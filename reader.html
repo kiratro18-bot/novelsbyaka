@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reader</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="reader-body">
+
+<div class="reader-root" id="readerRoot">
+
+  <div class="reader-progress"><div class="reader-progress-fill" id="progressFill"></div></div>
+
+  <div class="reader-chrome" id="chrome">
+    <a class="reader-back" href="index.html" aria-label="Back to library">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+    </a>
+    <div class="reader-heading">
+      <div class="t" id="chapterTitle">Loading…</div>
+      <div class="s mono" id="pageCounter"></div>
+    </div>
+  </div>
+
+  <main id="readerMain"></main>
+
+  <div class="reader-bottom">
+    <button class="reader-tab" id="settingsTab">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.36.14.66.36.9.64"/></svg>
+      Settings
+    </button>
+  </div>
+
+</div>
+
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<div class="drawer" id="drawer">
+  <h4>Reading settings</h4>
+  <div class="drawer-row">
+    <div class="drawer-label">Mode</div>
+    <div class="pill-group" id="modeGroup">
+      <button data-value="scroll">Scroll</button>
+      <button data-value="page">Page</button>
+    </div>
+  </div>
+  <div class="drawer-row" id="directionRow">
+    <div class="drawer-label">Direction</div>
+    <div class="pill-group" id="directionGroup">
+      <button data-value="ltr">Left → Right</button>
+      <button data-value="rtl">Right → Left</button>
+    </div>
+  </div>
+  <div class="drawer-row">
+    <div class="drawer-label">Theme</div>
+    <div class="pill-group" id="themeGroup">
+      <button data-value="dark">Dark</button>
+      <button data-value="light">Light</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/reader.js"></script>
+</body>
+</html>

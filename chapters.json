@@ -1,0 +1,19 @@
+{
+  "title": "My Manga",
+  "chapters": [
+    {
+      "id": "chapter-1",
+      "title": "Chapter 1",
+      "folder": "chapters/chapter-1",
+      "pages": [
+        "001.png",
+        "002.png",
+        "003.png",
+        "004.png",
+        "005.png",
+        "006.png",
+        "007.png"
+      ]
+    }
+  ]
+}
