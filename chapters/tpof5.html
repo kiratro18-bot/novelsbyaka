@@ -1,0 +1,941 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Ten Percent of Forever - Chapter 5</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f3f5f0;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #3d3d3d;
+      --ink-muted: #888;
+      --accent: #4a7c59;
+      --accent-light: rgba(74, 124, 89, 0.08);
+      --accent2: #8aab72;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-strong: rgba(0, 0, 0, 0.13);
+    }
+
+    body.dark {
+      --bg: #0e110c;
+      --surface: #151a12;
+      --ink: #dde8d4;
+      --ink-soft: #a8bea0;
+      --ink-muted: #637560;
+      --accent: #7aab72;
+      --accent-light: rgba(122, 171, 114, 0.09);
+      --accent2: #a0c890;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.11);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(74, 124, 89, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(122, 171, 114, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(34px, 7vw, 52px);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .soft-green {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* GAME SCENE */
+    .game-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center,
+          rgba(74, 124, 89, 0.04) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .game-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .game-scene {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .game-player {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .game-player-icon {
+      font-size: 24px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .game-player.focus .game-player-icon {
+      animation: spotlight 0.8s ease-in-out 3;
+    }
+
+    @keyframes spotlight {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    .game-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    /* WHISPER BLOCK */
+    .whisper-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--bg);
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+    }
+
+    .whisper-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .whisper-exchange {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .whisper-line {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .whisper-line.hers {
+      color: var(--ink-soft);
+    }
+
+    .whisper-line.his {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .whisper-speaker {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 3px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* THE MESSAGE — cold blue tint for contrast */
+    .message-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid rgba(100, 130, 180, 0.2);
+      border-left: 3px solid rgba(100, 130, 180, 0.5);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .message-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(100, 130, 180, 0.7);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .message-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .message-text em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .message-sub {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(100, 130, 180, 0.6);
+      margin-top: 12px;
+      display: block;
+    }
+
+    /* EMPTY SPACES LIST */
+    .empty-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .empty-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .empty-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .empty-list li {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .empty-dash {
+      color: var(--border-strong);
+      font-style: normal;
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev,
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover,
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .message-block,
+      .whisper-block,
+      .game-block,
+      .empty-block {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tpof.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">Ten Percent of Forever</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🎭</span> Ten Percent of Forever · Chapter
+        5
+      </div>
+      <h1 class="chapter-title">The Confession<br />Game</h1>
+      <p class="chapter-subtitle">
+        She said something. He heard the one she didn't.
+      </p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Slice of Life</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p><span class="dialogue">"Truth or dare?"</span></p>
+      <p>
+        It was late. The class trip was on its final night, and everyone was
+        gathered in a messy circle of pillows and snack wrappers, their
+        teacher long asleep and totally unaware.
+      </p>
+      <p>
+        The lights were dimmed. Someone had brought a flashlight and aimed it
+        at the ceiling,
+        <span class="thought">casting shadows that danced across the paper walls.</span>
+      </p>
+      <p>
+        Hiro sat at the edge of the circle. Mei was across from him, her knees
+        drawn up to her chest, hoodie sleeves covering half her fingers.<br />
+        She didn't usually join games like these.<br />
+        But tonight — for whatever reason — she stayed.
+      </p>
+    </div>
+
+    <!-- GAME SCENE -->
+    <div class="game-block">
+      <span class="game-label">🎌 Final night · Truth or dare</span>
+      <div class="game-scene">
+        <div class="game-player">
+          <span class="game-player-icon">👧</span>Haruka
+        </div>
+        <div style="font-size: 20px; color: var(--ink-muted)">→</div>
+        <div class="game-player focus">
+          <span class="game-player-icon">🎧</span>Mei
+        </div>
+        <div style="font-size: 20px; color: var(--ink-muted)">·</div>
+        <div class="game-player">
+          <span class="game-player-icon">🧍</span>Hiro
+        </div>
+      </div>
+      <p class="game-caption">"Who do you like?"</p>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p><span class="dialogue">"Your turn, Mei. Truth or dare?"</span></p>
+      <p>
+        Mei looked up, blinking. The room quieted. Even the most restless boys
+        leaned in.<br />
+        <span class="dialogue">"…Truth,"</span> she said softly.
+      </p>
+      <p>Haruka smirked. <span class="dialogue">"Who do you like?"</span></p>
+      <p>
+        A collective <span class="emphasis">ooooohhh</span> spread around the
+        room.
+      </p>
+      <p>
+        Mei froze. Hiro straightened, suddenly too aware of everything — the
+        room, the air,
+        <span class="thought">the way his hands were clenched without realizing it.</span>
+      </p>
+      <p>
+        Mei opened her mouth. Then paused.<br />
+        And smiled.<br />
+        The smallest, most mischievous smile he had ever seen on her.
+      </p>
+      <p>
+        <span class="dialogue">"…You,"</span> she said, pointing at Haruka.
+      </p>
+      <p>
+        Laughter exploded across the circle. Even Haruka blushed.<br />
+        Someone shouted,
+        <span class="dialogue">"She's totally bluffing!"</span><br />
+        Another voice:
+        <span class="dialogue">"She didn't even deny it though!"</span>
+      </p>
+      <p>
+        Mei leaned back into the shadows, pulling her hoodie over her head
+        slightly.
+      </p>
+      <p>
+        But Hiro noticed the way her eyes flicked to him — only for a
+        second.<br />
+        <span class="thought">Like she was asking: did you hear what I didn't say?</span>
+      </p>
+      <p>
+        He met her gaze.<br />
+        And nodded.
+      </p>
+    </div>
+
+    <!-- THE WHISPER -->
+    <div class="whisper-block">
+      <span class="whisper-label">🌙 After lights out</span>
+      <div class="whisper-exchange">
+        <div class="whisper-line hers">
+          <span class="whisper-speaker">Mei</span>
+          "…That wasn't a real confession."
+        </div>
+        <div class="whisper-line his">
+          <span class="whisper-speaker">Hiro</span>
+          "I know. But I heard the real one anyway."
+        </div>
+        <div class="whisper-line hers">
+          <span class="whisper-speaker">Mei</span>
+          "…Good."
+        </div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p class="scene-break">· · ·</p>
+    </div>
+
+    <!-- THE MESSAGE -->
+    <div class="message-block">
+      <span class="message-label">💬 The class group chat</span>
+      <p class="message-text">
+        "Nah, she's just a quiet kid. Not really my type lol."
+      </p>
+      <span class="message-sub">He meant it as sarcasm. Mei had seen it.</span>
+    </div>
+
+    <div class="prose" id="prose3">
+      <p>And she stopped talking to him the next day.</p>
+      <p>It was subtle at first.</p>
+    </div>
+
+    <!-- EMPTY SPACES -->
+    <div class="empty-block">
+      <span class="empty-label">🕊 What disappeared</span>
+      <ul class="empty-list">
+        <li>
+          <span class="empty-dash">—</span>No umbrella waiting under the
+          vending machine roof.
+        </li>
+        <li>
+          <span class="empty-dash">—</span>No sketchbook left open on the
+          bench.
+        </li>
+        <li><span class="empty-dash">—</span>No rice ball at lunch.</li>
+        <li>
+          <span class="empty-dash">—</span>No soft glances in the hallway.
+        </li>
+        <li>
+          <span class="empty-dash">—</span>Just empty spaces where she used to
+          be.
+        </li>
+      </ul>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>
+        Hiro noticed it <span class="thought">like a missing breath.</span>
+      </p>
+      <p>
+        When he finally approached her after class, her eyes didn't meet
+        his.<br />
+        <span class="dialogue">"Mei — wait, can we talk?"</span><br />
+        <span class="dialogue">"I'm busy,"</span> she said, without looking
+        up.
+      </p>
+      <p>
+        <span class="dialogue">"Is this about that message? Because that wasn't—"</span>
+      </p>
+      <p>
+        She stood up, gathering her things. Her voice was quiet, but her words
+        hit harder than shouting.<br />
+        <span class="dialogue">"You didn't even try to explain."</span><br />
+        <span class="dialogue">"I didn't know you saw—"</span><br />
+        <span class="dialogue">"Exactly. You didn't know. You didn't ask. You just said something
+          and left me to feel stupid about it."</span>
+      </p>
+      <p>
+        <span class="dialogue">"I'm sorry. I didn't mean it like that, I—"</span><br />
+        <span class="emphasis">"I don't care what you meant."</span>
+      </p>
+      <p>That stopped him cold.</p>
+      <p>
+        Mei hugged her sketchbook to her chest like a shield. Her eyes flicked
+        up once, just enough for him to see the hurt behind them.
+      </p>
+      <p>
+        <span class="dialogue">"Just… don't say things you don't mean,"</span>
+        she whispered.
+        <span class="dialogue">"Especially not about people who take you seriously."</span>
+      </p>
+      <p>Then she walked away.</p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        The days that followed were quiet again.<br />
+        But <span class="emphasis">not the comforting kind.</span>
+      </p>
+      <p>
+        <span class="thought">It was the old kind — the kind Hiro used to enjoy before he knew
+          what it meant to miss someone.</span>
+      </p>
+      <p>
+        She was still in class. Still drawing. Still passing him in the
+        hallway.<br />
+        But the sketchbook never opened when he was around.<br />
+        And the <span class="soft-green">7:10 AM</span> morning silence now
+        felt like punishment.
+      </p>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter 5</span>
+      <div class="chapter-nav">
+        <a href="tpof4.html" class="nav-btn nav-prev">← Chapter 4</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tpof6.html" class="nav-btn nav-next">Chapter 6 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fs = 19;
+    function changeFont(a) {
+      if (a === 1 && fs < 26) fs += 2;
+      else if (a === -1 && fs > 14) fs -= 2;
+      else if (a === 0) fs = 19;
+      ["prose1", "prose2", "prose3", "prose4"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fs + "px";
+      });
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop,
+        t =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

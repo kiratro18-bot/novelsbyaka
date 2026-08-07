@@ -1,0 +1,1053 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Book with No Cover - Chapters 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f7f4ee;
+      --surface: #fdfaf4;
+      --ink: #1e1a14;
+      --ink-soft: #3e3828;
+      --ink-muted: #9a9080;
+      --accent: #7a6a4a;
+      --accent-light: rgba(122, 106, 74, 0.08);
+      --accent2: #b09a6a;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-strong: rgba(0, 0, 0, 0.12);
+      --parchment: #f5f0e0;
+      --parchment-border: rgba(122, 106, 74, 0.2);
+    }
+
+    body.dark {
+      --bg: #120f0a;
+      --surface: #1a1610;
+      --ink: #e8e0cc;
+      --ink-soft: #b8aa90;
+      --ink-muted: #706858;
+      --accent: #b09a6a;
+      --accent-light: rgba(176, 154, 106, 0.09);
+      --accent2: #c8b480;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.11);
+      --parchment: #1e1a10;
+      --parchment-border: rgba(176, 154, 106, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    /* CHAPTER HEADER */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--parchment-border);
+      margin-bottom: 20px;
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: sway 5s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+
+      0%,
+      100% {
+        transform: rotate(0deg);
+      }
+
+      30% {
+        transform: rotate(-4deg);
+      }
+
+      70% {
+        transform: rotate(4deg);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(32px, 7vw, 50px);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* PROSE */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .warm {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* SAKURA VISUAL */
+    .sakura-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sakura-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(122, 106, 74, 0.05) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .sakura-scene {
+      width: 100%;
+      max-width: 240px;
+      height: 90px;
+      margin: 0 auto 16px;
+      background: linear-gradient(180deg,
+          #c8d8e0 0%,
+          #dde8ec 50%,
+          #eef2ee 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      width: 6px;
+      height: 4px;
+      background: rgba(240, 200, 210, 0.8);
+      border-radius: 50% 0 50% 0;
+      animation: drift linear infinite;
+    }
+
+    .p1 {
+      top: -10px;
+      left: 15%;
+      animation-duration: 4s;
+      animation-delay: 0s;
+    }
+
+    .p2 {
+      top: -10px;
+      left: 35%;
+      animation-duration: 5s;
+      animation-delay: 1s;
+    }
+
+    .p3 {
+      top: -10px;
+      left: 55%;
+      animation-duration: 4.5s;
+      animation-delay: 2s;
+    }
+
+    .p4 {
+      top: -10px;
+      left: 72%;
+      animation-duration: 5.5s;
+      animation-delay: 0.5s;
+    }
+
+    .p5 {
+      top: -10px;
+      left: 88%;
+      animation-duration: 4.2s;
+      animation-delay: 1.8s;
+    }
+
+    @keyframes drift {
+      0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 0.9;
+      }
+
+      50% {
+        transform: translateY(55px) rotate(180deg) translateX(10px);
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateY(110px) rotate(360deg) translateX(-5px);
+        opacity: 0;
+      }
+    }
+
+    .sakura-month {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(80, 60, 50, 0.5);
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .sakura-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .sakura-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* HIDDEN GAP */
+    .gap-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .gap-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .gap-meta {
+      flex: 1;
+    }
+
+    .gap-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .gap-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* LETTER BLOCK — the heart of this novel */
+    .letter-block {
+      margin: 40px 0;
+      background: var(--parchment);
+      border: 1px solid var(--parchment-border);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .letter-block::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: repeating-linear-gradient(90deg,
+          var(--parchment-border) 0,
+          var(--parchment-border) 6px,
+          transparent 6px,
+          transparent 14px);
+    }
+
+    .letter-inner {
+      padding: 32px 36px;
+    }
+
+    .letter-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .letter-text {
+      font-family: "Lora", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 2;
+      white-space: pre-line;
+    }
+
+    .letter-sig {
+      font-family: "Lora", serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-top: 20px;
+      display: block;
+      text-align: right;
+    }
+
+    /* RESPONSE LETTER — slightly different shade */
+    .letter-block.reply {
+      background: var(--surface);
+      border-color: var(--border-strong);
+    }
+
+    .letter-block.reply::before {
+      background: repeating-linear-gradient(90deg,
+          var(--border-strong) 0,
+          var(--border-strong) 6px,
+          transparent 6px,
+          transparent 14px);
+    }
+
+    /* CHAPTER DIVIDER */
+    .chapter-divider {
+      margin: 64px 0 48px;
+      text-align: center;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .chapter-divider .series-badge {
+      margin-bottom: 16px;
+    }
+
+    .chapter-divider h2 {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(28px, 6vw, 44px);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .chapter-divider p {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-muted);
+    }
+
+    /* FOUND NOTE BLOCK */
+    .found-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .found-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .found-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.85;
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .letter-inner {
+        padding: 20px 20px;
+      }
+
+      .gap-block {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .found-block {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tptfwasv2.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Book with No Cover</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <!-- ── CHAPTER 1 ── -->
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🌸</span> The Book with No Cover · Chapter
+        1
+      </div>
+      <h1 class="chapter-title">The Book<br />with No Cover</h1>
+      <p class="chapter-subtitle">She wasn't there for books. Just quiet.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Slice of Life</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- SAKURA IN FEBRUARY -->
+    <div class="sakura-block">
+      <div class="sakura-scene">
+        <div class="petal p1"></div>
+        <div class="petal p2"></div>
+        <div class="petal p3"></div>
+        <div class="petal p4"></div>
+        <div class="petal p5"></div>
+        <span class="sakura-month">February · Still cold</span>
+      </div>
+      <span class="sakura-label">🌸 The sakura tree</span>
+      <p class="sakura-caption">
+        The library was closed. But Nao didn't care.
+      </p>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>The library was closed for renovation. But Nao didn't care.</p>
+      <p>She wasn't there for books today. Just quiet.</p>
+      <p>
+        The rain had just stopped, and the sky wore that washed-out, tired
+        look it always did in February. Cold clung to her sleeves as she sat
+        beneath the sakura tree, tugging her coat tighter.
+      </p>
+      <p>
+        This was her third week at the new school.<br />
+        No one noticed her.
+        <span class="thought">She preferred it that way.</span>
+      </p>
+      <p>
+        Then, as she shifted on the old bench, her heel tapped something
+        underneath. Hollow.
+      </p>
+      <p>
+        Curious, she reached down — fingers brushing against a loose wooden
+        plank — and pulled.
+      </p>
+    </div>
+
+    <!-- THE HIDDEN GAP -->
+    <div class="gap-block">
+      <div class="gap-icon-wrap">📖</div>
+      <div class="gap-meta">
+        <span class="gap-title">A hidden gap beneath the bench.</span>
+        <span class="gap-sub">Small. Worn. A paperback with no cover.</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>
+        The pages were yellowed, soft at the edges like it had been read a
+        hundred times. She flipped through it. At the center, between
+        chapters, was a folded piece of paper.
+      </p>
+      <p>Her name wasn't on it.</p>
+      <p><span class="thought">But she read it anyway.</span></p>
+    </div>
+
+    <!-- THE ORIGINAL LETTER -->
+    <div class="letter-block">
+      <div class="letter-inner">
+        <span class="letter-label">📜 The letter inside</span>
+        <p class="letter-text">
+          Hey, Sora. You were right. I shouldn't have waited. But I still did.
+          Not because I hoped you'd come back. But because I wanted you to
+          know — Someone stayed. Even when you couldn't. And that mattered. It
+          still does.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose" id="prose3">
+      <p>Nao stared at the words.</p>
+      <p>Her throat tightened, suddenly and without warning.</p>
+      <p>She didn't know who Sora was. Or the person who wrote the letter.</p>
+      <p>
+        But the ache behind it —
+        <span class="thought">the quiet heartbreak</span> — felt familiar.<br />
+        Like something she'd tried to forget.<br />
+        Like something she hadn't told anyone.
+      </p>
+      <p>The book trembled slightly in her hands.</p>
+      <p>
+        Then, without really thinking, she reached into her bag, tore a page
+        from her notebook, and began to write.
+      </p>
+    </div>
+
+    <!-- NAO'S REPLY -->
+    <div class="letter-block reply">
+      <div class="letter-inner">
+        <span class="letter-label">✏️ Nao's reply</span>
+        <p class="letter-text">
+          I don't know who you are. But thank you for this. For staying, even
+          if it wasn't for me.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>
+        She folded it. Slipped it between the pages. And tucked the book
+        gently back beneath the floorboard.
+      </p>
+      <p>
+        <span class="thought">It felt like something sacred. Like a secret only she was allowed
+          to carry.</span>
+      </p>
+      <p>
+        As she stood up and dusted her skirt, Nao glanced back at the bench.
+      </p>
+      <p>
+        The wind stirred slightly, lifting a few sakura petals from the ground
+        — <span class="emphasis">though it wasn't spring.</span>
+      </p>
+      <p>
+        And for the first time since arriving at this new school, she didn't
+        feel entirely alone.
+      </p>
+    </div>
+
+    <!-- ── CHAPTER 2 ── -->
+    <div class="chapter-divider">
+      <div class="series-badge"><span class="chapter-icon">🌸</span></div>
+      <h2>Someone Replied</h2>
+      <p>She told herself she wasn't going back.</p>
+    </div>
+
+    <div class="prose" id="prose5">
+      <p>The next day, she told herself she wasn't going back.</p>
+      <p>
+        She wasn't the type to chase ghosts or believe in fate. Whatever that
+        letter was — a forgotten goodbye, a message lost to time — it wasn't
+        hers to touch again.
+      </p>
+      <p>But by lunch, her feet were already leading her there.</p>
+      <p>
+        Back to the sakura tree.<br />
+        Back to the bench.<br />
+        Back to the book with no cover.
+      </p>
+      <p>
+        She knelt, opened the floorboard.<br />
+        The paperback was still there.
+      </p>
+      <p>But <span class="emphasis">something had changed.</span></p>
+      <p>
+        Another note was tucked beside her own. Folded neatly, with
+        handwriting that wasn't hers.
+      </p>
+      <p><span class="thought">Nao's heart skipped.</span></p>
+      <p>
+        She looked around.<br />
+        No one.
+      </p>
+      <p>She picked up the new paper and unfolded it slowly.</p>
+    </div>
+
+    <!-- THE STRANGER'S REPLY -->
+    <div class="letter-block">
+      <div class="letter-inner">
+        <span class="letter-label">📜 Someone wrote back</span>
+        <p class="letter-text">
+          You read it. I thought maybe no one ever would. Or maybe it'd
+          crumble with time. I don't know who you are. But thanks for writing
+          back. It's been a long time since someone left anything here.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose" id="prose6">
+      <p>
+        Nao sat down without realizing it. Her hands trembled slightly — not
+        from fear, but from something deeper.
+        <span class="thought">A connection forming where there wasn't supposed to be one.</span>
+      </p>
+      <p>She pulled out her pen.</p>
+    </div>
+
+    <!-- NAO'S SECOND NOTE -->
+    <div class="letter-block reply">
+      <div class="letter-inner">
+        <span class="letter-label">✏️ Nao writes back</span>
+        <p class="letter-text">
+          I didn't mean to intrude. But it felt like the letter was waiting
+          for someone. Maybe both of us. Did you know them? Sora? The one the
+          letter was for?
+        </p>
+        <span class="letter-sig">– N</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose7">
+      <p>
+        Sliding the new note between the pages, she placed the book back and
+        closed the floorboard again.
+      </p>
+      <p>
+        She stood, brushing her skirt off, but didn't walk away immediately.
+      </p>
+      <p>
+        Instead, she looked up at the sakura tree, bare as ever in the
+        lingering cold.
+      </p>
+      <p>
+        <span class="thought">And wondered what kind of heartbreak could be buried under a tree
+          and still bloom years later.</span>
+      </p>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapters 1 </span>
+      <div class="chapter-nav">
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tptfwasv2-2.html" class="nav-btn nav-next">Next Chapter →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fs = 19;
+    function changeFont(a) {
+      if (a === 1 && fs < 26) fs += 2;
+      else if (a === -1 && fs > 14) fs -= 2;
+      else if (a === 0) fs = 19;
+      [
+        "prose1",
+        "prose2",
+        "prose3",
+        "prose4",
+        "prose5",
+        "prose6",
+        "prose7",
+      ].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fs + "px";
+      });
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop,
+        t =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

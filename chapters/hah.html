@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Him and Her — Chapters</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #faf7f2;
+      --surface: #f3ede4;
+      --surface2: #ede5d8;
+      --ink: #2a1f1a;
+      --ink-soft: rgba(42, 31, 26, 0.55);
+      --ink-faint: rgba(42, 31, 26, 0.07);
+      --rose: #b85c6e;
+      --rose-soft: rgba(184, 92, 110, 0.12);
+      --rose-dim: rgba(184, 92, 110, 0.3);
+      --mauve: #8c6b7a;
+      --warm: #c49a6c;
+      --fog: rgba(250, 247, 242, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* FLOATING PETALS */
+    .petal {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      animation: petalFall linear infinite;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    @keyframes petalFall {
+      0% {
+        transform: translateY(-30px) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.55;
+      }
+
+      90% {
+        opacity: 0.3;
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* DARK MODE */
+    body.dark {
+      --bg: #120e0c;
+      --surface: #1a1410;
+      --surface2: #201a14;
+      --ink: #ece4d8;
+      --ink-soft: rgba(236, 228, 216, 0.45);
+      --ink-faint: rgba(236, 228, 216, 0.06);
+      --fog: rgba(18, 14, 12, 0.95);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card:hover {
+      background: var(--surface2);
+      border-color: var(--rose-dim);
+    }
+
+    body.dark .hero-card {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: var(--surface2);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .section-header {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .ch-num {
+      color: rgba(184, 92, 110, 0.2);
+    }
+
+    body.dark .chapter-card:hover .ch-num {
+      color: var(--rose);
+    }
+
+    body.dark .read-arrow {
+      color: rgba(236, 228, 216, 0.15);
+    }
+
+    body.dark .chapter-card:hover .read-arrow {
+      color: var(--rose);
+    }
+
+    body.dark .ornament {
+      color: rgba(184, 92, 110, 0.25);
+    }
+
+    body.dark .tag {
+      background: var(--rose-soft);
+    }
+
+    /* NAV */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(42, 31, 26, 0.08);
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--mauve);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--rose);
+    }
+
+    .back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-title {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--mauve);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(42, 31, 26, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    /* FONT PANEL */
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(42, 31, 26, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 40px rgba(42, 31, 26, 0.1);
+      z-index: 200;
+      min-width: 180px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(42, 31, 26, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    .font-size-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--rose);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 52px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* big decorative background text */
+    .hero-bg-text {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Lora', serif;
+      font-size: clamp(70px, 14vw, 140px);
+      font-style: italic;
+      color: rgba(184, 92, 110, 0.04);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .hero-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(243, 237, 228, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(184, 92, 110, 0.15);
+      border-radius: 28px;
+      padding: 48px 60px;
+      max-width: 560px;
+      width: 100%;
+    }
+
+    .ornament {
+      font-size: 18px;
+      color: rgba(184, 92, 110, 0.35);
+      letter-spacing: 0.3em;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: 'Lora', serif;
+      font-size: clamp(36px, 6vw, 60px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 6px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--mauve);
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-divider {
+      width: 32px;
+      height: 1px;
+      background: var(--rose-dim);
+      margin: 0 auto 20px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .meta-row span {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: var(--rose-soft);
+      color: var(--rose);
+      letter-spacing: 0.05em;
+    }
+
+    /* CHAPTER SECTION */
+    .chapter-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(42, 31, 26, 0.07);
+      transition: border-color 0.4s;
+    }
+
+    .section-title {
+      font-family: 'Lora', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .chapter-total {
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+    }
+
+    /* PROGRESS */
+    .progress-bar {
+      height: 2px;
+      background: rgba(42, 31, 26, 0.06);
+      border-radius: 1px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--warm));
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    /* CHAPTER CARDS */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      background: white;
+      border: 1px solid rgba(42, 31, 26, 0.07);
+      border-radius: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--rose), var(--warm));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(184, 92, 110, 0.2);
+      box-shadow: 0 6px 28px rgba(184, 92, 110, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .ch-num {
+      font-family: 'Lora', serif;
+      font-size: 26px;
+      font-style: italic;
+      color: rgba(42, 31, 26, 0.12);
+      min-width: 36px;
+      line-height: 1;
+      transition: color 0.25s;
+      flex-shrink: 0;
+    }
+
+    .chapter-card:hover .ch-num {
+      color: var(--rose);
+    }
+
+    .chapter-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chapter-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    .chapter-title {
+      font-family: 'Lora', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.3;
+      transition: color 0.2s;
+    }
+
+    .chapter-card:hover .chapter-title {
+      color: var(--rose);
+    }
+
+    .read-arrow {
+      font-size: 18px;
+      color: rgba(42, 31, 26, 0.13);
+      transition: all 0.25s;
+      flex-shrink: 0;
+      transform: translateX(-6px);
+    }
+
+    .chapter-card:hover .read-arrow {
+      color: var(--rose);
+      transform: translateX(0);
+    }
+
+    /* ONGOING NOTE */
+    .ongoing-note {
+      margin-top: 28px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ongoing-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--rose-dim);
+      animation: dotPulse 1.8s ease-in-out infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes dotPulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.4);
+      }
+    }
+
+    .ongoing-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--mauve);
+      letter-spacing: 0.05em;
+    }
+
+    .ongoing-sub {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 20px 40px 40px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+    }
+
+    /* SCROLL BTN */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--rose);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(184, 92, 110, 0.3);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-card {
+      animation: fadeUp 0.55s ease both;
+      animation-delay: 0.05s;
+    }
+
+    .section-header {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .progress-bar {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.13s;
+    }
+
+    .chapter-card:nth-child(1) {
+      animation-delay: 0.16s;
+    }
+
+    .chapter-card:nth-child(2) {
+      animation-delay: 0.23s;
+    }
+
+    .chapter-card:nth-child(3) {
+      animation-delay: 0.30s;
+    }
+
+    .chapter-card:nth-child(4) {
+      animation-delay: 0.37s;
+    }
+
+    .chapter-card:nth-child(5) {
+      animation-delay: 0.44s;
+    }
+
+    .ongoing-note {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.48s;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-title {
+        display: none;
+      }
+
+      .hero {
+        padding: 32px 16px 28px;
+      }
+
+      .hero-card {
+        padding: 30px 22px;
+      }
+
+      .chapter-section {
+        padding: 0 16px 60px;
+      }
+
+      .chapter-card {
+        padding: 16px 18px;
+        gap: 14px;
+      }
+
+      .ch-num {
+        font-size: 20px;
+        min-width: 28px;
+      }
+
+      .chapter-title {
+        font-size: 16px;
+      }
+
+      .hero-bg-text {
+        font-size: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="../index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back to Library</span>
+    </a>
+    <div class="nav-title">Him and Her</div>
+    <div class="nav-right">
+      <div style="position:relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()" title="Font size">Aa</button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size:13px">A−</button>
+            <span class="font-size-display" id="fontDisplay">16</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size:19px">A+</button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size:13px;letter-spacing:0.1em;">Reset</button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">🌙</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg-text">Him &amp; Her</div>
+    <div class="hero-card">
+      <span class="ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
+      <h1 class="hero-title"><em>Him</em> and <em>Her</em></h1>
+      <p class="hero-subtitle">Two ordinary people, one quietly unfolding story</p>
+      <div class="hero-divider"></div>
+      <div class="meta-row">
+        <span>📖 5 Chapters</span>
+        <span>✅ Completed<span>
+            <span><span class="tag">Romance</span></span>
+            <span><span class="tag">Slice of Life</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER LIST -->
+  <div class="chapter-section">
+
+    <div class="section-header">
+      <h2 class="section-title">Chapters</h2>
+      <span class="chapter-total"> completed vol 1</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="chapter-list">
+
+      <a class="chapter-card" href="hah1.html">
+        <div class="ch-num">1</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter One</div>
+          <div class="chapter-title">Her</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="hah2.html">
+        <div class="ch-num">2</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Two</div>
+          <div class="chapter-title">Normal Day?</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="hah3.html">
+        <div class="ch-num">3</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Three</div>
+          <div class="chapter-title">A Silent Place</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="hah4.html">
+        <div class="ch-num">4</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Four</div>
+          <div class="chapter-title">Number</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="hah5.html">
+        <div class="ch-num">5</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Five</div>
+          <div class="chapter-title">Him</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+    </div>
+
+    <!-- ONGOING NOTE -->
+    <div class="ongoing-note">
+      <div class="ongoing-dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="ongoing-text">The story continues…</div>
+      <div class="ongoing-sub"><a class="chapter-card" href="hahv2.html">
+          <div class="ch-num">-</div>
+          <div class="chapter-info">
+            <div class="chapter-label">2</div>
+            <div class="chapter-title">Volume 2</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a></div>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    A Novel by AKA &nbsp;·&nbsp; Please do not repost or copy without permission.<br>
+    Sharing links is always appreciated.
+  </footer>
+
+  <button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    /* PETALS */
+    var petalChars = ['✿', '❀', '✾', '❁', '❃'];
+    var colors = ['rgba(184,92,110,0.4)', 'rgba(196,154,108,0.35)', 'rgba(140,107,122,0.35)'];
+
+    function spawnPetal() {
+      var p = document.createElement('div');
+      p.className = 'petal';
+      p.textContent = petalChars[Math.floor(Math.random() * petalChars.length)];
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top = '-30px';
+      p.style.color = colors[Math.floor(Math.random() * colors.length)];
+      var dur = Math.random() * 8 + 8;
+      p.style.animationDuration = dur + 's';
+      p.style.animationDelay = Math.random() * 4 + 's';
+      p.style.fontSize = (Math.random() * 8 + 10) + 'px';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), (dur + 4) * 1000);
+    }
+
+    setInterval(spawnPetal, 1800);
+    spawnPetal(); spawnPetal();
+
+    /* FONT SIZE */
+    var fontSize = 16;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 24) fontSize += 2;
+      else if (action === -1 && fontSize > 12) fontSize -= 2;
+      else if (action === 0) fontSize = 16;
+      document.getElementById('fontDisplay').textContent = fontSize;
+      try { localStorage.setItem('hahFontSize', fontSize); } catch (e) { }
+    }
+
+    function toggleFontPanel() {
+      document.getElementById('fontPanel').classList.toggle('open');
+    }
+
+    document.addEventListener('click', e => {
+      var btn = document.getElementById('fontToggle');
+      var panel = document.getElementById('fontPanel');
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
+
+    /* DARK MODE */
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      var on = document.body.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = on ? '☀️' : '🌙';
+      try { localStorage.setItem('darkMode', on ? 'on' : 'off'); } catch (e) { }
+    }
+
+    /* SCROLL BTN */
+    window.addEventListener('scroll', () => {
+      var btn = document.getElementById('scrollBtn');
+      btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+    });
+
+    /* READING PROGRESS */
+    var totalChapters = 3;
+    try {
+      var stored = JSON.parse(localStorage.getItem('hahRead') || '[]');
+      document.getElementById('progressFill').style.width = (Math.min(stored.length, totalChapters) / totalChapters * 100) + '%';
+    } catch (e) { }
+
+    /* INIT */
+    window.addEventListener('load', () => {
+      try {
+        if (localStorage.getItem('darkMode') === 'on') {
+          document.body.classList.add('dark');
+          document.getElementById('themeBtn').textContent = '☀️';
+        }
+        var saved = parseInt(localStorage.getItem('hahFontSize'));
+        if (saved && saved >= 12 && saved <= 24) {
+          fontSize = saved;
+          document.getElementById('fontDisplay').textContent = fontSize;
+        }
+      } catch (e) { }
+    });
+  </script>
+
+</body>
+
+</html>

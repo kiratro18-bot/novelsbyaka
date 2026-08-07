@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Second Place Forever</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ink: #1a1410;
+      --ink-soft: #3d3530;
+      --ink-faint: #7a6e67;
+      --paper: #f7f3ee;
+      --paper-dark: #ede7df;
+      --rain: #8faab8;
+      --rain-light: #c8d9e3;
+      --accent: #b8522a;
+      --serif: "EB Garamond", Georgia, serif;
+      --sans: "Inter", system-ui, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      line-height: 1;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── RAIN CANVAS ── */
+    #rain-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 9vw, 7.5rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+      max-width: 820px;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-divider {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--ink-faint), transparent);
+      margin: 0 auto 2rem;
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--ink-soft);
+      max-width: 380px;
+      line-height: 1.65;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      animation: float 2.8s ease-in-out infinite;
+    }
+
+    .scroll-hint::after {
+      content: "";
+      width: 1px;
+      height: 36px;
+      background: var(--ink-faint);
+      display: block;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(6px);
+      }
+    }
+
+    /* ── STORY ── */
+    .story-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 6rem 2rem 10rem;
+    }
+
+    .story-text p {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: var(--ink-soft);
+      margin-bottom: 1.6rem;
+      font-weight: 400;
+    }
+
+    /* special treatment for the list of relationships */
+    .timeline-block {
+      margin: 2.8rem 0;
+      padding-left: 1.6rem;
+      border-left: 1px solid var(--paper-dark);
+    }
+
+    .timeline-block p {
+      font-style: italic;
+      color: var(--ink-faint);
+      margin-bottom: 0.7rem;
+    }
+
+    /* the rainy night paragraph */
+    .rain-moment {
+      background: var(--paper-dark);
+      border-radius: 2px;
+      padding: 2rem 2.2rem;
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .rain-moment::before {
+      content: "\201C";
+      font-size: 5rem;
+      line-height: 1;
+      color: var(--rain-light);
+      position: absolute;
+      top: 0.2rem;
+      left: 1rem;
+      font-family: var(--serif);
+    }
+
+    .rain-moment p {
+      font-style: italic;
+      font-size: 1.22rem;
+      color: var(--ink);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* key emotional line */
+    .key-line {
+      text-align: center;
+      font-size: 1.35rem;
+      font-style: italic;
+      color: var(--ink);
+      margin: 3.5rem 0;
+      line-height: 1.6;
+    }
+
+    .key-line em {
+      display: block;
+      font-size: 0.85rem;
+      font-style: normal;
+      font-family: var(--sans);
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    /* section break */
+    .section-break {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0;
+      color: var(--ink-faint);
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+    }
+
+    .section-break::before,
+    .section-break::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--paper-dark);
+    }
+
+    /* the dialogue */
+    .dialogue {
+      margin: 2.5rem 0;
+    }
+
+    .dialogue p {
+      font-size: 1.1rem;
+      line-height: 1.85;
+    }
+
+    .dialogue .spoken {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    /* closing poem */
+    .closing {
+      margin-top: 5rem;
+      padding-top: 4rem;
+      border-top: 1px solid var(--paper-dark);
+      text-align: center;
+    }
+
+    .closing p {
+      font-size: 1.2rem;
+      line-height: 2;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 0;
+    }
+
+    .closing .final-line {
+      display: block;
+      margin-top: 2rem;
+      font-size: 1rem;
+      font-style: normal;
+      font-family: var(--sans);
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      border-top: 1px solid var(--paper-dark);
+    }
+
+    /* ── FADE IN ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .scroll-hint {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .story-text p {
+        font-size: 1.05rem;
+      }
+
+      .rain-moment p {
+        font-size: 1.1rem;
+      }
+
+      .rain-moment::before {
+        font-size: 3.5rem;
+      }
+
+      .hero-title {
+        font-size: clamp(2.6rem, 11vw, 4rem);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="rain-canvas"></canvas>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span>Library</span></a>
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">A story</p>
+    <h1 class="hero-title">Second Place <em>Forever</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">
+      Some loves arrive too late, even when they arrive.
+    </p>
+    <div class="scroll-hint">Read</div>
+  </section>
+
+  <!-- STORY -->
+  <main class="story-wrapper">
+    <article class="story-text">
+      <p class="fade-in">
+        His name was Jun, and for seventeen years he had been Hana's safe
+        harbor.
+      </p>
+
+      <p class="fade-in">
+        They met at fourteen in the cram school basement where the fluorescent
+        lights buzzed like dying insects. He was the boy who always saved her
+        the seat by the window. She was the girl who never noticed how long he
+        stared at the side of her face while she chewed her pen cap and
+        dreamed out loud about cities she would never visit.
+      </p>
+
+      <div class="timeline-block fade-in">
+        <p>
+          At twenty-two she dated a guitarist who wrote songs about her
+          ankles.
+        </p>
+        <p>
+          At twenty-five it was a finance bro who took her to Tokyo and forgot
+          her birthday.
+        </p>
+        <p>
+          At twenty-seven it was the kind photographer who cried when she left
+          him.
+        </p>
+      </div>
+
+      <p class="fade-in">
+        Each time the endings came, Jun was already there—coffee in hand, no
+        questions asked, just the steady warmth of someone who had never left.
+      </p>
+
+      <div class="section-break fade-in">◆</div>
+
+      <div class="rain-moment fade-in">
+        <p>
+          One rainy October night she showed up at his door soaked and
+          shaking.<br /><br />"I'm so tired of falling for people who don't
+          stay," she whispered against his chest.
+        </p>
+      </div>
+
+      <p class="fade-in">
+        Jun held her like she was made of glass and gunpowder at the same
+        time. He had waited so long that the waiting had become a part of his
+        skeleton.
+      </p>
+
+      <p class="fade-in">Three months later they were together.</p>
+
+      <p class="fade-in">
+        It should have been fireworks. Instead it felt like slipping into a
+        favorite sweater that had been hanging in the closet for
+        years—comfortable, familiar, and faintly dusty.
+      </p>
+
+      <p class="fade-in">
+        At first he was delirious with it. The way she reached for his hand
+        without thinking. The way she laughed at his terrible cooking. The way
+        she said "we" like it had always been inevitable.
+      </p>
+
+      <div class="key-line fade-in">
+        But love has a terrible memory.
+        <em>—</em>
+      </div>
+
+      <p class="fade-in">
+        One lazy Sunday they were sorting old boxes and she pulled out a photo
+        album from high school. There they were on a class trip to the
+        beach—Jun in the background, eyes soft on her. Hana in the foreground,
+        laughing at someone just outside the frame.
+      </p>
+
+      <p class="fade-in">Page after page, the same story.</p>
+
+      <p class="fade-in">She finally noticed him watching her.</p>
+
+      <div class="dialogue fade-in">
+        <p><span class="spoken">"Jun… what's wrong?"</span></p>
+        <p>
+          He tried to smile.
+          <span class="spoken">"Nothing. Just old pictures."</span>
+        </p>
+      </div>
+
+      <p class="fade-in">
+        That night he lay awake listening to her breathing and felt something
+        cracking open inside his chest. Not heartbreak exactly. Something
+        slower. Sadder.
+      </p>
+
+      <p class="fade-in">
+        He kept replaying every time she had cried on his shoulder about
+        another boy. Every time she had said, "You're the only one who really
+        knows me." Every time she had looked at him like a brother, a best
+        friend, a shelter—never like a destination.
+      </p>
+
+      <p class="fade-in">
+        Now she looked at him with love. Real love, he believed that. But it
+        was love that had been filtered through disappointment and exhaustion.
+        Love that had tried every other door before knocking on his.
+      </p>
+
+      <div class="section-break fade-in">◆</div>
+
+      <p class="fade-in">He started noticing small things.</p>
+
+      <p class="fade-in">
+        The way her eyes sometimes drifted when they passed couples who looked
+        newly in love.
+      </p>
+
+      <p class="fade-in">
+        The way she saved screenshots of her ex's new girlfriend's Instagram
+        (he saw it once when she fell asleep with her phone open).
+      </p>
+
+      <p class="fade-in">
+        The way she said "I'm so glad I finally found you" like relief instead
+        of wonder.
+      </p>
+
+      <p class="fade-in">
+        One quiet evening in their tiny apartment, she asked the question he'd
+        been dreading.
+      </p>
+
+      <div class="dialogue fade-in">
+        <p>
+          <span class="spoken">"Do you ever wish I had chosen you sooner?"</span>
+        </p>
+      </div>
+
+      <p class="fade-in">
+        Jun looked at her—really looked. The woman he had loved since before
+        he understood what love was. The woman who had finally chosen him…
+        last.
+      </p>
+
+      <p class="fade-in">
+        He wanted to lie. He wanted to protect her. But the truth was heavier
+        than kindness.
+      </p>
+
+      <div class="dialogue fade-in">
+        <p>
+          <span class="spoken">"I wish you had chosen me first,"</span> he
+          said softly.
+          <span class="spoken">"Not because the others failed. Just… first."</span>
+        </p>
+      </div>
+
+      <p class="fade-in">
+        The silence that followed was gentle and devastating.
+      </p>
+
+      <p class="fade-in">
+        Hana cried. He held her, because that was what he always did. But
+        something inside him had already started packing its bags.
+      </p>
+
+      <div class="section-break fade-in">◆</div>
+
+      <p class="fade-in">Six weeks later he left.</p>
+
+      <p class="fade-in">
+        Not with anger. Not with shouting. Just a quiet conversation on the
+        same balcony where she had first told him she was tired of running.
+      </p>
+
+      <div class="dialogue fade-in">
+        <p>
+          <span class="spoken">"I love you,"</span> she said, voice breaking.
+          <span class="spoken">"I do. I really do."</span>
+        </p>
+        <p>
+          <span class="spoken">"I know,"</span> he answered.
+          <span class="spoken">"That's what makes this so sad."</span>
+        </p>
+      </div>
+
+      <p class="fade-in">
+        He moved to a different city. Got a job teaching English to kids who
+        didn't care about his broken heart. Sometimes, late at night, he still
+        checked her socials—not to stalk, just to make sure she was okay. She
+        looked happy in the pictures. Softer somehow.
+      </p>
+
+      <p class="fade-in">People asked him why they broke up.</p>
+
+      <p class="fade-in">He always gave different answers.</p>
+
+      <p class="fade-in">But the real one lived in his bones:</p>
+
+      <div class="key-line fade-in">
+        She chose him.<br />
+        He had waited his whole life for it.<br />
+        And in the end, the waiting had ruined the winning.
+      </div>
+
+      <div class="closing fade-in">
+        <p>
+          Some loves are not meant to be tested by time.<br />
+          Some loves arrive too late, even when they arrive.<br />
+          And the worst part?<br /><br />
+          He would probably do it all over again.
+        </p>
+        <span class="final-line">— End —</span>
+      </div>
+    </article>
+  </main>
+
+  <footer>Second Place Forever &nbsp;·&nbsp; A short story</footer>
+
+  <script>
+    // Rain canvas
+    const canvas = document.getElementById("rain-canvas");
+    const ctx = canvas.getContext("2d");
+    let drops = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initDrops() {
+      drops = [];
+      const count = Math.floor(canvas.width / 6);
+      for (let i = 0; i < count; i++) {
+        drops.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          len: Math.random() * 18 + 8,
+          speed: Math.random() * 1.4 + 0.6,
+          opacity: Math.random() * 0.4 + 0.1,
+        });
+      }
+    }
+
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "#8faab8";
+      ctx.lineWidth = 0.6;
+      drops.forEach((d) => {
+        ctx.globalAlpha = d.opacity;
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x - 1, d.y + d.len);
+        ctx.stroke();
+        d.y += d.speed;
+        if (d.y > canvas.height) {
+          d.y = -d.len;
+          d.x = Math.random() * canvas.width;
+        }
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(drawRain);
+    }
+
+    resize();
+    initDrops();
+    drawRain();
+    window.addEventListener("resize", () => {
+      resize();
+      initDrops();
+    });
+
+    // Scroll fade-in
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.15 },
+    );
+
+    document
+      .querySelectorAll(".fade-in")
+      .forEach((el) => observer.observe(el));
+  </script>
+</body>
+
+</html>

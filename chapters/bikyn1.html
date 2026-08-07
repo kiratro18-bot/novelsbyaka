@@ -1,0 +1,896 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Before I Forget Your Name — Chapter 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400;1,7..72,500&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      :root {
+        --paper: #f6f1e4;
+        --paper-dark: #ede5d0;
+        --ink: #262420;
+        --ink-soft: #55503f;
+        --ink-faint: #9c9484;
+        --tape: #d8a73d;
+        --tape-soft: rgba(216, 167, 61, 0.16);
+        --green: #5c7a5e;
+        --green-soft: rgba(92, 122, 94, 0.12);
+        --rust: #b5562f;
+        --rule: rgba(38, 36, 32, 0.09);
+        --shadow: rgba(38, 36, 32, 0.14);
+      }
+      body.dark {
+        --paper: #1c1b19;
+        --paper-dark: #232119;
+        --ink: #ece6d6;
+        --ink-soft: #c9c2ab;
+        --ink-faint: #8b8570;
+        --tape: #e6bb55;
+        --tape-soft: rgba(230, 187, 85, 0.14);
+        --green: #86ab89;
+        --green-soft: rgba(134, 171, 137, 0.12);
+        --rust: #d97a52;
+        --rule: rgba(236, 230, 214, 0.08);
+        --shadow: rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Literata", serif;
+        background:
+          repeating-linear-gradient(
+            var(--paper) 0px,
+            var(--paper) 34px,
+            var(--rule) 35px
+          ),
+          var(--paper);
+        color: var(--ink);
+        min-height: 100vh;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* ── TOP BAR ── */
+      .topbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 54px;
+        background: var(--paper-dark);
+        border-bottom: 1px solid var(--rule);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        z-index: 999;
+        font-family: "Space Mono", monospace;
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--ink-soft);
+        text-decoration: none;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        padding: 6px 12px;
+        border-radius: 3px;
+        border: 1px solid var(--rule);
+        background: var(--paper);
+        transition: all 0.2s;
+      }
+      .back-btn:hover {
+        color: var(--ink);
+        border-color: var(--tape);
+        background: var(--tape-soft);
+      }
+      .novel-label {
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .icon-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 3px;
+        border: 1px solid var(--rule);
+        background: var(--paper);
+        color: var(--ink);
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .icon-btn:hover {
+        border-color: var(--tape);
+        background: var(--tape-soft);
+      }
+      .font-pill {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        background: var(--paper);
+        border: 1px solid var(--rule);
+        border-radius: 3px;
+        padding: 3px 6px;
+      }
+      .font-pill span {
+        font-size: 10px;
+        color: var(--ink-faint);
+        padding: 0 4px;
+      }
+      .font-pill button {
+        width: 24px;
+        height: 24px;
+        border-radius: 2px;
+        border: none;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        font-size: 11px;
+        font-weight: 700;
+        font-family: "Space Mono", monospace;
+        transition: background 0.15s;
+      }
+      .font-pill button:hover {
+        background: var(--tape-soft);
+        color: var(--rust);
+      }
+
+      /* ── PROGRESS BAR ── */
+      .reading-progress {
+        position: fixed;
+        top: 54px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--rule);
+        z-index: 998;
+      }
+      .reading-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--tape), var(--green));
+        width: 0%;
+        transition: width 0.1s;
+      }
+
+      /* ── MAIN ── */
+      main {
+        max-width: 660px;
+        margin: 0 auto;
+        padding: 96px 24px 120px;
+        position: relative;
+      }
+
+      /* ── CHAPTER TAB (masking tape) ── */
+      .chapter-tab {
+        display: inline-block;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        background: linear-gradient(
+          180deg,
+          rgba(216, 167, 61, 0.22),
+          rgba(216, 167, 61, 0.1)
+        );
+        border: 1px solid rgba(216, 167, 61, 0.35);
+        padding: 6px 16px;
+        transform: rotate(-1.6deg);
+        box-shadow: 0 2px 6px var(--shadow);
+        margin-bottom: 28px;
+      }
+
+      .chapter-header {
+        margin-bottom: 44px;
+        padding-bottom: 28px;
+        border-bottom: 1px dashed var(--rule);
+      }
+      .story-eyebrow {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 10px;
+      }
+      .chapter-title {
+        font-family: "Caveat", cursive;
+        font-weight: 700;
+        font-size: clamp(42px, 9vw, 64px);
+        line-height: 1;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      .chapter-subtitle {
+        font-family: "Literata", serif;
+        font-style: italic;
+        font-size: 18px;
+        color: var(--ink-soft);
+        margin-bottom: 18px;
+      }
+      .chapter-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .meta-chip {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--green);
+        border: 1px solid var(--green-soft);
+        background: var(--green-soft);
+        padding: 4px 10px;
+        border-radius: 3px;
+      }
+
+      /* ── PROSE ── */
+      .prose {
+        font-size: 18px;
+        line-height: 1.85;
+        color: var(--ink-soft);
+      }
+      .prose p {
+        margin-bottom: 1.35em;
+      }
+      .prose .dialogue {
+        font-style: italic;
+        color: var(--ink);
+      }
+      .prose .thought {
+        color: var(--ink-faint);
+        font-style: italic;
+      }
+      .prose .emphasis {
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      /* ── MARGIN NOTE (signature element) ── */
+      .margin-wrap {
+        position: relative;
+      }
+      .margin-note {
+        font-family: "Caveat", cursive;
+        font-size: 20px;
+        color: var(--rust);
+        display: inline-block;
+        transform: rotate(-2.2deg);
+        margin: 4px 0 18px 8px;
+        padding: 2px 10px;
+        border-bottom: 1.5px solid rgba(181, 86, 47, 0.35);
+      }
+
+      /* ── BANTER STRIP ── */
+      .banter {
+        margin: 32px 0;
+        padding: 18px 22px;
+        border-left: 2px dashed var(--rule);
+        background: rgba(0, 0, 0, 0.012);
+      }
+      .banter-line {
+        font-style: italic;
+        color: var(--ink);
+        font-size: 17px;
+        line-height: 1.7;
+        margin-bottom: 6px;
+      }
+      .banter-aside {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        color: var(--ink-faint);
+        text-align: center;
+        margin: 10px 0;
+        font-style: normal;
+      }
+
+      /* ── SCENE BREAK ── */
+      .scene-break {
+        text-align: center;
+        margin: 48px 0;
+      }
+      .scene-break .dots {
+        font-family: "Space Mono", monospace;
+        color: var(--ink-faint);
+        letter-spacing: 10px;
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+      .scene-break .label {
+        font-family: "Caveat", cursive;
+        font-size: 22px;
+        color: var(--ink-soft);
+      }
+
+      /* ── FLURRY GRID ── */
+      .flurry {
+        margin: 28px 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        padding: 18px 0;
+      }
+      .flurry-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 7px 0;
+      }
+      .flurry-q {
+        font-style: italic;
+        color: var(--ink-soft);
+        font-size: 16px;
+      }
+      .flurry-a {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        color: var(--green);
+        background: var(--green-soft);
+        padding: 4px 10px;
+        border-radius: 3px;
+        white-space: nowrap;
+      }
+
+      /* ── QUIET NOTE (reflective callout) ── */
+      .quiet-note {
+        margin: 36px 0;
+        padding: 24px 8px;
+        text-align: center;
+        border-top: 1px dashed var(--rule);
+        border-bottom: 1px dashed var(--rule);
+      }
+      .quiet-note p {
+        font-style: italic;
+        color: var(--ink-soft);
+        font-size: 18px;
+        line-height: 1.8;
+        margin: 0;
+      }
+
+      /* ── CLOSING LINE ── */
+      .closing-line {
+        text-align: center;
+        margin-top: 56px;
+        padding: 28px 20px;
+      }
+      .closing-line .tag {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 12px;
+      }
+      .closing-line .line {
+        font-family: "Caveat", cursive;
+        font-weight: 600;
+        font-size: 32px;
+        color: var(--rust);
+        transform: rotate(-1deg);
+        display: inline-block;
+      }
+
+      /* ── CHAPTER NAV ── */
+      .chapter-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 40px;
+        padding-top: 24px;
+        border-top: 1px solid var(--rule);
+      }
+      .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 3px;
+        font-family: "Space Mono", monospace;
+        font-size: 12px;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1px solid var(--rule);
+        background: var(--paper-dark);
+        color: var(--ink);
+      }
+      .nav-btn:hover {
+        border-color: var(--tape);
+        background: var(--tape-soft);
+      }
+
+      /* ── SCROLL BTN ── */
+      #scrollBtn {
+        position: fixed;
+        bottom: 26px;
+        right: 22px;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        background: var(--ink);
+        color: var(--paper);
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        box-shadow: 0 4px 14px var(--shadow);
+        z-index: 999;
+        transition: all 0.2s;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-family: "Space Mono", monospace;
+      }
+      #scrollBtn:hover {
+        transform: translateY(-2px);
+      }
+      #scrollBtn.visible {
+        display: flex;
+      }
+
+      @media (max-width: 480px) {
+        .topbar {
+          padding: 0 12px;
+        }
+        .novel-label {
+          display: none;
+        }
+        main {
+          padding: 82px 16px 100px;
+        }
+        .prose {
+          font-size: 16.5px;
+        }
+        .flurry-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-left">
+        <a href="bikyn.html" class="back-btn">← Chapters</a>
+        <span class="novel-label">Before I Forget Your Name</span>
+      </div>
+      <div class="topbar-right">
+        <div class="font-pill">
+          <button onclick="changeFont(-1)">A−</button>
+          <span>Aa</span>
+          <button onclick="changeFont(1)">A+</button>
+        </div>
+        <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+          🌙
+        </button>
+      </div>
+    </header>
+
+    <div class="reading-progress">
+      <div class="reading-progress-bar" id="progressBar"></div>
+    </div>
+
+    <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+    <main>
+      <span class="chapter-tab">Chapter 01</span>
+
+      <div class="chapter-header">
+        <div class="story-eyebrow">Before I Forget Your Name</div>
+        <h1 class="chapter-title">The Seat Beside the Window</h1>
+        <p class="chapter-subtitle">
+          Some ordinary Mondays don't stay ordinary.
+        </p>
+        <div class="chapter-meta">
+          <span class="meta-chip">POV: Hina</span>
+          <span class="meta-chip">Transfer Student</span>
+          <span class="meta-chip">Comedy</span>
+          <span class="meta-chip">By AKA</span>
+        </div>
+      </div>
+
+      <div class="prose" id="ch1-1">
+        <p>There are two kinds of students in every classroom.</p>
+        <p>The ones who pay attention.</p>
+        <p>
+          And the ones who spend the first five minutes of every lesson
+          wondering what they'll eat for lunch.
+        </p>
+        <p>Unfortunately...</p>
+        <p>I belonged to the second group.</p>
+      </div>
+
+      <div class="banter">
+        <p class="banter-line"><span class="dialogue">"...Hina."</span></p>
+        <p class="banter-aside">
+          Our homeroom teacher's voice cut through my thoughts.
+        </p>
+        <p class="banter-line"><span class="dialogue">"Hm?"</span></p>
+        <p class="banter-line">
+          <span class="dialogue"
+            >"Would you like to tell the class the answer?"</span
+          >
+        </p>
+        <p class="banter-line">
+          <span class="dialogue"
+            >"...If I say 'bread,' can we pretend I was listening?"</span
+          >
+        </p>
+        <p class="banter-aside">
+          The room burst into laughter. Even our teacher pinched the bridge of
+          his nose.
+        </p>
+        <p class="banter-line">
+          <span class="dialogue"
+            >"You were thinking about food again, weren't you?"</span
+          >
+        </p>
+        <p class="banter-line"><span class="dialogue">"...Maybe."</span></p>
+        <p class="banter-line"><span class="dialogue">"Stand."</span></p>
+      </div>
+
+      <div class="prose" id="ch1-2">
+        <p>
+          I let out the most dramatic sigh my body could produce before
+          standing.
+        </p>
+        <p>The punishment wasn't serious.</p>
+        <p>Just five seconds of public embarrassment.</p>
+        <p>Still...</p>
+        <p>It was five seconds too many.</p>
+      </div>
+
+      <div class="banter">
+        <p class="banter-line"><span class="dialogue">"Sit down."</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"Thank you for your mercy."</span>
+        </p>
+      </div>
+
+      <div class="prose margin-wrap" id="ch1-3">
+        <p>A few classmates chuckled as I dropped back into my seat.</p>
+        <p>Mission accomplished.</p>
+        <p>
+          If I was going to get scolded, I might as well make everyone laugh.
+        </p>
+        <p>The classroom settled once again.</p>
+        <p>Sunlight slipped through the windows, warming the wooden floor.</p>
+        <p>
+          Outside, the baseball club could already be heard shouting from the
+          field, even though classes weren't over yet.
+        </p>
+        <p>A perfectly ordinary Monday.</p>
+        <p>
+          Exactly the kind of day that disappears from your memory after a week.
+        </p>
+        <span class="margin-note">this one didn't.</span>
+        <p>
+          Our teacher checked the attendance sheet one last time before looking
+          toward the door.
+        </p>
+        <p><span class="dialogue">"Oh, right."</span></p>
+        <p>He smiled.</p>
+        <p>
+          <span class="dialogue">"We have someone new joining us today."</span>
+        </p>
+        <p>The classroom instantly came alive.</p>
+        <p><span class="thought">A transfer student?</span></p>
+        <p><span class="thought">In the middle of the semester?</span></p>
+        <p>Now this was more interesting than math.</p>
+        <p>The classroom door slid open.</p>
+        <p>A boy stepped inside.</p>
+      </div>
+
+      <div class="prose margin-wrap" id="ch1-4">
+        <p>
+          He wore the same uniform as the rest of us, though it looked almost
+          too neat, as if he'd spent extra time making sure everything was in
+          place.
+        </p>
+        <p>His black hair was slightly messy despite that effort.</p>
+        <p>Not in a fashionable way.</p>
+        <p>Just... naturally.</p>
+        <p>
+          His eyes quietly wandered across the classroom, taking in unfamiliar
+          faces.
+        </p>
+        <p>He didn't seem nervous.</p>
+        <p>He seemed...</p>
+        <p><span class="emphasis">Careful.</span></p>
+        <p>
+          <span class="dialogue">"This is Haruto Kisaragi,"</span> the teacher
+          said.
+        </p>
+        <span class="margin-note">new name to remember.</span>
+        <p>
+          <span class="dialogue">"He transferred here over the weekend."</span>
+        </p>
+        <p>Haruto bowed.</p>
+        <p><span class="dialogue">"My name is Haruto Kisaragi."</span></p>
+        <p>His voice was calm.</p>
+        <p><span class="dialogue">"I hope we can get along."</span></p>
+        <p>No dramatic speech.</p>
+        <p>No attempt to impress anyone.</p>
+        <p>Just one polite sentence.</p>
+      </div>
+
+      <div class="prose" id="ch1-5">
+        <p>The teacher pointed toward the only empty desk.</p>
+        <p><span class="dialogue">"The seat beside the window."</span></p>
+        <p>Lucky.</p>
+        <p>Every student secretly wanted that seat.</p>
+        <p>Fresh air.</p>
+        <p>A nice view.</p>
+        <p>
+          And the perfect excuse to stare outside whenever class became boring.
+        </p>
+        <p>Haruto thanked the teacher quietly before taking his seat.</p>
+        <p>For the rest of the lesson, everyone pretended to pay attention.</p>
+        <p>Nobody actually did.</p>
+        <p>Every few minutes, someone stole another glance at the new guy.</p>
+        <p>Including me.</p>
+        <p><span class="thought">"..."</span></p>
+        <p>Okay.</p>
+        <p>Maybe more than a few.</p>
+      </div>
+
+      <div class="scene-break">
+        <div class="dots">· · ·</div>
+        <div class="label">Lunch bell</div>
+      </div>
+
+      <div class="prose" id="ch1-6">
+        <p>Lunch break arrived like a prison sentence finally ending.</p>
+        <p>The moment the bell rang, chairs scraped against the floor.</p>
+        <p>Within seconds, Haruto's desk was surrounded.</p>
+      </div>
+
+      <div class="flurry">
+        <div class="flurry-row">
+          <span class="flurry-q">"So where did you transfer from?"</span>
+          <span class="flurry-a">"No."</span>
+        </div>
+        <div class="flurry-row">
+          <span class="flurry-q">"Do you play basketball?"</span>
+          <span class="flurry-a">"Sometimes."</span>
+        </div>
+        <div class="flurry-row">
+          <span class="flurry-q">"Do you have a girlfriend?"</span>
+          <span class="flurry-a">"Not really."</span>
+        </div>
+        <div class="flurry-row">
+          <span class="flurry-q">"What games do you play?"</span>
+          <span class="flurry-a">"I mostly read."</span>
+        </div>
+      </div>
+
+      <div class="prose" id="ch1-7">
+        <p>Question after question.</p>
+        <p>The poor guy answered every one politely.</p>
+        <p>He never sounded annoyed.</p>
+        <p>But after ten minutes...</p>
+        <p>Even I was getting socially exhausted just watching him.</p>
+        <p>Eventually, the crowd drifted away in search of food.</p>
+        <p>Haruto let out the smallest sigh.</p>
+      </div>
+
+      <div class="banter">
+        <p class="banter-line"><span class="dialogue">"...Survived?"</span></p>
+        <p class="banter-aside">The word slipped out before I could stop it.</p>
+        <p class="banter-line"><span class="dialogue">"...Barely."</span></p>
+        <p class="banter-aside">He looked up. I laughed.</p>
+        <p class="banter-line">
+          <span class="dialogue"
+            >"So that's your first boss battle at this school."</span
+          >
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"I wasn't prepared for it."</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"You'll level up."</span>
+        </p>
+        <p class="banter-line"><span class="dialogue">"I hope so."</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"...Those were actually decent jokes."</span>
+        </p>
+        <p class="banter-line"><span class="dialogue">"I practiced."</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"You practiced making jokes?"</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"I had a long train ride."</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"...You know what?"</span>
+        </p>
+        <p class="banter-line"><span class="dialogue">"What?"</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"I believe you."</span>
+        </p>
+      </div>
+
+      <div class="quiet-note">
+        <p>
+          For the first time... he laughed. It wasn't loud. It wasn't
+          exaggerated. Just a quiet laugh that reached his eyes. Somehow, it
+          made the classroom feel less unfamiliar.
+        </p>
+      </div>
+
+      <div class="prose" id="ch1-8">
+        <p>I walked over with my lunch.</p>
+      </div>
+
+      <div class="banter">
+        <p class="banter-line">
+          <span class="dialogue">"Mind if I sit here?"</span>
+        </p>
+        <p class="banter-aside">Haruto glanced at the empty seats around us.</p>
+        <p class="banter-line">
+          <span class="dialogue"
+            >"I don't think anyone else was planning to."</span
+          >
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"...Was that another joke?"</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"...I think so."</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"They're getting better."</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"I'll take that as a compliment."</span>
+        </p>
+        <p class="banter-line"><span class="dialogue">"You should."</span></p>
+      </div>
+
+      <div class="prose margin-wrap" id="ch1-9">
+        <p>I placed my lunch on the desk and held out my hand.</p>
+        <p><span class="dialogue">"I'm Hina Aizawa."</span></p>
+        <p>He shook it.</p>
+        <p><span class="dialogue">"Haruto Kisaragi."</span></p>
+        <span class="margin-note">properly introduced, this time.</span>
+        <p>His handshake was warm.</p>
+        <p>Not awkward.</p>
+        <p>Not overly confident.</p>
+        <p>Just...</p>
+        <p>Comfortable.</p>
+      </div>
+
+      <div class="quiet-note">
+        <p>
+          For a while, we simply ate. It wasn't an uncomfortable silence. Some
+          people force conversations because silence scares them. This wasn't
+          like that. The silence itself felt... easy.
+        </p>
+      </div>
+
+      <div class="prose" id="ch1-10">
+        <p>After finishing the last bite of my sandwich, I stood.</p>
+      </div>
+
+      <div class="banter">
+        <p class="banter-line"><span class="dialogue">"Well..."</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"I'll see you tomorrow."</span>
+        </p>
+        <p class="banter-aside">Haruto looked up.</p>
+        <p class="banter-line">
+          <span class="dialogue">"...See you tomorrow, Hina."</span>
+        </p>
+        <p class="banter-aside">I smiled without thinking.</p>
+        <p class="banter-line"><span class="dialogue">"Good."</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"...You remembered my name."</span>
+        </p>
+        <p class="banter-aside">He tilted his head.</p>
+        <p class="banter-line"><span class="dialogue">"I'd hope so."</span></p>
+        <p class="banter-line">
+          <span class="dialogue">"I only learned it today."</span>
+        </p>
+        <p class="banter-line">
+          <span class="dialogue">"...Fair enough."</span>
+        </p>
+      </div>
+
+      <div class="prose" id="ch1-11">
+        <p>I laughed, waved goodbye, and walked out of the classroom.</p>
+      </div>
+
+      <div class="closing-line">
+        <div class="tag">End of Chapter 01</div>
+        <div class="line">
+          For some reason, the rest of the day felt a little brighter than
+          usual.
+        </div>
+      </div>
+
+      <div class="chapter-nav">
+        <span class="nav-btn" style="opacity: 0.4; cursor: default"
+          >← Chapter 1</span
+        >
+        <a href="../index.html" class="nav-btn">🏠 Home</a>
+      </div>
+    </main>
+
+    <script>
+      var fontSize = 18;
+
+      function changeFont(action) {
+        if (action === 1 && fontSize < 24) fontSize += 1.5;
+        else if (action === -1 && fontSize > 14) fontSize -= 1.5;
+        var proses = document.querySelectorAll(".prose");
+        proses.forEach(function (el) {
+          el.style.fontSize = fontSize + "px";
+        });
+      }
+
+      function toggleDark() {
+        document.body.classList.toggle("dark");
+        var on = document.body.classList.contains("dark");
+        document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      }
+
+      window.onscroll = function () {
+        var scrollTop =
+          document.documentElement.scrollTop || document.body.scrollTop;
+        var total =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        document.getElementById("progressBar").style.width =
+          (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+        var btn = document.getElementById("scrollBtn");
+        if (scrollTop > 300) btn.classList.add("visible");
+        else btn.classList.remove("visible");
+      };
+
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      window.onload = function () {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("darkModeBtn").textContent = "☀️";
+        }
+      };
+    </script>
+  </body>
+</html>

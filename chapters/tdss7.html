@@ -1,0 +1,1079 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Day She Stayed - Chapter 7</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #444;
+      --ink-muted: #888;
+      --accent: #7a5c6e;
+      --accent-light: rgba(122, 92, 110, 0.07);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.14);
+      --gold: #c9a84c;
+      --gold-light: rgba(201, 168, 76, 0.1);
+      --blush: #c8706e;
+      --blush-light: rgba(200, 112, 110, 0.08);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --ink: #e6edf3;
+      --ink-soft: #b0bec5;
+      --ink-muted: #6a7f99;
+      --accent: #c9a0b8;
+      --accent-light: rgba(201, 160, 184, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --gold: #d4a84c;
+      --gold-light: rgba(212, 168, 76, 0.08);
+      --blush: #d47878;
+      --blush-light: rgba(212, 120, 120, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ── PROGRESS BAR ── */
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    /* ── CHAPTER HEADER ── */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(122, 92, 110, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: heartbeat 3s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      14% {
+        transform: scale(1.2);
+      }
+
+      28% {
+        transform: scale(1);
+      }
+
+      42% {
+        transform: scale(1.12);
+      }
+
+      70% {
+        transform: scale(1);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(34px, 7vw, 54px);
+      font-weight: 600;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* ── PROSE ── */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .gold {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .prose .blush {
+      color: var(--blush);
+      font-weight: 600;
+    }
+
+    .prose .ribbon {
+      color: #9b7b8c;
+      font-weight: 600;
+    }
+
+    /* ── JOURNAL BLOCK ── */
+    .journal-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .journal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .journal-day {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .journal-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* ── PHOTO BLOCK ── */
+    .photo-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .photo-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .photo-meta {
+      flex: 1;
+    }
+
+    .photo-filename {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .photo-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── RETURN VISUAL ── */
+    .return-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .return-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center,
+          rgba(201, 168, 76, 0.06) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .return-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .return-visual {
+      font-size: 40px;
+      margin-bottom: 14px;
+      animation: floatIn 3s ease-in-out infinite;
+      display: block;
+    }
+
+    @keyframes floatIn {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    .return-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* ── DATE BLOCK ── */
+    .date-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .date-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--gold-light);
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .date-meta {
+      flex: 1;
+    }
+
+    .date-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .date-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── MOMENT BLOCK ── */
+    .moment-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .moment-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at bottom,
+          rgba(122, 92, 110, 0.05) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .moment-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .moment-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.65;
+    }
+
+    .moment-text .said {
+      color: var(--ink);
+    }
+
+    /* ── FINAL CHAPTER END ── */
+    .chapter-end {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .end-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 28px;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .end-sub {
+      font-family: "Crimson Pro", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 32px;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.78;
+    }
+
+    /* ── SCROLL BTN ── */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .journal-block,
+      .return-block,
+      .moment-block {
+        padding: 20px;
+      }
+
+      .photo-block,
+      .date-block {
+        padding: 20px;
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tdss.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Day She Stayed</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)" title="Smaller">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)" title="Reset">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)" title="Larger">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <!-- PROGRESS BAR -->
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- SCROLL BTN -->
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <!-- CHAPTER HEADER -->
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🎀</span>
+        The Day She Stayed · Chapter 7
+      </div>
+      <h1 class="chapter-title">Rewriting the Ending</h1>
+      <p class="chapter-subtitle">
+        She didn't just survive. She chose to keep living.
+      </p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Drama</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Sad</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- PROSE 1 — The Return -->
+    <div class="prose" id="novel-content">
+      <p>The school was loud.</p>
+
+      <p>
+        Louder than she remembered. Hallways full of footsteps, laughter,
+        forgotten projects and snacks left in lockers. The same chaos… but it
+        felt new now.
+        <span class="thought">Like she was walking through it for the first time — not as a
+          ghost, not as someone counting days…</span>
+      </p>
+
+      <p>But as Sayo. <span class="emphasis">Just Sayo.</span></p>
+
+      <p>
+        She paused at the classroom door. Ren stood beside her, holding her
+        bag like it was made of glass.
+      </p>
+
+      <p><span class="dialogue">"You okay?"</span> he whispered.</p>
+
+      <p>She nodded. Then took a deep breath and stepped inside.</p>
+    </div>
+
+    <!-- RETURN VISUAL -->
+    <div class="return-block">
+      <span class="return-label">The Moment Everything Stopped</span>
+      <span class="return-visual">🎀</span>
+      <p class="return-caption">
+        The room froze. Chairs squeaked.<br />
+        Whispers passed like ripples in a lake.<br />
+        <em>The girl who disappeared.</em>
+      </p>
+    </div>
+
+    <!-- PROSE 2 — The Room -->
+    <div class="prose" id="novel-content-2">
+      <p>People turned. Some gasped. Some stared.</p>
+
+      <p>
+        <span class="thought">The quiet one. The one with the ribbon and the journal and the boy
+          who never stopped looking at her seat.</span>
+      </p>
+
+      <p>And then — the teacher smiled.</p>
+
+      <p><span class="dialogue">"Welcome back, Sayo."</span></p>
+
+      <p>She smiled back.</p>
+
+      <p>
+        <span class="dialogue">"Sorry I was gone so long. I was… rewriting my ending."</span>
+      </p>
+
+      <p>
+        She took her seat — the same one beside Ren, by the window. The
+        <span class="ribbon">ribbon was tied around her wrist again.</span>
+        Faded. Beautiful.
+      </p>
+
+      <p>
+        Ren leaned in, whispering:
+        <span class="dialogue">"You stole the spotlight."</span>
+      </p>
+
+      <p>She smirked. <span class="dialogue">"I earned it."</span></p>
+
+      <p class="scene-break">· · ·</p>
+    </div>
+
+    <!-- JOURNAL PAGE 2 -->
+    <div class="journal-block">
+      <span class="journal-label">📓 Sayo's Journal</span>
+      <span class="journal-day">Page 2.</span>
+      <p class="journal-text">
+        They looked at me like I survived something.<br /><br />
+        But I didn't just survive.<br />
+        I chose to keep living.<br /><br />
+        And in that choice… I found him again.
+      </p>
+    </div>
+
+    <!-- PROSE 3 — The Rooftop -->
+    <div class="prose" id="novel-content-3">
+      <p class="scene-break">— A Sky Worth Sharing</p>
+
+      <p>
+        It wasn't some fancy place. No lights, no music, no crowd. Just a
+        train ride. A hill. A picnic basket. And two people who once thought
+        they'd never have this kind of moment.
+      </p>
+
+      <p><span class="emphasis">Their first official date.</span></p>
+
+      <p>
+        Sayo laid out the blanket beneath a tree, the city lights distant
+        behind them and the horizon melting into orange. Ren set down his
+        camera gently, like he was afraid it might interrupt the silence.
+      </p>
+
+      <p>She watched him from across the blanket.</p>
+
+      <p>
+        <span class="dialogue">"You look like you're about to propose,"</span>
+        she teased.
+      </p>
+
+      <p>
+        Ren choked on his sandwich.
+        <span class="dialogue">"I— I mean… not yet."</span>
+      </p>
+
+      <p>
+        Sayo laughed —
+        <span class="thought">soft, real. A sound he would've crossed lifetimes to hear
+          again.</span>
+      </p>
+    </div>
+
+    <!-- DATE BLOCK -->
+    <div class="date-block">
+      <div class="date-icon-wrap">🧺</div>
+      <div class="date-meta">
+        <span class="date-title">A Hill. A Picnic Basket. A Horizon in Orange.</span>
+        <span class="date-sub">Their First Official Date · No fancy place needed</span>
+      </div>
+    </div>
+
+    <!-- PROSE 4 — The Photo -->
+    <div class="prose" id="novel-content-4">
+      <p>
+        They didn't talk much. Just exchanged glances, gestures, shared bites
+        of food and a soda with too little fizz. But it felt
+        <span class="emphasis">full.</span> Full of the space between two
+        people who had seen the edge — and still reached for each other.
+      </p>
+
+      <p>Later, he picked up his camera.</p>
+
+      <p><span class="dialogue">"Can I?"</span> he asked.</p>
+
+      <p>
+        She nodded, brushing her hair back. He took the shot — no filters, no
+        angles, no tricks. Just her in
+        <span class="gold">golden light,</span> smiling toward him like she
+        wasn't scared anymore.
+      </p>
+
+      <p>He looked at the preview screen. Then at her.</p>
+
+      <p>
+        <span class="dialogue">"…This one,"</span> he whispered,
+        <span class="dialogue">"is my favorite."</span>
+      </p>
+
+      <p>She walked over, peeking at the photo.</p>
+
+      <p><span class="dialogue">"It's not the sky."</span></p>
+
+      <p>
+        <span class="dialogue">"No,"</span> he said.
+        <span class="dialogue">"It's who I look up to now."</span>
+      </p>
+
+      <p class="scene-break">· · ·</p>
+    </div>
+
+    <!-- PHOTO BLOCK -->
+    <div class="photo-block">
+      <div class="photo-icon-wrap">🌅</div>
+      <div class="photo-meta">
+        <span class="photo-filename">"Golden Light, No Filter."</span>
+        <span class="photo-sub">His Favorite Photo · The sky he looks up to now</span>
+      </div>
+    </div>
+
+    <!-- PROSE 5 — The Kiss -->
+    <div class="prose" id="novel-content-5">
+      <p>
+        And then, with the sun dipping behind them and the breeze gentle on
+        her skin — Sayo leaned in. Not fast. Not dramatic.
+        <span class="thought">Just enough.</span>
+      </p>
+
+      <p>Their foreheads touched. Her eyes closed.</p>
+
+      <p>And in a voice barely heard:</p>
+
+      <p><span class="dialogue">"I love you, Ren."</span></p>
+
+      <p>
+        He didn't rush to reply. He took her hand, gently placed it over his
+        heart, and said:
+      </p>
+
+      <p>
+        <span class="dialogue">"You don't have to be dying to hear that back."</span>
+      </p>
+
+      <p>
+        Then he kissed her.
+        <span class="thought">Slow. Honest. Full of all the days they thought they'd never
+          have.</span>
+      </p>
+    </div>
+
+    <!-- THE MOMENT -->
+    <div class="moment-block">
+      <span class="moment-label">The Confession</span>
+      <p class="moment-text">
+        <span class="said">"You don't have to be dying<br />to hear that back."</span><br /><br />
+        Then he kissed her.<br />
+        <em>Slow. Honest. Full of all the days<br />they thought they'd never
+          have.</em>
+      </p>
+    </div>
+
+    <!-- JOURNAL FINAL -->
+    <div class="journal-block">
+      <span class="journal-label">📓 Sayo's Journal</span>
+      <span class="journal-day">Page 3.</span>
+      <p class="journal-text">
+        He didn't just fall for me.<br />
+        He stayed.<br /><br />
+        I think this is what it means to live —<br />
+        not just breathing, but choosing to be seen,<br />
+        loved, and held, even on the days I feel small.<br /><br />
+        And today… I felt like the sky.
+      </p>
+    </div>
+
+    <!-- CHAPTER END -->
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter 7</span>
+      <div class="end-title">I felt like the sky.</div>
+      <div class="end-sub">— Sayo's Journal, Page 3</div>
+      <div class="chapter-nav">
+        <a href="tdss6.html" class="nav-btn nav-prev">← Chapter 6</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tdss8.html" class="nav-btn nav-next">Chapter 8 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fontSize = 19;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 26) fontSize += 2;
+      else if (action === -1 && fontSize > 14) fontSize -= 2;
+      else if (action === 0) fontSize = 19;
+      [
+        "novel-content",
+        "novel-content-2",
+        "novel-content-3",
+        "novel-content-4",
+        "novel-content-5",
+      ].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fontSize + "px";
+      });
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+
+    window.onscroll = function () {
+      var scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      var total =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+      var btn = document.getElementById("scrollBtn");
+      if (scrollTop > 300) btn.classList.add("visible");
+      else btn.classList.remove("visible");
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

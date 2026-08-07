@@ -1,0 +1,44 @@
+<svg viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dots1" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="7" cy="7" r="3.2" fill="#16151a"/>
+    </pattern>
+    <pattern id="dotsFade" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="8" cy="8" r="1.4" fill="#16151a"/>
+    </pattern>
+    <radialGradient id="burst" cx="50%" cy="42%" r="60%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e7e4dc"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1200" fill="#f4f2ec"/>
+  <rect x="0" y="0" width="800" height="1200" fill="url(#burst)"/>
+  <!-- speed lines burst -->
+  <g stroke="#16151a" stroke-width="2" opacity="0.55">
+    <line x1="400" y1="500" x2="60" y2="60"/>
+    <line x1="400" y1="500" x2="200" y2="20"/>
+    <line x1="400" y1="500" x2="400" y2="0"/>
+    <line x1="400" y1="500" x2="600" y2="20"/>
+    <line x1="400" y1="500" x2="740" y2="60"/>
+    <line x1="400" y1="500" x2="770" y2="220"/>
+    <line x1="400" y1="500" x2="30" y2="220"/>
+  </g>
+  <!-- outer panel border -->
+  <rect x="24" y="24" width="752" height="1152" fill="none" stroke="#16151a" stroke-width="6"/>
+  <!-- silhouette figure (generic, non-copyrighted) -->
+  <g transform="translate(400,640)">
+    <ellipse cx="0" cy="0" rx="150" ry="220" fill="#16151a"/>
+    <circle cx="0" cy="-260" r="90" fill="#16151a"/>
+    <rect x="-160" y="-40" width="320" height="60" fill="#16151a"/>
+  </g>
+  <rect x="0" y="960" width="800" height="240" fill="url(#dots1)" opacity="0.9"/>
+  <rect x="24" y="960" width="752" height="1" fill="#16151a"/>
+  <!-- title lettering -->
+  <text x="400" y="1080" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="86" fill="#f4f2ec" stroke="#16151a" stroke-width="4" letter-spacing="4">CHAPTER 1</text>
+  <text x="400" y="1140" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="30" fill="#f4f2ec" letter-spacing="10">SAMPLE PAGE</text>
+  <!-- corner page number -->
+  <g transform="translate(700,1110)">
+    <rect x="0" y="0" width="70" height="46" fill="#f4f2ec" stroke="#16151a" stroke-width="4"/>
+    <text x="35" y="31" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="26" fill="#16151a">01</text>
+  </g>
+</svg>

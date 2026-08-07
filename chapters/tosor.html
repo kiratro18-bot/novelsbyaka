@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Other Side of Rain — Chapters</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Gloock:ital@0;1&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f0f4f8;
+      --surface: #e6ecf2;
+      --surface2: #dce4ee;
+      --ink: #18202c;
+      --ink-soft: rgba(24, 32, 44, 0.5);
+      --ink-faint: rgba(24, 32, 44, 0.07);
+      --teal: #4a8fa0;
+      --teal-soft: rgba(74, 143, 160, 0.12);
+      --teal-dim: rgba(74, 143, 160, 0.3);
+      --teal-light: #7ab8c8;
+      --slate: #5a7080;
+      --mist: #a8c4d0;
+      --fog: rgba(240, 244, 248, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.4s,
+        color 0.4s;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* RAIN CANVAS */
+    #rainCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.28;
+    }
+
+    /* DARK MODE */
+    body.dark {
+      --bg: #0c1218;
+      --surface: #121a22;
+      --surface2: #18222e;
+      --ink: #d8e8f0;
+      --ink-soft: rgba(216, 232, 240, 0.45);
+      --ink-faint: rgba(216, 232, 240, 0.06);
+      --fog: rgba(12, 18, 24, 0.95);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card:hover {
+      background: var(--surface2);
+      border-color: var(--teal-dim);
+    }
+
+    body.dark .hero-card {
+      background: rgba(18, 26, 34, 0.9);
+      border-color: rgba(74, 143, 160, 0.18);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: var(--surface2);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .section-header {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .ch-num {
+      color: rgba(74, 143, 160, 0.18);
+    }
+
+    body.dark .chapter-card:hover .ch-num {
+      color: var(--teal);
+    }
+
+    body.dark .read-arrow {
+      color: rgba(216, 232, 240, 0.12);
+    }
+
+    body.dark .chapter-card:hover .read-arrow {
+      color: var(--teal);
+    }
+
+    body.dark .world-banner {
+      background: rgba(74, 143, 160, 0.08);
+      border-color: rgba(74, 143, 160, 0.2);
+    }
+
+    body.dark .closing-card {
+      background: rgba(18, 26, 34, 0.7);
+      border-color: rgba(74, 143, 160, 0.12);
+    }
+
+    body.dark .tag {
+      background: var(--teal-soft);
+    }
+
+    body.dark .new-badge {
+      background: rgba(74, 143, 160, 0.15);
+      color: var(--teal-light);
+    }
+
+    /* NAV */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(24, 32, 44, 0.08);
+      transition:
+        background 0.4s,
+        border-color 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition:
+        gap 0.2s,
+        color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--ink);
+    }
+
+    .back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-title {
+      font-family: "Gloock", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--teal);
+      letter-spacing: 0.03em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(24, 32, 44, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    /* FONT PANEL */
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(24, 32, 44, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 40px rgba(24, 32, 44, 0.1);
+      z-index: 200;
+      min-width: 180px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(24, 32, 44, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--teal);
+      color: white;
+      border-color: var(--teal);
+    }
+
+    .font-size-display {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      color: var(--teal);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 52px 40px 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* gradient wash behind hero */
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: linear-gradient(180deg,
+          rgba(74, 143, 160, 0.07) 0%,
+          transparent 80%);
+      pointer-events: none;
+    }
+
+    .hero-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(230, 236, 242, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(74, 143, 160, 0.2);
+      border-radius: 28px;
+      padding: 50px 60px;
+      max-width: 580px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* rain streak decoration top-right */
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 120px;
+      height: 100%;
+      background: repeating-linear-gradient(105deg,
+          transparent,
+          transparent 8px,
+          rgba(74, 143, 160, 0.04) 8px,
+          rgba(74, 143, 160, 0.04) 9px);
+      pointer-events: none;
+    }
+
+    .new-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      background: rgba(74, 143, 160, 0.1);
+      border: 1px solid rgba(74, 143, 160, 0.22);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 14px;
+      opacity: 0.75;
+      position: relative;
+    }
+
+    .hero-title {
+      font-family: "Gloock", serif;
+      font-size: clamp(30px, 5.5vw, 54px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 6px;
+      position: relative;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--teal);
+    }
+
+    .hero-subtitle {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 26px;
+      letter-spacing: 0.04em;
+      position: relative;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .div-line {
+      width: 28px;
+      height: 1px;
+      background: var(--teal-dim);
+    }
+
+    .div-drop {
+      font-size: 13px;
+      opacity: 0.5;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .meta-row span {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      letter-spacing: 0.05em;
+    }
+
+    /* WORLD BANNER */
+    .world-banner {
+      max-width: 600px;
+      margin: 0 auto 8px;
+      padding: 0 24px;
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.08s;
+    }
+
+    .world-banner-inner {
+      background: rgba(74, 143, 160, 0.07);
+      border: 1px solid rgba(74, 143, 160, 0.18);
+      border-radius: 12px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .world-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .world-text {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--teal);
+    }
+
+    .world-link {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--teal);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+      flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+
+    .world-link:hover {
+      opacity: 1;
+    }
+
+    /* CHAPTER SECTION */
+    .chapter-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(24, 32, 44, 0.07);
+      transition: border-color 0.4s;
+    }
+
+    .section-title {
+      font-family: "Gloock", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .chapter-total {
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+    }
+
+    /* PROGRESS */
+    .progress-bar {
+      height: 2px;
+      background: rgba(24, 32, 44, 0.06);
+      border-radius: 1px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    /* CHAPTER CARDS */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      background: white;
+      border: 1px solid rgba(24, 32, 44, 0.07);
+      border-radius: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .chapter-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--teal), var(--teal-light));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(74, 143, 160, 0.22);
+      box-shadow: 0 6px 28px rgba(74, 143, 160, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .ch-num {
+      font-family: "Gloock", serif;
+      font-size: 28px;
+      font-style: italic;
+      color: rgba(24, 32, 44, 0.1);
+      min-width: 36px;
+      line-height: 1;
+      transition: color 0.25s;
+      flex-shrink: 0;
+    }
+
+    .chapter-card:hover .ch-num {
+      color: var(--teal);
+    }
+
+    .chapter-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chapter-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    .chapter-title {
+      font-family: "Gloock", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.3;
+      transition: color 0.2s;
+    }
+
+    .chapter-card:hover .chapter-title {
+      color: var(--teal);
+    }
+
+    .read-arrow {
+      font-size: 18px;
+      color: rgba(24, 32, 44, 0.12);
+      transition: all 0.25s;
+      flex-shrink: 0;
+      transform: translateX(-6px);
+    }
+
+    .chapter-card:hover .read-arrow {
+      color: var(--teal);
+      transform: translateX(0);
+    }
+
+    /* STATUS NOTE */
+    .status-note {
+      margin-top: 24px;
+      padding: 16px 22px;
+      background: var(--teal-soft);
+      border-left: 2px solid var(--teal-dim);
+      border-radius: 0 10px 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.36s;
+    }
+
+    .status-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .status-text {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--teal);
+      line-height: 1.4;
+    }
+
+    .status-sub {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      opacity: 0.6;
+      margin-top: 2px;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 20px 40px 40px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+    }
+
+    /* SCROLL BTN */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(74, 143, 160, 0.35);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-card {
+      animation: fadeUp 0.55s ease both;
+      animation-delay: 0.05s;
+    }
+
+    .section-header {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.12s;
+    }
+
+    .progress-bar {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.15s;
+    }
+
+    .chapter-card:nth-child(1) {
+      animation-delay: 0.19s;
+    }
+
+    .chapter-card:nth-child(2) {
+      animation-delay: 0.26s;
+    }
+
+    .chapter-card:nth-child(3) {
+      animation-delay: 0.33s;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-title {
+        display: none;
+      }
+
+      .hero {
+        padding: 32px 16px 28px;
+      }
+
+      .hero-card {
+        padding: 30px 22px;
+      }
+
+      .world-banner {
+        padding: 0 16px;
+      }
+
+      .chapter-section {
+        padding: 0 16px 60px;
+      }
+
+      .chapter-card {
+        padding: 16px 18px;
+        gap: 14px;
+      }
+
+      .ch-num {
+        font-size: 22px;
+        min-width: 28px;
+      }
+
+      .chapter-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Rain canvas -->
+  <canvas id="rainCanvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="../index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back to Library</span>
+    </a>
+    <div class="nav-title">The Other Side of Rain</div>
+    <div class="nav-right">
+      <div style="position: relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()" title="Font size">
+          Aa
+        </button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size: 13px">
+              A−
+            </button>
+            <span class="font-size-display" id="fontDisplay">16</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size: 19px">
+              A+
+            </button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size: 13px; letter-spacing: 0.1em">
+            Reset
+          </button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-card">
+      <div class="new-badge">🌧️ New Arrival</div>
+      <div class="hero-eyebrow">A Novel by AKA</div>
+      <h1 class="hero-title">The Other<br />Side of <em>Rain</em></h1>
+      <p class="hero-subtitle">
+        Every storm has another side. She's standing in it.
+      </p>
+      <div class="hero-divider">
+        <div class="div-line"></div>
+        <span class="div-drop">🌧️</span>
+        <div class="div-line"></div>
+      </div>
+      <div class="meta-row">
+        <span>📖 5 Chapter</span>
+        <span>🟢 Completed</span>
+        <span><span class="tag">Romance</span></span>
+        <span><span class="tag">Drama</span></span>
+        <span><span class="tag">Slice of Life</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONNECTED WORLD BANNER -->
+  <div class="world-banner">
+    <div class="world-banner-inner">
+      <span class="world-icon">🔗</span>
+      <span class="world-text">Set in the same world as <em>The Rain Pact</em></span>
+      <a href="rpc.html" class="world-link">Read The Rain Pact →</a>
+    </div>
+  </div>
+
+  <!-- CHAPTER LIST -->
+  <div class="chapter-section">
+    <div class="section-header">
+      <h2 class="section-title">Chapters</h2>
+      <span class="chapter-total">Just beginning</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="chapter-list">
+      <a class="chapter-card" href="tosor1.html">
+        <div class="ch-num">1</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter One</div>
+          <div class="chapter-title">
+            The Girl Who Always Forgot Her Umbrella
+          </div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tosor2.html">
+        <div class="ch-num">2</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Two</div>
+          <div class="chapter-title">Where the Water Seeps In</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tosor3.html">
+        <div class="ch-num">3</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Three</div>
+          <div class="chapter-title">The Truth Behind the Smile</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tosor4.html">
+        <div class="ch-num">4</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Four</div>
+          <div class="chapter-title">What the Rain Was Hiding</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tosor5.html">
+        <div class="ch-num">5</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Five</div>
+          <div class="chapter-title">The Days the Sky Forgot to Cry</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+    </div>
+
+    <!-- STATUS NOTE -->
+    <div class="status-note">
+      <span class="status-icon">🌧️</span>
+      <div>
+        <div class="status-text">Completed the rainy days</div>
+        <div class="status-sub">Completed · novel</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    A Novel by AKA &nbsp;·&nbsp; Please do not repost or copy without
+    permission.<br />
+    Sharing links is always appreciated.
+  </footer>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+
+  <script>
+    /* RAIN CANVAS — slightly gentler than Rain Pact, diagonal slant */
+    var canvas = document.getElementById("rainCanvas");
+    var ctx = canvas.getContext("2d");
+    var drops = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    function spawnDrop() {
+      drops.push({
+        x: Math.random() * (canvas.width + 100),
+        y: -20,
+        length: Math.random() * 16 + 8,
+        speedY: Math.random() * 3.5 + 2.5,
+        speedX: -(Math.random() * 0.8 + 0.3),
+        opacity: Math.random() * 0.2 + 0.07,
+        width: Math.random() * 0.7 + 0.3,
+      });
+    }
+
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drops.forEach((d, i) => {
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x + d.speedX * 3, d.y + d.length);
+        ctx.strokeStyle = `rgba(74,143,160,${d.opacity})`;
+        ctx.lineWidth = d.width;
+        ctx.stroke();
+        d.y += d.speedY;
+        d.x += d.speedX;
+        if (d.y > canvas.height + 30) drops.splice(i, 1);
+      });
+
+      if (Math.random() < 0.35) spawnDrop();
+      requestAnimationFrame(drawRain);
+    }
+
+    drawRain();
+
+    /* FONT SIZE */
+    var fontSize = 16;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 24) fontSize += 2;
+      else if (action === -1 && fontSize > 12) fontSize -= 2;
+      else if (action === 0) fontSize = 16;
+      document.getElementById("fontDisplay").textContent = fontSize;
+      try {
+        localStorage.setItem("tosorFontSize", fontSize);
+      } catch (e) { }
+    }
+
+    function toggleFontPanel() {
+      document.getElementById("fontPanel").classList.toggle("open");
+    }
+
+    document.addEventListener("click", (e) => {
+      var btn = document.getElementById("fontToggle");
+      var panel = document.getElementById("fontPanel");
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove("open");
+      }
+    });
+
+    /* DARK MODE */
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+
+    /* SCROLL BTN */
+    window.addEventListener("scroll", () => {
+      var btn = document.getElementById("scrollBtn");
+      btn.style.display = window.scrollY > 200 ? "flex" : "none";
+    });
+
+    /* READING PROGRESS */
+    var totalChapters = 1;
+    try {
+      var stored = JSON.parse(localStorage.getItem("tosorRead") || "[]");
+      document.getElementById("progressFill").style.width =
+        (Math.min(stored.length, totalChapters) / totalChapters) * 100 + "%";
+    } catch (e) { }
+
+    /* INIT */
+    window.addEventListener("load", () => {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+        var saved = parseInt(localStorage.getItem("tosorFontSize"));
+        if (saved && saved >= 12 && saved <= 24) {
+          fontSize = saved;
+          document.getElementById("fontDisplay").textContent = fontSize;
+        }
+      } catch (e) { }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ten Percent of Forever - Chapter 10: The Last Morning</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f3f5f0;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #3d3d3d;
+      --ink-muted: #888;
+      --accent: #4a7c59;
+      --accent-light: rgba(74, 124, 89, 0.08);
+      --accent2: #8aab72;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-strong: rgba(0, 0, 0, 0.13);
+    }
+
+    body.dark {
+      --bg: #0e110c;
+      --surface: #151a12;
+      --ink: #dde8d4;
+      --ink-soft: #a8bea0;
+      --ink-muted: #637560;
+      --accent: #7aab72;
+      --accent-light: rgba(122, 171, 114, 0.09);
+      --accent2: #a0c890;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.11);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ── PROGRESS ── */
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    /* ── CHAPTER HEADER ── */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(74, 124, 89, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(122, 171, 114, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(36px, 7vw, 52px);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* ── SCENE BLOCK ── */
+    .scene-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scene-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(74, 124, 89, 0.05) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .scene-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .scene-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    .time-marker {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    /* ── PROSE ── */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--accent);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .soft-accent {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── SKETCH BLOCK ── */
+    .sketch-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .sketch-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .sketch-scene {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      color: var(--ink-soft);
+      line-height: 1.85;
+      font-style: italic;
+    }
+
+    /* ── FINALE BLOCK ── */
+    .finale-block {
+      margin: 48px auto 40px;
+      padding: 44px 36px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .finale-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center,
+          rgba(74, 124, 89, 0.04) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .finale-pct {
+      font-family: "Crimson Pro", serif;
+      font-size: 72px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+      opacity: 0.12;
+      line-height: 1;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .finale-quote {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .finale-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .finale-sub {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+      position: relative;
+    }
+
+    .finale-attr {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      opacity: 0.6;
+      position: relative;
+    }
+
+    /* ── END + NAV ── */
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-home {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-home:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .sketch-block {
+        padding: 20px;
+      }
+
+      .finale-block {
+        padding: 32px 24px;
+      }
+
+      .chapter-title {
+        font-size: clamp(28px, 6vw, 40px);
+      }
+
+      .finale-quote {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tpof.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">Ten Percent of Forever</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">✦</span>
+        Ten Percent of Forever · Final Chapter
+      </div>
+      <h1 class="chapter-title">The Last<br />Morning</h1>
+      <p class="chapter-subtitle">When endings become beginnings.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Finale</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- OPENING SCENE -->
+    <div class="scene-block">
+      <span class="time-marker">7:10 AM</span>
+      <span class="scene-label">🌅 The vending machine overhang</span>
+      <p class="scene-caption">
+        Everything feels like it's moving too fast. Except for this moment.
+      </p>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>The school year was ending.</p>
+      <p>
+        Desks were already being rearranged. Uniforms had started to feel too
+        tight or too loose. Yearbooks were being passed around with
+        halfhearted jokes scribbled into margins.
+      </p>
+      <p>
+        <span class="emphasis">Everything felt like it was moving too fast.</span>
+      </p>
+      <p><span class="thought">Except for this moment.</span></p>
+
+      <p class="scene-break">· · ·</p>
+
+      <p>7:10 AM.</p>
+      <p>
+        The vending machine roof still leaked slightly in the corner. The sky
+        was a soft grey — not raining, not sunny, just…
+        <span class="soft-accent">somewhere in between.</span>
+      </p>
+      <p>Hiro stood there, hands in his pockets, breathing slow.</p>
+      <p>And then — footsteps.</p>
+      <p>
+        She came into view, hair slightly windblown, blazer wrinkled,
+        sketchbook tucked carefully beneath her arm.
+      </p>
+      <p><span class="soft-accent">Mei.</span></p>
+      <p>
+        <span class="dialogue">"Morning,"</span> she said, stepping under the
+        roof beside him.
+      </p>
+      <p><span class="dialogue">"You're late,"</span> he teased.</p>
+      <p><span class="dialogue">"You're early."</span></p>
+      <p>He smiled. <span class="dialogue">"You came."</span></p>
+      <p><span class="dialogue">"Of course I did,"</span> she said.</p>
+
+      <p class="scene-break">· · ·</p>
+
+      <p>Then held up a folded piece of paper.</p>
+      <p><span class="dialogue">"This is yours."</span></p>
+      <p>He blinked. <span class="dialogue">"What's this?"</span></p>
+      <p>
+        <span class="dialogue">"I drew the first day. The umbrella day."</span>
+      </p>
+      <p>
+        She pressed it into his hands before he could react. Then added,
+        <span class="dialogue">"It felt right to give it back. You started it."</span>
+      </p>
+    </div>
+
+    <!-- SKETCH REVEAL -->
+    <div class="sketch-block">
+      <span class="sketch-label">✏️ Mei's drawing</span>
+      <p class="sketch-scene">
+        Two figures under an umbrella, but this time…
+        <em>their faces were visible.</em><br />
+        And they were smiling.
+      </p>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>Mei looked away, suddenly shy.</p>
+      <p>
+        <span class="dialogue">"You kept showing up,"</span> she said softly.
+        <span class="dialogue">"Even after I pushed you away. Even when I was scared."</span>
+      </p>
+      <p><span class="dialogue">"I was scared too."</span></p>
+      <p>
+        <span class="dialogue">"But you were kind,"</span> she whispered.
+        <span class="dialogue">"Not loud. Not dramatic. Just… here. Every time."</span>
+      </p>
+
+      <p class="scene-break">· · ·</p>
+
+      <p>A pause.</p>
+      <p>Then Hiro took a deep breath.</p>
+      <p>Reached into his bag.</p>
+      <p>And pulled out an umbrella.</p>
+      <p><span class="dialogue">"Want to walk with me?"</span> he asked.</p>
+      <p>
+        She stared for a second —
+        <span class="thought">like she might cry, or laugh, or both.</span>
+      </p>
+      <p>Then nodded.</p>
+      <p>And reached out her hand to hold the handle with him.</p>
+      <p>
+        They stepped into the morning together. No rush. No noise. Just two
+        people walking side by side.
+        <span class="emphasis">No promises of forever. No need for them.</span>
+        Just this moment. This quiet, gentle, ten percent of forever.
+      </p>
+      <p><span class="soft-accent">And it was enough.</span></p>
+    </div>
+
+    <!-- FINALE -->
+    <div class="finale-block">
+      <div class="finale-pct">10%</div>
+      <p class="finale-quote">
+        "Ten percent of forever is still forever,<br />if you feel it right."
+      </p>
+      <h2 class="finale-title">The End</h2>
+      <span class="finale-sub">Ten Percent of Forever</span>
+      <span class="finale-attr">Written by AKA</span>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Story</span>
+      <div class="chapter-nav">
+        <a href="tpof6.html" class="nav-btn nav-prev">← Previous Chapter</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Library</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fontSize = 19;
+    function changeFont(a) {
+      if (a === 1 && fontSize < 26) fontSize += 2;
+      else if (a === -1 && fontSize > 14) fontSize -= 2;
+      else if (a === 0) fontSize = 19;
+      var el1 = document.getElementById("prose1");
+      var el2 = document.getElementById("prose2");
+      if (el1) el1.style.fontSize = fontSize + "px";
+      if (el2) el2.style.fontSize = fontSize + "px";
+      localStorage.setItem("tpofFontSize", fontSize);
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop;
+      var t =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+      var s = parseInt(localStorage.getItem("tpofFontSize"));
+      if (s && s >= 14 && s <= 26) {
+        fontSize = s;
+        document.getElementById("prose1").style.fontSize = s + "px";
+        document.getElementById("prose2").style.fontSize = s + "px";
+      }
+    };
+  </script>
+</body>
+
+</html>

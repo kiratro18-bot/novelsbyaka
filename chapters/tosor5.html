@@ -1,0 +1,1116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Days the Sky Forgot to Cry — Complete Story</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f0f4f8;
+      --surface: #e6ecf2;
+      --ink: #18202c;
+      --ink-soft: rgba(24, 32, 44, 0.5);
+      --ink-faint: rgba(24, 32, 44, 0.07);
+      --teal: #4a8fa0;
+      --teal-dim: rgba(74, 143, 160, 0.3);
+      --deep: #2d7080;
+      --storm: #1a4050;
+      --gold: #b8945a;
+      --fog: rgba(240, 244, 248, 0.96);
+      --reading-width: 660px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Lora", serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.4s,
+        color 0.4s;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    #rainCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body.dark {
+      --bg: #0c1218;
+      --surface: #121a22;
+      --ink: #d8e8f0;
+      --ink-soft: rgba(216, 232, 240, 0.45);
+      --ink-faint: rgba(216, 232, 240, 0.06);
+      --fog: rgba(12, 18, 24, 0.97);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-header {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-nav {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .nav-prev {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .nav-prev:hover {
+      background: var(--teal);
+      color: white;
+    }
+
+    body.dark .reading-progress-bar {
+      background: var(--ink-faint);
+    }
+
+    body.dark .moment-card {
+      background: rgba(18, 26, 34, 0.88);
+      border-color: rgba(74, 143, 160, 0.2);
+    }
+
+    body.dark .crane-card {
+      background: rgba(18, 26, 34, 0.7);
+      border-color: rgba(184, 148, 90, 0.2);
+    }
+
+    body.dark .part-end-card {
+      background: rgba(18, 26, 34, 0.6);
+      border-color: rgba(74, 143, 160, 0.15);
+    }
+
+    .reading-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: rgba(24, 32, 44, 0.08);
+      width: 100%;
+      z-index: 200;
+    }
+
+    .reading-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--gold));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 58px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(24, 32, 44, 0.08);
+      transition: background 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--teal);
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      transition:
+        gap 0.2s,
+        color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--storm);
+    }
+
+    .back-arrow {
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-center {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(24, 32, 44, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(24, 32, 44, 0.1);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 12px 40px rgba(24, 32, 44, 0.1);
+      z-index: 200;
+      min-width: 200px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(24, 32, 44, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--teal);
+      color: white;
+      border-color: var(--teal);
+    }
+
+    .font-size-display {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      color: var(--teal);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .chapter-header {
+      max-width: var(--reading-width);
+      margin: 16px auto 0;
+      padding: 44px 48px 36px;
+      background: var(--surface);
+      border: 1px solid rgba(24, 32, 44, 0.07);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.55s ease both;
+      overflow: hidden;
+    }
+
+    .novel-name {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .chapter-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+
+    .chapter-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(22px, 4.5vw, 40px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--storm);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .chapter-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .div-line {
+      width: 30px;
+      height: 1px;
+      background: var(--teal-dim);
+    }
+
+    .div-drop {
+      font-size: 12px;
+      opacity: 0.45;
+    }
+
+    .story-wrapper {
+      max-width: var(--reading-width);
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.6s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .story-body {
+      font-family: "Lora", serif;
+      font-size: 18px;
+      line-height: 1.95;
+      color: var(--ink);
+      padding: 44px 0 0;
+      transition: font-size 0.2s;
+    }
+
+    .story-body p:first-of-type::first-letter {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 4.2em;
+      font-style: italic;
+      color: var(--teal);
+      float: left;
+      line-height: 0.75;
+      margin-right: 8px;
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    .story-body p {
+      margin-bottom: 1.6em;
+      text-align: left;
+    }
+
+    .section-break {
+      text-align: center;
+      color: var(--teal);
+      opacity: 0.35;
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      margin: 2em 0;
+      user-select: none;
+    }
+
+    .moment-card {
+      margin: 2em 0;
+      background: rgba(230, 236, 242, 0.85);
+      border: 1px solid var(--teal-dim);
+      border-radius: 16px;
+      padding: 28px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .moment-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(74, 143, 160, 0.05),
+          rgba(184, 148, 90, 0.04));
+      pointer-events: none;
+    }
+
+    .moment-eyebrow {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--teal);
+      opacity: 0.7;
+      margin-bottom: 12px;
+    }
+
+    .moment-text {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      font-style: italic;
+      line-height: 1.9;
+      color: var(--storm);
+      position: relative;
+    }
+
+    .crane-card {
+      margin: 2em 0;
+      background: rgba(230, 236, 242, 0.7);
+      border: 1px solid rgba(184, 148, 90, 0.3);
+      border-radius: 16px;
+      padding: 26px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .crane-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(184, 148, 90, 0.04),
+          rgba(74, 143, 160, 0.03));
+      pointer-events: none;
+    }
+
+    .crane-eyebrow {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 12px;
+    }
+
+    .crane-text {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 17px;
+      font-style: italic;
+      line-height: 1.85;
+      color: var(--storm);
+      position: relative;
+    }
+
+    .part-divider {
+      margin: 3.5em 0 0;
+      text-align: center;
+    }
+
+    .part-divider-line {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg,
+          transparent,
+          var(--teal-dim),
+          transparent);
+      margin: 0 auto 14px;
+    }
+
+    .part-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--teal);
+      letter-spacing: 0.05em;
+    }
+
+    .part-sub {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 6px;
+      opacity: 0.6;
+    }
+
+    .story-body .part2-start::first-letter {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 4.2em;
+      font-style: italic;
+      color: var(--gold);
+      float: left;
+      line-height: 0.75;
+      margin-right: 8px;
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    .part-end-card {
+      margin-top: 2.5em;
+      background: rgba(230, 236, 242, 0.65);
+      border: 1px solid rgba(74, 143, 160, 0.18);
+      border-radius: 18px;
+      padding: 36px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .part-end-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(74, 143, 160, 0.04),
+          rgba(184, 148, 90, 0.04));
+      pointer-events: none;
+    }
+
+    .pec-rain {
+      font-size: 20px;
+      letter-spacing: 0.2em;
+      margin-bottom: 16px;
+      opacity: 0.45;
+    }
+
+    .pec-quote {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--teal);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .pec-note {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--storm);
+      opacity: 0.7;
+    }
+
+    .chapter-end {
+      text-align: center;
+      padding: 32px 0 8px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--teal);
+      opacity: 0.6;
+      letter-spacing: 0.08em;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0 0;
+      border-top: 1px solid rgba(24, 32, 44, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-prev {
+      background: rgba(24, 32, 44, 0.06);
+      color: var(--ink-soft);
+      border-color: rgba(24, 32, 44, 0.1);
+    }
+
+    .nav-prev:hover {
+      background: var(--teal);
+      color: white;
+      border-color: var(--teal);
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink-soft);
+      border-color: rgba(24, 32, 44, 0.1);
+    }
+
+    .nav-home:hover {
+      background: var(--storm);
+      color: white;
+      border-color: var(--storm);
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(74, 143, 160, 0.35);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .chapter-header {
+        margin-left: 16px;
+        margin-right: 16px;
+        padding: 30px 22px 26px;
+      }
+
+      .story-wrapper {
+        padding: 0 16px 48px;
+      }
+
+      .story-body {
+        font-size: 16px;
+        padding-top: 32px;
+      }
+
+      .moment-card,
+      .crane-card {
+        padding: 20px 18px;
+      }
+
+      .chapter-nav {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        font-size: 12px;
+        padding: 9px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reading-progress-bar">
+    <div class="reading-progress-fill" id="readingProgress"></div>
+  </div>
+  <canvas id="rainCanvas"></canvas>
+
+  <nav class="nav-bar">
+    <a href="index.html" class="back-link"><span class="back-arrow">←</span><span>Stories</span></a>
+    <div class="nav-center">The Days the Sky Forgot to Cry</div>
+    <div class="nav-right">
+      <div style="position: relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()">
+          Aa
+        </button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size: 13px">
+              A−
+            </button>
+            <span class="font-size-display" id="fontDisplay">18</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size: 20px">
+              A+
+            </button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size: 13px; letter-spacing: 0.1em">
+            Reset
+          </button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <div class="chapter-header" style="margin-left: auto; margin-right: auto; max-width: 660px">
+    <div class="novel-name">Rika & Minato</div>
+    <div class="chapter-label">Complete Story</div>
+    <h1 class="chapter-title">The Days the Sky Forgot to Cry</h1>
+    <div class="chapter-divider">
+      <div class="div-line"></div>
+      <span class="div-drop">☔</span>
+      <div class="div-line"></div>
+    </div>
+  </div>
+
+  <div class="story-wrapper">
+    <div class="story-body" id="storyBody">
+      <p>
+        The rain didn't return for weeks.<br />
+        Blue skies stretched endlessly, cloudless and loud.<br />
+        The kind of days people celebrated—warm, golden, buzzing with
+        energy.<br />
+        Rika hated them.
+      </p>
+
+      <p>
+        It's not that she missed the rain exactly.<br />
+        It's that, without it, everything else got louder.<br />
+        She still laughed with her friends.<br />
+        Still played the part.<br />
+        But somewhere in between jokes and hallway noise, she caught herself
+        checking the stairwell window.<br />
+        Wondering if he was already waiting.
+      </p>
+
+      <p>
+        He was.<br />
+        Every time.<br />
+        But something was different.
+      </p>
+
+      <p>
+        Minato smiled when he saw her.<br />
+        Said all the right things.<br />
+        Walked her home.<br />
+        But he seemed distant—like part of him had folded inwards.
+      </p>
+
+      <div class="section-break">· · ·</div>
+
+      <p>
+        It started the day she told him:<br />
+        "My mom's moving. A transfer. Not far. But enough that I won't be at
+        this school anymore."
+      </p>
+
+      <p>
+        She said it casually.<br />
+        Lightly.<br />
+        Like it didn't matter.
+      </p>
+
+      <p>
+        Minato didn't react right away.<br />
+        Didn't tell her what it felt like to finally be seen by someone—only
+        to watch them step into the distance again.
+      </p>
+
+      <div class="section-break">· · ·</div>
+
+      <p>
+        The last Friday of the term, they met behind the school again.<br />
+        This time, no umbrella.<br />
+        No rain.<br />
+        Just that dry breeze of early summer.
+      </p>
+
+      <p>
+        Rika handed him something—a folded note, sealed with a sticker shaped
+        like a raindrop.
+      </p>
+
+      <p>Minato didn't open it.</p>
+
+      <!-- KEY MOMENT CARD -->
+      <div class="moment-card">
+        <div class="moment-eyebrow">A confession without words</div>
+        <div class="moment-text">
+          She looked at him and smiled—not like she used to.<br />
+          Not with her armor.<br />
+          But softly.<br />
+          Honestly.<br />
+          Like it was goodbye.
+        </div>
+      </div>
+
+      <p>
+        "I'm scared," she admitted.<br />
+        "Not of leaving. But of forgetting how this felt."
+      </p>
+
+      <p>
+        Minato finally reached into his bag.<br />
+        He pulled out the same paper crane—hers—now worn, edges a little
+        bent.<br />
+        He placed it in her hands.
+      </p>
+
+      <p>"I won't forget," he said.</p>
+
+      <p>
+        They stood there, silent.<br />
+        No promises made.<br />
+        No confessions.<br />
+        Just two people holding the memory of a storm they survived together.
+      </p>
+
+      <p>
+        And as she walked away, Rika whispered,<br />
+        "Maybe in the next rain…I'll see you again."
+      </p>
+
+      <!-- PART DIVIDER -->
+      <div class="part-divider">
+        <div class="part-divider-line"></div>
+        <div class="part-title">When the Rain Returns Again</div>
+        <div class="part-sub">One year later</div>
+      </div>
+
+      <div class="section-break" style="margin-top: 2.5em">· · ·</div>
+
+      <p class="part2-start">
+        A full year later.<br />
+        The sky broke open in late June—a sudden downpour that caught everyone
+        off guard.<br />
+        Students rushed to cover.<br />
+        Cars slowed.<br />
+        The smell of wet pavement filled the air.
+      </p>
+
+      <p>
+        Minato stood under the old cherry tree—the same one where stories
+        always seemed to begin.<br />
+        He hadn't been there in months.<br />
+        Not since graduation.<br />
+        Not since she left.
+      </p>
+
+      <p>
+        He didn't expect anything that day.<br />
+        Didn't bring an umbrella.<br />
+        But he did carry something in his pocket—a folded note, the one Rika
+        gave him before she left.<br />
+        He never opened it.<br />
+        Until now.
+      </p>
+
+      <p>
+        Minato slowly peeled the sticker, careful not to tear the paper.<br />
+        Inside, it said:
+      </p>
+
+      <!-- CRANE CARD — THE NOTE -->
+      <div class="crane-card">
+        <div class="crane-eyebrow">Her words</div>
+        <div class="crane-text">
+          "You were never just the boy with the umbrella.<br />
+          You were the one who stayed when it stopped raining.<br /><br />
+          If you ever need someone to walk beside you again…<br />
+          I'll still forget my umbrella."
+        </div>
+      </div>
+
+      <p>
+        He smiled.<br />
+        The kind that hurt.<br />
+        The kind that healed.
+      </p>
+
+      <p>
+        And then…<br />
+        A voice behind him.
+      </p>
+
+      <p>"…You didn't bring an umbrella again?"</p>
+
+      <p>
+        He turned.<br />
+        There she was.<br />
+        Soaked.<br />
+        Windblown.<br />
+        Rika.<br />
+        No hoodie.<br />
+        No act.<br />
+        Just her.
+      </p>
+
+      <p>
+        He didn't speak.<br />
+        Just walked toward her, pulled the umbrella from his bag—a new one,
+        blue, just like before—and opened it above them.
+      </p>
+
+      <p>
+        She blinked.<br />
+        "You actually carry one now?"
+      </p>
+
+      <p>
+        He nodded.<br />
+        "For you," he said softly.<br />
+        "Always."
+      </p>
+
+      <p>
+        They didn't kiss.<br />
+        Didn't run into each other's arms.<br />
+        They just stood under the rain, side by side, hands brushing
+        gently.<br />
+        And this time, no one reached first.<br />
+        They met halfway.
+      </p>
+
+      <!-- EPILOGUE MOMENT -->
+      <div class="moment-card">
+        <div class="moment-eyebrow">Another pact</div>
+        <div class="moment-text">
+          Some people think love is about grand confessions.<br />
+          Others think it's about fate, or flowers, or timing.<br /><br />
+          But Rika and Minato knew the truth.<br />
+          Love was an umbrella quietly opened.<br />
+          A crane folded by uncertain hands.<br />
+          A silence shared when the world turned loud again.
+        </div>
+      </div>
+
+      <p>
+        And when the rain came back, they didn't hide from it.<br />
+        They walked through it together.<br />
+        Same city.<br />
+        Same tree.<br />
+        A new storm survived.
+      </p>
+
+      <!-- END CARD -->
+      <div class="part-end-card">
+        <div class="pec-rain">☔ &nbsp; 🌧️ &nbsp; ☁️</div>
+        <div class="pec-quote">"For you. Always."</div>
+        <div class="pec-note">— The Days the Sky Forgot to Cry</div>
+      </div>
+    </div>
+    <div class="chapter-end">— End —</div>
+    <div class="chapter-nav">
+      <a href="tosor4.html" class="nav-btn nav-prev">← Previous Chapter</a>
+      <a href="../index.html" class="nav-btn nav-home">🏠 Library</a>
+    </div>
+  </div>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+
+  <script>
+    var canvas = document.getElementById("rainCanvas"),
+      ctx = canvas.getContext("2d"),
+      drops = [];
+    var rainOpacity = 0,
+      targetOpacity = 0.32;
+    canvas.style.opacity = "0";
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    function spawnDrop() {
+      drops.push({
+        x: Math.random() * (canvas.width + 100),
+        y: -20,
+        length: Math.random() * 18 + 8,
+        speedY: Math.random() * 4 + 3,
+        speedX: -(Math.random() * 0.9 + 0.35),
+        opacity: Math.random() * 0.22 + 0.07,
+        width: Math.random() * 0.8 + 0.3,
+      });
+    }
+    for (var i = 0; i < 15; i++) spawnDrop();
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drops.forEach(function (d, i) {
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x + d.speedX * 3, d.y + d.length);
+        ctx.strokeStyle = "rgba(74,143,160," + d.opacity + ")";
+        ctx.lineWidth = d.width;
+        ctx.stroke();
+        d.y += d.speedY;
+        d.x += d.speedX;
+        if (d.y > canvas.height + 30) drops.splice(i, 1);
+      });
+      if (Math.random() < 0.38) spawnDrop();
+      requestAnimationFrame(drawRain);
+    }
+    drawRain();
+    setTimeout(function () {
+      canvas.style.transition = "opacity 2s ease";
+      canvas.style.opacity = "0.32";
+    }, 600);
+    window.addEventListener(
+      "scroll",
+      function () {
+        var s = window.scrollY,
+          h = document.documentElement.scrollHeight - window.innerHeight;
+        document.getElementById("readingProgress").style.width =
+          (h > 0 ? (s / h) * 100 : 0) + "%";
+        document.getElementById("scrollBtn").style.display =
+          s > 200 ? "flex" : "none";
+        var pct = h > 0 ? s / h : 0;
+        if (pct > 0.75) {
+          var newOp = 0.32 * (1 - (pct - 0.75) / 0.2);
+          canvas.style.opacity = Math.max(0, Math.min(0.32, newOp));
+        } else {
+          canvas.style.opacity = "0.32";
+        }
+      },
+      { passive: true },
+    );
+    var fontSize = 18;
+    function changeFont(a) {
+      if (a === 1 && fontSize < 26) fontSize += 2;
+      else if (a === -1 && fontSize > 14) fontSize -= 2;
+      else if (a === 0) fontSize = 18;
+      document.getElementById("storyBody").style.fontSize = fontSize + "px";
+      document.getElementById("fontDisplay").textContent = fontSize;
+      try {
+        localStorage.setItem("daysRikaMinatoFont", fontSize);
+      } catch (e) { }
+    }
+    function toggleFontPanel() {
+      document.getElementById("fontPanel").classList.toggle("open");
+    }
+    document.addEventListener("click", function (e) {
+      var b = document.getElementById("fontToggle"),
+        p = document.getElementById("fontPanel");
+      if (!b.contains(e.target) && !p.contains(e.target))
+        p.classList.remove("open");
+    });
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+    window.addEventListener("load", function () {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+        var s = parseInt(localStorage.getItem("daysRikaMinatoFont"));
+        if (s && s >= 14 && s <= 26) {
+          fontSize = s;
+          document.getElementById("storyBody").style.fontSize = s + "px";
+          document.getElementById("fontDisplay").textContent = s;
+        }
+      } catch (e) { }
+    });
+  </script>
+</body>
+
+</html>

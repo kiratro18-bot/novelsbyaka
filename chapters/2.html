@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Novel Web</title>
+  <meta name="description" content="Original fiction by AKA. Romance, drama, and slice-of-life novels updated weekly.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' fonts.googleapis.com fonts.gstatic.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f5f0e8; --cream: #ede8dc; --ink: #1a1410;
+      --mauve: #9b7b8c; --plum: #5c3d52; --blush: #d4a9a0;
+      --sage: #7a8c75; --gold: #c9a84c; --surface: #fff;
+      --border: rgba(26,20,16,0.09); --mist: rgba(245,240,232,0.96);
+      --shadow-sm: 0 2px 12px rgba(92,61,82,0.07);
+      --shadow-md: 0 8px 32px rgba(92,61,82,0.12);
+      --shadow-lg: 0 16px 48px rgba(92,61,82,0.16);
+      --tr: 0.26s cubic-bezier(.4,0,.2,1);
+      --r-sm: 10px; --r-md: 16px; --r-lg: 20px;
+    }
+    body.dark {
+      --paper: #14100d; --cream: #1e1812; --ink: #f0ebe0;
+      --surface: #1e1812; --border: rgba(255,255,255,0.08);
+      --mist: rgba(20,16,13,0.97); --mauve: #b89aaa; --blush: #a07870;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.5);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; transition: background .3s, color .3s; }
+
+    /* GRAIN */
+    #grain { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: .45;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
+
+    /* ── SETTINGS OVERLAY & PANEL ── */
+    .settings-overlay { position: fixed; inset: 0; background: rgba(26,20,16,.35); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .28s; backdrop-filter: blur(4px); }
+    .settings-overlay.open { opacity: 1; pointer-events: all; }
+    .settings-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 300px; background: var(--surface); border-left: 1px solid var(--border); z-index: 201; transform: translateX(100%); transition: transform .32s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; }
+    .settings-panel.open { transform: translateX(0); }
+    .sp-header { padding: 22px 22px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .sp-title { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--plum); }
+    .sp-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+    .sp-section { margin-bottom: 24px; }
+    .sp-section-label { font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: var(--mauve); margin-bottom: 12px; display: block; }
+    .sp-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .sp-row:last-child { border-bottom: none; }
+    .sp-row-label { font-size: 13px; color: var(--ink); }
+    .sp-row-sub { font-size: 10px; color: var(--mauve); opacity: .6; margin-top: 2px; }
+    .toggle { width: 42px; height: 24px; background: rgba(26,20,16,.12); border-radius: 12px; position: relative; cursor: pointer; transition: background var(--tr); border: none; flex-shrink: 0; }
+    .toggle.on { background: var(--plum); }
+    .toggle::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: white; transition: transform var(--tr); box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+    .toggle.on::after { transform: translateX(18px); }
+    .sp-select { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink); cursor: pointer; outline: none; }
+    .font-control { display: flex; align-items: center; gap: 8px; }
+    .fc-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: var(--cream); color: var(--ink); cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all var(--tr); }
+    .fc-btn:hover { background: var(--surface); border-color: var(--mauve); }
+    .fc-val { font-size: 12px; color: var(--mauve); min-width: 28px; text-align: center; }
+    .accent-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ap-dot { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all var(--tr); }
+    .ap-dot.selected { border-color: var(--ink); transform: scale(1.15); }
+    .ap-dot:hover { transform: scale(1.1); }
+
+    /* ── NAV ── */
+    .site-nav { position: sticky; top: 0; z-index: 100; height: 60px; background: var(--mist); backdrop-filter: blur(24px) saturate(1.8); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; transition: background var(--tr), box-shadow var(--tr); }
+    .site-nav.scrolled { box-shadow: 0 8px 32px rgba(92,61,82,.1); }
+    .nav-brand { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--plum); letter-spacing: .04em; }
+    .nav-brand span { font-style: italic; color: var(--mauve); }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--cream); color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; transition: all var(--tr); }
+    .icon-btn:hover { transform: scale(1.08); background: var(--surface); }
+    .icon-btn:active { transform: scale(.95); }
+
+    /* ── ANNOUNCEMENT ── */
+    .announcement { background: var(--cream); border-bottom: 1px solid rgba(26,20,16,.06); padding: 9px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mauve); overflow: hidden; transition: all .5s cubic-bezier(.4,0,.2,1); }
+    body.dark .announcement { background: #1e1812; }
+    .ann-track { overflow: hidden; flex: 1; }
+    .ann-scroll { white-space: nowrap; display: inline-block; animation: ticker 24s linear infinite; font-weight: 500; }
+    .ann-scroll em { font-style: normal; color: var(--plum); }
+    @keyframes ticker { 0% { transform: translateX(60vw); } 100% { transform: translateX(-100%); } }
+    .ann-close { cursor: pointer; font-size: 14px; color: var(--mauve); opacity: .4; flex-shrink: 0; transition: opacity var(--tr), transform var(--tr); padding: 4px; }
+    .ann-close:hover { opacity: 1; transform: rotate(90deg); }
+
+    /* ── HERO ── */
+    .hero { max-width: 1060px; margin: 0 auto; padding: 52px 32px 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .hero-eyebrow { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: var(--mauve); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .hero-eyebrow::before { content: ''; width: 18px; height: 1px; background: var(--blush); }
+    .hero-title { font-family: 'DM Serif Display', serif; font-size: clamp(38px,5.5vw,64px); line-height: 1.0; color: var(--plum); margin-bottom: 12px; }
+    .hero-title em { font-style: italic; color: var(--mauve); }
+    .hero-sub { font-size: 13.5px; line-height: 1.75; color: var(--mauve); max-width: 300px; margin-bottom: 24px; }
+    .hero-line { width: 44px; height: 1px; background: var(--blush); margin-bottom: 18px; }
+    .hero-stats { display: flex; gap: 28px; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300; color: var(--plum); line-height: 1; }
+    .stat-label { font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--mauve); }
+
+    /* COUNTDOWN */
+    .countdown-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px 24px; position: relative; overflow: hidden; box-shadow: var(--shadow-md); transition: transform var(--tr), box-shadow var(--tr); }
+    body.dark .countdown-card { background: #1e1812; }
+    .countdown-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .countdown-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(212,169,160,.22), transparent 70%); pointer-events: none; }
+    .cd-label { font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase; color: var(--mauve); margin-bottom: 14px; }
+    .cd-row { display: flex; gap: 8px; align-items: flex-start; }
+    .cd-unit { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .cd-num { font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 300; color: var(--plum); min-width: 52px; text-align: center; line-height: 1; }
+    .cd-num.tick { animation: cdTick .15s ease; }
+    @keyframes cdTick { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(.88); opacity: .7; } }
+    .cd-colon { font-family: 'Cormorant Garamond', serif; font-size: 34px; color: var(--blush); padding-top: 7px; opacity: .5; animation: blink 1s step-end infinite; }
+    @keyframes blink { 0%,100% { opacity: .5; } 50% { opacity: .12; } }
+    .cd-sublabel { font-size: 8.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--mauve); }
+    .cd-title { margin-top: 12px; font-family: 'DM Serif Display', serif; font-size: 14px; font-style: italic; color: var(--plum); opacity: .65; }
+
+    /* ── CAROUSEL (UPDATES) ── */
+    .updates-section { max-width: 1060px; margin: 0 auto; padding: 0 32px 40px; }
+    .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; padding-bottom: 11px; border-bottom: 1px solid var(--border); }
+    .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--plum); }
+    .section-count { font-size: 11px; color: var(--mauve); opacity: .45; letter-spacing: .1em; }
+
+    .carousel-outer { display: flex; align-items: center; gap: 12px; position: relative; user-select: none; }
+    .carousel-nav-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--cream); color: var(--ink); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; transition: all var(--tr); flex-shrink: 0; box-shadow: var(--shadow-sm); }
+    body.dark .carousel-nav-btn { background: #1e1812; }
+    .carousel-nav-btn:hover { background: var(--surface); border-color: var(--mauve); transform: scale(1.08); }
+    .carousel-nav-btn:disabled { opacity: .3; cursor: default; transform: none; }
+
+    .carousel-container { position: relative; overflow: hidden; border: 1px solid rgba(26,20,16,.1); border-radius: 22px; padding: 16px; flex: 1; background: var(--cream); box-shadow: var(--shadow-sm); }
+    body.dark .carousel-container { background: #1e1812; border-color: rgba(255,255,255,.08); }
+    .carousel-track { display: flex; gap: 16px; cursor: grab; transition: transform .38s cubic-bezier(.4,0,.2,1); will-change: transform; }
+    .carousel-track.dragging { cursor: grabbing; transition: none; }
+
+    .carousel-card { flex-shrink: 0; background: var(--surface); border: 1px solid rgba(26,20,16,.08); border-radius: 14px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; transition: transform var(--tr), box-shadow var(--tr); height: 200px; }
+    body.dark .carousel-card { background: #252018; border-color: rgba(255,255,255,.07); }
+    .carousel-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .carousel-card-header { padding: 18px 18px 12px; }
+    .carousel-card-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--plum); display: flex; align-items: center; justify-content: center; font-size: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(92,61,82,.28); }
+    .carousel-card-date { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--mauve); opacity: .6; }
+    .carousel-card-content { padding: 0 18px 18px; }
+    .carousel-card-title { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--ink); margin-bottom: 5px; line-height: 1.2; }
+    .carousel-card-desc { font-size: 11.5px; color: var(--mauve); line-height: 1.55; opacity: .8; }
+    .carousel-card-tag { display: inline-block; font-size: 9.5px; padding: 2px 9px; border-radius: 50px; margin-top: 8px; letter-spacing: .04em; }
+    .tag-new { background: rgba(122,140,117,.12); color: var(--sage); }
+    .tag-update { background: rgba(201,168,76,.12); color: #9a7f30; }
+    .tag-coming { background: rgba(155,123,140,.12); color: var(--mauve); }
+
+    .carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+    .carousel-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(26,20,16,.15); cursor: pointer; transition: all var(--tr); border: none; }
+    body.dark .carousel-dot { background: rgba(255,255,255,.18); }
+    .carousel-dot.active { background: var(--plum); transform: scale(1.25); }
+
+    /* ── LIBRARY + SIDEBAR ── */
+    .library-wrap { max-width: 1060px; margin: 0 auto; padding: 0 32px 60px; display: grid; grid-template-columns: 1fr 320px; gap: 28px; align-items: start; }
+
+    /* ANIMATED LIST */
+    .al-container { position: relative; }
+    .al-scroll { max-height: 500px; overflow-y: auto; padding-right: 2px; }
+    .al-scroll::-webkit-scrollbar { width: 4px; }
+    .al-scroll::-webkit-scrollbar-track { background: transparent; }
+    .al-scroll::-webkit-scrollbar-thumb { background: var(--blush); border-radius: 2px; }
+    .al-grad-top { position: absolute; top: 0; left: 0; right: 0; height: 50px; background: linear-gradient(to bottom, var(--paper), transparent); pointer-events: none; transition: opacity .3s; z-index: 2; }
+    .al-grad-bot { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, var(--paper), transparent); pointer-events: none; z-index: 2; }
+    body.dark .al-grad-top { background: linear-gradient(to bottom, var(--paper), transparent); }
+    body.dark .al-grad-bot { background: linear-gradient(to top, var(--paper), transparent); }
+
+    .novel-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 15px 18px; display: flex; align-items: center; gap: 16px; cursor: pointer; text-decoration: none; color: inherit; transition: transform var(--tr), box-shadow var(--tr), border-color var(--tr); position: relative; overflow: hidden; margin-bottom: 9px; opacity: 0; animation: cardIn .45s cubic-bezier(.4,0,.2,1) forwards; }
+    body.dark .novel-item { background: #1e1812; }
+    .novel-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--blush), var(--mauve)); opacity: 0; transition: opacity var(--tr); }
+    .novel-item:hover, .novel-item.selected { border-color: rgba(92,61,82,.18); box-shadow: var(--shadow-md); transform: translateY(-3px) scale(1.003); }
+    .novel-item:hover::before, .novel-item.selected::before { opacity: 1; }
+    .novel-item:active { transform: translateY(-1px); }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .novel-item:nth-child(1){animation-delay:.04s} .novel-item:nth-child(2){animation-delay:.08s}
+    .novel-item:nth-child(3){animation-delay:.12s} .novel-item:nth-child(4){animation-delay:.16s}
+    .novel-item:nth-child(5){animation-delay:.20s} .novel-item:nth-child(6){animation-delay:.24s}
+    .novel-item:nth-child(7){animation-delay:.28s} .novel-item:nth-child(8){animation-delay:.32s}
+    .novel-item:nth-child(9){animation-delay:.36s}
+
+    .cover-ph { width: 58px; height: 84px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 8px; color: white; text-align: center; padding: 6px; line-height: 1.3; box-shadow: 3px 5px 12px rgba(26,20,16,.2); transition: transform var(--tr); }
+    .novel-item:hover .cover-ph { transform: scale(1.07) rotate(-1.5deg); }
+    .novel-info { flex: 1; min-width: 0; }
+    .novel-title-t { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--plum); margin-bottom: 6px; line-height: 1.2; transition: color var(--tr); }
+    .novel-item:hover .novel-title-t, .novel-item.selected .novel-title-t { color: var(--mauve); }
+    .novel-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 5px; }
+    .badge { font-size: 9.5px; padding: 2px 9px; border-radius: 50px; letter-spacing: .04em; }
+    .b-romance{background:rgba(176,84,106,.09);color:#b0546a} .b-drama{background:rgba(92,61,82,.09);color:var(--plum)}
+    .b-slice{background:rgba(122,140,117,.11);color:var(--sage)} .b-sad{background:rgba(95,116,137,.09);color:#5f7489}
+    .b-mystery{background:rgba(97,77,122,.09);color:#614d7a} .b-action{background:rgba(139,48,48,.09);color:#8b3030}
+    .b-ongoing{background:rgba(201,168,76,.11);color:#9a7f30;font-weight:500}
+    .b-completed{background:rgba(122,140,117,.11);color:var(--sage);font-weight:500}
+    .b-soon{background:rgba(155,123,140,.11);color:var(--mauve);font-weight:500}
+    .b-ch{background:rgba(26,20,16,.05);color:rgba(26,20,16,.38)}
+    .novel-byline { font-size: 10px; color: var(--mauve); opacity: .42; letter-spacing: .1em; text-transform: uppercase; }
+    .novel-arrow { font-size: 16px; color: var(--blush); opacity: 0; transition: all var(--tr); transform: translateX(-8px); flex-shrink: 0; }
+    .novel-item:hover .novel-arrow { opacity: 1; transform: translateX(0); }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 14px; position: sticky; top: 72px; }
+    .sidebar-card { background: var(--cream); border: 1px solid var(--border); border-radius: var(--r-md); padding: 20px 18px; }
+    body.dark .sidebar-card { background: #1e1812; }
+    .sb-label { font-size: 9px; letter-spacing: .28em; text-transform: uppercase; color: var(--mauve); margin-bottom: 10px; display: block; }
+    .sb-title { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; color: var(--plum); margin-bottom: 3px; }
+    .sb-sub { font-size: 11px; color: var(--mauve); opacity: .55; }
+    .search-bar { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 50px; padding: 7px 7px 7px 15px; gap: 8px; transition: border-color var(--tr), box-shadow var(--tr); }
+    .search-bar:focus-within { border-color: rgba(155,123,140,.5); box-shadow: 0 0 0 3px rgba(155,123,140,.1); }
+    .search-bar input { flex: 1; border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 300; background: transparent; color: var(--ink); }
+    .search-bar input::placeholder { color: rgba(26,20,16,.28); }
+    body.dark .search-bar input::placeholder { color: rgba(240,235,224,.25); }
+    .search-btn-i { background: var(--plum); color: white; border: none; border-radius: 50px; padding: 7px 15px; font-size: 12px; cursor: pointer; transition: all var(--tr); }
+    .search-btn-i:hover { background: var(--mauve); transform: translateY(-1px); }
+    .pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pill { padding: 4px 12px; border-radius: 50px; font-size: 11px; background: rgba(26,20,16,.05); color: rgba(26,20,16,.5); border: none; cursor: pointer; transition: all var(--tr); white-space: nowrap; font-family: 'DM Sans', sans-serif; }
+    body.dark .pill { background: rgba(255,255,255,.06); color: rgba(240,235,224,.55); }
+    .pill:hover { background: rgba(26,20,16,.09); color: var(--plum); transform: translateY(-1px); }
+    .pill.active { background: var(--plum); color: white; box-shadow: 0 2px 8px rgba(92,61,82,.28); }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 78px; left: 50%; transform: translateX(-50%) translateY(14px); background: var(--plum); color: white; padding: 9px 22px; border-radius: 50px; font-size: 13px; z-index: 300; opacity: 0; transition: all .3s cubic-bezier(.4,0,.2,1); pointer-events: none; box-shadow: 0 8px 24px rgba(92,61,82,.4); }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* SCROLL BTN */
+    #scrollBtn { position: fixed; bottom: 24px; right: 24px; width: 40px; height: 40px; border-radius: 50%; background: var(--plum); color: white; border: none; cursor: pointer; font-size: 15px; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(92,61,82,.32); transition: all var(--tr); z-index: 50; }
+    #scrollBtn:hover { background: var(--mauve); transform: translateY(-2px); }
+    #scrollBtn.vis { display: flex; }
+
+    footer { border-top: 1px solid var(--border); padding: 22px 32px; text-align: center; font-size: 10.5px; color: var(--mauve); opacity: .4; letter-spacing: .07em; line-height: 1.9; }
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+      .hero { grid-template-columns: 1fr; padding: 28px 18px 24px; gap: 24px; }
+      .hero-countdown { order: -1; }
+      .library-wrap { grid-template-columns: 1fr; padding: 0 18px 40px; }
+      .sidebar { position: static; }
+      .updates-section { padding: 0 18px 32px; }
+      .site-nav, .announcement { padding-left: 18px; padding-right: 18px; }
+      .settings-panel { width: 88vw; }
+    }
+    @media(max-width:480px){
+      .novel-item { padding: 12px 14px; gap: 12px; }
+      .cover-ph { width: 52px; height: 76px; }
+      .novel-title-t { font-size: 16px; }
+    }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  </style>
+  <meta name="google-site-verification" content="CjtMMlctLjvkx0nCfKICKUhFmq-v7zvq7Fznj-fMKTw" />
+</head>
+<body>
+
+<div id="grain"></div>
+<div class="toast" id="toast"></div>
+
+<!-- SETTINGS OVERLAY -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="sp-header">
+    <div class="sp-title">Settings</div>
+    <button class="icon-btn" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="sp-body">
+    <div class="sp-section">
+      <span class="sp-section-label">Appearance</span>
+      <div class="sp-row">
+        <div><div class="sp-row-label">Dark mode</div><div class="sp-row-sub">Easy on the eyes</div></div>
+        <button class="toggle" id="darkToggle" onclick="toggleDark()"></button>
+      </div>
+      <div class="sp-row">
+        <div><div class="sp-row-label">Grain texture</div><div class="sp-row-sub">Paper feel</div></div>
+        <button class="toggle on" id="grainToggle" onclick="toggleGrain()"></button>
+      </div>
+      <div class="sp-row">
+        <div><div class="sp-row-label">Animations</div><div class="sp-row-sub">Motion effects</div></div>
+        <button class="toggle on" id="animToggle" onclick="toggleAnim()"></button>
+      </div>
+    </div>
+    <div class="sp-section">
+      <span class="sp-section-label">Accent Colour</span>
+      <div class="accent-picker">
+        <div class="ap-dot selected" style="background:#5c3d52" onclick="setAccent(this,'#5c3d52','#9b7b8c')"></div>
+        <div class="ap-dot" style="background:#1565c0" onclick="setAccent(this,'#1565c0','#5c94d6')"></div>
+        <div class="ap-dot" style="background:#3a5c3a" onclick="setAccent(this,'#3a5c3a','#7a9c7a')"></div>
+        <div class="ap-dot" style="background:#7a4a1e" onclick="setAccent(this,'#7a4a1e','#c9844c')"></div>
+        <div class="ap-dot" style="background:#4a3a6c" onclick="setAccent(this,'#4a3a6c','#9a7acc')"></div>
+        <div class="ap-dot" style="background:#6c3a3a" onclick="setAccent(this,'#6c3a3a','#c47a7a')"></div>
+      </div>
+    </div>
+    <div class="sp-section">
+      <span class="sp-section-label">Reading</span>
+      <div class="sp-row">
+        <div><div class="sp-row-label">Default font size</div></div>
+        <div class="font-control">
+          <button class="fc-btn" onclick="changeFontSize(-1)">−</button>
+          <span class="fc-val" id="fontSizeVal">19</span>
+          <button class="fc-btn" onclick="changeFontSize(1)">+</button>
+        </div>
+      </div>
+      <div class="sp-row">
+        <div><div class="sp-row-label">Sort library</div></div>
+        <select class="sp-select" id="sortSelect" onchange="applySort()">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="alpha">A → Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="sp-section">
+      <span class="sp-section-label">About</span>
+      <div class="sp-row"><div><div class="sp-row-label">Version</div></div><div style="font-size:12px;color:var(--mauve)">1.7 Remaster</div></div>
+      <div class="sp-row"><div><div class="sp-row-label">Last updated</div></div><div style="font-size:12px;color:var(--mauve)">May 2026</div></div>
+      <div class="sp-row"><div><div class="sp-row-label">Admin</div></div><a href="admin-login.html" style="font-size:12px;color:var(--mauve);text-decoration:none;opacity:.7">→ Login</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="site-nav" id="siteNav">
+  <div class="nav-brand">A <span>Novel</span> Web</div>
+  <div class="nav-actions">
+    <button class="icon-btn" id="themeBtn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+    <button class="icon-btn" onclick="openSettings()" title="Settings">⚙️</button>
+  </div>
+</nav>
+
+<!-- ANNOUNCEMENT -->
+<div class="announcement" id="annBar">
+  <div class="ann-track">
+    <div class="ann-scroll">
+      ✦ &nbsp;&nbsp;
+      <em>Him and Her Vol. 2</em>
+      &nbsp; releases 2nd June &nbsp;&nbsp; ✦ &nbsp;&nbsp;
+      Website updates weekly &nbsp;&nbsp; ✦
+    </div>
+  </div>
+  <span class="ann-close" onclick="closeAnn()">✕</span>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="fade-in" style="animation:fadeUp .65s cubic-bezier(.4,0,.2,1) .05s both">
+    <div class="hero-eyebrow">Original Fiction · By AKA</div>
+    <h1 class="hero-title">Stories<br>worth<br><em>feeling.</em></h1>
+    <div class="hero-line"></div>
+    <p class="hero-sub">A collection of romance, drama, and slice-of-life novels crafted with care. Updated weekly.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">9</div><div class="stat-label">Novels</div></div>
+      <div class="stat"><div class="stat-num">37+</div><div class="stat-label">Chapters</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Ongoing</div></div>
+    </div>
+  </div>
+  <div style="animation:fadeUp .65s cubic-bezier(.4,0,.2,1) .2s both">
+    <div class="countdown-card">
+      <div class="cd-label">Next Release In</div>
+      <div class="cd-row">
+        <div class="cd-unit"><div class="cd-num" id="days">00</div><div class="cd-sublabel">Days</div></div>
+        <div class="cd-colon">:</div>
+        <div class="cd-unit"><div class="cd-num" id="hours">00</div><div class="cd-sublabel">Hrs</div></div>
+        <div class="cd-colon">:</div>
+        <div class="cd-unit"><div class="cd-num" id="minutes">00</div><div class="cd-sublabel">Min</div></div>
+        <div class="cd-colon">:</div>
+        <div class="cd-unit"><div class="cd-num" id="seconds">00</div><div class="cd-sublabel">Sec</div></div>
+      </div>
+      <div class="cd-title">Him and Her Vol. 2 · 2nd June</div>
+    </div>
+  </div>
+</section>
+<style>@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}</style>
+
+<!-- ── UPDATES CAROUSEL ── -->
+<div class="updates-section">
+  <div class="section-header">
+    <h2 class="section-title">Updates</h2>
+    <span class="section-count">What's new</span>
+  </div>
+  <div class="carousel-outer">
+    <button class="carousel-nav-btn" id="carPrev" onclick="carMove(-1)">←</button>
+    <div class="carousel-container" id="carContainer">
+      <div class="carousel-track" id="carTrack"
+        onmousedown="carDragStart(event)"
+        ontouchstart="carTouchStart(event)"
+        ontouchmove="carTouchMove(event)"
+        ontouchend="carTouchEnd(event)">
+        <!-- cards injected by JS -->
+      </div>
+      <div class="carousel-dots" id="carDots"></div>
+    </div>
+    <button class="carousel-nav-btn" id="carNext" onclick="carMove(1)">→</button>
+  </div>
+</div>
+
+<!-- ── LIBRARY + SIDEBAR ── -->
+<div class="library-wrap">
+  <div>
+    <div class="section-header">
+      <h2 class="section-title">Library</h2>
+      <span class="section-count" id="libCount">9 works</span>
+    </div>
+    <div class="al-container">
+      <div class="al-grad-top" id="gradTop" style="opacity:0"></div>
+      <div class="al-scroll" id="novelScroll" onscroll="handleListScroll()">
+        <div id="novelList"></div>
+      </div>
+      <div class="al-grad-bot" id="gradBot"></div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <span class="sb-label">Search</span>
+      <div class="search-bar">
+        <span style="opacity:.3;font-size:14px">🔍</span>
+        <input type="text" placeholder="Search novels or genres…" id="searchInput" oninput="renderNovels()" maxlength="60">
+        <button class="search-btn-i" onclick="renderNovels()">Go</button>
+      </div>
+    </div>
+    <div class="sidebar-card">
+      <span class="sb-label">Genre</span>
+      <div class="pills" id="genrePills">
+        <button class="pill active" data-genre="all">All</button>
+        <button class="pill" data-genre="romance">💗 Romance</button>
+        <button class="pill" data-genre="drama">🎭 Drama</button>
+        <button class="pill" data-genre="slice of life">🌿 Slice</button>
+        <button class="pill" data-genre="sad">🩶 Sad</button>
+        <button class="pill" data-genre="mystery">🔍 Mystery</button>
+        <button class="pill" data-genre="action">⚔️ Action</button>
+      </div>
+      <div class="pills" style="margin-top:10px" id="statusPills">
+        <button class="pill active" data-status="all">All Status</button>
+        <button class="pill" data-status="ongoing">🟢 Ongoing</button>
+        <button class="pill" data-status="completed">✅ Complete</button>
+      </div>
+    </div>
+    <div class="sidebar-card">
+      <span class="sb-label">Coming Soon</span>
+      <div class="sb-title">Him and Her Vol. 2</div>
+      <div class="sb-sub">Releases 2nd June 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMENT SECTION -->
+<div style="max-width:1060px;margin:0 auto 60px;padding:0 32px">
+  <div class="section-header">
+    <h2 class="section-title">Reader Comments</h2>
+    <span class="section-count" id="commentCount">0 comments</span>
+  </div>
+  <div style="background:var(--cream);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-md)">
+    <div style="font-family:'DM Serif Display',serif;font-size:15px;color:var(--plum);margin-bottom:14px;display:flex;align-items:center;gap:8px">💬 Leave a Comment</div>
+    <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+      <input class="comment-input-field" id="commentName" type="text" placeholder="Your name…" maxlength="30" style="flex:1;min-width:140px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface);color:var(--ink);outline:none">
+      <select id="commentNovel" style="flex:1;min-width:160px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface);color:var(--ink);outline:none;cursor:pointer">
+        <option value="">About which novel?</option>
+        <option>The Rain Pact</option><option>Ten Percent of Forever</option>
+        <option>The Petal That Falls With a Smile Vol. 1</option>
+        <option>The Petal That Falls With a Smile Vol. 2</option>
+        <option>The Day She Stayed</option><option>Him and Her</option>
+        <option>Him and Her Vol. 2</option><option>Case File: You</option>
+        <option>The Other Side of Rain</option><option>General / All novels</option>
+      </select>
+    </div>
+    <textarea id="commentText" maxlength="500" oninput="updateCharCount()" placeholder="Share your thoughts…" style="width:100%;min-height:85px;resize:vertical;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.65;background:var(--surface);color:var(--ink);outline:none;margin-bottom:10px"></textarea>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <span style="font-size:10px;color:var(--mauve);opacity:.5" id="charCount">0 / 500</span>
+      <span style="font-size:11px;color:var(--mauve);opacity:.5">✦ Be kind · No spoilers · Max 500 chars</span>
+      <button onclick="submitComment()" style="background:var(--plum);color:white;border:none;border-radius:50px;padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all var(--tr);box-shadow:0 4px 12px rgba(92,61,82,.28)">Post Comment →</button>
+    </div>
+  </div>
+  <div id="commentsList"><div id="noComments" style="text-align:center;padding:40px;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--mauve);opacity:.45">Be the first to leave a comment…</div></div>
+</div>
+
+<footer>Last Updated: May 2026 · Version 1.7 Remaster<br>Please do not repost, copy, or reupload stories without permission. Sharing links is always appreciated.</footer>
+<button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+'use strict';
+
+/* ── UTILS ── */
+function esc(s){var d=document.createElement('div');d.appendChild(document.createTextNode(String(s)));return d.innerHTML}
+var store={
+  get:function(k,fb){try{var v=localStorage.getItem(k);return v!==null?JSON.parse(v):fb}catch(e){return fb}},
+  set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+
+/* ── DATA ── */
+var novels=[
+  {title:'The Rain Pact',img:"cover/rpc.jpg",link:'rpc.html',genres:'romance drama slice of life',status:'completed',ch:6,order:1,grad:'135deg,#9b7b8c,#d4a9a0',badges:['romance','drama','slice']},
+  {title:'Ten Percent of Forever',link:'tpof.html',genres:'romance drama slice of life',status:'completed',ch:7,order:2,grad:'135deg,#c3a7f4,#f4a7c3',badges:['romance','drama','slice']},
+  {title:'The Petal That Falls With a Smile Vol. 1',link:'tptfwas.html',genres:'drama slice of life',status:'completed',ch:4,order:3,grad:'135deg,#7a8c75,#c9a84c',badges:['drama','slice']},
+  {title:'The Day She Stayed',link:'tdss.html',genres:'romance drama sad',status:'ongoing',ch:7,order:4,grad:'135deg,#5f7489,#9b7b8c',badges:['romance','drama','sad']},
+  {title:'Him and Her',link:'hah.html',genres:'romance drama slice of life',status:'completed',ch:5,order:5,grad:'135deg,#d4a9a0,#c9a84c',badges:['romance','drama','slice']},
+  {title:'Case File: You',link:'cfy.html',genres:'mystery drama action',status:'ongoing',ch:3,order:6,grad:'135deg,#614d7a,#8b3030',badges:['mystery','drama','action']},
+  {title:'The Other Side of Rain',link:'tosor.html',genres:'romance drama slice of life',status:'ongoing',ch:3,order:7,grad:'135deg,#5f7489,#9b7b8c',badges:['romance','drama','slice']},
+  {title:'The Petal That Falls With a Smile Vol. 2',link:'tptfwasv2.html',genres:'romance drama slice of life',status:'ongoing',ch:4,order:8,grad:'135deg,#c97fa0,#f9c7d9',badges:['romance','drama','slice']},
+  {title:'Him and Her Vol. 2',link:'',genres:'romance drama slice of life',status:'soon',ch:0,order:9,grad:'135deg,#d4a9a0,#c9a84c',badges:['romance','drama','slice']}
+];
+
+var updateCards=[
+  {icon:'✦',title:'Him and Her Vol. 2',desc:'The sequel arrives 2nd June. A new chapter of love, loss, and choosing each other.',date:'Coming June 2026',tag:'coming',tagLabel:'Coming Soon'},
+  {icon:'🌸',title:'The Petal Vol. 2 — Ch. 3 & 4',desc:'Nao and H\'s letters grow closer. Two chapters, one combined page.',date:'May 2026',tag:'new',tagLabel:'New Chapter'},
+  {icon:'🔍',title:'Case File: You — Ch. 3',desc:'The interrogation of RIE reveals more questions than answers.',date:'May 2026',tag:'new',tagLabel:'New Chapter'},
+  {icon:'🎀',title:'The Day She Stayed — Ch. 7',desc:'Sayo returns to school, and Ren gives her the sky.',date:'May 2026',tag:'new',tagLabel:'New Chapter'},
+  {icon:'⚙️',title:'Site Remaster',desc:'Smoother animations, settings panel, animated library list, and carousel updates.',date:'May 2026',tag:'update',tagLabel:'Site Update'},
+  {icon:'🔒',title:'Admin Login',desc:'4-digit PIN login page for site admin access.',date:'May 2026',tag:'update',tagLabel:'Site Update'}
+];
+
+
+
+/* ── CAROUSEL ── */
+var carPos=0,carCardW=260,carGap=16,carDragging=false,carDragStartX=0,carDragDelta=0;
+
+function buildCarousel(){
+  var track=document.getElementById('carTrack');
+  var dots=document.getElementById('carDots');
+  track.innerHTML=updateCards.map(function(c){
+    var tagClass=c.tag==='new'?'tag-new':c.tag==='update'?'tag-update':'tag-coming';
+    return'<div class="carousel-card" style="width:'+carCardW+'px">'+
+      '<div class="carousel-card-header">'+
+        '<div class="carousel-card-icon">'+c.icon+'</div>'+
+        '<div class="carousel-card-date">'+esc(c.date)+'</div>'+
+      '</div>'+
+      '<div class="carousel-card-content">'+
+        '<div class="carousel-card-title">'+esc(c.title)+'</div>'+
+        '<p class="carousel-card-desc">'+esc(c.desc)+'</p>'+
+        '<span class="carousel-card-tag '+tagClass+'">'+esc(c.tagLabel)+'</span>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  dots.innerHTML=updateCards.map(function(_,i){
+    return'<button class="carousel-dot'+(i===0?' active':'')+'" onclick="carGoTo('+i+')"></button>';
+  }).join('');
+  carUpdateNav();
+}
+
+function carGetMax(){
+  var container=document.getElementById('carContainer');
+  var w=container.clientWidth-32;
+  var visible=Math.floor((w+carGap)/(carCardW+carGap));
+  return Math.max(0,updateCards.length-visible);
+}
+
+function carMove(dir){carGoTo(carPos+dir)}
+function carGoTo(idx){
+  carPos=Math.max(0,Math.min(idx,carGetMax()));
+  var offset=carPos*(carCardW+carGap);
+  document.getElementById('carTrack').style.transform='translateX(-'+offset+'px)';
+  document.querySelectorAll('.carousel-dot').forEach(function(d,i){d.classList.toggle('active',i===carPos)});
+  carUpdateNav();
+}
+function carUpdateNav(){
+  document.getElementById('carPrev').disabled=carPos===0;
+  document.getElementById('carNext').disabled=carPos>=carGetMax();
+}
+
+/* DRAG */
+function carDragStart(e){
+  carDragging=true;carDragStartX=e.clientX;carDragDelta=0;
+  document.getElementById('carTrack').classList.add('dragging');
+  document.addEventListener('mousemove',carDragMove);
+  document.addEventListener('mouseup',carDragEnd);
+}
+function carDragMove(e){if(!carDragging)return;carDragDelta=e.clientX-carDragStartX}
+function carDragEnd(){
+  if(!carDragging)return;carDragging=false;
+  document.getElementById('carTrack').classList.remove('dragging');
+  document.removeEventListener('mousemove',carDragMove);
+  document.removeEventListener('mouseup',carDragEnd);
+  if(carDragDelta<-50)carMove(1);
+  else if(carDragDelta>50)carMove(-1);
+  else carGoTo(carPos);
+}
+
+/* TOUCH */
+var carTouchX=0;
+function carTouchStart(e){carTouchX=e.touches[0].clientX}
+function carTouchMove(e){e.preventDefault()}
+function carTouchEnd(e){
+  var dx=e.changedTouches[0].clientX-carTouchX;
+  if(dx<-40)carMove(1);else if(dx>40)carMove(-1);
+}
+
+window.addEventListener('resize',function(){carGoTo(carPos)});
+
+/* ── NOVEL LIST ── */
+var activeGenre='all',activeStatus='all',activeSort='newest',selectedOrder=-1;
+
+var badgeClass={romance:'b-romance',drama:'b-drama',slice:'b-slice','slice of life':'b-slice',sad:'b-sad',mystery:'b-mystery',action:'b-action'};
+var badgeLabel={romance:'Romance',drama:'Drama',slice:'Slice of Life',sad:'Sad',mystery:'Mystery',action:'Action'};
+
+function renderNovels(){
+  var list=document.getElementById('novelList');
+  var q=document.getElementById('searchInput').value.toLowerCase().trim();
+  var sorted=novels.slice();
+  if(activeSort==='newest')sorted.sort(function(a,b){return b.order-a.order});
+  else if(activeSort==='oldest')sorted.sort(function(a,b){return a.order-b.order});
+  else sorted.sort(function(a,b){return a.title.localeCompare(b.title)});
+  var filtered=sorted.filter(function(n){
+    return(!q||n.title.toLowerCase().includes(q)||n.genres.includes(q))&&
+           (activeGenre==='all'||n.genres.includes(activeGenre))&&
+           (activeStatus==='all'||n.status===activeStatus);
+  });
+  document.getElementById('libCount').textContent=filtered.length+' works';
+  list.innerHTML=filtered.map(function(n){
+    var isSelected=selectedOrder===n.order;
+    var statusBadge=n.status==='ongoing'?'<span class="badge b-ongoing">🟢 Ongoing</span>':
+      n.status==='completed'?'<span class="badge b-completed">✅ Complete</span>':
+      '<span class="badge b-soon">⏳ 2nd June</span>';
+    var chBadge=n.ch>0?'<span class="badge b-ch">📖 '+n.ch+' Ch</span>':'<span class="badge b-ch">📖 Coming</span>';
+    var genBadges=n.badges.map(function(b){return'<span class="badge '+badgeClass[b]+'">'+badgeLabel[b]+'</span>'}).join('');
+    return'<a class="novel-item'+(isSelected?' selected':'')+'" href="'+esc(n.link||'#')+'" data-order="'+n.order+'" onclick="selectNovel(event,'+n.order+')">'+
+      '<div class="cover-ph" style="background:linear-gradient('+esc(n.grad)+')">'+esc(n.title.slice(0,16))+'</div>'+
+      '<div class="novel-info">'+
+        '<div class="novel-title-t">'+esc(n.title)+'</div>'+
+        '<div class="novel-badges">'+genBadges+statusBadge+chBadge+'</div>'+
+        '<div class="novel-byline">A Novel by AKA</div>'+
+      '</div>'+
+      '<span class="novel-arrow">→</span>'+
+    '</a>';
+  }).join('');
+}
+
+function selectNovel(e,order){
+  if(!e.currentTarget.href||e.currentTarget.href.endsWith('#')){e.preventDefault()}
+  selectedOrder=order;renderNovels();
+}
+function applySort(){activeSort=document.getElementById('sortSelect').value;renderNovels()}
+
+document.getElementById('genrePills').addEventListener('click',function(e){
+  var btn=e.target.closest('.pill');if(!btn)return;
+  this.querySelectorAll('.pill').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');activeGenre=btn.dataset.genre||'all';renderNovels();
+});
+document.getElementById('statusPills').addEventListener('click',function(e){
+  var btn=e.target.closest('.pill');if(!btn)return;
+  this.querySelectorAll('.pill').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');activeStatus=btn.dataset.status||'all';renderNovels();
+});
+
+/* LIST SCROLL GRADIENTS */
+function handleListScroll(){
+  var el=document.getElementById('novelScroll');
+  var top=el.scrollTop,total=el.scrollHeight-el.clientHeight;
+  document.getElementById('gradTop').style.opacity=Math.min(top/60,1);
+  document.getElementById('gradBot').style.opacity=total<=0?0:Math.min((total-top)/60,1);
+}
+
+/* KEYBOARD */
+document.addEventListener('keydown',function(e){
+  var items=document.querySelectorAll('.novel-item');if(!items.length)return;
+  var cur=-1;items.forEach(function(el,i){if(parseInt(el.dataset.order)===selectedOrder)cur=i});
+  if(e.key==='ArrowDown'){e.preventDefault();var nx=Math.min(cur+1,items.length-1);items[nx].click();items[nx].scrollIntoView({block:'nearest',behavior:'smooth'})}
+  else if(e.key==='ArrowUp'){e.preventDefault();var pv=Math.max(cur-1,0);items[pv].click();items[pv].scrollIntoView({block:'nearest',behavior:'smooth'})}
+});
+
+/* ── COUNTDOWN ── */
+var releaseDate=new Date('2026-06-02T00:00:00').getTime(),prevSec=-1;
+function tick(){
+  var diff=releaseDate-Date.now();
+  if(diff<=0){['days','hours','minutes','seconds'].forEach(function(id){document.getElementById(id).textContent='00'});return}
+  var d=Math.floor(diff/86400000),h=Math.floor(diff%86400000/3600000),m=Math.floor(diff%3600000/60000),s=Math.floor(diff%60000/1000);
+  document.getElementById('days').textContent=String(d).padStart(2,'0');
+  document.getElementById('hours').textContent=String(h).padStart(2,'0');
+  document.getElementById('minutes').textContent=String(m).padStart(2,'0');
+  var sEl=document.getElementById('seconds');
+  if(s!==prevSec){sEl.textContent=String(s).padStart(2,'0');sEl.classList.remove('tick');void sEl.offsetWidth;sEl.classList.add('tick');prevSec=s}
+}
+setInterval(tick,500);tick();
+
+/* ── SETTINGS ── */
+function openSettings(){document.getElementById('settingsOverlay').classList.add('open');document.getElementById('settingsPanel').classList.add('open')}
+function closeSettings(){document.getElementById('settingsOverlay').classList.remove('open');document.getElementById('settingsPanel').classList.remove('open')}
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  var on=document.body.classList.contains('dark');
+  document.getElementById('themeBtn').textContent=on?'☀️':'🌙';
+  document.getElementById('darkToggle').classList.toggle('on',on);
+  store.set('darkMode',on?'on':'off');
+}
+function toggleGrain(){
+  var btn=document.getElementById('grainToggle');btn.classList.toggle('on');
+  document.getElementById('grain').style.opacity=btn.classList.contains('on')?'.45':'0';
+}
+function toggleAnim(){
+  var btn=document.getElementById('animToggle');btn.classList.toggle('on');
+  var on=btn.classList.contains('on');
+  document.querySelectorAll('.novel-item,.carousel-card').forEach(function(el){el.style.transition=on?'':'none'});
+}
+var fontSize=19;
+function changeFontSize(dir){
+  fontSize=Math.max(14,Math.min(26,fontSize+dir*2));
+  document.getElementById('fontSizeVal').textContent=fontSize;
+  store.set('fontSize',fontSize);
+}
+function setAccent(el,plum,mauve){
+  document.querySelectorAll('.ap-dot').forEach(function(d){d.classList.remove('selected')});
+  el.classList.add('selected');
+  document.documentElement.style.setProperty('--plum',plum);
+  document.documentElement.style.setProperty('--mauve',mauve);
+}
+
+/* ── ANNOUNCEMENT ── */
+function closeAnn(){
+  var bar=document.getElementById('annBar');
+  bar.style.opacity='0';bar.style.maxHeight=bar.scrollHeight+'px';
+  requestAnimationFrame(function(){bar.style.transition='all .45s cubic-bezier(.4,0,.2,1)';bar.style.maxHeight='0';bar.style.padding='0';bar.style.borderWidth='0'});
+  setTimeout(function(){bar.remove()},450);
+}
+
+/* ── TOAST ── */
+var toastTimer;
+function showToast(msg){
+  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},2800);
+}
+
+/* ── COMMENTS ── */
+var lastCommentTime=0,COOLDOWN=15000;
+var comments=store.get('novelComments',[]);
+var avatarColors=['#9b7b8c','#7a8c75','#5c3d52','#b0546a','#5f7489','#614d7a','#8b3030','#c9a84c'];
+function getInitials(n){return n.trim().split(/\s+/).map(function(w){return w[0]}).join('').toUpperCase().slice(0,2)}
+function getAvColor(n){var i=0;for(var c=0;c<n.length;c++)i+=n.charCodeAt(c);return avatarColors[i%avatarColors.length]}
+function timeAgo(ts){var d=Date.now()-ts,s=Math.floor(d/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+
+function updateCharCount(){var l=document.getElementById('commentText').value.length;var el=document.getElementById('charCount');el.textContent=l+' / 500';el.style.color=l>450?'#b0546a':''}
+
+function renderComments(){
+  var list=document.getElementById('commentsList'),none=document.getElementById('noComments');
+  document.getElementById('commentCount').textContent=comments.length+' comment'+(comments.length!==1?'s':'');
+  if(!comments.length){none.style.display='block';list.innerHTML='';list.appendChild(none);return}
+  none.style.display='none';
+  list.innerHTML=comments.slice().reverse().map(function(c,i){
+    var ri=comments.length-1-i;
+    return'<div class="novel-item" id="cc-'+ri+'" style="flex-direction:column;align-items:flex-start;cursor:default;margin-bottom:9px;animation:cardIn .38s ease both">'+
+      '<div style="display:flex;align-items:center;gap:12px;width:100%;margin-bottom:8px">'+
+        '<div style="width:34px;height:34px;border-radius:50%;background:'+getAvColor(c.name)+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:white;flex-shrink:0">'+esc(getInitials(c.name))+'</div>'+
+        '<div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--plum)">'+esc(c.name)+'</div><div style="font-size:10px;color:var(--mauve);opacity:.55">'+timeAgo(c.ts)+'</div></div>'+
+        (c.novel?'<span class="badge b-drama">📖 '+esc(c.novel)+'</span>':'')+
+      '</div>'+
+      '<div style="font-size:14px;line-height:1.7;color:var(--ink);opacity:.78;word-break:break-word">'+esc(c.text)+'</div>'+
+      '<div style="display:flex;gap:7px;margin-top:10px">'+
+        '<button onclick="toggleLike('+ri+')" style="background:none;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;color:var(--mauve);cursor:pointer;transition:all var(--tr)'+(c.liked?';background:rgba(212,169,160,.18);color:var(--plum)':'')+'">'+(c.liked?'♥':'♡')+' '+(c.likes||0)+'</button>'+
+        '<button onclick="askDelete('+ri+')" style="margin-left:auto;background:none;border:1px solid rgba(176,84,106,.15);border-radius:20px;padding:4px 12px;font-size:12px;color:rgba(176,84,106,.5);cursor:pointer;transition:all var(--tr)">🗑 Delete</button>'+
+      '</div>'+
+      '<div id="cfm-'+ri+'" style="display:none;margin-top:10px;padding:12px;background:rgba(176,84,106,.06);border:1px solid rgba(176,84,106,.18);border-radius:10px;width:100%">'+
+        '<span style="font-size:12px;color:#b0546a">⚠️ Delete this comment?</span>'+
+        '<div style="display:flex;gap:7px;margin-top:8px">'+
+          '<button onclick="cancelDelete('+ri+')" style="background:none;border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-family:\'DM Sans\',sans-serif;font-size:12px;color:var(--mauve);cursor:pointer">Cancel</button>'+
+          '<button onclick="confirmDelete('+ri+')" style="background:#b0546a;color:white;border:none;border-radius:20px;padding:5px 14px;font-family:\'DM Sans\',sans-serif;font-size:12px;cursor:pointer">Yes, Delete</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+var pendingDelete=null;
+function askDelete(idx){if(pendingDelete!==null&&pendingDelete!==idx){var o=document.getElementById('cfm-'+pendingDelete);if(o)o.style.display='none'}pendingDelete=idx;var b=document.getElementById('cfm-'+idx);if(b)b.style.display=b.style.display==='none'?'block':'none'}
+function cancelDelete(idx){var b=document.getElementById('cfm-'+idx);if(b)b.style.display='none';pendingDelete=null}
+function confirmDelete(idx){var card=document.getElementById('cc-'+idx);if(card){card.style.animation='commentOut .32s ease forwards';setTimeout(function(){comments.splice(idx,1);store.set('novelComments',comments);pendingDelete=null;renderComments();showToast('Comment deleted.')},320)}
+}
+function toggleLike(i){if(!comments[i])return;comments[i].liked=!comments[i].liked;comments[i].likes=(comments[i].likes||0)+(comments[i].liked?1:-1);if(comments[i].likes<0)comments[i].likes=0;store.set('novelComments',comments);renderComments()}
+
+function submitComment(){
+  var now=Date.now(),name=document.getElementById('commentName').value.trim(),novel=document.getElementById('commentNovel').value,text=document.getElementById('commentText').value.trim();
+  if(!name){shakeEl('commentName');showToast('Please enter your name.');return}
+  if(text.length<3){shakeEl('commentText');showToast('Comment is too short.');return}
+  if(text.length>500){shakeEl('commentText');showToast('Too long.');return}
+  if(now-lastCommentTime<COOLDOWN){showToast('Wait '+ Math.ceil((COOLDOWN-(now-lastCommentTime))/1000)+'s before posting again.');return}
+  if(/^(.)\1{9,}/.test(text.replace(/\s/g,''))){showToast('Please write a real comment.');return}
+  lastCommentTime=now;comments.push({name:name,novel:novel,text:text,ts:now,likes:0,liked:false});store.set('novelComments',comments);
+  document.getElementById('commentText').value='';document.getElementById('commentNovel').value='';document.getElementById('charCount').textContent='0 / 500';
+  renderComments();showToast('Comment posted! ✦');document.getElementById('commentsList').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function shakeEl(id){var el=document.getElementById(id);el.style.borderColor='#b0546a';el.style.animation='none';void el.offsetWidth;el.style.animation='shake .3s ease';setTimeout(function(){el.style.animation='';el.style.borderColor='';el.focus()},320)}
+
+/* ── SCROLL BTN + NAV SHADOW ── */
+window.addEventListener('scroll',function(){
+  document.getElementById('scrollBtn').classList.toggle('vis',window.scrollY>200);
+  document.getElementById('siteNav').classList.toggle('scrolled',window.scrollY>10);
+},{passive:true});
+
+/* ── INIT ── */
+window.addEventListener('load',function(){
+  if(store.get('darkMode','')===('on')){document.body.classList.add('dark');document.getElementById('themeBtn').textContent='☀️';document.getElementById('darkToggle').classList.add('on')}
+  var fs=store.get('fontSize',19);if(fs>=14&&fs<=26){fontSize=fs;document.getElementById('fontSizeVal').textContent=fs}
+  if(comments.length>200){comments=comments.slice(-200);store.set('novelComments',comments)}
+  buildCarousel();
+  renderNovels();
+  handleListScroll();
+});
+</script>
+<style>@keyframes commentOut{to{opacity:0;transform:scale(.97) translateY(-8px);max-height:0;padding:0;margin:0;border-width:0}}</style>
+</body>
+</html>

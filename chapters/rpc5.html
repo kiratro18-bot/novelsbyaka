@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Rain Pact — Chapter 5: Umbrellas Left Behind</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f0ece2;
+      --surface: #e8e2d4;
+      --ink: #1e1a14;
+      --ink-soft: rgba(30, 26, 20, 0.5);
+      --ink-faint: rgba(30, 26, 20, 0.07);
+      --rain: #6a8faf;
+      --rain-dim: rgba(106, 143, 175, 0.3);
+      --deep: #3d6080;
+      --storm: #2a3d50;
+      --fog: rgba(240, 236, 226, 0.96);
+      --reading-width: 660px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Lora", serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.4s,
+        color 0.4s;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    #rainCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.25;
+    }
+
+    body.dark {
+      --bg: #111820;
+      --surface: #161e28;
+      --ink: #e8e0d0;
+      --ink-soft: rgba(232, 224, 208, 0.45);
+      --ink-faint: rgba(232, 224, 208, 0.06);
+      --fog: rgba(17, 24, 32, 0.97);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-header {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-nav {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .nav-prev {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .nav-prev:hover {
+      background: var(--deep);
+      color: white;
+    }
+
+    body.dark .reading-progress-bar {
+      background: var(--ink-faint);
+    }
+
+    .reading-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: rgba(30, 26, 20, 0.08);
+      width: 100%;
+      z-index: 200;
+    }
+
+    .reading-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rain), var(--deep));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 58px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(30, 26, 20, 0.08);
+      transition: background 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--deep);
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition:
+        gap 0.2s,
+        color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--storm);
+    }
+
+    .back-arrow {
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-center {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(30, 26, 20, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(30, 26, 20, 0.1);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 12px 40px rgba(30, 26, 20, 0.1);
+      z-index: 200;
+      min-width: 200px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(30, 26, 20, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .font-size-display {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      color: var(--rain);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .chapter-header {
+      max-width: var(--reading-width);
+      margin: 48px auto 0;
+      padding: 44px 48px 36px;
+      background: var(--surface);
+      border: 1px solid rgba(30, 26, 20, 0.07);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .novel-name {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rain);
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .chapter-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+
+    .chapter-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--storm);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .chapter-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .div-line {
+      width: 30px;
+      height: 1px;
+      background: var(--rain-dim);
+    }
+
+    .div-drop {
+      font-size: 12px;
+      opacity: 0.45;
+    }
+
+    .story-wrapper {
+      max-width: var(--reading-width);
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.6s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .story-body {
+      font-family: "Lora", serif;
+      font-size: 18px;
+      line-height: 1.95;
+      color: var(--ink);
+      padding: 44px 0 0;
+      transition: font-size 0.2s;
+    }
+
+    .story-body p:first-of-type::first-letter {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 4.2em;
+      font-style: italic;
+      color: var(--rain);
+      float: left;
+      line-height: 0.75;
+      margin-right: 8px;
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    .story-body p {
+      margin-bottom: 1.6em;
+      text-align: left;
+    }
+
+    .section-break {
+      text-align: center;
+      color: var(--rain);
+      opacity: 0.4;
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      margin: 2em 0;
+      user-select: none;
+    }
+
+    .chapter-end {
+      text-align: center;
+      padding: 32px 0 8px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--rain);
+      opacity: 0.6;
+      letter-spacing: 0.08em;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0 0;
+      border-top: 1px solid rgba(30, 26, 20, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-prev {
+      background: rgba(30, 26, 20, 0.06);
+      color: var(--ink-soft);
+      border-color: rgba(30, 26, 20, 0.1);
+    }
+
+    .nav-prev:hover {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink-soft);
+      border-color: rgba(30, 26, 20, 0.1);
+    }
+
+    .nav-home:hover {
+      background: var(--storm);
+      color: white;
+      border-color: var(--storm);
+    }
+
+    .nav-next {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .nav-next:hover {
+      background: var(--storm);
+      border-color: var(--storm);
+      transform: translateX(3px);
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--deep);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(61, 96, 128, 0.3);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      background: var(--storm);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .chapter-header {
+        margin: 24px 16px 0;
+        padding: 30px 24px 26px;
+      }
+
+      .story-wrapper {
+        padding: 0 16px 48px;
+      }
+
+      .story-body {
+        font-size: 16px;
+        padding-top: 32px;
+      }
+
+      .chapter-nav {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        font-size: 12px;
+        padding: 9px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reading-progress-bar">
+    <div class="reading-progress-fill" id="readingProgress"></div>
+  </div>
+  <canvas id="rainCanvas"></canvas>
+  <nav class="nav-bar">
+    <a href="rpc.html" class="back-link"><span class="back-arrow">←</span><span>Chapters</span></a>
+    <div class="nav-center">The Rain Pact &nbsp;·&nbsp; Chapter 5</div>
+    <div class="nav-right">
+      <div style="position: relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()">
+          Aa
+        </button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size: 13px">
+              A−
+            </button>
+            <span class="font-size-display" id="fontDisplay">18</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size: 20px">
+              A+
+            </button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size: 13px; letter-spacing: 0.1em">
+            Reset
+          </button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <div class="chapter-header" style="margin-left: auto; margin-right: auto; max-width: 660px">
+    <div class="novel-name">The Rain Pact</div>
+    <div class="chapter-label">Chapter Five</div>
+    <h1 class="chapter-title">Umbrellas Left Behind</h1>
+    <div class="chapter-divider">
+      <div class="div-line"></div>
+      <span class="div-drop">🌂</span>
+      <div class="div-line"></div>
+    </div>
+  </div>
+
+  <div class="story-wrapper">
+    <div class="story-body" id="storyBody">
+      <p>
+        The clouds had cleared for days now.<br />
+        Sunlight painted golden stripes across classroom floors, and a warm
+        breeze made the curtains dance. For once, students didn't talk about
+        the weather—they talked about the upcoming School Cultural
+        Festival.<br />
+        Aoi didn't usually care for these things. She avoided crowds, noise,
+        and events where she might be noticed.<br />
+        But when the teacher assigned her to the literature booth, she didn't
+        argue. She just nodded and wrote her name on the sheet.<br />
+        That's when she saw him—Itsuki—laughing with someone else.<br />
+        A girl from Class 3-C. Short hair, bold eyes, and the kind of smile
+        that didn't hesitate.<br />
+        They stood close, like they knew each other well. The girl handed him
+        a flyer, and he grinned.<br />
+        Aoi wasn't the jealous type.<br />
+        But she felt something. A quiet sting in her chest.<br />
+        She turned away.
+      </p>
+
+      <p>
+        Later that day, she found herself under the cherry tree again.<br />
+        No rain. No umbrella. Just the shadow of a habit.<br />
+        "Waiting for rain?" a voice teased.<br />
+        Itsuki stood beside her, hands in his pockets.<br />
+        "No," she replied, a little sharper than she meant to.<br />
+        He blinked. "Did I do something?"<br />
+        Aoi hesitated. Then shook her head. "Forget it."<br />
+        But he didn't.
+      </p>
+
+      <p>
+        On the day of the festival, the school was alive with color. Stalls,
+        music, lights. Aoi wore her usual uniform, sleeves rolled up, helping
+        arrange books and handwritten poetry cards at the booth.<br />
+        At the far end of the hallway, she spotted them again—Itsuki and the
+        girl. They were setting up the photography exhibit together. The girl
+        tugged playfully at his sleeve, pointing at a picture.<br />
+        And Itsuki smiled.<br />
+        That same smile he used to give her under the umbrella.<br />
+        Aoi looked down at the paper crane she had taped to the corner of her
+        booth.<br />
+        It felt… distant now. Like a dream fading in sunlight.<br />
+        She didn't wait by the tree that day.<br />
+        And for the first time since the pact was made,<br />
+        she brought an umbrella…<br />
+        but didn't open it.
+      </p>
+
+      <div class="section-break">· · ·</div>
+
+      <p>
+        It rained that evening.<br />
+        Not a thunderstorm. Just a soft, cold drizzle, like the sky was
+        breathing gently. The kind of rain that once felt like comfort.<br />
+        But this time, Aoi didn't walk to the tree.<br />
+        She sat by her window, the blue umbrella leaning against her wall,
+        untouched.<br />
+        Across her desk, the paper crane stared at her. Faded now. The corners
+        curled slightly. It looked more fragile than she remembered.<br />
+        Aoi rested her chin on her knees.<br />
+        "I don't know why it hurts," she whispered, "but it does."
+      </p>
+
+      <p>
+        At school, she and Itsuki still passed each other.<br />
+        Sometimes, he waved. Sometimes, she looked away.<br />
+        He didn't ask what was wrong again. Maybe he sensed she didn't want to
+        talk. Or maybe… he was hurting too.<br />
+        They didn't walk together.<br />
+        Not for days.<br />
+        The umbrella stayed folded. The pact, it seemed, had been left behind
+        in sunlight.
+      </p>
+
+      <p>
+        One afternoon, as rain pattered outside, Aoi went to the old music
+        room. Dust still clung to the piano. The same two chairs still sat
+        side by side.<br />
+        She sat alone.<br />
+        The silence wasn't peaceful anymore. It echoed.<br />
+        Then the door creaked.<br />
+        Aoi turned—expecting a teacher, a classmate, maybe no one at all.<br />
+        But it was Itsuki.<br />
+        Soaked, breathless, eyes searching.<br />
+        "I waited by the tree," he said. "You didn't come."<br />
+        Aoi looked away. "You don't have to wait anymore."<br />
+        He stepped closer. "But I want to."
+      </p>
+
+      <p>
+        Silence.<br />
+        Rain drummed on the windows, soft but insistent.<br />
+        "I saw you," Aoi said at last. "With her. You looked happy."<br />
+        "She's just an old friend," he said. "But even if I smiled… it wasn't
+        the same."<br />
+        She looked up.<br />
+        "I didn't understand it until you stopped walking with me," he
+        continued. "It wasn't the rain I liked. It was you."<br />
+        Aoi felt the tears before they fell.<br />
+        Slow. Silent. Like the rain they always shared.<br />
+        Itsuki sat beside her—close, but not too close.<br />
+        No umbrella. No crane.<br />
+        Just two people, learning how to speak without running from the quiet.
+      </p>
+    </div>
+    <div class="chapter-end">— End of Chapter Five —</div>
+    <div class="chapter-nav">
+      <a href="rpc4.html" class="nav-btn nav-prev">← Previous</a>
+      <a href="../index.html" class="nav-btn nav-home">🏠 Library</a>
+      <a href="rpc6.html" class="nav-btn nav-next">Final Chapter →</a>
+    </div>
+  </div>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+  <script>
+    var canvas = document.getElementById("rainCanvas"),
+      ctx = canvas.getContext("2d"),
+      drops = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    function spawnDrop() {
+      drops.push({
+        x: Math.random() * canvas.width,
+        y: -20,
+        length: Math.random() * 16 + 8,
+        speedY: Math.random() * 3 + 2,
+        opacity: Math.random() * 0.18 + 0.05,
+        width: Math.random() * 0.7 + 0.3,
+      });
+    }
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drops.forEach((d, i) => {
+        ctx.beginPath();
+        ctx.moveTo(d.x, d.y);
+        ctx.lineTo(d.x - 0.5, d.y + d.length);
+        ctx.strokeStyle = `rgba(106,143,175,${d.opacity})`;
+        ctx.lineWidth = d.width;
+        ctx.stroke();
+        d.y += d.speedY;
+        if (d.y > canvas.height + 30) drops.splice(i, 1);
+      });
+      if (Math.random() < 0.3) spawnDrop();
+      requestAnimationFrame(drawRain);
+    }
+    drawRain();
+    window.addEventListener("scroll", () => {
+      var s = window.scrollY,
+        h = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById("readingProgress").style.width =
+        (h > 0 ? (s / h) * 100 : 0) + "%";
+      document.getElementById("scrollBtn").style.display =
+        s > 200 ? "flex" : "none";
+    });
+    var fontSize = 18;
+    function changeFont(a) {
+      if (a === 1 && fontSize < 26) fontSize += 2;
+      else if (a === -1 && fontSize > 14) fontSize -= 2;
+      else if (a === 0) fontSize = 18;
+      document.getElementById("storyBody").style.fontSize = fontSize + "px";
+      document.getElementById("fontDisplay").textContent = fontSize;
+      try {
+        localStorage.setItem("rpc5FontSize", fontSize);
+      } catch (e) { }
+    }
+    function toggleFontPanel() {
+      document.getElementById("fontPanel").classList.toggle("open");
+    }
+    document.addEventListener("click", (e) => {
+      var b = document.getElementById("fontToggle"),
+        p = document.getElementById("fontPanel");
+      if (!b.contains(e.target) && !p.contains(e.target))
+        p.classList.remove("open");
+    });
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+    try {
+      var r = JSON.parse(localStorage.getItem("rpRead") || "[]");
+      if (!r.includes("ch5")) {
+        r.push("ch5");
+        localStorage.setItem("rpRead", JSON.stringify(r));
+      }
+    } catch (e) { }
+    window.addEventListener("load", () => {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+        var s = parseInt(localStorage.getItem("rpc5FontSize"));
+        if (s && s >= 14 && s <= 26) {
+          fontSize = s;
+          document.getElementById("storyBody").style.fontSize = s + "px";
+          document.getElementById("fontDisplay").textContent = s;
+        }
+      } catch (e) { }
+    });
+  </script>
+</body>
+
+</html>

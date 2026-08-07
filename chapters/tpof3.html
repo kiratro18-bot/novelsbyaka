@@ -1,0 +1,1046 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Ten Percent of Forever - Chapter 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f3f5f0;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #3d3d3d;
+      --ink-muted: #888;
+      --accent: #4a7c59;
+      --accent-light: rgba(74, 124, 89, 0.08);
+      --accent2: #8aab72;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-strong: rgba(0, 0, 0, 0.13);
+    }
+
+    body.dark {
+      --bg: #0e110c;
+      --surface: #151a12;
+      --ink: #dde8d4;
+      --ink-soft: #a8bea0;
+      --ink-muted: #637560;
+      --accent: #7aab72;
+      --accent-light: rgba(122, 171, 114, 0.09);
+      --accent2: #a0c890;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.11);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(74, 124, 89, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(122, 171, 114, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(34px, 7vw, 52px);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .soft-green {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* LUNCHBOX TRADE VISUAL */
+    .trade-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trade-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(74, 124, 89, 0.05) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .trade-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .trade-item {
+      text-align: center;
+      flex: 1;
+      min-width: 80px;
+    }
+
+    .trade-emoji {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .trade-lbl {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .trade-arrow {
+      font-size: 20px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .trade-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .trade-time {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      display: block;
+      margin-top: 8px;
+    }
+
+    /* RITUAL LIST */
+    .ritual-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .ritual-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .ritual-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ritual-list li {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .ritual-dot {
+      font-size: 8px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    /* ACCENT BLOCK */
+    .accent-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .accent-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .accent-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.85;
+    }
+
+    /* FIREWORKS VISUAL */
+    .fireworks-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fw-sky {
+      width: 100%;
+      max-width: 260px;
+      height: 90px;
+      margin: 0 auto 16px;
+      background: linear-gradient(180deg,
+          #0a0e18 0%,
+          #151f35 60%,
+          #1e2d40 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fw-burst {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .fw1 {
+      width: 40px;
+      height: 40px;
+      top: 10px;
+      left: 30px;
+      background: radial-gradient(circle,
+          rgba(255, 200, 80, 0.9) 0%,
+          rgba(255, 160, 40, 0.4) 40%,
+          transparent 70%);
+      animation: pop 3s ease-out infinite;
+    }
+
+    .fw2 {
+      width: 30px;
+      height: 30px;
+      top: 20px;
+      left: 50%;
+      background: radial-gradient(circle,
+          rgba(255, 100, 100, 0.9) 0%,
+          rgba(220, 60, 60, 0.4) 40%,
+          transparent 70%);
+      animation: pop 3s ease-out infinite 0.8s;
+    }
+
+    .fw3 {
+      width: 35px;
+      height: 35px;
+      top: 8px;
+      right: 30px;
+      background: radial-gradient(circle,
+          rgba(120, 200, 255, 0.9) 0%,
+          rgba(80, 160, 220, 0.4) 40%,
+          transparent 70%);
+      animation: pop 3s ease-out infinite 1.5s;
+    }
+
+    @keyframes pop {
+      0% {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+
+      20% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      80% {
+        opacity: 0.6;
+        transform: scale(1.1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.3);
+      }
+    }
+
+    .fw-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .fw-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* MOMENT BLOCK */
+    .moment-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--bg);
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+    }
+
+    .moment-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .moment-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    .moment-text em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev,
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover,
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .accent-block,
+      .ritual-block,
+      .trade-block,
+      .moment-block {
+        padding: 20px;
+      }
+
+      .trade-row {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tpof.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">Ten Percent of Forever</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🍱</span> Ten Percent of Forever · Chapter
+        3
+      </div>
+      <h1 class="chapter-title">Lunchbox<br />Trade</h1>
+      <p class="chapter-subtitle">
+        A rice ball, a terrible sandwich, and a quiet pact.
+      </p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Slice of Life</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>Monday started wrong.</p>
+      <p>
+        Hiro realized it the moment he reached into his bag and felt…
+        nothing.<br />
+        No bento box. No sandwich. Not even an energy bar. Just his notebook
+        and an eraser that had somehow melted into the bottom corner of his
+        bag <span class="thought">like gum.</span>
+      </p>
+      <p>He sighed.</p>
+      <p>
+        The bell rang for lunch. His friends ran off toward the cafeteria,
+        yelling something about curry bread.<br />
+        Hiro didn't follow.<br />
+        He just sat there, chin resting on his hand, stomach rumbling a little
+        louder with each passing second.
+      </p>
+      <p>
+        Across the room, Mei was flipping through her sketchbook again,
+        earphones in, eyes calm as always.
+      </p>
+      <p>
+        Then she looked up.<br />
+        Their eyes met. It only lasted a second.
+      </p>
+      <p>
+        But then, she stood.<br />
+        And walked over.
+      </p>
+    </div>
+
+    <!-- THE RICE BALL -->
+    <div class="trade-block">
+      <div class="trade-row">
+        <div class="trade-item">
+          <span class="trade-emoji">🍙</span>
+          <span class="trade-lbl">Her rice ball</span>
+        </div>
+        <span class="trade-arrow">→</span>
+        <div class="trade-item">
+          <span class="trade-emoji">🥪</span>
+          <span class="trade-lbl">His sandwich</span>
+        </div>
+      </div>
+      <p class="trade-caption">"If it was bad, I'd tell you."</p>
+      <span class="trade-time">12:20 PM · Every lunch</span>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>
+        Without saying anything, Mei slid something across his desk — a rice
+        ball. Wrapped in cling film, slightly warm.
+      </p>
+      <p>Hiro blinked. <span class="dialogue">"Wait, are you—?"</span></p>
+      <p>
+        <span class="dialogue">"You'll pass out by math period if you don't eat,"</span>
+        she said, not quite meeting his eyes.<br />
+        <span class="dialogue">"…Are you sure?"</span><br />
+        <span class="dialogue">"It's plain rice. Nothing special."</span> Her
+        voice was quiet, but her fingers lingered on the plastic wrap for a
+        second longer than necessary.
+        <span class="dialogue">"I made extras."</span>
+      </p>
+      <p>He took it gently. <span class="dialogue">"Thanks."</span></p>
+      <p>
+        She turned to walk back but paused halfway. Glanced over her
+        shoulder.<br />
+        <span class="dialogue">"…Next time, bring extra,"</span> she said.
+        <span class="dialogue">"So I can try yours too."</span>
+      </p>
+      <p>
+        Hiro smiled, wide.<br />
+        <span class="dialogue">"You got it."</span>
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        The next day, he made a sandwich.<br />
+        It was… questionable. Too much mayonnaise, not enough salt, and the
+        lettuce was a little wilted.
+      </p>
+      <p>
+        At lunch, he walked over to her desk. Held it out without a word.<br />
+        She took it. Unwrapped it. Then paused.
+      </p>
+      <p>
+        <span class="dialogue">"…Is this tuna and… apple slices?"</span><br />
+        <span class="dialogue">"…I panicked,"</span> he admitted.
+      </p>
+      <p>
+        She stared at it. Then took a bite.<br />
+        Hiro held his breath.
+      </p>
+      <p>
+        <span class="dialogue">"…It's weird,"</span> Mei said finally.
+        <span class="dialogue">"But… kinda good."</span><br />
+        <span class="dialogue">"You're just being nice."</span><br />
+        <span class="dialogue">"No,"</span> she said, looking up at him.
+        <span class="dialogue">"If it was bad, I'd tell you."</span>
+      </p>
+      <p>
+        <span class="thought">Something warm passed between them. Like a quiet pact, sealed with
+          mayonnaise and trust.</span>
+      </p>
+    </div>
+
+    <!-- THE RITUAL -->
+    <div class="ritual-block">
+      <span class="ritual-label">🔄 From then on</span>
+      <ul class="ritual-list">
+        <li><span class="ritual-dot">●</span>Rice balls for sandwiches.</li>
+        <li><span class="ritual-dot">●</span>Tamagoyaki for sweet corn.</li>
+        <li>
+          <span class="ritual-dot">●</span>Doodled napkin notes exchanged like
+          tiny secrets.
+        </li>
+        <li>
+          <span class="ritual-dot">●</span><em style="font-style: italic">No one else noticed.</em>
+        </li>
+      </ul>
+    </div>
+
+    <div class="prose">
+      <p class="scene-break">· · ·</p>
+    </div>
+
+    <!-- SCHOOL FESTIVAL -->
+    <div class="prose" id="prose3">
+      <p>School festivals were chaos.</p>
+      <p>
+        Paper lanterns hung across the courtyard. Students shouted over each
+        other, running around in mismatched costumes, face paint, cat ears, or
+        some combination of all three.
+      </p>
+      <p>
+        Hiro wasn't really into crowds.<br />
+        But he wandered anyway, sipping lukewarm soda and chewing on a stick
+        of yakitori that had gone cold fifteen minutes ago.
+      </p>
+      <p>
+        He hadn't seen Mei all day.<br />
+        Not at the art club's gallery, not near Class 3-B's haunted house, not
+        even at the goldfish scooping stall where he half-expected her to be
+        sketching behind the scenes.
+      </p>
+      <p>He almost gave up.</p>
+      <p>Then he looked up — and <span class="emphasis">saw her.</span></p>
+      <p>
+        On the rooftop.<br />
+        Sitting alone near the railing, feet drawn up to her chest, sketchbook
+        open in her lap.
+        <span class="thought">The lights from the courtyard reflected faintly in her eyes.</span>
+      </p>
+      <p>
+        She didn't look surprised when he opened the rooftop door.<br />
+        <span class="dialogue">"…Hey,"</span> he said, stepping out.<br />
+        <span class="dialogue">"…Hey,"</span> she echoed.
+        <span class="dialogue">"You're late."</span><br />
+        <span class="dialogue">"For what?"</span><br />
+        She patted the spot beside her.
+      </p>
+      <p>He sat down.</p>
+      <p>
+        There was no music up here. No shouting. Just the breeze. The hum of
+        distant laughter. The sky.
+      </p>
+      <p>
+        She didn't speak for a while. Just kept drawing. Then, without looking
+        up, she said:<br />
+        <span class="dialogue">"I like being above the noise."</span><br />
+        He nodded. <span class="dialogue">"Me too."</span>
+      </p>
+    </div>
+
+    <!-- FIREWORKS -->
+    <div class="fireworks-block">
+      <div class="fw-sky">
+        <div class="fw-burst fw1"></div>
+        <div class="fw-burst fw2"></div>
+        <div class="fw-burst fw3"></div>
+      </div>
+      <span class="fw-label">🎆 Festival fireworks</span>
+      <p class="fw-caption">Gold and red — reflected in her eyes.</p>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>
+        Then a loud boom cracked the sky.<br />
+        Fireworks.
+      </p>
+      <p>
+        They shot upward from the back field — bright bursts of gold and red
+        that reflected in her eyes and glowed across her face.
+      </p>
+      <p>
+        Mei didn't flinch. She just stared, completely still.<br />
+        Hiro watched the fireworks, then
+        <span class="thought">looked at her.</span>
+      </p>
+      <p>She looked… peaceful.</p>
+      <p>
+        Then, slowly, without thinking too hard, he shifted his hand closer.
+      </p>
+    </div>
+
+    <!-- THE PINKY MOMENT -->
+    <div class="moment-block">
+      <span class="moment-label">🤏 That moment</span>
+      <p class="moment-text">
+        <em>Their pinkies brushed.</em><br />
+        <em>She didn't move away.</em>
+      </p>
+    </div>
+
+    <div class="prose" id="prose5">
+      <p>
+        Just whispered,
+        <span class="dialogue">"I thought you hated fireworks."</span><br />
+        <span class="dialogue">"I do,"</span> he said.<br />
+        <span class="dialogue">"…Then why are you here?"</span>
+      </p>
+      <p>He turned to face her, half-laughing.</p>
+      <p><span class="dialogue">"Because you're here."</span></p>
+      <p>
+        Her eyes flickered toward him — wide for a moment, then soft.<br />
+        A firework exploded overhead, casting light on her smile.
+      </p>
+      <p>
+        She didn't say anything else.<br />
+        But she didn't pull her hand away either.
+      </p>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter 3</span>
+      <div class="chapter-nav">
+        <a href="tpof2.html" class="nav-btn nav-prev">← Chapter 2</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tpof4.html" class="nav-btn nav-next">Chapter 4 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fs = 19;
+    function changeFont(a) {
+      if (a === 1 && fs < 26) fs += 2;
+      else if (a === -1 && fs > 14) fs -= 2;
+      else if (a === 0) fs = 19;
+      ["prose1", "prose2", "prose3", "prose4", "prose5"].forEach(
+        function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.fontSize = fs + "px";
+        },
+      );
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop,
+        t =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

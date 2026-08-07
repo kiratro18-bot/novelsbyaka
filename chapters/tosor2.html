@@ -1,0 +1,1153 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Other Side of Rain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f0f2f5;
+      --surface: #ffffff;
+      --ink: #1a1c22;
+      --ink-soft: #3c3e48;
+      --ink-muted: #8a8e9a;
+      --accent: #5a6ea0;
+      --accent-light: rgba(90, 110, 160, 0.08);
+      --accent2: #8a9ec8;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-strong: rgba(0, 0, 0, 0.13);
+      --violet: #7a6a9a;
+    }
+
+    body.dark {
+      --bg: #0c0e14;
+      --surface: #13151e;
+      --ink: #dde0ea;
+      --ink-soft: #a8aabb;
+      --ink-muted: #606478;
+      --accent: #8a9ec8;
+      --accent-light: rgba(138, 158, 200, 0.09);
+      --accent2: #aabce0;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.11);
+      --violet: #9a8abb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--violet));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    /* HEADER */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(90, 110, 160, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(138, 158, 200, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: drip 3s ease-in-out infinite;
+    }
+
+    @keyframes drip {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      50% {
+        transform: translateY(3px);
+        opacity: 0.6;
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(32px, 7vw, 50px);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* PROSE */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .rain-blue {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .prose .violet {
+      color: var(--violet);
+      font-weight: 600;
+    }
+
+    /* RUMOUR BLOCK */
+    .rumour-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rumour-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(90, 110, 160, 0.04) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .rumour-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .rumour-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rumour-item {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .rumour-dash {
+      font-style: normal;
+      color: var(--border-strong);
+    }
+
+    /* VIOLET SKY VISUAL */
+    .violet-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .violet-scene {
+      width: 100%;
+      max-width: 240px;
+      height: 90px;
+      margin: 0 auto 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(180deg,
+          #2a1e3a 0%,
+          #4a3060 40%,
+          #6a5080 70%,
+          #8a7098 100%);
+    }
+
+    .thunder-flash {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0);
+      animation: flash 5s ease-in-out infinite;
+    }
+
+    @keyframes flash {
+
+      0%,
+      88%,
+      92%,
+      100% {
+        background: rgba(255, 255, 255, 0);
+      }
+
+      90% {
+        background: rgba(255, 255, 255, 0.12);
+      }
+    }
+
+    .vdrop {
+      position: absolute;
+      width: 1px;
+      background: rgba(200, 180, 230, 0.35);
+      border-radius: 1px;
+      animation: fall linear infinite;
+    }
+
+    .vd1 {
+      height: 12px;
+      left: 10%;
+      top: -20px;
+      animation-duration: 1.1s;
+      animation-delay: 0s;
+    }
+
+    .vd2 {
+      height: 9px;
+      left: 24%;
+      top: -20px;
+      animation-duration: 1.4s;
+      animation-delay: 0.3s;
+    }
+
+    .vd3 {
+      height: 13px;
+      left: 38%;
+      top: -20px;
+      animation-duration: 1s;
+      animation-delay: 0.7s;
+    }
+
+    .vd4 {
+      height: 10px;
+      left: 52%;
+      top: -20px;
+      animation-duration: 1.3s;
+      animation-delay: 0.1s;
+    }
+
+    .vd5 {
+      height: 12px;
+      left: 66%;
+      top: -20px;
+      animation-duration: 1.2s;
+      animation-delay: 0.9s;
+    }
+
+    .vd6 {
+      height: 9px;
+      left: 80%;
+      top: -20px;
+      animation-duration: 1.5s;
+      animation-delay: 0.4s;
+    }
+
+    .vd7 {
+      height: 11px;
+      left: 92%;
+      top: -20px;
+      animation-duration: 1.1s;
+      animation-delay: 0.8s;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: translateY(110px);
+        opacity: 0;
+      }
+    }
+
+    .violet-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .violet-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* BROKEN UMBRELLA */
+    .broken-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .broken-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .broken-meta {
+      flex: 1;
+    }
+
+    .broken-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .broken-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* THE LINE — the one that hits */
+    .line-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .line-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .line-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 21px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .line-attr {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-top: 12px;
+      display: block;
+    }
+
+    /* WHAT SHE IS — the masks */
+    .mask-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .mask-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .mask-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mask-list li {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .mask-dot {
+      font-style: normal;
+      color: var(--accent);
+      font-size: 8px;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .mask-list li.real {
+      color: var(--ink);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* NAPKIN MOMENT */
+    .napkin-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--bg);
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+    }
+
+    .napkin-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .napkin-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    .napkin-text em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* CLOSING LINE */
+    .closing-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .closing-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .closing-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev,
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover,
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .line-block,
+      .mask-block,
+      .napkin-block,
+      .closing-block,
+      .broken-block {
+        padding: 20px;
+      }
+
+      .broken-block {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tosor.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Other Side of Rain</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🌂</span> The Other Side of Rain
+      </div>
+      <h1 class="chapter-title">
+        The Girl Who<br />Held It Slightly<br />to His Side
+      </h1>
+      <p class="chapter-subtitle">He noticed everything she tried to hide.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Slice of Life</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>The umbrella-sharing became routine.</p>
+      <p>
+        Not every day. Not always under gray skies. But often enough that
+        people started whispering.
+      </p>
+    </div>
+
+    <!-- RUMOURS -->
+    <div class="rumour-block">
+      <span class="rumour-label">💬 What people said</span>
+      <div class="rumour-list">
+        <div class="rumour-item">
+          <span class="rumour-dash">—</span>"Minato? With her?"
+        </div>
+        <div class="rumour-item">
+          <span class="rumour-dash">—</span>"She talks to him?"
+        </div>
+      </div>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>
+        But Rika didn't care.<br />
+        Or maybe she <span class="thought">pretended not to.</span>
+      </p>
+      <p>
+        She still laughed loudly with her friends during class, still got
+        scolded for not doing her homework, still played the role everyone
+        expected of her.
+      </p>
+      <p>Except when it rained.</p>
+      <p>Then… she changed.</p>
+      <p>
+        That's what Minato noticed first. How quiet she became when the
+        streets turned wet. How she always held the umbrella
+        <span class="emphasis">just slightly more to his side.</span> How she
+        smiled… but softer. Sadder.
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        One afternoon, as thunder grumbled in the distance and the sky turned
+        a <span class="violet">sick shade of violet</span>, Minato walked
+        toward their usual meeting spot — the vending machine behind the gym.
+      </p>
+      <p>She wasn't there.</p>
+      <p>
+        At first, he thought she left early. Then maybe sick. But something
+        didn't sit right.
+      </p>
+      <p>So he searched.</p>
+      <p>
+        He checked the corridors. The rooftop. Even peeked into the music
+        room.<br />
+        Empty.
+      </p>
+      <p>
+        Then, near the back stairwell — the one no one used — he heard it.
+      </p>
+      <p>
+        A voice. Choked. Cracked. Not loud, but
+        <span class="thought">shaking.</span>
+      </p>
+    </div>
+
+    <!-- VIOLET SKY -->
+    <div class="violet-block">
+      <div class="violet-scene">
+        <div class="thunder-flash"></div>
+        <div class="vdrop vd1"></div>
+        <div class="vdrop vd2"></div>
+        <div class="vdrop vd3"></div>
+        <div class="vdrop vd4"></div>
+        <div class="vdrop vd5"></div>
+        <div class="vdrop vd6"></div>
+        <div class="vdrop vd7"></div>
+      </div>
+      <span class="violet-label">🌩 The back stairwell · No one used it</span>
+      <p class="violet-caption">A voice. Choked. Not loud — shaking.</p>
+    </div>
+
+    <div class="prose" id="prose3">
+      <p>He turned the corner.</p>
+      <p>
+        There she was — Rika, sitting on the floor, hugging her knees, mascara
+        running like ink.
+      </p>
+    </div>
+
+    <!-- BROKEN UMBRELLA -->
+    <div class="broken-block">
+      <div class="broken-icon-wrap">🌂</div>
+      <div class="broken-meta">
+        <span class="broken-title">Her umbrella — snapped beside her.</span>
+        <span class="broken-sub">Like it had been thrown. Her mom's. Not hers.</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>She didn't see him at first.</p>
+      <p>
+        Not until he knelt beside her and whispered,<br />
+        <span class="dialogue">"Rika…"</span>
+      </p>
+      <p>
+        She flinched. Then looked up, eyes red, and whispered the words no one
+        expected from a girl like her:
+      </p>
+      <p>
+        <span class="emphasis">"I'm so tired of pretending I'm okay."</span>
+      </p>
+      <p>
+        Minato didn't speak. He just sat beside her, legs stretched out, rain
+        softly tapping on the old stairwell window above.
+      </p>
+      <p>
+        Rika wiped her face with the sleeve of her uniform,
+        <span class="thought">like it didn't matter. Like she didn't matter.</span>
+      </p>
+      <p>
+        <span class="dialogue">"Sorry,"</span> she muttered.
+        <span class="dialogue">"You weren't supposed to see that."</span><br />
+        <span class="dialogue">"You're crying,"</span> Minato said gently.
+        <span class="dialogue">"You don't have to apologize."</span>
+      </p>
+      <p>She gave a hollow laugh.</p>
+    </div>
+
+    <!-- THE MASKS -->
+    <div class="mask-block">
+      <span class="mask-label">🎭 What she said about herself</span>
+      <ul class="mask-list">
+        <li>
+          <span class="mask-dot">●</span>"People like me don't get to fall
+          apart."
+        </li>
+        <li><span class="mask-dot">●</span>We're the fun ones.</li>
+        <li><span class="mask-dot">●</span>The glue.</li>
+        <li><span class="mask-dot">●</span>The noise.</li>
+        <li><span class="mask-dot">●</span>The comic relief.</li>
+        <li class="real">
+          <span class="mask-dot" style="color: var(--ink)">●</span>Not
+          tonight.
+        </li>
+      </ul>
+    </div>
+
+    <div class="prose" id="prose5">
+      <p>
+        Rika stared down at her umbrella — one side bent, the handle
+        cracked.<br />
+        <span class="dialogue">"I broke it,"</span> she said, voice small.
+        <span class="dialogue">"It wasn't even mine. It was my mom's. She told me to take care of
+          it."</span>
+      </p>
+      <p>He finally spoke.</p>
+    </div>
+
+    <!-- THE LINE THAT HIT -->
+    <div class="line-block">
+      <span class="line-label">🗣 Minato</span>
+      <p class="line-text">
+        "…Then maybe it wasn't strong enough to protect you."
+      </p>
+      <span class="line-attr">He wasn't smiling. He wasn't joking.</span>
+    </div>
+
+    <div class="prose" id="prose6">
+      <p>
+        <span class="thought">For some reason, those words hit harder than anything anyone had
+          ever said to her.</span>
+      </p>
+      <p>
+        <span class="dialogue">"I'm not good at talking,"</span> Minato
+        continued, <span class="dialogue">"but I'm good at noticing."</span>
+      </p>
+      <p>He pulled something from his bag.</p>
+    </div>
+
+    <!-- THE NAPKIN -->
+    <div class="napkin-block">
+      <span class="napkin-label">🧻 What he gave her</span>
+      <p class="napkin-text"><em>A napkin. Crumpled, but clean.</em></p>
+    </div>
+
+    <div class="prose" id="prose7">
+      <p>
+        She stared at it for a second, then took it and wiped her eyes again —
+        <span class="emphasis">slower this time.</span>
+      </p>
+      <p>
+        <span class="dialogue">"…Why do you walk with me?"</span> she asked.
+        <span class="dialogue">"I don't make it easy."</span>
+      </p>
+      <p>
+        He glanced at her.
+        <span class="thought">Rain cast reflections across her face like fractured glass.</span>
+      </p>
+      <p>
+        <span class="dialogue">"Because you always forget your umbrella,"</span>
+        he said.
+      </p>
+      <p>A beat. Then, softer:</p>
+      <p>
+        <span class="dialogue">"And because no one else sees what I see."</span>
+      </p>
+      <p>She looked down, blinking fast.</p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        They didn't say much else. Just sat there. Two soaked high schoolers
+        with too much to carry and not enough words to carry it with.
+      </p>
+    </div>
+
+    <!-- CLOSING -->
+    <div class="closing-block">
+      <span class="closing-label">✦ But sometimes</span>
+      <p class="closing-text">Being seen is enough.</p>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter</span>
+      <div class="chapter-nav">
+        <a href="tosor1.html" class="nav-btn nav-prev">← Previous</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tosor3.html" class="nav-btn nav-next">Next Chapter →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fs = 19;
+    function changeFont(a) {
+      if (a === 1 && fs < 26) fs += 2;
+      else if (a === -1 && fs > 14) fs -= 2;
+      else if (a === 0) fs = 19;
+      [
+        "prose1",
+        "prose2",
+        "prose3",
+        "prose4",
+        "prose5",
+        "prose6",
+        "prose7",
+      ].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fs + "px";
+      });
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop,
+        t =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

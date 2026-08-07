@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Rain Pact — Chapter 6: The Choice + Epilogue</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f0ece2;
+      --surface: #e8e2d4;
+      --ink: #1e1a14;
+      --ink-soft: rgba(30, 26, 20, 0.5);
+      --ink-faint: rgba(30, 26, 20, 0.07);
+      --rain: #6a8faf;
+      --rain-dim: rgba(106, 143, 175, 0.3);
+      --deep: #3d6080;
+      --storm: #2a3d50;
+      --gold: #b8945a;
+      --gold-dim: rgba(184, 148, 90, 0.25);
+      --fog: rgba(240, 236, 226, 0.96);
+      --reading-width: 660px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Lora", serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.4s,
+        color 0.4s;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    #skyCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    body.dark {
+      --bg: #111820;
+      --surface: #161e28;
+      --ink: #e8e0d0;
+      --ink-soft: rgba(232, 224, 208, 0.45);
+      --ink-faint: rgba(232, 224, 208, 0.06);
+      --fog: rgba(17, 24, 32, 0.97);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-header {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-nav {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .nav-prev {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .nav-prev:hover {
+      background: var(--deep);
+      color: white;
+    }
+
+    body.dark .reading-progress-bar {
+      background: var(--ink-faint);
+    }
+
+    body.dark .epilogue-card {
+      background: rgba(22, 30, 40, 0.85);
+      border-color: rgba(184, 148, 90, 0.2);
+    }
+
+    body.dark .finale-card {
+      background: rgba(22, 30, 40, 0.7);
+      border-color: var(--ink-faint);
+    }
+
+    .reading-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: rgba(30, 26, 20, 0.08);
+      width: 100%;
+      z-index: 200;
+    }
+
+    .reading-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rain), var(--gold));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 58px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(30, 26, 20, 0.08);
+      transition: background 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--deep);
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition:
+        gap 0.2s,
+        color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--storm);
+    }
+
+    .back-arrow {
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-center {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(30, 26, 20, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(30, 26, 20, 0.1);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 12px 40px rgba(30, 26, 20, 0.1);
+      z-index: 200;
+      min-width: 200px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(30, 26, 20, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .font-size-display {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      color: var(--rain);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .chapter-header {
+      max-width: var(--reading-width);
+      margin: 48px auto 0;
+      padding: 44px 48px 36px;
+      background: var(--surface);
+      border: 1px solid rgba(30, 26, 20, 0.07);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .novel-name {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rain);
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .chapter-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+
+    .chapter-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(24px, 4.5vw, 40px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--storm);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .chapter-subtitle {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+
+    .chapter-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .div-line {
+      width: 30px;
+      height: 1px;
+      background: var(--gold-dim);
+    }
+
+    .div-drop {
+      font-size: 12px;
+      opacity: 0.55;
+    }
+
+    .story-wrapper {
+      max-width: var(--reading-width);
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.6s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .story-body {
+      font-family: "Lora", serif;
+      font-size: 18px;
+      line-height: 1.95;
+      color: var(--ink);
+      padding: 44px 0 0;
+      transition: font-size 0.2s;
+    }
+
+    .story-body p:first-of-type::first-letter {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 4.2em;
+      font-style: italic;
+      color: var(--rain);
+      float: left;
+      line-height: 0.75;
+      margin-right: 8px;
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    .story-body p {
+      margin-bottom: 1.6em;
+      text-align: left;
+    }
+
+    .section-break {
+      text-align: center;
+      color: var(--rain);
+      opacity: 0.35;
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      margin: 2.5em 0;
+      user-select: none;
+    }
+
+    /* EPILOGUE CARD — special treatment */
+    .epilogue-card {
+      margin: 2.5em 0 1.5em;
+      background: linear-gradient(135deg,
+          rgba(240, 236, 226, 0.9),
+          rgba(232, 226, 212, 0.85));
+      border: 1px solid var(--gold-dim);
+      border-radius: 20px;
+      padding: 40px 44px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .epilogue-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(184, 148, 90, 0.04),
+          rgba(106, 143, 175, 0.04));
+      pointer-events: none;
+    }
+
+    .epilogue-eyebrow {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .epilogue-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 22px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--storm);
+      margin-bottom: 20px;
+    }
+
+    .epilogue-body {
+      font-family: "Lora", serif;
+      font-size: 17px;
+      line-height: 2;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    .epilogue-body p {
+      margin-bottom: 1.2em;
+    }
+
+    /* THE END card */
+    .finale-card {
+      margin-top: 40px;
+      padding: 36px 32px;
+      background: rgba(232, 226, 212, 0.5);
+      border: 1px solid rgba(30, 26, 20, 0.07);
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .finale-icon {
+      font-size: 28px;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+
+    .finale-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 26px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--storm);
+      margin-bottom: 6px;
+    }
+
+    .finale-attr {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
+    }
+
+    .finale-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      color: var(--rain);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .finale-link:hover {
+      opacity: 1;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0 0;
+      border-top: 1px solid rgba(30, 26, 20, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-prev {
+      background: rgba(30, 26, 20, 0.06);
+      color: var(--ink-soft);
+      border-color: rgba(30, 26, 20, 0.1);
+    }
+
+    .nav-prev:hover {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .nav-home {
+      background: var(--deep);
+      color: white;
+      border-color: var(--deep);
+    }
+
+    .nav-home:hover {
+      background: var(--storm);
+      border-color: var(--storm);
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--deep);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(61, 96, 128, 0.3);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      background: var(--storm);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .chapter-header {
+        margin: 24px 16px 0;
+        padding: 30px 24px 26px;
+      }
+
+      .story-wrapper {
+        padding: 0 16px 48px;
+      }
+
+      .story-body {
+        font-size: 16px;
+        padding-top: 32px;
+      }
+
+      .epilogue-card {
+        padding: 28px 22px;
+      }
+
+      .chapter-nav {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        font-size: 12px;
+        padding: 9px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reading-progress-bar">
+    <div class="reading-progress-fill" id="readingProgress"></div>
+  </div>
+  <canvas id="skyCanvas"></canvas>
+
+  <nav class="nav-bar">
+    <a href="rpc.html" class="back-link"><span class="back-arrow">←</span><span>Chapters</span></a>
+    <div class="nav-center">The Rain Pact &nbsp;·&nbsp; Final Chapter</div>
+    <div class="nav-right">
+      <div style="position: relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()">
+          Aa
+        </button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size: 13px">
+              A−
+            </button>
+            <span class="font-size-display" id="fontDisplay">18</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size: 20px">
+              A+
+            </button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size: 13px; letter-spacing: 0.1em">
+            Reset
+          </button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <div class="chapter-header" style="margin-left: auto; margin-right: auto; max-width: 660px">
+    <div class="novel-name">The Rain Pact</div>
+    <div class="chapter-label">Chapter Six</div>
+    <h1 class="chapter-title">The Choice</h1>
+    <div class="chapter-subtitle">+ Epilogue: After the Rain</div>
+    <div class="chapter-divider">
+      <div class="div-line"></div>
+      <span class="div-drop">☀️</span>
+      <div class="div-line"></div>
+    </div>
+  </div>
+
+  <div class="story-wrapper">
+    <div class="story-body" id="storyBody">
+      <p>
+        The rain stopped the next morning.<br />
+        The sky was pale, still streaked with clouds, but the world felt
+        lighter somehow—like it had taken a long breath and finally
+        exhaled.<br />
+        Aoi stood in front of her mirror, adjusting her uniform. Her fingers
+        paused on the paper crane pinned to her bag.<br />
+        She smiled, just a little.
+      </p>
+
+      <p>
+        At school, she found him before he could find her.<br />
+        Itsuki blinked in surprise as she stepped in front of his classroom
+        door. "You came early."<br />
+        "I couldn't sleep," she said.<br />
+        There was a pause.<br />
+        Then, she took a breath and asked, "Will you walk with me today?"<br />
+        Itsuki's smile was softer than ever. "Even if it doesn't rain?"<br />
+        Aoi looked up at him, the ghost of a grin on her lips.<br />
+        "Even if it never rains again."
+      </p>
+
+      <p>
+        They walked home slowly, side by side. No umbrella, no need. Just
+        sunlight brushing the trees and the faint smell of wet earth lingering
+        in the air.<br />
+        At the crosswalk, Aoi spoke again.<br />
+        "I used to hate the rain."<br />
+        Itsuki turned to her, curious.<br />
+        "But now… I think I like it," she continued. "Because it gave me
+        something to hold onto when I couldn't hold onto anything else."
+      </p>
+
+      <p>
+        Itsuki didn't say anything. He just reached into his bag and pulled
+        out two small, worn paper cranes.<br />
+        He handed her one.<br />
+        "I kept it," he said. "Even when I thought I lost you."<br />
+        Their fingers touched.<br />
+        They didn't kiss.<br />
+        They didn't confess in grand words.<br />
+        They just stood there — two people who had weathered something quiet,
+        something real. And made it out on the other side.<br />
+        Together.
+      </p>
+    </div>
+
+    <div class="section-break">· · · ☀️ · · ·</div>
+
+    <!-- EPILOGUE CARD -->
+    <div class="epilogue-card">
+      <div class="epilogue-eyebrow">Epilogue</div>
+      <div class="epilogue-title">After the Rain</div>
+      <div class="epilogue-body">
+        <p>
+          Sometimes, Aoi still sits by the window when it rains.<br />
+          She watches droplets chase each other down the glass, listens to the
+          hush it brings.<br />
+          And somewhere in the distance, she knows Itsuki is smiling too.
+        </p>
+        <p>
+          They still walk home together — sunny days, cloudy skies, and
+          everything in between.<br />
+          Because some promises aren't about umbrellas or paper cranes.<br />
+          They're about choosing each other, again and again.<br />
+          Even when the skies clear.<br />
+          Even after the rain.
+        </p>
+      </div>
+    </div>
+
+    <!-- FINALE CARD -->
+    <div class="finale-card">
+      <div class="finale-icon">🌧️ 💙</div>
+      <div class="finale-title">The End</div>
+      <div class="finale-attr">Written by AKA</div>
+      <a href="rpc.html" class="finale-link">← Back to all chapters</a>
+    </div>
+
+    <div class="chapter-nav">
+      <a href="rpc5.html" class="nav-btn nav-prev">← Previous</a>
+      <a href="../index.html" class="nav-btn nav-home">🏠 Library</a>
+    </div>
+  </div>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+
+  <script>
+    /* SKY — clearing with sun, light clouds */
+    var canvas = document.getElementById("skyCanvas"),
+      ctx = canvas.getContext("2d"),
+      clouds = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    function spawnCloud() {
+      clouds.push({
+        x: -220,
+        y: Math.random() * canvas.height * 0.5,
+        w: Math.random() * 180 + 100,
+        h: Math.random() * 45 + 25,
+        speed: Math.random() * 0.2 + 0.07,
+        opacity: Math.random() * 0.09 + 0.03,
+      });
+    }
+    for (var i = 0; i < 4; i++) {
+      spawnCloud();
+      clouds[clouds.length - 1].x = Math.random() * canvas.width;
+    }
+    function drawClouds() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      clouds.forEach((c, i) => {
+        ctx.save();
+        ctx.globalAlpha = c.opacity;
+        ctx.fillStyle = "#b8945a";
+        ctx.beginPath();
+        ctx.ellipse(c.x, c.y, c.w * 0.5, c.h * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(
+          c.x + c.w * 0.25,
+          c.y - c.h * 0.2,
+          c.w * 0.35,
+          c.h * 0.44,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(
+          c.x - c.w * 0.22,
+          c.y - c.h * 0.1,
+          c.w * 0.3,
+          c.h * 0.37,
+          0,
+          0,
+          Math.PI * 2,
+        );
+        ctx.fill();
+        ctx.restore();
+        c.x += c.speed;
+        if (c.x > canvas.width + 250) {
+          clouds.splice(i, 1);
+          spawnCloud();
+        }
+      });
+      requestAnimationFrame(drawClouds);
+    }
+    drawClouds();
+
+    window.addEventListener("scroll", () => {
+      var s = window.scrollY,
+        h = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById("readingProgress").style.width =
+        (h > 0 ? (s / h) * 100 : 0) + "%";
+      document.getElementById("scrollBtn").style.display =
+        s > 200 ? "flex" : "none";
+    });
+    var fontSize = 18;
+    function changeFont(a) {
+      if (a === 1 && fontSize < 26) fontSize += 2;
+      else if (a === -1 && fontSize > 14) fontSize -= 2;
+      else if (a === 0) fontSize = 18;
+      document.getElementById("storyBody").style.fontSize = fontSize + "px";
+      document.getElementById("fontDisplay").textContent = fontSize;
+      try {
+        localStorage.setItem("rpc6FontSize", fontSize);
+      } catch (e) { }
+    }
+    function toggleFontPanel() {
+      document.getElementById("fontPanel").classList.toggle("open");
+    }
+    document.addEventListener("click", (e) => {
+      var b = document.getElementById("fontToggle"),
+        p = document.getElementById("fontPanel");
+      if (!b.contains(e.target) && !p.contains(e.target))
+        p.classList.remove("open");
+    });
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+    try {
+      var r = JSON.parse(localStorage.getItem("rpRead") || "[]");
+      if (!r.includes("ch6")) {
+        r.push("ch6");
+        localStorage.setItem("rpRead", JSON.stringify(r));
+      }
+    } catch (e) { }
+    window.addEventListener("load", () => {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+        var s = parseInt(localStorage.getItem("rpc6FontSize"));
+        if (s && s >= 14 && s <= 26) {
+          fontSize = s;
+          document.getElementById("storyBody").style.fontSize = s + "px";
+          document.getElementById("fontDisplay").textContent = s;
+        }
+      } catch (e) { }
+    });
+  </script>
+</body>
+
+</html>

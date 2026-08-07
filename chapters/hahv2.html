@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Him and Her — Volume 2</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Serif+Display:ital@0;1&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #faf7f2;
+      --cream: #f4ede0;
+      --ink: #241c10;
+      --ink-soft: rgba(36, 28, 16, 0.5);
+      --ink-faint: rgba(36, 28, 16, 0.07);
+      --rose: #b85c6e;
+      --rose-dim: rgba(184, 92, 110, 0.22);
+      --plum: #6b3050;
+      --mauve: #9b6b80;
+      --warm: #c49a6c;
+      --sage: #7a8c75;
+      --mist: rgba(250, 247, 242, 0.96);
+      --surface: #fff;
+      --sh-sm: 0 2px 12px rgba(92, 61, 82, 0.07);
+      --sh-md: 0 8px 32px rgba(92, 61, 82, 0.12);
+      --tr: 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.dark {
+      --bg: #120e0c;
+      --cream: #1c1410;
+      --ink: #f0e8e0;
+      --ink-soft: rgba(240, 232, 224, 0.5);
+      --ink-faint: rgba(240, 232, 224, 0.06);
+      --surface: #1c1410;
+      --mist: rgba(18, 14, 12, 0.97);
+      --sh-sm: 0 2px 12px rgba(0, 0, 0, 0.3);
+      --sh-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      transition:
+        background 0.3s,
+        color 0.3s;
+      min-height: 100vh;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.45;
+    }
+
+    #petalCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+    }
+
+    /* NAV */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 58px;
+      background: var(--mist);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--ink-faint);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      transition: background var(--tr);
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--rose);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      transition:
+        gap var(--tr),
+        color var(--tr);
+    }
+
+    .back-link:hover {
+      gap: 13px;
+      color: var(--plum);
+    }
+
+    .back-arrow {
+      transition: transform var(--tr);
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-center {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--ink-faint);
+      background: var(--cream);
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      transition: all var(--tr);
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.08);
+      background: var(--surface);
+    }
+
+    body.dark .icon-btn {
+      background: #1c1410;
+    }
+
+    /* HERO */
+    .hero {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 52px 32px 40px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 44px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cover-block {
+      position: relative;
+    }
+
+    .cover-img {
+      width: 100%;
+      aspect-ratio: 2/3;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 6px 10px 32px rgba(36, 28, 16, 0.22);
+      display: block;
+    }
+
+    .cover-placeholder {
+      width: 100%;
+      aspect-ratio: 2/3;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #d4a9a0, #b85c6e, #6b3050);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.85);
+      text-align: center;
+      padding: 20px;
+      line-height: 1.4;
+      box-shadow: 6px 10px 32px rgba(36, 28, 16, 0.22);
+    }
+
+    .vol-ribbon {
+      position: absolute;
+      top: 14px;
+      left: -8px;
+      background: var(--rose);
+      color: white;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 4px 14px 4px 10px;
+      border-radius: 0 20px 20px 0;
+      box-shadow: 0 2px 8px rgba(184, 92, 110, 0.3);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rose);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-eyebrow::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      background: var(--rose-dim);
+    }
+
+    .hero-title {
+      font-family: "DM Serif Display", serif;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.05;
+      color: var(--plum);
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--rose);
+    }
+
+    .hero-vol {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--mauve);
+      margin-top: 2px;
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--mauve);
+      max-width: 380px;
+    }
+
+    .hero-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--rose-dim);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-num {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--plum);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mauve);
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .hero-tag {
+      font-size: 10px;
+      padding: 3px 12px;
+      border-radius: 50px;
+    }
+
+    .t-romance {
+      background: rgba(184, 92, 110, 0.09);
+      color: var(--rose);
+    }
+
+    .t-drama {
+      background: rgba(107, 48, 80, 0.09);
+      color: var(--plum);
+    }
+
+    .t-slice {
+      background: rgba(122, 140, 117, 0.1);
+      color: var(--sage);
+    }
+
+    /* PROGRESS BAR */
+    .progress-banner {
+      max-width: 860px;
+      margin: 0 auto 32px;
+      padding: 0 32px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-card {
+      background: var(--cream);
+      border: 1px solid var(--ink-faint);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    body.dark .progress-card {
+      background: #1c1410;
+    }
+
+    .prog-label {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      flex-shrink: 0;
+    }
+
+    .prog-bar-wrap {
+      flex: 1;
+      height: 4px;
+      background: rgba(36, 28, 16, 0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    body.dark .prog-bar-wrap {
+      background: rgba(240, 232, 224, 0.07);
+    }
+
+    .prog-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--warm));
+      border-radius: 2px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .prog-pct {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--rose);
+      flex-shrink: 0;
+    }
+
+    /* CHAPTERS */
+    .chapters-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .ch-section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--ink-faint);
+    }
+
+    .ch-section-title {
+      font-family: "DM Serif Display", serif;
+      font-size: 20px;
+      color: var(--plum);
+    }
+
+    .ch-section-count {
+      font-size: 11px;
+      color: var(--mauve);
+      opacity: 0.45;
+      letter-spacing: 0.1em;
+    }
+
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chapter-card {
+      background: var(--surface);
+      border: 1px solid var(--ink-faint);
+      border-radius: 14px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform var(--tr),
+        box-shadow var(--tr),
+        border-color var(--tr);
+      opacity: 0;
+      animation: cardIn 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    body.dark .chapter-card {
+      background: #1c1410;
+    }
+
+    .chapter-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--rose), var(--mauve));
+      opacity: 0;
+      transition: opacity var(--tr);
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--sh-md);
+      border-color: rgba(184, 92, 110, 0.2);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .chapter-card.locked {
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(0.4);
+    }
+
+    .chapter-card.read .ch-num {
+      background: linear-gradient(135deg, var(--rose), var(--mauve));
+    }
+
+    .chapter-card.read .ch-num-text {
+      color: white;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chapter-card:nth-child(1) {
+      animation-delay: 0.04s;
+    }
+
+    .chapter-card:nth-child(2) {
+      animation-delay: 0.08s;
+    }
+
+    .chapter-card:nth-child(3) {
+      animation-delay: 0.12s;
+    }
+
+    .chapter-card:nth-child(4) {
+      animation-delay: 0.16s;
+    }
+
+    .chapter-card:nth-child(5) {
+      animation-delay: 0.2s;
+    }
+
+    .chapter-card:nth-child(6) {
+      animation-delay: 0.24s;
+    }
+
+    .chapter-card:nth-child(7) {
+      animation-delay: 0.28s;
+    }
+
+    .chapter-card:nth-child(8) {
+      animation-delay: 0.32s;
+    }
+
+    .ch-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--rose-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--tr);
+    }
+
+    .chapter-card:hover .ch-num {
+      background: var(--rose-dim);
+    }
+
+    .ch-num-text {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 17px;
+      font-weight: 300;
+      color: var(--rose);
+      line-height: 1;
+    }
+
+    .ch-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .ch-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      opacity: 0.6;
+      margin-bottom: 3px;
+    }
+
+    .ch-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--plum);
+      line-height: 1.2;
+      transition: color var(--tr);
+    }
+
+    .chapter-card:hover .ch-title {
+      color: var(--rose);
+    }
+
+    .ch-desc {
+      font-size: 12px;
+      color: var(--mauve);
+      opacity: 0.65;
+      margin-top: 4px;
+      line-height: 1.55;
+    }
+
+    .ch-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .ch-badge {
+      font-size: 9px;
+      padding: 2px 10px;
+      border-radius: 50px;
+      letter-spacing: 0.05em;
+    }
+
+    .b-new {
+      background: rgba(122, 140, 117, 0.12);
+      color: var(--sage);
+    }
+
+    .b-soon {
+      background: rgba(184, 92, 110, 0.1);
+      color: var(--rose);
+      opacity: 0.7;
+    }
+
+    .ch-arrow {
+      font-size: 16px;
+      color: var(--rose);
+      opacity: 0;
+      transition: all var(--tr);
+      transform: translateX(-6px);
+    }
+
+    .chapter-card:hover .ch-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .ch-lock {
+      font-size: 16px;
+      opacity: 0.3;
+    }
+
+    /* READ MARKER */
+    .read-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--rose);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 3px rgba(184, 92, 110, 0.15);
+    }
+
+    /* VOLUME NAV */
+    .vol-nav {
+      max-width: 860px;
+      margin: 0 auto 60px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+
+    .vol-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      transition: all var(--tr);
+      border: 1px solid transparent;
+    }
+
+    .btn-prev {
+      background: rgba(36, 28, 16, 0.06);
+      color: var(--ink-soft);
+      border-color: var(--ink-faint);
+    }
+
+    .btn-prev:hover {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    .btn-home {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    .btn-home:hover {
+      background: var(--plum);
+      border-color: var(--plum);
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--rose);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(184, 92, 110, 0.3);
+      transition: all var(--tr);
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      background: var(--plum);
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.vis {
+      display: flex;
+    }
+
+    @media (max-width: 650px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 32px 18px 28px;
+        gap: 24px;
+      }
+
+      .cover-block {
+        max-width: 160px;
+        margin: 0 auto;
+      }
+
+      .site-nav {
+        padding: 0 18px;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .progress-banner,
+      .chapters-wrap,
+      .vol-nav {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .chapter-card {
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .ch-title {
+        font-size: 16px;
+      }
+
+      .ch-desc {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="petalCanvas"></canvas>
+
+  <nav class="site-nav">
+    <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span>Library</span></a>
+    <div class="nav-center">Him and Her · Vol. 2</div>
+    <button class="icon-btn" id="themeBtn" onclick="toggleDark()">🌙</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="animation: fadeUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both">
+    <div class="cover-block">
+      <img class="cover-img" src="hahv2.jpg" alt="Him and Her Vol. 2" onerror="
+            this.style.display = 'none';
+            this.nextElementSibling.style.display = 'flex';
+          " />
+      <div class="cover-placeholder" style="display: none">
+        Him and Her<br />Vol. 2
+      </div>
+      <div class="vol-ribbon">Volume 2</div>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-eyebrow">Original Fiction · AKA</div>
+      <h1 class="hero-title">Him<br />and <em>Her</em></h1>
+      <div class="hero-vol">Volume Two</div>
+      <div class="hero-tags">
+        <span class="hero-tag t-romance">💗 Romance</span>
+        <span class="hero-tag t-drama">🎭 Drama</span>
+        <span class="hero-tag t-slice">🌿 Slice of Life</span>
+      </div>
+      <div class="hero-divider"></div>
+      <p class="hero-sub">
+        A new semester. A lost memory. And two hearts finding their way back
+        to each other — one quiet word at a time.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Chapters</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="readCount">0</div>
+          <div class="stat-label">Read</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">🟢</div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESS -->
+  <div class="progress-banner">
+    <div class="progress-card">
+      <span class="prog-label">Your Progress</span>
+      <div class="prog-bar-wrap">
+        <div class="prog-bar-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <span class="prog-pct" id="progressPct">0%</span>
+    </div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="chapters-wrap">
+    <div class="ch-section-header">
+      <h2 class="ch-section-title">Chapters</h2>
+      <span class="ch-section-count">Volume 2 · 4 Chapters </span>
+    </div>
+
+    <div class="chapter-list" id="chapterList">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- VOLUME NAV -->
+  <div class="vol-nav">
+    <a href="hah.html" class="vol-nav-btn btn-prev">← Volume 1</a>
+    <a href="../index.html" class="vol-nav-btn btn-home">🏠 Library</a>
+  </div>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+
+  <script>
+    /* ─── CHAPTER DATA ─── */
+    var CHAPTERS = [
+      {
+        num: 1,
+        title: "Why Him?",
+        desc: ".",
+        file: "hahv2-1.html",
+        badge: "new",
+        available: true,
+      },
+
+      {
+        num: 2,
+        title: "Feelings",
+        desc: ".",
+        file: "hahv2-2.html",
+        badge: "new",
+        available: true,
+      },
+      {
+        num: 3,
+        title: "Unexpected Tragedy",
+        desc: ".",
+        file: "hahv2-3.html",
+        badge: "new",
+        available: true,
+      },
+      {
+        num: 4,
+        title: "We Can Be Friends Again",
+        desc: ".",
+        file: "hahv2-4.html",
+        badge: "new",
+        available: true,
+      },
+    ];
+
+    var READ_KEY = "hahv2Read";
+    var TOTAL = CHAPTERS.length;
+
+    function getRead() {
+      try {
+        return JSON.parse(localStorage.getItem(READ_KEY) || "[]");
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function renderChapters() {
+      var read = getRead();
+      var readCount = 0;
+      var html = CHAPTERS.map(function (c) {
+        var isRead = read.includes("ch" + c.num);
+        if (isRead) readCount++;
+        var badgeHTML = "";
+        if (!c.available) {
+          badgeHTML = '<span class="ch-badge b-soon">⏳ Soon</span>';
+        } else if (c.badge === "new") {
+          badgeHTML = '<span class="ch-badge b-new">✦ New</span>';
+        }
+        var rightHTML = !c.available
+          ? '<span class="ch-lock">🔒</span>'
+          : '<span class="ch-arrow">→</span>';
+        var readDot = isRead ? '<div class="read-dot"></div>' : "";
+        return (
+          '<a class="chapter-card' +
+          (isRead ? " read" : "") +
+          (!c.available ? " locked" : "") +
+          '" href="' +
+          (c.available ? c.file : "#") +
+          '">' +
+          '<div class="ch-num"><span class="ch-num-text">' +
+          c.num +
+          "</span></div>" +
+          '<div class="ch-info">' +
+          '<div class="ch-label">Chapter ' +
+          c.num +
+          "</div>" +
+          '<div class="ch-title">' +
+          c.title +
+          "</div>" +
+          '<div class="ch-desc">' +
+          c.desc +
+          "</div>" +
+          "</div>" +
+          '<div class="ch-right">' +
+          badgeHTML +
+          rightHTML +
+          readDot +
+          "</div>" +
+          "</a>"
+        );
+      }).join("");
+
+      document.getElementById("chapterList").innerHTML = html;
+
+      // progress
+      var pct = Math.round((readCount / TOTAL) * 100);
+      document.getElementById("readCount").textContent = readCount;
+      document.getElementById("progressFill").style.width = pct + "%";
+      document.getElementById("progressPct").textContent = pct + "%";
+    }
+
+    /* ─── PETAL CANVAS ─── */
+    var canvas = document.getElementById("petalCanvas"),
+      ctx = canvas.getContext("2d"),
+      petals = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    var pColors = ["#ffb7c5", "#f4a7c3", "#e8b4d8", "#ffd4e8"];
+    function spawnPetal() {
+      petals.push({
+        x: Math.random() * canvas.width,
+        y: -20,
+        size: Math.random() * 9 + 4,
+        speedY: Math.random() * 0.9 + 0.4,
+        speedX: (Math.random() - 0.5) * 0.5,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.025,
+        color: pColors[Math.floor(Math.random() * pColors.length)],
+        opacity: Math.random() * 0.28 + 0.1,
+      });
+    }
+    function drawPetals() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      petals.forEach(function (p, i) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.52, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.y * 0.018) * 0.3;
+        p.rot += p.rotSpeed;
+        if (p.y > canvas.height + 20) petals.splice(i, 1);
+      });
+      if (Math.random() < 0.055) spawnPetal();
+      requestAnimationFrame(drawPetals);
+    }
+    for (var i = 0; i < 6; i++) {
+      spawnPetal();
+      petals[petals.length - 1].y = Math.random() * canvas.height;
+    }
+    drawPetals();
+
+    /* ─── DARK MODE ─── */
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+
+    /* ─── SCROLL ─── */
+    window.addEventListener(
+      "scroll",
+      function () {
+        document
+          .getElementById("scrollBtn")
+          .classList.toggle("vis", window.scrollY > 200);
+      },
+      { passive: true },
+    );
+
+    /* ─── INIT ─── */
+    window.addEventListener("load", function () {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+      } catch (e) { }
+      renderChapters();
+    });
+  </script>
+  <style>
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</body>
+
+</html>

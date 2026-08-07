@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case File: You — Chapters</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f4f1ec;
+      --surface: #edeae2;
+      --surface2: #e5e1d8;
+      --ink: #1c1a17;
+      --ink-muted: rgba(28, 26, 23, 0.4);
+      --ink-faint: rgba(28, 26, 23, 0.07);
+      --red: #9b2c2c;
+      --red-muted: rgba(155, 44, 44, 0.12);
+      --red-dim: rgba(155, 44, 44, 0.35);
+      --amber: #b07d2a;
+      --slate: #4a5568;
+      --fog: rgba(244, 241, 236, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* DARK MODE */
+    body.dark {
+      --bg: #0e0d0b;
+      --surface: #141210;
+      --surface2: #1a1814;
+      --ink: #e8e4dc;
+      --ink-muted: rgba(232, 228, 220, 0.4);
+      --ink-faint: rgba(232, 228, 220, 0.06);
+      --fog: rgba(14, 13, 11, 0.95);
+    }
+
+    body.dark .chapter-card {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card:hover {
+      background: var(--surface2);
+      border-color: var(--red-dim);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: var(--surface2);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .hero-wrap {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .file-stamp {
+      border-color: rgba(155, 44, 44, 0.3);
+      color: rgba(155, 44, 44, 0.55);
+    }
+
+    body.dark .case-num {
+      color: rgba(155, 44, 44, 0.25);
+    }
+
+    body.dark .chapter-card:hover .case-num {
+      color: var(--red);
+    }
+
+    body.dark .scan-line {
+      background: var(--ink-faint);
+    }
+
+    body.dark .section-header {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-divider {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .progress-bar {
+      background: var(--ink-faint);
+    }
+
+    body.dark .tag {
+      background: var(--red-muted);
+    }
+
+    body.dark .meta-row span {
+      color: var(--ink-muted);
+    }
+
+    /* NAV */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(28, 26, 23, 0.08);
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--slate);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--red);
+    }
+
+    .back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      color: var(--red);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(28, 26, 23, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    /* FONT PANEL */
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(28, 26, 23, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 40px rgba(28, 26, 23, 0.1);
+      z-index: 200;
+      min-width: 180px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(28, 26, 23, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--red);
+      color: white;
+      border-color: var(--red);
+    }
+
+    .font-size-display {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 16px;
+      color: var(--red);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 48px 40px 36px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-wrap {
+      background: var(--surface);
+      border: 1px solid rgba(28, 26, 23, 0.08);
+      border-radius: 20px;
+      padding: 44px 56px;
+      max-width: 620px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* dossier corner marks */
+    .hero-wrap::before,
+    .hero-wrap::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--red-dim);
+      border-style: solid;
+    }
+
+    .hero-wrap::before {
+      top: 14px;
+      left: 14px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .hero-wrap::after {
+      bottom: 14px;
+      right: 14px;
+      border-width: 0 2px 2px 0;
+    }
+
+    .file-stamp {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(155, 44, 44, 0.5);
+      border: 1px solid rgba(155, 44, 44, 0.25);
+      padding: 3px 10px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 6vw, 60px);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.0;
+      margin-bottom: 6px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--red);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-divider {
+      width: 36px;
+      height: 1px;
+      background: var(--red-dim);
+      margin-bottom: 20px;
+    }
+
+    .meta-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .meta-row span {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 3px;
+      background: var(--red-muted);
+      color: var(--red);
+      letter-spacing: 0.08em;
+    }
+
+    /* scan lines effect */
+    .scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(28, 26, 23, 0.04);
+    }
+
+    /* CHAPTER SECTION */
+    .chapter-section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(28, 26, 23, 0.08);
+      transition: border-color 0.4s;
+    }
+
+    .section-title {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .chapter-total {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--red);
+      letter-spacing: 0.1em;
+    }
+
+    /* PROGRESS */
+    .progress-bar {
+      height: 2px;
+      background: rgba(28, 26, 23, 0.06);
+      border-radius: 1px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    /* CHAPTER CARDS */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 24px;
+      background: white;
+      border: 1px solid rgba(28, 26, 23, 0.07);
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.22s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--red);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(155, 44, 44, 0.2);
+      box-shadow: 0 4px 24px rgba(155, 44, 44, 0.07);
+      transform: translateY(-1px);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    /* coming soon card */
+    .chapter-card.locked {
+      opacity: 0.5;
+      pointer-events: none;
+      filter: grayscale(0.3);
+    }
+
+    .case-num {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 22px;
+      color: rgba(28, 26, 23, 0.12);
+      min-width: 42px;
+      line-height: 1;
+      transition: color 0.25s;
+      flex-shrink: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .chapter-card:hover .case-num {
+      color: var(--red);
+    }
+
+    .chapter-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chapter-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.25;
+      transition: color 0.2s;
+    }
+
+    .chapter-card:hover .chapter-title {
+      color: var(--red);
+    }
+
+    .read-arrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      color: rgba(28, 26, 23, 0.15);
+      transition: all 0.25s;
+      flex-shrink: 0;
+      transform: translateX(-6px);
+      letter-spacing: -0.05em;
+    }
+
+    .chapter-card:hover .read-arrow {
+      color: var(--red);
+      transform: translateX(0);
+    }
+
+    .chapter-divider {
+      border: none;
+      border-top: 1px solid rgba(28, 26, 23, 0.05);
+      margin: 10px 0 4px;
+      transition: border-color 0.4s;
+    }
+
+    /* STATUS NOTE */
+    .status-note {
+      margin-top: 24px;
+      padding: 14px 20px;
+      background: var(--red-muted);
+      border-left: 2px solid var(--red-dim);
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-note-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .status-note-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: var(--red);
+      letter-spacing: 0.1em;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 20px 40px 40px;
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 0.08em;
+      line-height: 1.8;
+    }
+
+    /* SCROLL BTN */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      background: var(--red);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(155, 44, 44, 0.3);
+      transition: all 0.2s;
+      z-index: 50;
+      letter-spacing: 0.05em;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-wrap {
+      animation: fadeUp 0.55s ease both;
+      animation-delay: 0.05s;
+    }
+
+    .section-header {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .progress-bar {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.13s;
+    }
+
+    .chapter-card:nth-child(1) {
+      animation-delay: 0.16s;
+    }
+
+    .chapter-card:nth-child(2) {
+      animation-delay: 0.22s;
+    }
+
+    .chapter-card:nth-child(3) {
+      animation-delay: 0.28s;
+    }
+
+    .chapter-card:nth-child(4) {
+      animation-delay: 0.34s;
+    }
+
+    .chapter-card:nth-child(5) {
+      animation-delay: 0.40s;
+    }
+
+    .status-note {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.44s;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-title {
+        display: none;
+      }
+
+      .hero {
+        padding: 28px 16px 28px;
+      }
+
+      .hero-wrap {
+        padding: 28px 24px;
+      }
+
+      .chapter-section {
+        padding: 0 16px 60px;
+      }
+
+      .chapter-card {
+        padding: 14px 16px;
+        gap: 12px;
+      }
+
+      .case-num {
+        font-size: 18px;
+        min-width: 32px;
+      }
+
+      .chapter-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="../index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back to Library</span>
+    </a>
+    <div class="nav-title">Case File: You</div>
+    <div class="nav-right">
+      <div style="position:relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()" title="Font size">Aa</button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size:13px">A−</button>
+            <span class="font-size-display" id="fontDisplay">16</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size:19px">A+</button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size:13px;letter-spacing:0.1em;">Reset</button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">🌙</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-wrap">
+      <!-- scan lines decoration -->
+      <div class="scan-line" style="top:30%"></div>
+      <div class="scan-line" style="top:60%"></div>
+      <div class="scan-line" style="top:80%"></div>
+
+      <div class="file-stamp">CASE FILE · CLASSIFIED</div>
+      <h1 class="hero-title">Case File: <em>You</em></h1>
+      <p class="hero-subtitle">A mystery that begins where the evidence ends</p>
+      <div class="hero-divider"></div>
+      <div class="meta-row">
+        <span>📁 9 Chapter</span>
+        <span>🟢 Ongoing</span>
+        <span><span class="tag">Mystery</span></span>
+        <span><span class="tag">Drama</span></span>
+        <span><span class="tag">Action</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER LIST -->
+  <div class="chapter-section">
+
+    <div class="section-header">
+      <span class="section-title">Evidence Log</span>
+      <span class="chapter-total">09 FILE OPEN</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="chapter-list">
+
+      <a class="chapter-card" href="cfy1.html">
+        <div class="case-num">01</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter One</div>
+          <div class="chapter-title">The Detective</div>
+        </div>
+        <span class="read-arrow">→&nbsp;→</span>
+      </a>
+
+      <a class="chapter-card" href="cfy2.html">
+        <div class="case-num">02</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Two</div>
+          <div class="chapter-title">The Clue</div>
+        </div>
+        <span class="read-arrow">→&nbsp;→</span>
+
+        <a class="chapter-card" href="cfy3.html">
+          <div class="case-num">03</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Three</div>
+            <div class="chapter-title">The Interrogation</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+
+        <a class="chapter-card" href="cfy4.html">
+          <div class="case-num">04</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter four</div>
+            <div class="chapter-title">One More</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+
+        <a class="chapter-card" href="cfy5.html">
+          <div class="case-num">05</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Five</div>
+            <div class="chapter-title">AfterMath</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+
+        <a class="chapter-card" href="cfy6.html">
+          <div class="case-num">06</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Six</div>
+            <div class="chapter-title">Past</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+
+        <a class="chapter-card" href="cfy7.html">
+          <div class="case-num">07</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Seven</div>
+            <div class="chapter-title">Lead</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+        <a class="chapter-card" href="cfy8.html">
+          <div class="case-num">08</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Eight</div>
+            <div class="chapter-title">Apartment</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+
+        <a class="chapter-card" href="cfy9.html">
+          <div class="case-num">09</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Nine</div>
+            <div class="chapter-title">Apartment !!</div>
+          </div>
+          <span class="read-arrow">→&nbsp;→</span>
+        </a>
+
+    </div>
+
+    <!-- STATUS NOTE -->
+    <div class="status-note">
+      <span class="status-note-icon">🔍</span>
+      <span class="status-note-text">INVESTIGATION ONGOING — New files added Biweekly</span>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    Please do not repost, copy, or reupload without permission from the author.<br>
+    Sharing links is always appreciated.
+  </footer>
+
+  <button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    /* FONT SIZE */
+    var fontSize = 16;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 24) fontSize += 2;
+      else if (action === -1 && fontSize > 12) fontSize -= 2;
+      else if (action === 0) fontSize = 16;
+      document.getElementById('fontDisplay').textContent = fontSize;
+      try { localStorage.setItem('cfyFontSize', fontSize); } catch (e) { }
+    }
+
+    function toggleFontPanel() {
+      document.getElementById('fontPanel').classList.toggle('open');
+    }
+
+    document.addEventListener('click', e => {
+      var btn = document.getElementById('fontToggle');
+      var panel = document.getElementById('fontPanel');
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
+
+    /* DARK MODE */
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      var on = document.body.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = on ? '☀️' : '🌙';
+      try { localStorage.setItem('darkMode', on ? 'on' : 'off'); } catch (e) { }
+    }
+
+    /* SCROLL BTN */
+    window.addEventListener('scroll', () => {
+      var btn = document.getElementById('scrollBtn');
+      btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+    });
+
+    /* READING PROGRESS */
+    var totalChapters = 1;
+    var read = 0;
+    try {
+      var stored = JSON.parse(localStorage.getItem('cfyRead') || '[]');
+      read = Math.min(stored.length, totalChapters);
+    } catch (e) { }
+    document.getElementById('progressFill').style.width = (read / totalChapters * 100) + '%';
+
+    /* INIT */
+    window.addEventListener('load', () => {
+      try {
+        if (localStorage.getItem('darkMode') === 'on') {
+          document.body.classList.add('dark');
+          document.getElementById('themeBtn').textContent = '☀️';
+        }
+        var saved = parseInt(localStorage.getItem('cfyFontSize'));
+        if (saved && saved >= 12 && saved <= 24) {
+          fontSize = saved;
+          document.getElementById('fontDisplay').textContent = fontSize;
+        }
+      } catch (e) { }
+    });
+  </script>
+
+</body>
+
+</html>

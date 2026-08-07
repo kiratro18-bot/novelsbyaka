@@ -1,0 +1,1356 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Day She Stayed - Chapters 6</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #444;
+      --ink-muted: #888;
+      --accent: #1565c0;
+      --accent-light: rgba(21, 101, 192, 0.07);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.14);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --ink: #e6edf3;
+      --ink-soft: #b0bec5;
+      --ink-muted: #6a7f99;
+      --accent: #7ba7c9;
+      --accent-light: rgba(123, 167, 201, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #37474f);
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(21, 101, 192, 0.15);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(123, 167, 201, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(32px, 7vw, 50px);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .sky-blue {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .prose .red-ribbon {
+      color: #c62828;
+      font-weight: 600;
+    }
+
+    /* SURGERY RAIN WINDOW */
+    .surgery-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .surgery-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(21, 101, 192, 0.04) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .surgery-window {
+      width: 100%;
+      max-width: 240px;
+      height: 90px;
+      margin: 0 auto 16px;
+      background: linear-gradient(180deg,
+          #1e2c3a 0%,
+          #2d404e 50%,
+          #4a5e6a 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rdrop {
+      position: absolute;
+      width: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 1px;
+      animation: fall linear infinite;
+    }
+
+    .rd1 {
+      height: 12px;
+      left: 10%;
+      top: -20px;
+      animation-duration: 1.2s;
+      animation-delay: 0s;
+    }
+
+    .rd2 {
+      height: 9px;
+      left: 22%;
+      top: -20px;
+      animation-duration: 1.5s;
+      animation-delay: 0.3s;
+    }
+
+    .rd3 {
+      height: 13px;
+      left: 35%;
+      top: -20px;
+      animation-duration: 1.1s;
+      animation-delay: 0.6s;
+    }
+
+    .rd4 {
+      height: 10px;
+      left: 50%;
+      top: -20px;
+      animation-duration: 1.4s;
+      animation-delay: 0.1s;
+    }
+
+    .rd5 {
+      height: 12px;
+      left: 63%;
+      top: -20px;
+      animation-duration: 1.3s;
+      animation-delay: 0.8s;
+    }
+
+    .rd6 {
+      height: 9px;
+      left: 76%;
+      top: -20px;
+      animation-duration: 1.6s;
+      animation-delay: 0.4s;
+    }
+
+    .rd7 {
+      height: 11px;
+      left: 88%;
+      top: -20px;
+      animation-duration: 1.2s;
+      animation-delay: 0.9s;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+
+      100% {
+        transform: translateY(110px);
+        opacity: 0;
+      }
+    }
+
+    .surgery-time {
+      font-family: "Crimson Pro", serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .surgery-sub {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    /* SEALED LETTER */
+    .sealed-block {
+      margin: 40px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-strong);
+    }
+
+    .sealed-top {
+      background: #c62828;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sealed-ribbon-icon {
+      font-size: 14px;
+    }
+
+    .sealed-top-text {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: white;
+      font-weight: 500;
+    }
+
+    .sealed-body {
+      padding: 28px 32px;
+      background: var(--surface);
+    }
+
+    .sealed-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.85;
+    }
+
+    /* PHOTO BLOCK */
+    .photo-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .photo-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .photo-meta {
+      flex: 1;
+    }
+
+    .photo-filename {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .photo-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* WAIT BLOCK — 9 hours */
+    .wait-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .wait-num {
+      font-family: "Crimson Pro", serif;
+      font-size: 52px;
+      font-weight: 600;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+    }
+
+    .wait-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-top: 8px;
+      display: block;
+    }
+
+    .wait-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-top: 10px;
+    }
+
+    /* JOURNAL BLOCK */
+    .journal-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .journal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .journal-day {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .journal-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* CHAPTER DIVIDER */
+    .chapter-divider {
+      margin: 64px 0 48px;
+      text-align: center;
+      padding-top: 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .chapter-divider h2 {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(28px, 6vw, 44px);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .chapter-divider p {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-muted);
+    }
+
+    /* SKY PHOTO — the cloudy one she wakes to */
+    .sky-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sky-visual {
+      width: 100%;
+      max-width: 260px;
+      height: 90px;
+      margin: 0 auto 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(180deg,
+          #8a9eb0 0%,
+          #a8bcc8 40%,
+          #c4d4dc 70%,
+          #dce8ec 100%);
+      position: relative;
+    }
+
+    .cloud-break {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50px;
+    }
+
+    .cb1 {
+      width: 90px;
+      height: 22px;
+      top: 18px;
+      left: 10px;
+      animation: drift 9s ease-in-out infinite;
+    }
+
+    .cb2 {
+      width: 60px;
+      height: 16px;
+      top: 30px;
+      left: 110px;
+      animation: drift 12s ease-in-out infinite 2s;
+    }
+
+    .cb3 {
+      width: 70px;
+      height: 18px;
+      top: 14px;
+      left: 170px;
+      animation: drift 10s ease-in-out infinite 4s;
+    }
+
+    @keyframes drift {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(8px);
+      }
+    }
+
+    .sky-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .sky-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* BURN BLOCK */
+    .burn-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .burn-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at bottom,
+          rgba(200, 80, 20, 0.05) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .burn-icon {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 12px;
+      animation: flicker 2s ease-in-out infinite;
+    }
+
+    @keyframes flicker {
+
+      0%,
+      100% {
+        transform: scale(1) rotate(-2deg);
+      }
+
+      50% {
+        transform: scale(1.1) rotate(2deg);
+      }
+    }
+
+    .burn-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .burn-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* EXCHANGE BLOCK */
+    .exchange-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .exchange-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .exchange-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .exchange-item {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+    .exchange-item.q {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .exchange-item.a {
+      font-style: italic;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .exchange-speaker {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 3px;
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* NEW JOURNAL */
+    .new-journal-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .new-journal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .new-journal-day {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .new-journal-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.9;
+    }
+
+    .new-journal-final {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 18px;
+      display: block;
+      font-style: normal;
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev,
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover,
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .journal-block,
+      .sealed-body,
+      .exchange-block,
+      .new-journal-block {
+        padding: 20px;
+      }
+
+      .photo-block {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tdss.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Day She Stayed</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <!-- ── CHAPTER 6 ── -->
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🌧</span> The Day She Stayed · Chapter 6
+      </div>
+      <h1 class="chapter-title">The Sky That<br />Stood Still</h1>
+      <p class="chapter-subtitle">He waited. Nine hours. One letter.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Drama</span><span class="meta-dot"></span>
+        <span class="meta-item">Sad</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>It was raining again.</p>
+      <p>
+        The kind of rain that felt like silence. No thunder. No drama. Just
+        droplets tapping against the hospital window
+        <span class="thought">like a ticking clock.</span>
+      </p>
+      <p>Sayo was prepped for surgery.</p>
+      <p>Ren sat beside her, pretending his hands weren't shaking.</p>
+      <p>
+        She looked at him — eyes heavy, face calm.<br />
+        <span class="dialogue">"Will you be here when I wake up?"</span>
+      </p>
+      <p>
+        He reached into his bag and pulled out a letter — sealed with a piece
+        of <span class="red-ribbon">red ribbon.</span>
+      </p>
+      <p>
+        <span class="dialogue">"I'll be here. But if I'm not… open this."</span>
+      </p>
+      <p>
+        Her fingers hovered over it. Then pulled back.<br />
+        <span class="dialogue">"Only if you're not?"</span><br />
+        He nodded.<br />
+        <span class="dialogue">"And only then."</span>
+      </p>
+      <p>
+        She smiled.<br />
+        <span class="dialogue">"You're always giving me rules to break."</span>
+      </p>
+    </div>
+
+    <!-- SURGERY TIME -->
+    <div class="surgery-block">
+      <div class="surgery-window">
+        <div class="rdrop rd1"></div>
+        <div class="rdrop rd2"></div>
+        <div class="rdrop rd3"></div>
+        <div class="rdrop rd4"></div>
+        <div class="rdrop rd5"></div>
+        <div class="rdrop rd6"></div>
+        <div class="rdrop rd7"></div>
+      </div>
+      <span class="surgery-time">7:03 AM</span>
+      <span class="surgery-sub">They wheeled her away.</span>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>Ren stood in the hallway long after the doors closed.</p>
+      <p>
+        <span class="thought">His heart didn't beat right. His thoughts were noise.</span>
+      </p>
+      <p>He didn't cry.</p>
+      <p>
+        Instead, he opened his camera, found a photo from the week before — a
+        blurry one of her laughing, wind in her hair, sunlight dancing on her
+        skin.
+      </p>
+      <p>
+        He stared at it like it was holding her soul.<br />
+        Then he whispered:
+      </p>
+      <p><span class="dialogue">"Please stay."</span></p>
+    </div>
+
+    <!-- THE PHOTO -->
+    <div class="photo-block">
+      <div class="photo-icon-wrap">📷</div>
+      <div class="photo-meta">
+        <span class="photo-filename">Blurry. Wind. Laughing.</span>
+        <span class="photo-sub">The one that held her soul.</span>
+      </div>
+    </div>
+
+    <!-- 9 HOURS -->
+    <div class="wait-block">
+      <span class="wait-num">9</span>
+      <span class="wait-label">Hours · He waited the entire time</span>
+      <p class="wait-caption">
+        A chair too cold. A room too white. A letter he never wanted her to
+        read.
+      </p>
+    </div>
+
+    <div class="prose" id="prose3">
+      <p>
+        He thought about opening it himself.<br />
+        Just in case.
+      </p>
+      <p>But he didn't.</p>
+      <p>
+        <span class="thought">Because if he did… it meant he'd given up.</span>
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        Then the doctor appeared.<br />
+        Tired. Calm.
+      </p>
+      <p><span class="dialogue">"She's stable,"</span> he said.</p>
+      <p>Ren didn't move.</p>
+      <p>It took ten full seconds for the words to reach him.</p>
+      <p>And when they did — <span class="emphasis">he ran.</span></p>
+      <p class="scene-break">· · ·</p>
+      <p>She was pale. Hooked up to wires. Eyes closed.</p>
+      <p>
+        But breathing.<br />
+        <span class="emphasis">Alive.</span>
+      </p>
+      <p>
+        He sat beside her. Held her hand. Laid the letter beside her pillow —
+        unopened.
+      </p>
+      <p>
+        <span class="dialogue">"You're not allowed to read that anymore,"</span>
+        he whispered.
+      </p>
+    </div>
+
+    <!-- JOURNAL — last entry before surgery -->
+    <div class="journal-block">
+      <span class="journal-label">📓 From Sayo's Journal</span>
+      <span class="journal-day">Day 59 — Last entry before surgery.</span>
+      <p class="journal-text">
+        If I don't wake up…<br />
+        Tell him he was the reason I tried.<br />
+        Tell him he made me want more than just borrowed time.<br />
+        Tell him I love him.<br /><br />
+        And if I do wake up…<br />
+        Tell him yourself, idiot.
+      </p>
+    </div>
+
+    <div class="chapter-divider">
+      <div class="series-badge">
+        <span class="chapter-icon">☁️</span> The Day She Stayed
+      </div>
+      <h2>The Things We Don't Say<br />(But Mean Anyway)</h2>
+      <p>It took her two days to fully wake up.</p>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>
+        When she opened her eyes, the room was empty — except for the photo
+        pinned to the ceiling above her bed.
+      </p>
+      <p>A picture of the sky.</p>
+      <p>
+        Not the perfect blue she once feared.<br />
+        But a cloudy, broken one —
+        <span class="thought">the kind that looked like it had survived something.</span>
+      </p>
+    </div>
+
+    <!-- THE CLOUDY SKY -->
+    <div class="sky-block">
+      <div class="sky-visual">
+        <div class="cloud-break cb1"></div>
+        <div class="cloud-break cb2"></div>
+        <div class="cloud-break cb3"></div>
+      </div>
+      <span class="sky-label">📷 Pinned to the ceiling above her bed</span>
+      <p class="sky-caption">
+        Not perfect. Broken. The kind that had survived something.
+      </p>
+    </div>
+
+    <div class="prose" id="prose5">
+      <p>
+        Beside her was the letter Ren had given her.<br />
+        Still sealed.<br />
+        Still waiting.
+      </p>
+      <p>
+        She didn't open it.<br />
+        She didn't have to.
+      </p>
+      <p>
+        He came in that afternoon with a plastic bag full of vending machine
+        snacks and a face that looked like he hadn't slept in a week.
+      </p>
+      <p>
+        She smiled.<br />
+        <span class="dialogue">"You look like you lost a fight with a raccoon."</span>
+      </p>
+      <p>
+        He dropped the snacks, sat beside her, and exhaled
+        <span class="thought">like he'd been holding his breath since the moment she left.</span>
+      </p>
+      <p>
+        <span class="dialogue">"You're here,"</span> he said.<br />
+        <span class="dialogue">"I told you I'd stay."</span>
+      </p>
+      <p>
+        He didn't cry.<br />
+        But his voice cracked when he whispered:<br />
+        <span class="dialogue">"I didn't open your letter."</span>
+      </p>
+      <p>
+        She reached for it. Placed it in his hands.<br />
+        <span class="dialogue">"Then let's burn it together."</span>
+      </p>
+      <p>
+        He blinked. <span class="dialogue">"Wait — what?"</span><br />
+        <span class="dialogue">"It's not needed anymore. You're here. I'm here. Let's make new
+          rules."</span>
+      </p>
+      <p>
+        He stared at her.<br />
+        Then laughed.<br />
+        <span class="thought">A real laugh. The kind that didn't carry weight, just relief.</span>
+      </p>
+    </div>
+
+    <!-- THE BURN -->
+    <div class="burn-block">
+      <span class="burn-icon">🔥</span>
+      <span class="burn-label">That evening · Outside · Wind gentle · Sun low</span>
+      <p class="burn-caption">
+        They held both letters over the flame — hers and his.<br />Watched as
+        the papers curled, burned, disappeared.
+      </p>
+    </div>
+
+    <!-- THE EXCHANGE -->
+    <div class="exchange-block">
+      <span class="exchange-label">💬 What they said</span>
+      <div class="exchange-list">
+        <div class="exchange-item q">
+          <span class="exchange-speaker">Sayo</span>
+          "I never read yours."
+        </div>
+        <div class="exchange-item q">
+          <span class="exchange-speaker">Ren</span>
+          "I never read yours either."
+        </div>
+        <div class="exchange-item a">
+          <span class="exchange-speaker">Both</span>
+          "Good."
+        </div>
+      </div>
+    </div>
+
+    <div class="prose" id="prose6">
+      <p><span class="dialogue">"Why?"</span></p>
+      <p>
+        She looked at him.<br />
+        <span class="dialogue">"Because if I had… I think I would've broken again. And I don't
+          want to break anymore."</span>
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        That night, he asked:<br />
+        <span class="dialogue">"What happens now?"</span>
+      </p>
+      <p>
+        She answered:<br />
+        <span class="dialogue">"We live. Clumsily. Softly. One picture at a time."</span>
+      </p>
+    </div>
+
+    <!-- NEW JOURNAL — counting up -->
+    <div class="new-journal-block">
+      <span class="new-journal-label">📓 Sayo's new journal</span>
+      <span class="new-journal-day">Day 1.</span>
+      <p class="new-journal-text">
+        Not of dying. Of living.<br /><br />
+        He still looks at the sky every morning.<br />
+        But now, he holds my hand while he does.<br /><br />
+        We don't talk about the surgery much.<br />
+        We don't need to.<br /><br />
+        Because he knows. And I know.<br />
+        And that's enough.
+      </p>
+      <span class="new-journal-final">We're not counting down anymore.<br />We're counting up.</span>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapters 6</span>
+      <div class="chapter-nav">
+        <a href="tdss5.html" class="nav-btn nav-prev">← Chapter 5</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tdss7.html" class="nav-btn nav-next">Chapter 7 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fs = 19;
+    function changeFont(a) {
+      if (a === 1 && fs < 26) fs += 2;
+      else if (a === -1 && fs > 14) fs -= 2;
+      else if (a === 0) fs = 19;
+      ["prose1", "prose2", "prose3", "prose4", "prose5", "prose6"].forEach(
+        function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.fontSize = fs + "px";
+        },
+      );
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop,
+        t =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

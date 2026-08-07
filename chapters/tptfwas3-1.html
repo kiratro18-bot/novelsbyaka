@@ -1,0 +1,1253 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Petal That Falls With a Smile Vol. 1 - Chapters 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #444;
+      --ink-muted: #888;
+      --accent: #7a6c8a;
+      --accent-light: rgba(122, 108, 138, 0.07);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.14);
+      --petal: #c9a0b8;
+      --petal-light: rgba(201, 160, 184, 0.09);
+      --sage: #7a8c75;
+      --sage-light: rgba(122, 140, 117, 0.09);
+      --rain: #7fa3b8;
+      --rain-light: rgba(127, 163, 184, 0.09);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --ink: #e6edf3;
+      --ink-soft: #b0bec5;
+      --ink-muted: #6a7f99;
+      --accent: #c9a0b8;
+      --accent-light: rgba(201, 160, 184, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --petal: #d4a8c4;
+      --petal-light: rgba(212, 168, 196, 0.08);
+      --sage: #8fa889;
+      --sage-light: rgba(143, 168, 137, 0.08);
+      --rain: #8db8cc;
+      --rain-light: rgba(141, 184, 204, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ── PROGRESS BAR ── */
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--rain));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    /* ── CHAPTER HEADER ── */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(122, 108, 138, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: petalFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes petalFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      33% {
+        transform: translateY(-4px) rotate(-5deg);
+      }
+
+      66% {
+        transform: translateY(-2px) rotate(4deg);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(30px, 6vw, 50px);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* ── CHAPTER DIVIDER ── */
+    .chapter-divider {
+      text-align: center;
+      margin: 56px 0 48px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .chapter-divider::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .chapter-divider-inner {
+      position: relative;
+      display: inline-block;
+      background: var(--bg);
+      padding: 0 24px;
+    }
+
+    .chapter-divider-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(122, 108, 138, 0.18);
+    }
+
+    body.dark .chapter-divider-badge {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .chapter-divider-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-divider-sub {
+      font-family: "Crimson Pro", serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    /* ── PROSE ── */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .petal {
+      color: var(--petal);
+      font-weight: 600;
+    }
+
+    .prose .nature {
+      color: var(--sage);
+      font-style: italic;
+    }
+
+    .prose .rain-accent {
+      color: var(--rain);
+      font-style: italic;
+    }
+
+    /* ── MEMORY BLOCK ── */
+    .memory-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--rain);
+      border-radius: 0 16px 16px 0;
+      position: relative;
+    }
+
+    .memory-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--rain);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .memory-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.85;
+    }
+
+    /* ── RAIN BLOCK ── */
+    .rain-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rain-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          var(--rain-light) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .rain-visual {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 14px;
+      animation: petalFloat 4s ease-in-out infinite;
+    }
+
+    .rain-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .rain-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.65;
+    }
+
+    /* ── MOMENT BLOCK ── */
+    .moment-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .moment-icon {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--accent-light);
+      border: 1px solid rgba(122, 108, 138, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    body.dark .moment-icon {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .moment-meta {
+      flex: 1;
+    }
+
+    .moment-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .moment-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── OBSERVATION BLOCK ── */
+    .observation-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--petal);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .observation-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--petal);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .observation-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* ── CHAPTER END ── */
+    .chapter-end {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .end-line {
+      font-family: "Crimson Pro", serif;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .end-sub {
+      font-family: "Crimson Pro", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 32px;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-next:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ── SCROLL BTN ── */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .memory-block,
+      .observation-block {
+        padding: 20px;
+      }
+
+      .rain-block,
+      .moment-block {
+        padding: 20px;
+      }
+
+      .moment-block {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .chapter-divider {
+        padding: 24px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="index.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Petal Vol. 3</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <!-- PROGRESS BAR -->
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <!-- ═══════════════════════ CHAPTER 1 ═══════════════════════ -->
+
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🌸</span>
+        The Petal That Falls With a Smile Vol. 3 · Chapter 1
+      </div>
+      <h1 class="chapter-title">Regret</h1>
+      <p class="chapter-subtitle">What we leave behind .</p>
+      <div class="chapter-meta">
+        <span class="meta-item">POV: Sora</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Memory</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Regret</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- PROSE 1 -->
+    <div class="prose" id="novel-content-1">
+      <p>The university library was too quiet.</p>
+
+      <p>
+        Pages turned somewhere behind me. A chair scraped softly across the
+        floor. Outside the tall windows, the sky hung dull and pale,
+        <span class="thought">like it hadn't decided what it wanted to be yet.</span>
+      </p>
+
+      <p>
+        I stared at the open book in front of me without reading a single
+        word.
+      </p>
+
+      <p><span class="thought">Because this all started back then.</span></p>
+    </div>
+
+    <!-- MEMORY BLOCK — REN'S CONFESSION -->
+    <div class="memory-block">
+      <span class="memory-label">💭 Memory</span>
+      <p class="memory-text">"I really like you, Sora."</p>
+    </div>
+
+    <!-- PROSE 2 -->
+    <div class="prose" id="novel-content-2">
+      <p>
+        Ren's voice came back to me as clearly as if he were standing there
+        again—soft, shaking,
+        <span class="emphasis">honest in a way that scared me.</span> Rain had
+        poured down that day, soaking his hair, his clothes, the space between
+        us. I remember how my heart had slammed against my ribs, how badly I
+        wanted to say the words back.
+      </p>
+
+      <p>I did like him.</p>
+
+      <p>But I was leaving.</p>
+
+      <p>
+        Transfer papers sat heavy in my bag, unreadable but unavoidable.
+        <span class="thought">One more week. One more week before I disappeared from his life
+          completely.</span>
+      </p>
+
+      <p>I was scared.</p>
+
+      <p>
+        Scared that if I said my feelings were the same, I wouldn't be able to
+        leave. Scared that staying would hurt more than running.
+      </p>
+
+      <p>So instead of explaining.</p>
+
+      <p>Instead of answering properly.</p>
+
+      <p><span class="thought">…I ran.</span></p>
+    </div>
+
+    <!-- MOMENT BLOCK -->
+    <div class="moment-block">
+      <div class="moment-icon">🏫</div>
+      <div class="moment-meta">
+        <span class="moment-title">A new school. A new start.</span>
+        <span class="moment-sub">Or so everyone said.</span>
+      </div>
+    </div>
+
+    <!-- PROSE 3 -->
+    <div class="prose" id="novel-content-3">
+      <p>When I moved away, everything was supposed to feel new.</p>
+
+      <p>
+        A new high school. New classrooms. New faces. People said it would be
+        a fresh start.
+      </p>
+
+      <p>It wasn't.</p>
+
+      <p>
+        The school was fine. The teachers were fine. But I didn't make
+        friends. Or maybe I just didn't let myself. Hallways passed by in gray
+        blurs, whispers I pretended not to hear, lunch breaks spent alone.
+      </p>
+
+      <p>Then one day, I noticed it.</p>
+
+      <p><span class="petal">A sakura tree.</span></p>
+
+      <p><span class="petal">Blooming in November.</span></p>
+
+      <p>
+        <span class="nature">It stood there like it didn't care about seasons or rules—soft pink
+          petals clinging stubbornly to bare branches.</span>
+        I remember stopping in my tracks, staring at it, wondering how
+        something like that could exist.
+      </p>
+
+      <p>Curiosity pulled me closer.</p>
+
+      <p>But I wasn't alone.</p>
+
+      <p>
+        A boy sat beneath it, hands in his pockets, staring at nothing in
+        particular. He was in my class. I recognized him immediately. For a
+        second, I thought about saying hi.
+      </p>
+
+      <p>I didn't.</p>
+
+      <p>
+        I told myself the seat was probably taken.
+        <span class="thought">A stupid excuse.</span> I turned away and walked
+        off, pretending my chest didn't feel tight.
+      </p>
+
+      <p>Funny thing is… we still became friends.</p>
+
+      <p>
+        Another day, another meeting beneath that same tree. We talked. About
+        small things at first. Then bigger ones. Time slipped by quietly, the
+        way it always does when you're not paying attention.
+      </p>
+
+      <p>
+        And then—on another rainy evening, in a school corridor that smelled
+        faintly of wet concrete—he confessed.
+      </p>
+
+      <p>
+        Not loud. Not dramatic. <span class="emphasis">Just honest.</span>
+      </p>
+
+      <p>
+        I remember talking too much after that. Saying things I didn't fully
+        understand yet. Telling him I might hurt him. Telling him I was happy
+        I'd found someone like him.
+      </p>
+
+      <p>For the first time in a long while, I wanted to stay.</p>
+
+      <p>But I didn't.</p>
+
+      <p><span class="emphasis">I transferred again.</span></p>
+    </div>
+
+    <!-- RAIN BLOCK -->
+    <div class="rain-block">
+      <span class="rain-visual">🌸</span>
+      <span class="rain-label">The Weight of It</span>
+      <p class="rain-caption">
+        I wanted to stay.<br />
+        The words felt heavier now than they ever had back then.
+      </p>
+    </div>
+
+    <!-- PROSE 4 -->
+    <div class="prose" id="novel-content-4">
+      <p>
+        I closed my eyes in the library, my fingers tightening around the edge
+        of the desk.
+      </p>
+
+      <p>
+        <span class="dialogue">"Wow…"</span> I murmured under my breath,
+        barely louder than the rustling pages around me.
+      </p>
+
+      <p><span class="dialogue">"What a memory."</span></p>
+
+      <p>The library stayed quiet.</p>
+
+      <p>And so did my regret.</p>
+    </div>
+
+    <!-- OBSERVATION BLOCK -->
+    <div class="observation-block">
+      <span class="observation-label">� Sora</span>
+      <p class="observation-text">
+        Some things don't hurt less with time.<br />
+        They just hurt differently.<br /><br />
+        Quieter. Deeper.<br />
+        Like rain that never quite stops.
+      </p>
+    </div>
+
+    <!-- ═══════════════════════ CHAPTER 2 ═══════════════════════ -->
+
+    <div class="chapter-divider">
+      <div class="chapter-divider-inner">
+        <div class="chapter-divider-badge">
+          <span class="chapter-icon">🌸</span>
+        </div>
+        <div class="chapter-divider-title">The Boy Beneath the Tree</div>
+        <div class="chapter-divider-sub">
+          Where old memories find new shapes.
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAPTER 2 META -->
+    <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+      <div class="series-badge">
+        <span class="chapter-icon">🌸</span>
+        The Petal That Falls With a Smile Vol. 3
+      </div>
+      <div class="chapter-meta">
+        <span class="meta-item">POV: Haruki</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">New Beginnings</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Sakura</span>
+      </div>
+    </div>
+
+    <!-- PROSE 5 -->
+    <div class="prose" id="novel-content-5">
+      <p>The university campus felt too big.</p>
+
+      <p>
+        Buildings stretched endlessly in every direction, students flooding
+        the open paths like rivers that never stopped moving. Laughter,
+        voices, footsteps—everything overlapped until it became noise.
+      </p>
+
+      <p>
+        <span class="dialogue">"The university is huge, Haruki!"</span> Noa
+        said, spinning once in place.
+        <span class="dialogue">"Look at that building. And that one. And—everything!"</span>
+      </p>
+
+      <p>
+        She was glowing with excitement, the kind that came naturally to her.
+        Being in the same university as Haruki meant something special to her,
+        and she wasn't trying to hide it. She walked closer, clearly hoping
+        they'd spend more time together.
+      </p>
+
+      <p>Haruki nodded absentmindedly.</p>
+
+      <p>
+        <span class="dialogue">"Yeah… it is,"</span> he replied, though his
+        eyes weren't really on the campus.
+      </p>
+
+      <p><span class="thought">He was somewhere else. As usual.</span></p>
+
+      <p>
+        <span class="dialogue">"No seriously,"</span> Noa continued, tugging
+        lightly at his sleeve.
+        <span class="dialogue">"At least pretend you're here."</span>
+      </p>
+
+      <p>Before Haruki could answer, Noa suddenly stopped.</p>
+
+      <p>
+        <span class="dialogue">"Oh! Look!"</span> she said, pointing ahead.
+        <span class="dialogue">"Haruki, a sakura tree!"</span>
+      </p>
+    </div>
+
+    <!-- MOMENT BLOCK -->
+    <div class="moment-block">
+      <div class="moment-icon">🌸</div>
+      <div class="moment-meta">
+        <span class="moment-title">He froze.</span>
+        <span class="moment-sub">The tree did something else entirely.</span>
+      </div>
+    </div>
+
+    <!-- PROSE 6 -->
+    <div class="prose" id="novel-content-6">
+      <p>
+        The tree stood quietly near the edge of the open courtyard—<span class="nature">petals full, branches strong,
+          blooming exactly when it was supposed
+          to.</span>
+        Sakura blooming in the right season was rare enough to catch anyone's
+        attention.
+      </p>
+
+      <p>But for Haruki, it did something else entirely.</p>
+
+      <p>
+        <span class="dialogue">"This one's blooming properly,"</span> Noa said
+        with a small laugh.
+        <span class="dialogue">"Ahh… brings back memories, right?"</span>
+      </p>
+
+      <p>Haruki swallowed.</p>
+
+      <p>
+        <span class="dialogue">"Yeah,"</span> he said quietly.
+        <span class="dialogue">"A lot of them."</span>
+      </p>
+
+      <p>Beneath the tree, someone was sitting.</p>
+
+      <p>
+        A boy—alone, shoulders slightly slouched, eyes distant.
+        <span class="thought">He looked like he was carrying winter inside him despite the
+          season.</span>
+      </p>
+
+      <p>Noa noticed him too and lowered her voice.</p>
+
+      <p><span class="dialogue">"Let's not bother him."</span></p>
+
+      <p><span class="dialogue">"Yeah,"</span> Haruki agreed.</p>
+
+      <p>
+        But even as they turned to walk away, Haruki glanced back at the tree…
+        and the boy sitting beneath it.
+      </p>
+
+      <p>And then—</p>
+
+      <p><span class="thought">A memory surfaced, sudden and sharp.</span></p>
+    </div>
+
+    <!-- MEMORY BLOCK -->
+    <div class="memory-block">
+      <span class="memory-label">💭 Memory</span>
+      <p class="memory-text">"I'm a student council delivery boy."</p>
+    </div>
+
+    <!-- PROSE 7 -->
+    <div class="prose" id="novel-content-7">
+      <p>Haruki's chest tightened.</p>
+
+      <p><span class="dialogue">"No—"</span> he muttered under his breath.</p>
+
+      <p><span class="dialogue">"Haruki!"</span></p>
+
+      <p>
+        Noa waved her hand in front of his face.
+        <span class="dialogue">"Haruki—HARUKI!"</span>
+      </p>
+
+      <p>
+        He blinked.
+        <span class="dialogue">"Oh—yeah. Sorry. Lost in thought."</span>
+      </p>
+
+      <p>
+        She sighed, half-amused, half-annoyed.
+        <span class="dialogue">"Figures. Anyway, I've got my psychology class. I'll see you later,
+          okay?"</span>
+      </p>
+
+      <p><span class="dialogue">"Yeah. See you."</span></p>
+
+      <p>Noa walked off, disappearing into the crowd.</p>
+
+      <p>Haruki stayed where he was.</p>
+
+      <p>
+        <span class="thought">Why now?</span> he wondered.
+        <span class="thought">Why this memory… and in this place of all places?</span>
+      </p>
+
+      <p>A familiar name slipped into his thoughts without permission.</p>
+
+      <p><span class="emphasis">Sora.</span></p>
+
+      <p>She was still there. Somewhere in his mind, quiet but persistent.</p>
+
+      <p>
+        Almost without realizing it, Haruki turned back and walked toward the
+        sakura tree. He sat down nearby,
+        <span class="nature">the shade falling gently over him.</span>
+      </p>
+
+      <p>The boy beneath the tree looked up.</p>
+
+      <p><span class="dialogue">"Hello,"</span> the boy said.</p>
+
+      <p>Haruki hesitated for a second before replying.</p>
+
+      <p><span class="dialogue">"Hello."</span></p>
+
+      <p>
+        <span class="dialogue">"My name's Ren,"</span> the boy continued, a
+        faint smile forming.
+        <span class="dialogue">"Isn't this tree beautiful?"</span>
+      </p>
+
+      <p>Haruki looked up at the blossoms, then back at him.</p>
+
+      <p>
+        <span class="dialogue">"Nice to meet you, Ren,"</span> he said.
+        <span class="dialogue">"Yeah… it really is."</span>
+      </p>
+
+      <p>
+        <span class="nature">The petals stirred softly in the breeze.</span>
+      </p>
+
+      <p>
+        And somewhere between falling blossoms and unfinished memories,
+        <span class="emphasis">something began to shift.</span>
+      </p>
+    </div>
+
+    <!-- OBSERVATION BLOCK -->
+    <div class="observation-block">
+      <span class="observation-label">🌸 Haruki</span>
+      <p class="observation-text">
+        Some names stay with you.<br />
+        Not because you hold onto them.<br /><br />
+        But because they never quite let go.
+      </p>
+    </div>
+
+    <!-- CHAPTER END -->
+    <div class="chapter-end">
+      <span class="end-label">End of Chapters 1</span>
+      <div class="end-line">Something began to shift.</div>
+      <div class="end-sub">— The Petal That Falls With a Smile, Vol. 3</div>
+      <div class="chapter-nav">
+        <a href="tptfwasv3.html" class="nav-btn nav-prev">← Chapters</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tptfwas3-2.html" class="nav-btn nav-next">Next Chapters →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fontSize = 19;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 26) fontSize += 2;
+      else if (action === -1 && fontSize > 14) fontSize -= 2;
+      else if (action === 0) fontSize = 19;
+      var ids = [
+        "novel-content-1",
+        "novel-content-2",
+        "novel-content-3",
+        "novel-content-4",
+        "novel-content-5",
+        "novel-content-6",
+        "novel-content-7",
+      ];
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fontSize + "px";
+      });
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+
+    window.onscroll = function () {
+      var scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      var total =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+      var btn = document.getElementById("scrollBtn");
+      if (scrollTop > 300) btn.classList.add("visible");
+      else btn.classList.remove("visible");
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1031 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Petal That Falls With a Smile — Chapters</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Zen+Antique+Soft&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fdf8f8;
+      --surface: #f8f0f2;
+      --surface2: #f2e6ea;
+      --ink: #261520;
+      --ink-soft: rgba(38, 21, 32, 0.5);
+      --ink-faint: rgba(38, 21, 32, 0.07);
+      --sakura: #d4789a;
+      --sakura-soft: rgba(212, 120, 154, 0.12);
+      --sakura-dim: rgba(212, 120, 154, 0.3);
+      --petal-light: #f2afc8;
+      --sage: #7a8c6e;
+      --fog: rgba(253, 248, 248, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.4s,
+        color 0.4s;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* PETAL CANVAS */
+    #petalCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* DARK MODE */
+    body.dark {
+      --bg: #130d10;
+      --surface: #1c1117;
+      --surface2: #231520;
+      --ink: #f0e4ea;
+      --ink-soft: rgba(240, 228, 234, 0.45);
+      --ink-faint: rgba(240, 228, 234, 0.06);
+      --fog: rgba(19, 13, 16, 0.95);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card:hover {
+      background: var(--surface2);
+      border-color: var(--sakura-dim);
+    }
+
+    body.dark .hero-card {
+      background: rgba(28, 17, 23, 0.85);
+      border-color: rgba(212, 120, 154, 0.15);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: var(--surface2);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .section-header {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .ch-num {
+      color: rgba(212, 120, 154, 0.18);
+    }
+
+    body.dark .chapter-card:hover .ch-num {
+      color: var(--sakura);
+    }
+
+    body.dark .read-arrow {
+      color: rgba(240, 228, 234, 0.13);
+    }
+
+    body.dark .chapter-card:hover .read-arrow {
+      color: var(--sakura);
+    }
+
+    body.dark .vol-badge {
+      background: rgba(212, 120, 154, 0.1);
+      color: var(--sakura);
+      border-color: rgba(212, 120, 154, 0.2);
+    }
+
+    body.dark .end-card {
+      background: rgba(28, 17, 23, 0.7);
+      border-color: rgba(212, 120, 154, 0.15);
+    }
+
+    body.dark .tag {
+      background: var(--sakura-soft);
+    }
+
+    /* NAV */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(38, 21, 32, 0.08);
+      transition:
+        background 0.4s,
+        border-color 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--sakura);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition:
+        gap 0.2s,
+        color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--ink);
+    }
+
+    .back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--sakura);
+      letter-spacing: 0.04em;
+      text-align: center;
+      max-width: 260px;
+      line-height: 1.2;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(38, 21, 32, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    /* FONT PANEL */
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(38, 21, 32, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 40px rgba(38, 21, 32, 0.1);
+      z-index: 200;
+      min-width: 180px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(38, 21, 32, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--sakura);
+      color: white;
+      border-color: var(--sakura);
+    }
+
+    .font-size-display {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      color: var(--sakura);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 52px 40px 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    /* blurred petal bg blobs */
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(60px);
+      opacity: 0.18;
+    }
+
+    .hero-blob-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--sakura);
+      top: -40px;
+      left: 10%;
+    }
+
+    .hero-blob-2 {
+      width: 200px;
+      height: 200px;
+      background: var(--petal-light);
+      top: 20px;
+      right: 15%;
+    }
+
+    .hero-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(248, 240, 242, 0.8);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(212, 120, 154, 0.18);
+      border-radius: 28px;
+      padding: 50px 60px;
+      max-width: 580px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* subtle sakura watermark */
+    .hero-card::before {
+      content: "🌸";
+      position: absolute;
+      bottom: -20px;
+      right: -10px;
+      font-size: 120px;
+      opacity: 0.04;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .vol-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sakura);
+      border: 1px solid rgba(212, 120, 154, 0.3);
+      background: rgba(212, 120, 154, 0.07);
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(28px, 5vw, 50px);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--sakura);
+    }
+
+    .hero-subtitle {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .hero-divider-line {
+      width: 28px;
+      height: 1px;
+      background: var(--sakura-dim);
+    }
+
+    .hero-divider-icon {
+      font-size: 13px;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .meta-row span {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: var(--sakura-soft);
+      color: var(--sakura);
+      letter-spacing: 0.05em;
+    }
+
+    /* CHAPTER SECTION */
+    .chapter-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(38, 21, 32, 0.07);
+      transition: border-color 0.4s;
+    }
+
+    .section-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .chapter-total {
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+    }
+
+    /* PROGRESS */
+    .progress-bar {
+      height: 2px;
+      background: rgba(38, 21, 32, 0.06);
+      border-radius: 1px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sakura), var(--petal-light));
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    /* CHAPTER CARDS */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      background: white;
+      border: 1px solid rgba(38, 21, 32, 0.07);
+      border-radius: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .chapter-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--sakura), var(--petal-light));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(212, 120, 154, 0.22);
+      box-shadow: 0 6px 28px rgba(212, 120, 154, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .ch-num {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 300;
+      color: rgba(38, 21, 32, 0.1);
+      min-width: 36px;
+      line-height: 1;
+      transition: color 0.25s;
+      flex-shrink: 0;
+    }
+
+    .chapter-card:hover .ch-num {
+      color: var(--sakura);
+    }
+
+    .chapter-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chapter-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sakura);
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    .chapter-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.3;
+      transition: color 0.2s;
+    }
+
+    .chapter-card:hover .chapter-title {
+      color: var(--sakura);
+    }
+
+    .read-arrow {
+      font-size: 18px;
+      color: rgba(38, 21, 32, 0.12);
+      transition: all 0.25s;
+      flex-shrink: 0;
+      transform: translateX(-6px);
+    }
+
+    .chapter-card:hover .read-arrow {
+      color: var(--sakura);
+      transform: translateX(0);
+    }
+
+    /* END OF VOLUME CARD */
+    .end-card {
+      margin-top: 28px;
+      background: rgba(248, 240, 242, 0.6);
+      border: 1px solid rgba(212, 120, 154, 0.15);
+      border-radius: 18px;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.52s;
+    }
+
+    .end-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(212, 120, 154, 0.04),
+          rgba(242, 175, 200, 0.06));
+      pointer-events: none;
+    }
+
+    .end-petal-row {
+      font-size: 18px;
+      letter-spacing: 0.2em;
+      margin-bottom: 12px;
+      opacity: 0.55;
+    }
+
+    .end-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 22px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--sakura);
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .end-sub {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+    }
+
+    .vol2-note {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--sakura);
+      opacity: 0.7;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 20px 40px 40px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+    }
+
+    /* SCROLL BTN */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--sakura);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(212, 120, 154, 0.35);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-card {
+      animation: fadeUp 0.55s ease both;
+      animation-delay: 0.05s;
+    }
+
+    .section-header {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .progress-bar {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.13s;
+    }
+
+    .chapter-card:nth-child(1) {
+      animation-delay: 0.17s;
+    }
+
+    .chapter-card:nth-child(2) {
+      animation-delay: 0.24s;
+    }
+
+    .chapter-card:nth-child(3) {
+      animation-delay: 0.31s;
+    }
+
+    .chapter-card:nth-child(4) {
+      animation-delay: 0.38s;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-title {
+        font-size: 12px;
+        max-width: 160px;
+      }
+
+      .hero {
+        padding: 32px 16px 28px;
+      }
+
+      .hero-card {
+        padding: 30px 22px;
+      }
+
+      .hero-blob-1,
+      .hero-blob-2 {
+        display: none;
+      }
+
+      .chapter-section {
+        padding: 0 16px 60px;
+      }
+
+      .chapter-card {
+        padding: 16px 18px;
+        gap: 14px;
+      }
+
+      .ch-num {
+        font-size: 22px;
+        min-width: 28px;
+      }
+
+      .chapter-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Petal canvas -->
+  <canvas id="petalCanvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="../index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back to Library</span>
+    </a>
+    <div class="nav-title">The Petal That Falls With a Smile</div>
+    <div class="nav-right">
+      <div style="position: relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()" title="Font size">
+          Aa
+        </button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size: 13px">
+              A−
+            </button>
+            <span class="font-size-display" id="fontDisplay">16</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size: 19px">
+              A+
+            </button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size: 13px; letter-spacing: 0.1em">
+            Reset
+          </button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-blob hero-blob-1"></div>
+    <div class="hero-blob hero-blob-2"></div>
+    <div class="hero-card">
+      <div class="vol-badge">🌸 Volume One</div>
+      <h1 class="hero-title">
+        The Petal That<br />Falls With <em>a Smile</em>
+      </h1>
+      <p class="hero-subtitle">Some goodbyes wear the softest faces</p>
+      <div class="hero-divider">
+        <div class="hero-divider-line"></div>
+        <span class="hero-divider-icon">🌸</span>
+        <div class="hero-divider-line"></div>
+      </div>
+      <div class="meta-row">
+        <span>📖 4 Chapters</span>
+        <span>✅ Completed</span>
+        <span><span class="tag">Drama</span></span>
+        <span><span class="tag">Slice of Life</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER LIST -->
+  <div class="chapter-section">
+    <div class="section-header">
+      <h2 class="section-title">Volume One</h2>
+      <span class="chapter-total">4 chapters</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="chapter-list">
+      <a class="chapter-card" href="tptfwas1.html">
+        <div class="ch-num">1</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter One</div>
+          <div class="chapter-title">Sakura in November</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tptfwas2.html">
+        <div class="ch-num">2</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Two</div>
+          <div class="chapter-title">The Wrong Kind of Smile</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tptfwas3.html">
+        <div class="ch-num">3</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Three</div>
+          <div class="chapter-title">Confession After the Bell</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tptfwas4.html">
+        <div class="ch-num">4</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Four</div>
+          <div class="chapter-title">The Truth She Hid</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+    </div>
+
+    <!-- END OF VOLUME -->
+    <div class="end-card">
+      <div class="end-petal-row">🌸 &nbsp; 🌸 &nbsp; 🌸</div>
+      <div class="end-title">End of Volume One</div>
+      <div class="end-sub">The story continues</div>
+      <div class="vol2-note">
+        <a class="chapter-card" href="tptfwasv2.html">
+          <div class="ch-num">-</div>
+          <div class="chapter-info">
+            <div class="chapter-label">2</div>
+            <div class="chapter-title">Volume Two</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    A Novel by AKA &nbsp;·&nbsp; Please do not repost or copy without
+    permission.<br />
+    Sharing links is always appreciated.
+  </footer>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+
+  <script>
+    /* PETAL CANVAS */
+    var canvas = document.getElementById("petalCanvas");
+    var ctx = canvas.getContext("2d");
+    var petals = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
+    var petalColors = ["#ffb7c5", "#f4a7c3", "#e8b4d8", "#ffd4e8", "#f8c8d8"];
+
+    function spawnPetal() {
+      petals.push({
+        x: Math.random() * canvas.width,
+        y: -20,
+        size: Math.random() * 10 + 6,
+        speedY: Math.random() * 1.2 + 0.6,
+        speedX: (Math.random() - 0.5) * 0.8,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.04,
+        color: petalColors[Math.floor(Math.random() * petalColors.length)],
+        opacity: Math.random() * 0.35 + 0.2,
+      });
+    }
+
+    function drawPetals() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      petals.forEach((p, i) => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.y * 0.02) * 0.4;
+        p.rot += p.rotSpeed;
+
+        if (p.y > canvas.height + 30) petals.splice(i, 1);
+      });
+
+      if (Math.random() < 0.08) spawnPetal();
+      requestAnimationFrame(drawPetals);
+    }
+
+    // seed a few
+    for (var i = 0; i < 8; i++) {
+      spawnPetal();
+      petals[petals.length - 1].y = Math.random() * canvas.height;
+    }
+
+    drawPetals();
+
+    /* FONT SIZE */
+    var fontSize = 16;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 24) fontSize += 2;
+      else if (action === -1 && fontSize > 12) fontSize -= 2;
+      else if (action === 0) fontSize = 16;
+      document.getElementById("fontDisplay").textContent = fontSize;
+      try {
+        localStorage.setItem("tptfwasFontSize", fontSize);
+      } catch (e) { }
+    }
+
+    function toggleFontPanel() {
+      document.getElementById("fontPanel").classList.toggle("open");
+    }
+
+    document.addEventListener("click", (e) => {
+      var btn = document.getElementById("fontToggle");
+      var panel = document.getElementById("fontPanel");
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove("open");
+      }
+    });
+
+    /* DARK MODE */
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+
+    /* SCROLL BTN */
+    window.addEventListener("scroll", () => {
+      var btn = document.getElementById("scrollBtn");
+      btn.style.display = window.scrollY > 200 ? "flex" : "none";
+    });
+
+    /* READING PROGRESS */
+    var totalChapters = 4;
+    try {
+      var stored = JSON.parse(localStorage.getItem("tptfwasRead") || "[]");
+      document.getElementById("progressFill").style.width =
+        (Math.min(stored.length, totalChapters) / totalChapters) * 100 + "%";
+    } catch (e) { }
+
+    /* INIT */
+    window.addEventListener("load", () => {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+        var saved = parseInt(localStorage.getItem("tptfwasFontSize"));
+        if (saved && saved >= 12 && saved <= 24) {
+          fontSize = saved;
+          document.getElementById("fontDisplay").textContent = fontSize;
+        }
+      } catch (e) { }
+    });
+  </script>
+</body>
+
+</html>

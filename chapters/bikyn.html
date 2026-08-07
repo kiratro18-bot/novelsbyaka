@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Before I Know Your Name — Chapters</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    :root {
+      --ink: #26212b;
+      --paper: #ece6ec;
+      --cream: #e2dae4;
+      --mist: #d3c8d6;
+      --amber: #c98a4b;
+      --deep-amber: #93582b;
+      --dusk: #3c2f4a;
+      --blush: #d9b48f;
+      --gold: #c99a5b;
+      --fog: rgba(236,230,236,0.92);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* EMBER CANVAS */
+    #emberCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* DARK MODE */
+    body.dark {
+      --ink: #ede2d0;
+      --paper: #14100e;
+      --cream: #1b1512;
+      --mist: #241d18;
+      --fog: rgba(20,16,14,0.92);
+    }
+
+    body.dark .chapter-card { background: #1b1512; border-color: rgba(201,138,75,0.12); }
+    body.dark .chapter-card:hover { background: #221b16; border-color: rgba(201,138,75,0.3); }
+    body.dark .nav-bar { background: rgba(20,16,14,0.95); border-color: rgba(201,138,75,0.1); }
+    body.dark .font-panel { background: #1b1512; border-color: rgba(201,138,75,0.15); }
+    body.dark .font-btn { background: #241d18; color: var(--ink); border-color: rgba(201,138,75,0.15); }
+    body.dark .hero-card { background: rgba(27,21,18,0.9); border-color: rgba(201,138,75,0.15); }
+    body.dark .chapter-num { color: rgba(201,138,75,0.35); }
+    body.dark .chapter-title { color: var(--ink); }
+    body.dark .read-arrow { color: rgba(201,138,75,0.5); }
+    body.dark .chapter-card:hover .read-arrow { color: var(--amber); }
+    body.dark .progress-fill { background: var(--amber); }
+    body.dark .divider-line { border-color: rgba(201,138,75,0.08); }
+
+    /* NAV */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(36,28,23,0.08);
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--deep-amber);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .back-link:hover { gap: 12px; color: var(--dusk); }
+    .back-arrow { font-size: 16px; transition: transform 0.2s; }
+    .back-link:hover .back-arrow { transform: translateX(-3px); }
+
+    .nav-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--deep-amber);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(36,28,23,0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .icon-btn:hover { background: var(--cream); transform: scale(1.05); }
+
+    /* FONT PANEL */
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(36,28,23,0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 40px rgba(36,28,23,0.1);
+      z-index: 200;
+      min-width: 180px;
+    }
+
+    .font-panel.open { display: flex; }
+
+    .font-panel-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(36,28,23,0.35);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(36,28,23,0.1);
+      border-radius: 8px;
+      background: var(--cream);
+      cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover { background: var(--deep-amber); color: white; border-color: var(--deep-amber); }
+
+    .font-size-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--deep-amber);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 60px 40px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(147,88,43,0.07) 0%, transparent 80%);
+      pointer-events: none;
+    }
+
+    .hero-card {
+      position: relative;
+      background: rgba(236,230,236,0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(201,138,75,0.2);
+      border-radius: 24px;
+      padding: 48px 60px;
+      max-width: 580px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(34px, 5.6vw, 54px);
+      font-weight: 300;
+      color: var(--dusk);
+      line-height: 1.08;
+      margin-bottom: 10px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--deep-amber);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--amber);
+      margin-bottom: 24px;
+      letter-spacing: 0.05em;
+      max-width: 420px;
+    }
+
+    .hero-divider {
+      width: 40px;
+      height: 1px;
+      background: var(--blush);
+      margin: 0 auto 20px;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(36,28,23,0.4);
+    }
+
+    .hero-meta span { display: flex; align-items: center; gap: 5px; }
+
+    /* CHAPTER LIST */
+    .chapter-section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(36,28,23,0.08);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--dusk);
+    }
+
+    .chapter-count-badge {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: rgba(36,28,23,0.35);
+    }
+
+    /* READING PROGRESS */
+    .progress-bar {
+      height: 2px;
+      background: rgba(36,28,23,0.06);
+      border-radius: 1px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--amber);
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    /* CHAPTER CARDS */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      background: #faf8fa;
+      border: 1px solid rgba(36,28,23,0.07);
+      border-radius: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--amber);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(201,138,75,0.25);
+      box-shadow: 0 6px 28px rgba(147,88,43,0.08);
+      transform: translateY(-2px);
+    }
+
+    .chapter-card:hover::before { opacity: 1; }
+
+    .chapter-card.epilogue {
+      background: linear-gradient(135deg, rgba(201,138,75,0.05), rgba(201,154,91,0.05));
+      border-color: rgba(201,154,91,0.2);
+    }
+
+    .chapter-card.epilogue::before { background: var(--gold); }
+
+    .chapter-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: rgba(36,28,23,0.15);
+      min-width: 36px;
+      line-height: 1;
+      transition: color 0.3s;
+      flex-shrink: 0;
+    }
+
+    .chapter-card:hover .chapter-num { color: var(--amber); }
+    .chapter-card.epilogue .chapter-num { color: rgba(201,154,91,0.3); }
+    .chapter-card.epilogue:hover .chapter-num { color: var(--gold); }
+
+    .chapter-info { flex: 1; min-width: 0; }
+
+    .chapter-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 3px;
+    }
+
+    .chapter-card.epilogue .chapter-label { color: var(--gold); }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--dusk);
+      line-height: 1.25;
+      transition: color 0.2s;
+    }
+
+    .chapter-card:hover .chapter-title { color: var(--deep-amber); }
+    .chapter-card.epilogue .chapter-title { color: var(--ink); }
+
+    .read-arrow {
+      font-size: 18px;
+      color: rgba(36,28,23,0.15);
+      transition: all 0.25s;
+      flex-shrink: 0;
+      transform: translateX(-6px);
+    }
+
+    .chapter-card:hover .read-arrow {
+      color: var(--amber);
+      transform: translateX(0);
+    }
+
+    .chapter-card.epilogue:hover .read-arrow { color: var(--gold); }
+
+    /* DIVIDER */
+    .divider-line {
+      border: none;
+      border-top: 1px solid rgba(36,28,23,0.06);
+      margin: 16px 0;
+    }
+
+    /* THE END */
+    .the-end {
+      text-align: center;
+      padding: 40px 0 20px;
+    }
+
+    .the-end-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .the-end-sub {
+      font-size: 11px;
+      color: rgba(36,28,23,0.3);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 20px 40px 40px;
+      font-size: 11px;
+      color: rgba(36,28,23,0.3);
+      letter-spacing: 0.08em;
+      line-height: 1.8;
+    }
+
+    /* SCROLL BTN */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--deep-amber);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(147,88,43,0.3);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover { background: var(--dusk); transform: translateY(-2px); }
+
+    /* ANIMATIONS */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: fadeUp 0.55s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chapter-card { animation: fadeUp 0.5s ease both; }
+    .chapter-card:nth-child(1)  { animation-delay: 0.08s; }
+    .chapter-card:nth-child(2)  { animation-delay: 0.15s; }
+    .chapter-card:nth-child(3)  { animation-delay: 0.22s; }
+    .chapter-card:nth-child(4)  { animation-delay: 0.29s; }
+    .chapter-card:nth-child(5)  { animation-delay: 0.36s; }
+    .chapter-card:nth-child(6)  { animation-delay: 0.43s; }
+    .chapter-card:nth-child(7)  { animation-delay: 0.50s; }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .nav-bar { padding: 0 16px; }
+      .nav-title { display: none; }
+      .hero { padding: 36px 16px 36px; }
+      .hero-card { padding: 32px 24px; }
+      .chapter-section { padding: 0 16px 60px; }
+      .chapter-card { padding: 16px 18px; gap: 14px; }
+      .chapter-num { font-size: 22px; min-width: 28px; }
+      .chapter-title { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ember canvas -->
+  <canvas id="emberCanvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="../index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back to Library</span>
+    </a>
+    <div class="nav-title">Before I Know Your Name</div>
+    <div class="nav-right">
+      <div style="position:relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()" title="Font size">Aa</button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size:13px">A−</button>
+            <span class="font-size-display" id="fontDisplay">16</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size:19px">A+</button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size:13px; letter-spacing:0.1em;">Reset</button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">🌙</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero fade-up">
+    <div class="hero-bg"></div>
+    <div class="hero-card">
+      <div class="hero-eyebrow">A Novel by AKA</div>
+      <h1 class="hero-title">Before I Know <em>Your Name</em></h1>
+      <p class="hero-subtitle">A story about knowing someone completely, long before you ever learn what to call them</p>
+      <div class="hero-divider"></div>
+      <div class="hero-meta">
+        <span>📖 1 Chapters</span>
+        <span>✅ Ongoing</span>
+        <span>💫 Romance · Bittersweet</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <div class="chapter-section">
+
+    <div class="section-header fade-up" style="animation-delay:0.05s">
+      <h2 class="section-title">Table of Contents</h2>
+      <span class="chapter-count-badge">1 chapter </span>
+    </div>
+
+    <div class="progress-bar fade-up" style="animation-delay:0.08s">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="chapter-list">
+
+      <a class="chapter-card" href="bikyn1.html">
+        <div class="chapter-num">01</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter One</div>
+          <div class="chapter-title">The Seat Beside the Window</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      
+    <div class="the-end">
+      <div class="the-end-title">~ Monthly ~</div>
+      <div class="the-end-sub">Thank you for reading</div>
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    Please do not repost, copy, or reupload without permission from the author.<br>
+    Sharing links is always appreciated.
+  </footer>
+
+  <button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    /* ── EMBER CANVAS (drifting light motes, rising instead of falling) ── */
+    var canvas = document.getElementById('emberCanvas');
+    var ctx = canvas.getContext('2d');
+    var motes = [];
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function spawnMote() {
+      motes.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height + 10,
+        r: Math.random() * 1.6 + 0.6,
+        speed: Math.random() * 0.6 + 0.25,
+        drift: (Math.random() - 0.5) * 0.4,
+        opacity: Math.random() * 0.5 + 0.15,
+        flicker: Math.random() * 0.02 + 0.01
+      });
+    }
+
+    var t = 0;
+    function drawEmbers() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 1;
+
+      motes.forEach((m, i) => {
+        var flicker = m.opacity * (0.7 + 0.3 * Math.sin(t * m.flicker * 10));
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,138,75,${flicker})`;
+        ctx.shadowColor = 'rgba(201,138,75,0.6)';
+        ctx.shadowBlur = 4;
+        ctx.fill();
+
+        m.y -= m.speed;
+        m.x += m.drift;
+
+        if (m.y < -10) motes.splice(i, 1);
+      });
+
+      if (Math.random() < 0.06 && motes.length < 60) spawnMote();
+      requestAnimationFrame(drawEmbers);
+    }
+
+    drawEmbers();
+
+    /* ── FONT SIZE ── */
+    var fontSize = 16;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 24) fontSize += 2;
+      else if (action === -1 && fontSize > 12) fontSize -= 2;
+      else if (action === 0) fontSize = 16;
+      document.getElementById('fontDisplay').textContent = fontSize;
+      try { localStorage.setItem('bikyFontSize', fontSize); } catch(e){}
+    }
+
+    function toggleFontPanel() {
+      document.getElementById('fontPanel').classList.toggle('open');
+    }
+
+    document.addEventListener('click', e => {
+      var btn = document.getElementById('fontToggle');
+      var panel = document.getElementById('fontPanel');
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
+
+    /* ── DARK MODE ── */
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      var on = document.body.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = on ? '☀️' : '🌙';
+      try { localStorage.setItem('bikyDarkMode', on ? 'on' : 'off'); } catch(e){}
+    }
+
+    /* ── SCROLL BTN ── */
+    window.addEventListener('scroll', () => {
+      var btn = document.getElementById('scrollBtn');
+      btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+    });
+
+    /* ── READING PROGRESS (track which chapters visited) ── */
+    var totalChapters = 6;
+    var read = 0;
+    try {
+      var stored = JSON.parse(localStorage.getItem('bikyRead') || '[]');
+      read = stored.length;
+    } catch(e){}
+    document.getElementById('progressFill').style.width = (read / totalChapters * 100) + '%';
+
+    /* ── INIT ── */
+    window.addEventListener('load', () => {
+      try {
+        if (localStorage.getItem('bikyDarkMode') === 'on') {
+          document.body.classList.add('dark');
+          document.getElementById('themeBtn').textContent = '☀️';
+        }
+        var saved = parseInt(localStorage.getItem('bikyFontSize'));
+        if (saved && saved >= 12 && saved <= 24) {
+          fontSize = saved;
+          document.getElementById('fontDisplay').textContent = fontSize;
+        }
+      } catch(e){}
+    });
+  </script>
+
+</body>
+</html>

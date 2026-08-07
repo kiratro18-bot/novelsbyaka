@@ -1,0 +1,33 @@
+<svg viewBox="0 0 800 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dots3" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="2.4" fill="#16151a"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="1200" fill="#f4f2ec"/>
+  <g>
+    <rect x="24" y="24" width="752" height="340" fill="#fff" stroke="#16151a" stroke-width="6"/>
+    <g stroke="#16151a" stroke-width="2" opacity="0.6">
+      <line x1="30" y1="60" x2="770" y2="120"/>
+      <line x1="30" y1="120" x2="770" y2="180"/>
+      <line x1="30" y1="180" x2="770" y2="240"/>
+      <line x1="30" y1="240" x2="770" y2="300"/>
+    </g>
+    <ellipse cx="240" cy="190" rx="120" ry="150" fill="#16151a"/>
+    <text x="520" y="150" font-family="Arial Black, sans-serif" font-weight="900" font-size="64" fill="#16151a">ZUN</text>
+  </g>
+  <g>
+    <rect x="24" y="380" width="752" height="340" fill="url(#dots3)" stroke="#16151a" stroke-width="6"/>
+    <rect x="24" y="380" width="752" height="340" fill="#f4f2ec" opacity="0.2"/>
+    <path d="M100 720 L400 420 L700 720 Z" fill="#16151a"/>
+  </g>
+  <g>
+    <rect x="24" y="736" width="752" height="440" fill="#fff" stroke="#16151a" stroke-width="6"/>
+    <circle cx="400" cy="930" r="150" fill="#16151a"/>
+    <text x="400" y="1150" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="70" fill="#16151a" letter-spacing="6">--!!</text>
+  </g>
+  <g transform="translate(700,1110)">
+    <rect x="0" y="0" width="70" height="46" fill="#f4f2ec" stroke="#16151a" stroke-width="4"/>
+    <text x="35" y="31" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="26" fill="#16151a">03</text>
+  </g>
+</svg>

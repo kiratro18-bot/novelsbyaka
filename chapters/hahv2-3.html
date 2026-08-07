@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Him and Her Vol. 2 — Chapters 3: Unexpected Tragedy & Lost</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #faf7f2;
+      --surface: #f4ede0;
+      --ink: #241c10;
+      --ink-soft: rgba(36, 28, 16, 0.5);
+      --ink-faint: rgba(36, 28, 16, 0.07);
+      --rose: #b85c6e;
+      --rose-dim: rgba(184, 92, 110, 0.22);
+      --plum: #6b3050;
+      --mauve: #9b6b80;
+      --warm: #c49a6c;
+      --fog: rgba(250, 247, 242, 0.96);
+      --reading-width: 660px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Lora", serif;
+      font-weight: 400;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.4s,
+        color 0.4s;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    #petalCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    body.dark {
+      --bg: #120e0c;
+      --surface: #1c1410;
+      --ink: #f0e8e0;
+      --ink-soft: rgba(240, 232, 224, 0.45);
+      --ink-faint: rgba(240, 232, 224, 0.06);
+      --fog: rgba(18, 14, 12, 0.97);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-header {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-nav {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .pov-block {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .pov-block.kazuki {
+      background: rgba(107, 48, 80, 0.08);
+    }
+
+    body.dark .pov-block.sayori {
+      background: rgba(184, 92, 110, 0.08);
+    }
+
+    body.dark .scene-label {
+      color: rgba(240, 232, 224, 0.38);
+    }
+
+    body.dark .narrator-note {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    body.dark .nav-prev {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    .reading-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: rgba(36, 28, 16, 0.08);
+      width: 100%;
+      z-index: 200;
+    }
+
+    .reading-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--warm));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 58px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(36, 28, 16, 0.08);
+      transition: background 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--rose);
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      transition:
+        gap 0.2s,
+        color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--plum);
+    }
+
+    .back-arrow {
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-center {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(36, 28, 16, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(36, 28, 16, 0.1);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 12px 40px rgba(36, 28, 16, 0.1);
+      z-index: 200;
+      min-width: 200px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(36, 28, 16, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: "Cormorant Garamond", serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    .font-size-display {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 18px;
+      color: var(--rose);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .vol-banner {
+      max-width: var(--reading-width);
+      margin: 28px auto 0;
+      padding: 0 24px;
+    }
+
+    .vol-banner-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(184, 92, 110, 0.08);
+      border: 1px solid var(--rose-dim);
+      border-radius: 20px;
+      padding: 5px 14px;
+    }
+
+    .vol-banner-text {
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--rose);
+    }
+
+    .chapter-header {
+      max-width: var(--reading-width);
+      margin: 16px auto 0;
+      padding: 44px 48px 36px;
+      background: var(--surface);
+      border: 1px solid rgba(36, 28, 16, 0.07);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.55s ease both;
+      overflow: hidden;
+    }
+
+    .chapter-header::before {
+      content: "✿";
+      position: absolute;
+      bottom: -10px;
+      right: 16px;
+      font-size: 80px;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    .novel-name {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .chapter-label {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+
+    .chapter-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--plum);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .chapter-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .div-line {
+      width: 28px;
+      height: 1px;
+      background: var(--rose-dim);
+    }
+
+    .div-petal {
+      font-size: 13px;
+      opacity: 0.5;
+    }
+
+    .story-wrapper {
+      max-width: var(--reading-width);
+      margin: 0 auto;
+      padding: 0 24px 60px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.6s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .story-body {
+      font-family: "Lora", serif;
+      font-size: 18px;
+      line-height: 1.95;
+      color: var(--ink);
+      padding: 44px 0 0;
+      transition: font-size 0.2s;
+    }
+
+    /* POV BLOCKS */
+    .pov-block {
+      border-left: 3px solid var(--rose-dim);
+      border-radius: 0 12px 12px 0;
+      padding: 22px 24px;
+      margin: 1.8em 0;
+      transition: all 0.3s;
+    }
+
+    .pov-block.kazuki {
+      background: rgba(107, 48, 80, 0.04);
+      border-color: rgba(107, 48, 80, 0.25);
+    }
+
+    .pov-block.sayori {
+      background: rgba(184, 92, 110, 0.05);
+      border-color: var(--rose-dim);
+    }
+
+    .pov-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 3px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .pov-tag.kazuki-tag {
+      background: rgba(107, 48, 80, 0.1);
+      color: var(--plum);
+      border: 1px solid rgba(107, 48, 80, 0.2);
+    }
+
+    .pov-tag.sayori-tag {
+      background: rgba(184, 92, 110, 0.1);
+      color: var(--rose);
+      border: 1px solid var(--rose-dim);
+    }
+
+    .pov-content p {
+      margin-bottom: 1.4em;
+      text-align: left;
+    }
+
+    .pov-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .pov-block:first-of-type .pov-content p:first-of-type::first-letter {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 4.2em;
+      font-style: italic;
+      color: var(--rose);
+      float: left;
+      line-height: 0.75;
+      margin-right: 8px;
+      margin-top: 6px;
+      font-weight: 300;
+    }
+
+    .scene-label {
+      display: block;
+      font-family: "DM Sans", sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      opacity: 0.55;
+      margin-bottom: 8px;
+    }
+
+    .section-break {
+      text-align: center;
+      color: var(--rose);
+      opacity: 0.35;
+      font-size: 14px;
+      letter-spacing: 0.3em;
+      margin: 2em 0;
+      user-select: none;
+    }
+
+    /* DIALOGUE & STYLING */
+    .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .thought {
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+
+    .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .narrator-note {
+      background: rgba(155, 107, 128, 0.06);
+      border: 1px solid rgba(155, 107, 128, 0.15);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin: 1.4em 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--mauve);
+      text-align: center;
+    }
+
+    .chapter-end {
+      text-align: center;
+      padding: 32px 0 8px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--rose);
+      opacity: 0.6;
+      letter-spacing: 0.08em;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0 0;
+      border-top: 1px solid rgba(36, 28, 16, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-prev {
+      background: rgba(36, 28, 16, 0.06);
+      color: var(--ink-soft);
+      border-color: rgba(36, 28, 16, 0.1);
+    }
+
+    .nav-prev:hover {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink-soft);
+      border-color: rgba(36, 28, 16, 0.1);
+    }
+
+    .nav-home:hover {
+      background: var(--mauve);
+      color: white;
+      border-color: var(--mauve);
+    }
+
+    .nav-next {
+      background: var(--rose);
+      color: white;
+      border-color: var(--rose);
+    }
+
+    .nav-next:hover {
+      background: var(--plum);
+      border-color: var(--plum);
+      transform: translateX(3px);
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--rose);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(184, 92, 110, 0.3);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .vol-banner {
+        padding: 0 16px;
+      }
+
+      .chapter-header {
+        margin-left: 16px;
+        margin-right: 16px;
+        padding: 30px 22px 26px;
+      }
+
+      .story-wrapper {
+        padding: 0 16px 48px;
+      }
+
+      .story-body {
+        font-size: 16px;
+        padding-top: 32px;
+      }
+
+      .pov-block {
+        padding: 16px 16px;
+      }
+
+      .chapter-nav {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        font-size: 12px;
+        padding: 9px 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reading-progress-bar">
+    <div class="reading-progress-fill" id="readingProgress"></div>
+  </div>
+  <canvas id="petalCanvas"></canvas>
+
+  <nav class="nav-bar">
+    <a href="hahv2.html" class="back-link"><span class="back-arrow">←</span><span>Chapters</span></a>
+    <div class="nav-center">Him and Her Vol. 2 &nbsp;·&nbsp; Ch. 3</div>
+    <div class="nav-right">
+      <div style="position: relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()">
+          Aa
+        </button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size: 13px">
+              A−
+            </button>
+            <span class="font-size-display" id="fontDisplay">18</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size: 20px">
+              A+
+            </button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size: 13px; letter-spacing: 0.1em">
+            Reset
+          </button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </nav>
+
+  <div class="vol-banner">
+    <div class="vol-banner-inner">
+      <span class="vol-banner-text">✿ Volume Two · Him and Her</span>
+    </div>
+  </div>
+
+  <div class="chapter-header" style="margin-left: auto; margin-right: auto; max-width: 660px">
+    <div class="novel-name">Him and Her · Volume Two</div>
+    <div class="chapter-label">Chapters Three</div>
+    <h1 class="chapter-title">The Turning Point</h1>
+    <div class="chapter-divider">
+      <div class="div-line"></div>
+      <span class="div-petal">✿</span>
+      <div class="div-line"></div>
+    </div>
+  </div>
+
+  <div class="story-wrapper">
+    <div class="story-body" id="storyBody">
+      <!-- ══════════════════ CHAPTER 3 ══════════════════ -->
+
+      <!-- ── SCENE 1: NEAR HIGH SCHOOL ── -->
+      <div class="pov-block sayori">
+        <span class="scene-label">Near the High School</span>
+        <div class="pov-tag sayori-tag">Sayori — POV</div>
+        <div class="pov-content">
+          <p>
+            Sayori was walking toward school like usual.<br />
+            The morning air felt nice.<br />
+            And strangely… She was feeling happy.
+          </p>
+          <p>
+            Kazuki had called her his friend.<br />
+            Even though she was hoping for something more…<br />
+            That word still made her smile.
+          </p>
+          <p>
+            She continued walking down the road, lost in her thoughts.<br />
+            Thinking about him.<br />
+            Thinking about yesterday.
+          </p>
+          <p>Two minutes passed.</p>
+
+          <p>
+            <span class="thought">She didn't notice the sound of a car approaching.</span>
+          </p>
+
+          <p>Then suddenly—</p>
+
+          <p><span class="emphasis">BANG</span></p>
+
+          <p>
+            A loud sound echoed through the street.<br />
+            Her thoughts shattered.<br />
+            Her vision blurred.<br />
+            The world around her suddenly went white.
+          </p>
+
+          <p>
+            <span class="thought">She couldn't understand what had just happened.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="section-break">✿ &nbsp; · &nbsp; ✿</div>
+
+      <!-- ── SCENE 2: CLASSROOM ── -->
+      <div class="pov-block kazuki">
+        <span class="scene-label">High School · Classroom</span>
+        <div class="pov-tag kazuki-tag">Kazuki — POV</div>
+        <div class="pov-content">
+          <p>
+            Another school day.<br />
+            Honestly, I wish it was Saturday.<br />
+            School days feel so long sometimes.
+          </p>
+
+          <p>I entered the classroom and sat down.</p>
+
+          <p>Then I noticed something again.</p>
+
+          <p><span class="thought">Sayori wasn't here.</span></p>
+
+          <p>
+            That was surprising. She usually arrived earlier than most
+            students.
+          </p>
+
+          <p>I looked at the empty seat beside me.</p>
+
+          <p><span class="thought">Maybe she's just late again.</span></p>
+
+          <p>Class eventually started. The teacher walked into the room.</p>
+
+          <p>But something about his expression felt different.</p>
+
+          <p>He looked serious.</p>
+
+          <p>He stood in front of the class and cleared his throat.</p>
+
+          <p><span class="dialogue">Teacher: "Everyone… listen."</span></p>
+
+          <p>The classroom became quiet.</p>
+
+          <p>
+            <span class="dialogue">Teacher: "I… have something to share."</span>
+          </p>
+
+          <p>He paused for a moment.</p>
+
+          <p>Then he spoke again.</p>
+
+          <p>
+            <span class="dialogue">Teacher: "Sayori… is in the hospital."</span>
+          </p>
+
+          <p><span class="emphasis">My heart suddenly felt heavy.</span></p>
+
+          <p>The teacher continued.</p>
+
+          <p>
+            <span class="dialogue">Teacher: "She was hit by a car this morning."</span>
+          </p>
+
+          <p>For a moment…</p>
+
+          <p>
+            <span class="thought">The classroom felt completely silent.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="narrator-note">End of Chapter Five</div>
+
+      <div class="section-break">✿ &nbsp; · &nbsp; ✿</div>
+
+      <!-- ══════════════════ CHAPTER 3 ══════════════════ -->
+
+      <p style="
+            text-align: center;
+            font-family: &quot;DM Sans&quot;, sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--rose);
+            margin: 48px 0 32px;
+            opacity: 0.8;
+          ">
+        Chapter Three – Lost
+      </p>
+
+      <!-- ── SCENE 3: RUNNING TO HOSPITAL ── -->
+      <div class="pov-block kazuki">
+        <div class="pov-tag kazuki-tag">Kazuki — POV</div>
+        <div class="pov-content">
+          <p>
+            As soon as I heard the news…<br />
+            I ran.
+          </p>
+
+          <p>
+            The hospital was far from the school, but I didn't care.<br />
+            I just needed to get there.
+          </p>
+
+          <p>Rika came with me.</p>
+
+          <p>
+            <span class="thought">Neither of us said much during the way there.</span><br />
+            <span class="thought">The silence between us felt heavy.</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="section-break">· · ·</div>
+
+      <!-- ── SCENE 4: HOSPITAL ── -->
+      <div class="pov-block sayori">
+        <span class="scene-label">Hospital</span>
+        <div class="pov-tag sayori-tag">Sayori's Condition</div>
+        <div class="pov-content">
+          <p>
+            Sayori had injuries.<br />
+            Bandages around her arm.<br />
+            A small cut near her forehead.
+          </p>
+
+          <p>
+            But the doctors said something else that shocked everyone even
+            more.
+          </p>
+
+          <p>She had woken up.</p>
+
+          <p>But something wasn't right.</p>
+
+          <p>
+            She looked confused.<br />
+            Lost.<br />
+            Like she didn't know where she was supposed to be.
+          </p>
+
+          <p>The doctor spoke to her parents quietly.</p>
+
+          <p>
+            <span class="dialogue">Doctor: "She remembers who she is."</span>
+          </p>
+
+          <p>
+            <span class="dialogue">Doctor: "But it seems she has lost many of her memories."</span>
+          </p>
+
+          <p>Sayori's parents looked worried.</p>
+
+          <p>
+            <span class="dialogue">Doctor: "There is a chance they may return…"</span>
+          </p>
+
+          <p>He paused.</p>
+
+          <p>
+            <span class="dialogue">Doctor: "But right now, we cannot be sure."</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="section-break">✿ &nbsp; · &nbsp; ✿</div>
+
+      <!-- ── SCENE 5: HOSPITAL BED ── -->
+      <div class="pov-block sayori">
+        <span class="scene-label">Hospital Bed</span>
+        <div class="pov-tag sayori-tag">Sayori — POV</div>
+        <div class="pov-content">
+          <p>
+            I slowly open my eyes.<br />
+            Everything around me feels strange.<br />
+            White walls. Machines. A quiet room.
+          </p>
+
+          <p><span class="thought">I don't remember how I got here.</span></p>
+
+          <p><span class="thought">Was I always here…?</span></p>
+
+          <p><span class="thought">Something feels missing.</span></p>
+
+          <p>
+            <span class="thought">Like pieces of my life disappeared.</span>
+          </p>
+
+          <p>I turn my head toward the window.</p>
+
+          <p>
+            Outside the room, I see a girl around my age.<br />
+            She is sitting near the hallway window.<br />
+            Writing something in a small journal.<br />
+            There is a red ribbon tied around her wrist.
+          </p>
+
+          <p>
+            <span class="thought">Something about her feels… different.</span>
+          </p>
+
+          <p>Then she looks up at me.</p>
+
+          <p><span class="thought">Our eyes meet.</span></p>
+
+          <p>She speaks first.</p>
+
+          <p><span class="dialogue">Girl: "Lost your memories?"</span></p>
+
+          <p>I blink in confusion.</p>
+
+          <p><span class="dialogue">Sayori: "What…?"</span></p>
+
+          <p>
+            <span class="dialogue">Girl: "Try remembering the person you love."</span>
+          </p>
+
+          <p>She closes her journal.</p>
+
+          <p>
+            <span class="dialogue">Girl: "Or the person who loves you."</span>
+          </p>
+
+          <p>
+            <span class="dialogue">Girl: "Sometimes… that helps memories return."</span>
+          </p>
+
+          <p>
+            <span class="thought">I didn't fully understand what she meant.</span>
+          </p>
+
+          <p><span class="thought">And before I could ask her name…</span></p>
+
+          <p><span class="thought">She stood up and walked away.</span></p>
+        </div>
+      </div>
+
+      <div class="section-break">✿ &nbsp; · &nbsp; ✿</div>
+
+      <!-- ── SCENE 6: OUTSIDE HOSPITAL ── -->
+      <div class="pov-block kazuki">
+        <span class="scene-label">Outside the Hospital</span>
+        <div class="pov-tag kazuki-tag">Kazuki — POV</div>
+        <div class="pov-content">
+          <p>I stop in front of the hospital entrance.</p>
+
+          <p><span class="thought">My chest still feels tight.</span></p>
+
+          <p>
+            <span class="dialogue">Kazuki: "This is the place… right, Rika?"</span>
+          </p>
+
+          <p>Rika nods slowly.</p>
+
+          <p><span class="dialogue">Rika: "Yeah… Kazuki."</span></p>
+
+          <p>I look at the building.</p>
+
+          <p>
+            <span class="thought">Somewhere inside… Sayori is there.</span>
+          </p>
+
+          <p>But now…</p>
+
+          <p>
+            <span class="emphasis">I don't know if she remembers me.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="chapter-end">— End of Chapter —</div>
+    <div class="chapter-nav">
+      <a href="hahv2-2.html" class="nav-btn nav-prev">← Previous Chapters</a>
+      <a href="../index.html" class="nav-btn nav-home">🏠 Library</a>
+      <a href="hahv2-4.html" class="nav-btn nav-next">Next Chapter →</a>
+    </div>
+  </div>
+
+  <button id="scrollBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+    ↑
+  </button>
+
+  <script>
+    var canvas = document.getElementById("petalCanvas"),
+      ctx = canvas.getContext("2d"),
+      petals = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    var pColors = ["#ffb7c5", "#f4a7c3", "#e8b4d8", "#ffd4e8"];
+    function spawnPetal() {
+      petals.push({
+        x: Math.random() * canvas.width,
+        y: -20,
+        size: Math.random() * 9 + 5,
+        speedY: Math.random() * 1.0 + 0.4,
+        speedX: (Math.random() - 0.5) * 0.5,
+        rot: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.025,
+        color: pColors[Math.floor(Math.random() * pColors.length)],
+        opacity: Math.random() * 0.28 + 0.12,
+      });
+    }
+    function drawPetals() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      petals.forEach(function (p, i) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size, p.size * 0.52, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        p.y += p.speedY;
+        p.x += p.speedX + Math.sin(p.y * 0.018) * 0.3;
+        p.rot += p.rotSpeed;
+        if (p.y > canvas.height + 20) petals.splice(i, 1);
+      });
+      if (Math.random() < 0.06) spawnPetal();
+      requestAnimationFrame(drawPetals);
+    }
+    for (var i = 0; i < 6; i++) {
+      spawnPetal();
+      petals[petals.length - 1].y = Math.random() * canvas.height;
+    }
+    drawPetals();
+
+    window.addEventListener("scroll", function () {
+      var s = window.scrollY,
+        h = document.documentElement.scrollHeight - window.innerHeight;
+      document.getElementById("readingProgress").style.width =
+        (h > 0 ? (s / h) * 100 : 0) + "%";
+      document.getElementById("scrollBtn").style.display =
+        s > 200 ? "flex" : "none";
+    });
+
+    var fontSize = 18;
+    function changeFont(a) {
+      if (a === 1 && fontSize < 26) fontSize += 2;
+      else if (a === -1 && fontSize > 14) fontSize -= 2;
+      else if (a === 0) fontSize = 18;
+      document.getElementById("storyBody").style.fontSize = fontSize + "px";
+      document.getElementById("fontDisplay").textContent = fontSize;
+      try {
+        localStorage.setItem("hahv2c5-6FontSize", fontSize);
+      } catch (e) { }
+    }
+    function toggleFontPanel() {
+      document.getElementById("fontPanel").classList.toggle("open");
+    }
+    document.addEventListener("click", function (e) {
+      var b = document.getElementById("fontToggle"),
+        p = document.getElementById("fontPanel");
+      if (!b.contains(e.target) && !p.contains(e.target))
+        p.classList.remove("open");
+    });
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("themeBtn").textContent = on ? "☀️" : "🌙";
+      try {
+        localStorage.setItem("darkMode", on ? "on" : "off");
+      } catch (e) { }
+    }
+
+    try {
+      var r = JSON.parse(localStorage.getItem("hahv2Read") || "[]");
+      if (!r.includes("ch5-6")) {
+        r.push("ch5-6");
+        localStorage.setItem("hahv2Read", JSON.stringify(r));
+      }
+    } catch (e) { }
+
+    window.addEventListener("load", function () {
+      try {
+        if (localStorage.getItem("darkMode") === "on") {
+          document.body.classList.add("dark");
+          document.getElementById("themeBtn").textContent = "☀️";
+        }
+        var s = parseInt(localStorage.getItem("hahv2c5-6FontSize"));
+        if (s && s >= 14 && s <= 26) {
+          fontSize = s;
+          document.getElementById("storyBody").style.fontSize = s + "px";
+          document.getElementById("fontDisplay").textContent = s;
+        }
+      } catch (e) { }
+    });
+  </script>
+</body>
+
+</html>

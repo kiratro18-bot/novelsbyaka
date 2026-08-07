@@ -1,0 +1,1026 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Day She Stayed - Chapter 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #444;
+      --ink-muted: #888;
+      --accent: #1565c0;
+      --accent-light: rgba(21, 101, 192, 0.07);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.14);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --ink: #e6edf3;
+      --ink-soft: #b0bec5;
+      --ink-muted: #6a7f99;
+      --accent: #7ba7c9;
+      --accent-light: rgba(123, 167, 201, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #37474f);
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(21, 101, 192, 0.15);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(123, 167, 201, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: shutter 4s ease-in-out infinite;
+    }
+
+    @keyframes shutter {
+
+      0%,
+      85%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      90% {
+        opacity: 0.3;
+        transform: scale(0.85);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(36px, 7vw, 56px);
+      font-weight: 600;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* ART FESTIVAL VISUAL */
+    .festival-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .festival-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(21, 101, 192, 0.04) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .festival-gallery {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .gallery-card {
+      flex: 1;
+      max-width: 80px;
+      height: 90px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: flex-end;
+      padding: 6px;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.7);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+
+    .gc1 {
+      background: linear-gradient(160deg, #1a2e4a 0%, #4a6a8a 100%);
+    }
+
+    .gc2 {
+      background: linear-gradient(160deg, #2d1a1a 0%, #8a4a4a 100%);
+    }
+
+    .gc3 {
+      background: linear-gradient(160deg, #1a2d1a 0%, #4a7a4a 100%);
+    }
+
+    .festival-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-align: center;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .festival-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      text-align: center;
+      display: block;
+    }
+
+    /* RIBBON BLOCK */
+    .ribbon-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .ribbon-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .ribbon-meta {
+      flex: 1;
+    }
+
+    .ribbon-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: #c62828;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .ribbon-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* PHOTO BLOCK */
+    .photo-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .photo-icon-wrap {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .photo-meta {
+      flex: 1;
+    }
+
+    .photo-filename {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .photo-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* REVEAL BLOCK — the torn page */
+    .reveal-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .reveal-block::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: repeating-linear-gradient(90deg,
+          var(--border-strong) 0,
+          var(--border-strong) 6px,
+          transparent 6px,
+          transparent 12px);
+    }
+
+    .reveal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .reveal-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    .reveal-text em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* JOURNAL */
+    .journal-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .journal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .journal-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .journal-day {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* PROSE */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+      text-align: left;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .sky-blue {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .prose .red-ribbon {
+      color: #c62828;
+      font-weight: 600;
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev,
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover,
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .journal-block,
+      .ribbon-block,
+      .photo-block,
+      .festival-block,
+      .reveal-block {
+        padding: 20px;
+      }
+
+      .ribbon-block,
+      .photo-block {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tdss.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Day She Stayed</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🎨</span> The Day She Stayed · Chapter 3
+      </div>
+      <h1 class="chapter-title">Blue Stains and<br />Paper Ribbons</h1>
+      <p class="chapter-subtitle">The day she looked up — just once.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Drama</span><span class="meta-dot"></span>
+        <span class="meta-item">Sad</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- ART FESTIVAL -->
+    <div class="festival-block">
+      <div class="festival-gallery">
+        <div class="gallery-card gc1">Sky</div>
+        <div class="gallery-card gc2">Stars</div>
+        <div class="gallery-card gc3">Life</div>
+      </div>
+      <span class="festival-label">🖼 The Art Festival</span>
+      <span class="festival-title">"The Sound of Dying Stars" — framed, titled, hung.</span>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>It was the art festival.</p>
+      <p>
+        The one day the school walls weren't beige and boring — where every
+        corridor was lined with canvases, photographs, sculptures, all labeled
+        with names and quotes students had chosen to express themselves.
+      </p>
+      <p>Ren wasn't going to submit anything.</p>
+      <p>But when he passed by the gallery hallway, he stopped.</p>
+      <p>
+        There it was — a photo he had taken weeks ago.<br />
+        <span class="emphasis">The Sound of Dying Stars.</span><br />
+        Framed. Printed. Titled in his handwriting… but he hadn't entered it.
+      </p>
+      <p>
+        He turned the corner and found her.<br />
+        Sayo stood near the wall, pretending to admire the art.<br />
+        But she wasn't looking at anything.
+      </p>
+      <p><span class="dialogue">"Why'd you do that?"</span> he asked.</p>
+      <p>
+        She shrugged, not meeting his eyes.<br />
+        <span class="dialogue">"You take pictures like you're afraid they'll disappear,"</span>
+        she said softly.<br />
+        <span class="dialogue">"People should see them… before they do."</span>
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        Later, on the rooftop, Sayo did something she'd never done before.
+      </p>
+      <p>She <span class="emphasis">looked up.</span></p>
+      <p>
+        <span class="thought">Just for a moment — and only with her eyes. Not her heart.</span>
+      </p>
+      <p>Then she handed him something.</p>
+    </div>
+
+    <!-- RIBBON -->
+    <div class="ribbon-block">
+      <div class="ribbon-icon-wrap">🎀</div>
+      <div class="ribbon-meta">
+        <span class="ribbon-title">Her red ribbon.</span>
+        <span class="ribbon-sub">"I won't be wearing this anymore. It's your turn."</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>
+        <span class="dialogue">"You're giving me a rule-breaker's prize?"</span>
+        he asked.
+      </p>
+      <p>
+        <span class="dialogue">"No,"</span> she said.
+        <span class="dialogue">"I'm giving you a warning."</span>
+      </p>
+      <p>
+        He looked at her, confused.<br />
+        But she was already writing in her journal again, back turned, walls
+        rebuilt.
+      </p>
+      <p>He didn't understand what she meant until the next day.</p>
+      <p class="scene-break">· · ·</p>
+      <p>Sayo collapsed during P.E.</p>
+      <p>
+        Her hands had been shaking. Her knees buckled quietly. No scream, no
+        drama. She just… fell.
+        <span class="thought">Like her body had decided it couldn't carry the weight
+          anymore.</span>
+      </p>
+      <p>
+        The school nurse said it was dehydration.<br />
+        She didn't return for a week.
+      </p>
+      <p>
+        During that time, Ren took a photo every day.<br />
+        But none of them were of the sky.<br />
+        They were of places she had been.
+      </p>
+      <p>
+        The rooftop.<br />
+        Her <span class="emphasis">empty chair.</span><br />
+        A drawing left unfinished on the back of her desk.
+      </p>
+    </div>
+
+    <!-- PHOTO FOLDER -->
+    <div class="photo-block">
+      <div class="photo-icon-wrap">📁</div>
+      <div class="photo-meta">
+        <span class="photo-filename">"When Ribbons Forget Their Color."</span>
+        <span class="photo-sub">New folder · 7 photos · All of her absence</span>
+      </div>
+    </div>
+
+    <div class="journal-block">
+      <span class="journal-label">📓 From Sayo's Journal</span>
+      <span class="journal-day">Day 73.</span>
+      <p class="journal-text">
+        I gave him my ribbon today.<br />
+        Not because I'm brave.<br />
+        But because I'm tired.<br /><br />
+        I think he's starting to see it — the part of me I've been hiding.<br />
+        He's going to ask soon.<br />
+        And when he does… I don't think I'll lie.
+      </p>
+    </div>
+
+    <div class="prose">
+      <p class="scene-break">· · ·</p>
+    </div>
+
+    <div class="prose" id="prose3">
+      <p>
+        She came back on a Monday.<br />
+        Pale, thinner, hair tied in a loose braid — but
+        <span class="emphasis">there.</span>
+      </p>
+      <p>
+        Ren didn't say anything at first. He just stared at her, quiet relief
+        filling the silence between his heartbeats.
+      </p>
+      <p>
+        They sat together again at lunch. Rooftop, as always.<br />
+        Sayo rested her journal beside her, but didn't write.
+      </p>
+      <p><span class="dialogue">"Are you okay?"</span> he asked.</p>
+      <p>She didn't answer.</p>
+      <p>
+        Instead, she pointed at the clouds drifting above them.<br />
+        <span class="dialogue">"If you could ask the sky one question,"</span>
+        she said,
+        <span class="dialogue">"and get an honest answer… what would you ask?"</span>
+      </p>
+      <p>
+        Ren looked at her carefully.<br />
+        Then, without hesitation, he said:
+      </p>
+      <p><span class="dialogue">"What's wrong with you, Sayo?"</span></p>
+      <p>She froze.</p>
+      <p>
+        <span class="thought">For a moment, it felt like the world stopped spinning.</span>
+      </p>
+      <p>
+        Her hands trembled — not from cold, not from wind, but from something
+        deeper. Something breaking.
+      </p>
+      <p>
+        <span class="dialogue">"You said no questions about the journal,"</span>
+        she whispered.
+      </p>
+      <p>
+        <span class="dialogue">"This isn't about the journal,"</span> Ren
+        replied.<br />
+        <span class="dialogue">"This is about you. And I'm scared I'm going to lose you before I
+          even get the chance to know you properly."</span>
+      </p>
+      <p>
+        Sayo looked down.<br />
+        Then she reached for her journal — but not to write.<br />
+        She opened to the first page.<br />
+        And slowly, shakily, <span class="emphasis">tore it out.</span>
+      </p>
+      <p>
+        She folded it once. Twice. Handed it to him.<br />
+        <span class="dialogue">"One answer,"</span> she said.
+        <span class="dialogue">"No more. No less."</span>
+      </p>
+    </div>
+
+    <!-- TORN PAGE REVEAL -->
+    <div class="reveal-block">
+      <span class="reveal-label">📄 The torn page</span>
+      <p class="reveal-text">
+        <em>I'm dying, Ren.</em><br />
+        <em>And I've known since before I met you.</em><br /><br />
+        <em>That's why I made the rules.</em>
+      </p>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>
+        He didn't cry.<br />
+        Not then.
+      </p>
+      <p>
+        He just sat there, holding that small piece of paper
+        <span class="thought">like it weighed more than the sky above them.</span>
+      </p>
+      <p>
+        She stood up.<br />
+        <span class="dialogue">"I told you not to fall for me."</span>
+      </p>
+      <p>He looked up at her, eyes glassy.</p>
+      <p>
+        <span class="dialogue">"…I didn't fall,"</span> he said.
+        <span class="dialogue">"I jumped."</span>
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>
+        That night, he took one photo.<br />
+        Not of the sky. Not of the school.<br />
+        But of the torn journal page, taped gently to the wall above his bed.
+      </p>
+    </div>
+
+    <!-- PHOTO LABEL -->
+    <div class="photo-block">
+      <div class="photo-icon-wrap">📷</div>
+      <div class="photo-meta">
+        <span class="photo-filename">"Chapter 0."</span>
+        <span class="photo-sub">Because this is where the real story began.</span>
+      </div>
+    </div>
+
+    <div class="journal-block">
+      <span class="journal-label">📓 From Sayo's Journal</span>
+      <span class="journal-day">Day 72.</span>
+      <p class="journal-text">
+        He asked.<br />
+        And I answered.<br /><br />
+        Some part of me hoped he'd walk away. That it'd scare him off.<br />
+        But he stayed.<br /><br />
+        And now I'm terrified… because I think I want more than the sky can
+        give me.
+      </p>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter 3</span>
+      <div class="chapter-nav">
+        <a href="tdss2.html" class="nav-btn nav-prev">← Chapter 2</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tdss4.html" class="nav-btn nav-next">Chapter 4 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fontSize = 19;
+    function changeFont(a) {
+      if (a === 1 && fontSize < 26) fontSize += 2;
+      else if (a === -1 && fontSize > 14) fontSize -= 2;
+      else if (a === 0) fontSize = 19;
+      ["prose1", "prose2", "prose3", "prose4"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fontSize + "px";
+      });
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop;
+      var t =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Day She Stayed — Chapters</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f2f4f6;
+      --surface: #eaecf0;
+      --surface2: #e0e4ea;
+      --ink: #1e2230;
+      --ink-soft: rgba(30, 34, 48, 0.5);
+      --ink-faint: rgba(30, 34, 48, 0.07);
+      --sky: #6a8faf;
+      --sky-soft: rgba(106, 143, 175, 0.12);
+      --sky-dim: rgba(106, 143, 175, 0.3);
+      --dusk: #8a7090;
+      --steel: #4a5c72;
+      --silver: #a0aab8;
+      --fog: rgba(242, 244, 246, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* GRAIN */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* SKY CANVAS */
+    #skyCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* DARK MODE */
+    body.dark {
+      --bg: #0d1018;
+      --surface: #141820;
+      --surface2: #1a2028;
+      --ink: #dce4f0;
+      --ink-soft: rgba(220, 228, 240, 0.45);
+      --ink-faint: rgba(220, 228, 240, 0.06);
+      --fog: rgba(13, 16, 24, 0.95);
+    }
+
+    body.dark .nav-bar {
+      background: var(--fog);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .chapter-card:hover {
+      background: var(--surface2);
+      border-color: var(--sky-dim);
+    }
+
+    body.dark .hero-card {
+      background: rgba(20, 24, 32, 0.88);
+      border-color: rgba(106, 143, 175, 0.15);
+    }
+
+    body.dark .font-panel {
+      background: var(--surface);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .font-btn {
+      background: var(--surface2);
+      color: var(--ink);
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .icon-btn {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .section-header {
+      border-color: var(--ink-faint);
+    }
+
+    body.dark .ch-num {
+      color: rgba(106, 143, 175, 0.18);
+    }
+
+    body.dark .chapter-card:hover .ch-num {
+      color: var(--sky);
+    }
+
+    body.dark .read-arrow {
+      color: rgba(220, 228, 240, 0.12);
+    }
+
+    body.dark .chapter-card:hover .read-arrow {
+      color: var(--sky);
+    }
+
+    body.dark .closing-card {
+      background: rgba(20, 24, 32, 0.6);
+      border-color: rgba(106, 143, 175, 0.12);
+    }
+
+    body.dark .shutter-icon {
+      color: rgba(106, 143, 175, 0.35);
+    }
+
+    body.dark .tag {
+      background: var(--sky-soft);
+    }
+
+    /* NAV */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: var(--fog);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(30, 34, 48, 0.08);
+      transition: background 0.4s, border-color 0.4s;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--sky);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      transition: gap 0.2s, color 0.2s;
+    }
+
+    .back-link:hover {
+      gap: 12px;
+      color: var(--steel);
+    }
+
+    .back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover .back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .nav-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--sky);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: 1px solid rgba(30, 34, 48, 0.12);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: var(--ink);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface);
+      transform: scale(1.05);
+    }
+
+    /* FONT PANEL */
+    .font-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid rgba(30, 34, 48, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 12px 40px rgba(30, 34, 48, 0.1);
+      z-index: 200;
+      min-width: 180px;
+    }
+
+    .font-panel.open {
+      display: flex;
+    }
+
+    .font-panel-label {
+      font-size: 9px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .font-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-btn {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid rgba(30, 34, 48, 0.1);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--ink);
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .font-btn:hover {
+      background: var(--sky);
+      color: white;
+      border-color: var(--sky);
+    }
+
+    .font-size-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      color: var(--sky);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 52px 40px 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(234, 236, 240, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(106, 143, 175, 0.18);
+      border-radius: 28px;
+      padding: 50px 60px;
+      max-width: 580px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* camera shutter decoration */
+    .shutter-icon {
+      font-size: 80px;
+      position: absolute;
+      bottom: -16px;
+      right: 12px;
+      opacity: 0.05;
+      pointer-events: none;
+      user-select: none;
+      color: var(--sky);
+      line-height: 1;
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 18px;
+      opacity: 0.8;
+    }
+
+    .hero-title {
+      font-family: 'EB Garamond', serif;
+      font-size: clamp(32px, 5.5vw, 56px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--sky);
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 26px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .div-line {
+      width: 32px;
+      height: 1px;
+      background: var(--sky-dim);
+    }
+
+    .div-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--sky-dim);
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .meta-row span {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: var(--sky-soft);
+      color: var(--sky);
+      letter-spacing: 0.05em;
+    }
+
+    /* CHAPTER SECTION */
+    .chapter-section {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(30, 34, 48, 0.07);
+      transition: border-color 0.4s;
+    }
+
+    .section-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .chapter-total {
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.1em;
+    }
+
+    /* PROGRESS */
+    .progress-bar {
+      height: 2px;
+      background: rgba(30, 34, 48, 0.06);
+      border-radius: 1px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sky), var(--dusk));
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    /* CHAPTER CARDS */
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chapter-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      background: white;
+      border: 1px solid rgba(30, 34, 48, 0.07);
+      border-radius: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .chapter-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--sky), var(--dusk));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .chapter-card:hover {
+      border-color: rgba(106, 143, 175, 0.22);
+      box-shadow: 0 6px 28px rgba(106, 143, 175, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .ch-num {
+      font-family: 'EB Garamond', serif;
+      font-size: 30px;
+      font-style: italic;
+      font-weight: 400;
+      color: rgba(30, 34, 48, 0.1);
+      min-width: 36px;
+      line-height: 1;
+      transition: color 0.25s;
+      flex-shrink: 0;
+    }
+
+    .chapter-card:hover .ch-num {
+      color: var(--sky);
+    }
+
+    .chapter-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chapter-label {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    .chapter-title {
+      font-family: 'EB Garamond', serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.3;
+      transition: color 0.2s;
+    }
+
+    .chapter-card:hover .chapter-title {
+      color: var(--sky);
+    }
+
+    .read-arrow {
+      font-size: 18px;
+      color: rgba(30, 34, 48, 0.12);
+      transition: all 0.25s;
+      flex-shrink: 0;
+      transform: translateX(-6px);
+    }
+
+    .chapter-card:hover .read-arrow {
+      color: var(--sky);
+      transform: translateX(0);
+    }
+
+    /* CLOSING CARD */
+    .closing-card {
+      margin-top: 28px;
+      background: rgba(234, 236, 240, 0.55);
+      border: 1px solid rgba(106, 143, 175, 0.13);
+      border-radius: 18px;
+      padding: 32px 28px;
+      text-align: center;
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.5s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .closing-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(106, 143, 175, 0.04), rgba(138, 112, 144, 0.04));
+      pointer-events: none;
+    }
+
+    .photo-row {
+      font-size: 22px;
+      letter-spacing: 0.15em;
+      margin-bottom: 14px;
+      opacity: 0.5;
+    }
+
+    .closing-quote {
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--sky);
+      line-height: 1.5;
+      margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .closing-attr {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 14px;
+    }
+
+    .ongoing-note {
+      font-size: 11px;
+      color: var(--silver);
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .blink {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--sky);
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* FOOTER */
+    .page-footer {
+      text-align: center;
+      padding: 20px 40px 40px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+    }
+
+    /* SCROLL BTN */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--sky);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(106, 143, 175, 0.35);
+      transition: all 0.2s;
+      z-index: 50;
+    }
+
+    #scrollBtn:hover {
+      opacity: 0.85;
+      transform: translateY(-2px);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-card {
+      animation: fadeUp 0.55s ease both;
+      animation-delay: 0.05s;
+    }
+
+    .section-header {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .progress-bar {
+      animation: fadeUp 0.5s ease both;
+      animation-delay: 0.13s;
+    }
+
+    .chapter-card:nth-child(1) {
+      animation-delay: 0.17s;
+    }
+
+    .chapter-card:nth-child(2) {
+      animation-delay: 0.24s;
+    }
+
+    .chapter-card:nth-child(3) {
+      animation-delay: 0.31s;
+    }
+
+    .chapter-card:nth-child(4) {
+      animation-delay: 0.38s;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .nav-bar {
+        padding: 0 16px;
+      }
+
+      .nav-title {
+        display: none;
+      }
+
+      .hero {
+        padding: 32px 16px 28px;
+      }
+
+      .hero-card {
+        padding: 30px 22px;
+      }
+
+      .chapter-section {
+        padding: 0 16px 60px;
+      }
+
+      .chapter-card {
+        padding: 16px 18px;
+        gap: 14px;
+      }
+
+      .ch-num {
+        font-size: 24px;
+        min-width: 28px;
+      }
+
+      .chapter-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sky canvas -->
+  <canvas id="skyCanvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav-bar">
+    <a href="../index.html" class="back-link">
+      <span class="back-arrow">←</span>
+      <span>Back to Library</span>
+    </a>
+    <div class="nav-title">The Day She Stayed</div>
+    <div class="nav-right">
+      <div style="position:relative">
+        <button class="icon-btn" id="fontToggle" onclick="toggleFontPanel()" title="Font size">Aa</button>
+        <div class="font-panel" id="fontPanel">
+          <span class="font-panel-label">Text Size</span>
+          <div class="font-controls-row">
+            <button class="font-btn" onclick="changeFont(-1)" style="font-size:13px">A−</button>
+            <span class="font-size-display" id="fontDisplay">16</span>
+            <button class="font-btn" onclick="changeFont(1)" style="font-size:19px">A+</button>
+          </div>
+          <button class="font-btn" onclick="changeFont(0)" style="font-size:13px;letter-spacing:0.1em;">Reset</button>
+        </div>
+      </div>
+      <button class="icon-btn" id="themeBtn" onclick="toggleDark()">🌙</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-card">
+      <div class="shutter-icon">📷</div>
+      <div class="hero-eyebrow">A Novel by AKA</div>
+      <h1 class="hero-title">The Day<br><em>She Stayed</em></h1>
+      <p class="hero-subtitle">Some moments are taken. Some are left behind.</p>
+      <div class="hero-divider">
+        <div class="div-line"></div>
+        <div class="div-dot"></div>
+        <div class="div-dot"></div>
+        <div class="div-dot"></div>
+        <div class="div-line"></div>
+      </div>
+      <div class="meta-row">
+        <span>📖 10 Chapters</span>
+        <span>🟢 Completed</span>
+        <span><span class="tag">Romance</span></span>
+        <span><span class="tag">Drama</span></span>
+        <span><span class="tag">Sad</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAPTER LIST -->
+  <div class="chapter-section">
+
+    <div class="section-header">
+      <h2 class="section-title">Chapters</h2>
+      <span class="chapter-total">10 chapters so far</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="chapter-list">
+
+      <a class="chapter-card" href="tdss1.html">
+        <div class="ch-num">1</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter One</div>
+          <div class="chapter-title">The Boy Who Photographed the Sky</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tdss2.html">
+        <div class="ch-num">2</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Two</div>
+          <div class="chapter-title">The Rules</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tdss3.html">
+        <div class="ch-num">3</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Three</div>
+          <div class="chapter-title">Blue Stains and Paper Ribbons</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tdss4.html">
+        <div class="ch-num">4</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Four</div>
+          <div class="chapter-title">The Rule We Broke Together</div>
+        </div>
+        <span class="read-arrow">→</span>
+      </a>
+
+      <a class="chapter-card" href="tdss5.html">
+        <div class="ch-num">5</div>
+        <div class="chapter-info">
+          <div class="chapter-label">Chapter Five</div>
+          <div class="chapter-title">The Day the Sky Stopped Moving</div>
+        </div>
+        <span class="read-arrow">→</span>
+
+
+        <a class="chapter-card" href="tdss6.html">
+          <div class="ch-num">6</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Six</div>
+            <div class="chapter-title"> The Sky That Stood Still</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="tdss7.html">
+          <div class="ch-num">7</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Seven</div>
+            <div class="chapter-title">The Seat Beside the Window</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="tdss8.html">
+          <div class="ch-num">8</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Eight</div>
+            <div class="chapter-title">The Picture That Remembered Her</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="tdss9.html">
+          <div class="ch-num">9</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Nine</div>
+            <div class="chapter-title">The Day I Almost Forgot How to Breathe</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a>
+
+
+        <a class="chapter-card" href="tdss10.html">
+          <div class="ch-num">10</div>
+          <div class="chapter-info">
+            <div class="chapter-label">Chapter Ten</div>
+            <div class="chapter-title">A Letter From the Girl Who Didn’t Know She’d Survive</div>
+          </div>
+          <span class="read-arrow">→</span>
+        </a>
+
+    </div>
+
+    <!-- CLOSING CARD -->
+    <div class="closing-card">
+      <div class="photo-row">📷 &nbsp; 🌥️ &nbsp; 📷</div>
+      <div class="closing-quote">"Some days, staying is the bravest thing."</div>
+      <div class="closing-attr">— The Day She Stayed</div>
+      <div class="ongoing-note">
+        <span class="blink"></span>
+        Story completed ·
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-card">
+        <div class="shutter-icon">📷</div>
+        <div class="hero-eyebrow">A Novel by AKA</div>
+        <h1 class="hero-title">The Sky<br><em>She Left Behind</em></h1>
+        <p class="hero-subtitle">The alternate ending which take place after the Chapter 5th of main story </p>
+        <div class="hero-divider">
+          <div class="div-line"></div>
+          <div class="div-dot"></div>
+          <div class="div-dot"></div>
+          <div class="div-dot"></div>
+          <div class="div-line"></div>
+        </div>
+        <div class="meta-row">
+          <span>📖 1 Chapters</span>
+          <span>🟢 Completed</span>
+          <span><span class="tag">Romance</span></span>
+          <span><span class="tag">Drama</span></span>
+          <span><span class="tag">Sad</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chapter-section">
+
+    <a class="chapter-card" href="tdss11.html">
+      <div class="ch-num">1</div>
+      <div class="chapter-info">
+        <div class="chapter-label">Chapter One</div>
+        <div class="chapter-title">The Day the Sky Forgot Her Name</div>
+      </div>
+      <span class="read-arrow">→</span>
+    </a>
+  </div>
+
+
+  </div>
+
+  </div>
+
+  <footer class="page-footer">
+    A Novel by AKA &nbsp;·&nbsp; Please do not repost or copy without permission.<br>
+    Sharing links is always appreciated.
+  </footer>
+
+  <button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    /* SKY CANVAS — slow drifting clouds */
+    var canvas = document.getElementById('skyCanvas');
+    var ctx = canvas.getContext('2d');
+    var clouds = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function spawnCloud() {
+      var y = Math.random() * canvas.height * 0.6;
+      clouds.push({
+        x: -200,
+        y: y,
+        w: Math.random() * 160 + 100,
+        h: Math.random() * 40 + 24,
+        speed: Math.random() * 0.18 + 0.06,
+        opacity: Math.random() * 0.1 + 0.04
+      });
+    }
+
+    for (var i = 0; i < 5; i++) {
+      spawnCloud();
+      clouds[clouds.length - 1].x = Math.random() * canvas.width;
+    }
+
+    function drawClouds() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      clouds.forEach((c, i) => {
+        ctx.save();
+        ctx.globalAlpha = c.opacity;
+        ctx.fillStyle = '#6a8faf';
+        ctx.beginPath();
+        ctx.ellipse(c.x, c.y, c.w * 0.5, c.h * 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(c.x + c.w * 0.25, c.y - c.h * 0.2, c.w * 0.35, c.h * 0.45, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.ellipse(c.x - c.w * 0.22, c.y - c.h * 0.1, c.w * 0.3, c.h * 0.38, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        c.x += c.speed;
+        if (c.x > canvas.width + 250) {
+          clouds.splice(i, 1);
+          spawnCloud();
+        }
+      });
+
+      requestAnimationFrame(drawClouds);
+    }
+
+    drawClouds();
+
+    /* FONT SIZE */
+    var fontSize = 16;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 24) fontSize += 2;
+      else if (action === -1 && fontSize > 12) fontSize -= 2;
+      else if (action === 0) fontSize = 16;
+      document.getElementById('fontDisplay').textContent = fontSize;
+      try { localStorage.setItem('tdssFontSize', fontSize); } catch (e) { }
+    }
+
+    function toggleFontPanel() {
+      document.getElementById('fontPanel').classList.toggle('open');
+    }
+
+    document.addEventListener('click', e => {
+      var btn = document.getElementById('fontToggle');
+      var panel = document.getElementById('fontPanel');
+      if (!btn.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.remove('open');
+      }
+    });
+
+    /* DARK MODE */
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+      var on = document.body.classList.contains('dark');
+      document.getElementById('themeBtn').textContent = on ? '☀️' : '🌙';
+      try { localStorage.setItem('darkMode', on ? 'on' : 'off'); } catch (e) { }
+    }
+
+    /* SCROLL BTN */
+    window.addEventListener('scroll', () => {
+      var btn = document.getElementById('scrollBtn');
+      btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+    });
+
+    /* READING PROGRESS */
+    var totalChapters = 4;
+    try {
+      var stored = JSON.parse(localStorage.getItem('tdssRead') || '[]');
+      document.getElementById('progressFill').style.width =
+        (Math.min(stored.length, totalChapters) / totalChapters * 100) + '%';
+    } catch (e) { }
+
+    /* INIT */
+    window.addEventListener('load', () => {
+      try {
+        if (localStorage.getItem('darkMode') === 'on') {
+          document.body.classList.add('dark');
+          document.getElementById('themeBtn').textContent = '☀️';
+        }
+        var saved = parseInt(localStorage.getItem('tdssFontSize'));
+        if (saved && saved >= 12 && saved <= 24) {
+          fontSize = saved;
+          document.getElementById('fontDisplay').textContent = fontSize;
+        }
+      } catch (e) { }
+    });
+  </script>
+
+</body>
+
+</html>

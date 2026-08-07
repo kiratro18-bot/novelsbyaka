@@ -1,0 +1,1048 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Ten Percent of Forever - Chapter 4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f3f5f0;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #3d3d3d;
+      --ink-muted: #888;
+      --accent: #4a7c59;
+      --accent-light: rgba(74, 124, 89, 0.08);
+      --accent2: #8aab72;
+      --border: rgba(0, 0, 0, 0.07);
+      --border-strong: rgba(0, 0, 0, 0.13);
+    }
+
+    body.dark {
+      --bg: #0e110c;
+      --surface: #151a12;
+      --ink: #dde8d4;
+      --ink-soft: #a8bea0;
+      --ink-muted: #637560;
+      --accent: #7aab72;
+      --accent-light: rgba(122, 171, 114, 0.09);
+      --accent2: #a0c890;
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.11);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(74, 124, 89, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(122, 171, 114, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(34px, 7vw, 52px);
+      font-weight: 600;
+      line-height: 1.08;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .soft-green {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* READING ALOUD BLOCK */
+    .reading-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .reading-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          rgba(74, 124, 89, 0.05) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .reading-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .reading-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.75;
+      text-align: center;
+    }
+
+    .reading-attr {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-align: center;
+      display: block;
+      margin-top: 12px;
+    }
+
+    /* LAUGH MOMENT */
+    .laugh-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--bg);
+      border: 1px dashed var(--border-strong);
+      border-radius: 12px;
+    }
+
+    .laugh-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .laugh-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    .laugh-text em {
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* STARS VISUAL */
+    .stars-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stars-sky {
+      width: 100%;
+      max-width: 260px;
+      height: 90px;
+      margin: 0 auto 16px;
+      background: linear-gradient(180deg,
+          #06091a 0%,
+          #0d1530 60%,
+          #162040 100%);
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+
+      0%,
+      100% {
+        opacity: 0.9;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.3;
+        transform: scale(0.6);
+      }
+    }
+
+    .s1 {
+      width: 2px;
+      height: 2px;
+      top: 15%;
+      left: 12%;
+      animation-duration: 2.1s;
+      animation-delay: 0s;
+    }
+
+    .s2 {
+      width: 1px;
+      height: 1px;
+      top: 25%;
+      left: 28%;
+      animation-duration: 3s;
+      animation-delay: 0.4s;
+    }
+
+    .s3 {
+      width: 2px;
+      height: 2px;
+      top: 10%;
+      left: 45%;
+      animation-duration: 2.5s;
+      animation-delay: 0.8s;
+    }
+
+    .s4 {
+      width: 1px;
+      height: 1px;
+      top: 35%;
+      left: 60%;
+      animation-duration: 1.8s;
+      animation-delay: 0.2s;
+    }
+
+    .s5 {
+      width: 2px;
+      height: 2px;
+      top: 18%;
+      left: 75%;
+      animation-duration: 2.8s;
+      animation-delay: 1s;
+    }
+
+    .s6 {
+      width: 1px;
+      height: 1px;
+      top: 28%;
+      left: 88%;
+      animation-duration: 2.2s;
+      animation-delay: 0.6s;
+    }
+
+    .s7 {
+      width: 2px;
+      height: 2px;
+      top: 50%;
+      left: 20%;
+      animation-duration: 3.2s;
+      animation-delay: 0.3s;
+    }
+
+    .s8 {
+      width: 1px;
+      height: 1px;
+      top: 55%;
+      left: 40%;
+      animation-duration: 2s;
+      animation-delay: 0.9s;
+    }
+
+    .s9 {
+      width: 2px;
+      height: 2px;
+      top: 45%;
+      left: 65%;
+      animation-duration: 2.7s;
+      animation-delay: 0.1s;
+    }
+
+    .s10 {
+      width: 1px;
+      height: 1px;
+      top: 60%;
+      left: 82%;
+      animation-duration: 1.9s;
+      animation-delay: 0.7s;
+    }
+
+    .stars-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stars-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    /* THE LINE */
+    .line-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .line-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .line-exchange {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .line-item {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+    .line-item.him {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .line-item.her {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .line-speaker {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev,
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover,
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .nav-next:hover {
+      opacity: 0.8;
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .line-block,
+      .laugh-block,
+      .reading-block {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="tpof.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">Ten Percent of Forever</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🍂</span> Ten Percent of Forever · Chapter
+        4
+      </div>
+      <h1 class="chapter-title">The Sound<br />of Her Laugh</h1>
+      <p class="chapter-subtitle">The exact opposite of melancholy.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Romance</span><span class="meta-dot"></span>
+        <span class="meta-item">Slice of Life</span><span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <div class="prose" id="prose1">
+      <p>It started with a whisper.</p>
+      <p>
+        <span class="dialogue">"I have to read in front of the class tomorrow,"</span>
+        Mei said, barely audible over the rustling trees as they walked down
+        the path behind the school.
+      </p>
+      <p>
+        They often met here now, in the ten minutes before homeroom —
+        <span class="thought">a quiet space where the city faded and time softened.</span>
+      </p>
+      <p>
+        Hiro blinked. <span class="dialogue">"You? Reading aloud?"</span><br />
+        She nodded.
+        <span class="dialogue">"My turn. Literature presentation."</span><br />
+        <span class="dialogue">"But you hate speaking."</span><br />
+        <span class="dialogue">"I don't hate it,"</span> she said.
+        <span class="dialogue">"I'm just… bad at it."</span><br />
+        <span class="dialogue">"I've never even heard you raise your voice."</span><br />
+        <span class="dialogue">"Exactly,"</span> she mumbled.
+      </p>
+      <p>
+        They stopped under a tree. Leaves fell lazily, spinning in the soft
+        wind.<br />
+        Mei looked nervous. She clutched a crumpled sheet of paper in her
+        hand.
+      </p>
+      <p>
+        <span class="dialogue">"…Want help?"</span> Hiro offered.<br />
+        She hesitated. Then handed him the paper.<br />
+        <span class="dialogue">"Don't laugh."</span><br />
+        <span class="dialogue">"I won't."</span>
+      </p>
+      <p>
+        They sat on the bench. She cleared her throat. Tried once. Stumbled.
+        Tried again. Tripped over the word
+        <span class="emphasis">"melancholy."</span>
+      </p>
+      <p>
+        <span class="dialogue">"Melon what?"</span> Hiro teased.<br />
+        She glared.<br />
+        <span class="dialogue">"You said you wouldn't laugh."</span><br />
+        <span class="dialogue">"I'm not. Just offering… creative pronunciation."</span>
+      </p>
+      <p>
+        She pouted — and tried again. He read along beside her, echoing the
+        tricky words until she started to find the rhythm.<br />
+        It took four tries.<br />
+        By the fifth, she didn't pause.
+      </p>
+    </div>
+
+    <!-- THE PASSAGE -->
+    <div class="reading-block">
+      <span class="reading-label">📖 Her fifth try</span>
+      <p class="reading-text">
+        "And though the autumn leaves may fall in silence, their echo lingers
+        in the heart of those who watched them go."
+      </p>
+      <span class="reading-attr">She didn't pause once.</span>
+    </div>
+
+    <div class="prose" id="prose2">
+      <p>
+        Hiro clapped once, dramatic.<br />
+        She rolled her eyes — but the corner of her mouth twitched.<br />
+        Then he added, dead serious:
+        <span class="dialogue">"Honestly? You sound cooler than the author."</span>
+      </p>
+      <p>She stared.</p>
+      <p>
+        And then — for the first time in all the mornings, all the lunches,
+        all the quiet walks between classes —
+      </p>
+      <p><span class="emphasis">She laughed.</span></p>
+    </div>
+
+    <!-- THE LAUGH -->
+    <div class="laugh-block">
+      <span class="laugh-label">✨ That laugh</span>
+      <p class="laugh-text">
+        <em>It wasn't loud.</em><br />
+        <em>It wasn't perfect.</em><br />
+        <em>But it was real. And soft. And bright.</em><br />
+        <em>The kind of laugh that started small and surprised even her.</em>
+      </p>
+    </div>
+
+    <div class="prose" id="prose3">
+      <p>
+        Hiro blinked.<br />
+        <span class="dialogue">"…Wow,"</span> he said.<br />
+        <span class="dialogue">"What?"</span><br />
+        <span class="dialogue">"That was the first time I've heard your laugh."</span>
+      </p>
+      <p>
+        She immediately went quiet.<br />
+        <span class="dialogue">"Don't make it weird,"</span> she muttered.<br />
+        <span class="dialogue">"I'm not!"</span> he grinned.
+        <span class="dialogue">"Just saying… I like it."</span>
+      </p>
+      <p>
+        She didn't answer, but her cheeks turned a soft pink. She looked down,
+        letting her hair fall in front of her face.
+      </p>
+      <p>
+        He didn't push it.<br />
+        They just sat there, the paper still in her hands, sunlight filtering
+        through the trees.
+      </p>
+      <p>
+        <span class="thought">And Hiro thought: if her laugh were a sound, it would be the exact
+          opposite of melancholy.</span>
+      </p>
+      <p class="scene-break">· · ·</p>
+      <p>The mountains were quieter than anyone expected.</p>
+      <p>
+        By night, the class trip felt less like a field trip and more like a
+        dream — the air crisp, the lights dimmed, every voice muffled beneath
+        thick layers of sleep and moonlight.
+      </p>
+      <p>
+        Their inn was traditional. Tatami floors, futons, low ceilings, creaky
+        hallways.
+      </p>
+      <p>
+        But Hiro couldn't sleep.<br />
+        So he wandered outside, hoodie zipped, hands in his pockets.
+      </p>
+      <p>
+        And found her — again —
+        <span class="thought">before he even tried.</span>
+      </p>
+      <p>
+        Mei sat alone on the wooden deck behind the inn, legs swinging gently,
+        sketchbook beside her and her eyes on the sky.
+      </p>
+      <p>
+        <span class="dialogue">"You always find the quietest spots,"</span> he
+        said softly.<br />
+        She turned her head.
+        <span class="dialogue">"And you always find me in them."</span>
+      </p>
+      <p>
+        <span class="dialogue">"Can't sleep?"</span><br />
+        <span class="dialogue">"No. Too many voices in my head."</span><br />
+        <span class="dialogue">"Want me to chase them out?"</span><br />
+        <span class="dialogue">"That depends. Will you do it dramatically?"</span>
+      </p>
+      <p>
+        He cleared his throat and waved his arms toward the stars.<br />
+        <span class="dialogue">"Be gone, anxiety demons! Mei commands it!"</span>
+      </p>
+      <p>
+        She burst into a laugh — softer than the one under the trees, but
+        warmer somehow.
+      </p>
+    </div>
+
+    <!-- STARS -->
+    <div class="stars-block">
+      <div class="stars-sky">
+        <div class="star s1"></div>
+        <div class="star s2"></div>
+        <div class="star s3"></div>
+        <div class="star s4"></div>
+        <div class="star s5"></div>
+        <div class="star s6"></div>
+        <div class="star s7"></div>
+        <div class="star s8"></div>
+        <div class="star s9"></div>
+        <div class="star s10"></div>
+      </div>
+      <span class="stars-label">🌌 The inn rooftop · Class trip night</span>
+      <p class="stars-caption">
+        "A thousand stars scattered like forgotten wishes."
+      </p>
+    </div>
+
+    <div class="prose" id="prose4">
+      <p>
+        <span class="dialogue">"Did you draw this?"</span> Hiro asked,
+        gesturing upward.<br />
+        She shook her head.
+        <span class="dialogue">"Not yet. I don't know how to draw something this… big."</span>
+      </p>
+      <p>They sat in silence for a long time after that.</p>
+      <p>
+        Then she said, almost too quiet to hear:<br />
+        <span class="dialogue">"…I don't believe in forever."</span>
+      </p>
+      <p>
+        He turned toward her, surprised.<br />
+        <span class="dialogue">"I mean… nothing lasts. Friendships. People. Feelings. Even
+          memories fade."</span>
+      </p>
+      <p>
+        Hiro looked up again. Then back at her.<br />
+        <span class="dialogue">"Maybe. But even if something doesn't last forever… doesn't mean it
+          wasn't real."</span>
+      </p>
+      <p>
+        She didn't reply.<br />
+        So he added, with a quiet smile:
+      </p>
+    </div>
+
+    <!-- THE LINE -->
+    <div class="line-block">
+      <span class="line-label">💬 The exchange</span>
+      <div class="line-exchange">
+        <div class="line-item him">
+          <span class="line-speaker">Hiro</span>
+          "Then just give me ten percent of forever."
+        </div>
+        <div class="line-item her">
+          <span class="line-speaker">Mei</span>
+          "What if I already am?"
+        </div>
+      </div>
+    </div>
+
+    <div class="prose" id="prose5">
+      <p>
+        She looked at him.<br />
+        <span class="thought">Really looked.</span><br />
+        Like something inside her stopped holding back for a second.
+      </p>
+      <p>
+        And just like that, the stars above them didn't feel so distant
+        anymore.
+      </p>
+    </div>
+
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter 4</span>
+      <div class="chapter-nav">
+        <a href="tpof3.html" class="nav-btn nav-prev">← Chapter 3</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tpof5.html" class="nav-btn nav-next">Chapter 5 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fs = 19;
+    function changeFont(a) {
+      if (a === 1 && fs < 26) fs += 2;
+      else if (a === -1 && fs > 14) fs -= 2;
+      else if (a === 0) fs = 19;
+      ["prose1", "prose2", "prose3", "prose4", "prose5"].forEach(
+        function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.fontSize = fs + "px";
+        },
+      );
+    }
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+    window.onscroll = function () {
+      var s = document.documentElement.scrollTop || document.body.scrollTop,
+        t =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (t > 0 ? (s / t) * 100 : 0) + "%";
+      var b = document.getElementById("scrollBtn");
+      if (s > 300) b.classList.add("visible");
+      else b.classList.remove("visible");
+    };
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

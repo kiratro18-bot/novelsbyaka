@@ -1,0 +1,1184 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>The Petal That Falls With a Smile Vol. 2 - Chapters 4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #444;
+      --ink-muted: #888;
+      --accent: #7a6c8a;
+      --accent-light: rgba(122, 108, 138, 0.07);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.14);
+      --petal: #c9a0b8;
+      --petal-light: rgba(201, 160, 184, 0.09);
+      --sage: #7a8c75;
+      --sage-light: rgba(122, 140, 117, 0.09);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --ink: #e6edf3;
+      --ink-soft: #b0bec5;
+      --ink-muted: #6a7f99;
+      --accent: #c9a0b8;
+      --accent-light: rgba(201, 160, 184, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --petal: #d4a8c4;
+      --petal-light: rgba(212, 168, 196, 0.08);
+      --sage: #8fa889;
+      --sage-light: rgba(143, 168, 137, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ── PROGRESS BAR ── */
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--petal));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    /* ── CHAPTER HEADER ── */
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(122, 108, 138, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: petalFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes petalFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      33% {
+        transform: translateY(-4px) rotate(-5deg);
+      }
+
+      66% {
+        transform: translateY(-2px) rotate(4deg);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(30px, 6vw, 50px);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    /* ── CHAPTER DIVIDER ── */
+    .chapter-divider {
+      text-align: center;
+      margin: 56px 0 48px;
+      padding: 32px;
+      position: relative;
+    }
+
+    .chapter-divider::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .chapter-divider-inner {
+      position: relative;
+      display: inline-block;
+      background: var(--bg);
+      padding: 0 24px;
+    }
+
+    .chapter-divider-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 6px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(122, 108, 138, 0.18);
+    }
+
+    body.dark .chapter-divider-badge {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .chapter-divider-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-top: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .chapter-divider-sub {
+      font-family: "Crimson Pro", serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    /* ── PROSE ── */
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .petal {
+      color: var(--petal);
+      font-weight: 600;
+    }
+
+    .prose .nature {
+      color: var(--sage);
+      font-style: italic;
+    }
+
+    /* ── LETTER BLOCK ── */
+    .letter-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 16px 16px 0;
+      position: relative;
+    }
+
+    .letter-block.from-nao {
+      border-left-color: var(--petal);
+    }
+
+    .letter-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .letter-block.from-nao .letter-label {
+      color: var(--petal);
+    }
+
+    .letter-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.85;
+    }
+
+    .letter-sig {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 16px;
+      display: block;
+      font-style: normal;
+    }
+
+    .letter-block.from-nao .letter-sig {
+      color: var(--petal);
+    }
+
+    /* ── PETAL BLOCK ── */
+    .petal-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .petal-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          var(--petal-light) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .petal-visual {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 14px;
+      animation: petalFloat 4s ease-in-out infinite;
+    }
+
+    .petal-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .petal-caption {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.65;
+    }
+
+    /* ── MOMENT BLOCK ── */
+    .moment-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .moment-icon {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--accent-light);
+      border: 1px solid rgba(122, 108, 138, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    body.dark .moment-icon {
+      border-color: rgba(201, 160, 184, 0.2);
+    }
+
+    .moment-meta {
+      flex: 1;
+    }
+
+    .moment-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .moment-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── OBSERVATION BLOCK ── */
+    .observation-block {
+      margin: 40px 0;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--petal);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .observation-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--petal);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .observation-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    /* ── CHAPTER END ── */
+    .chapter-end {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .end-line {
+      font-family: "Crimson Pro", serif;
+      font-size: 24px;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .end-sub {
+      font-family: "Crimson Pro", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 32px;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+    }
+
+    .nav-prev {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-prev:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-home {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-home:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .nav-next {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .nav-next:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    /* ── SCROLL BTN ── */
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .letter-block,
+      .observation-block {
+        padding: 20px;
+      }
+
+      .petal-block,
+      .moment-block {
+        padding: 20px;
+      }
+
+      .moment-block {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .chapter-divider {
+        padding: 24px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="index.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">The Petal Vol. 2</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <!-- PROGRESS BAR -->
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <!-- ═══════════════════════════════ CHAPTER 4 ═══════════════════════════════ -->
+
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🌸</span>
+        The Petal That Falls With a Smile Vol. 2 · Chapter 4
+      </div>
+      <h1 class="chapter-title">The Space Between Glances</h1>
+      <p class="chapter-subtitle">When words become presence.</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Turning Point</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Meeting</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Rain</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- PROSE 1 -->
+    <div class="prose" id="novel-content-1">
+      <p>It was raining again.</p>
+
+      <p>But the sakura tree didn't seem to mind.</p>
+
+      <p>
+        <span class="petal">Its branches had begun to bloom properly now—pale pink against gray
+          sky, like stubborn hope blooming out of season.</span>
+      </p>
+
+      <p>
+        Nao sat on the bench, umbrella resting by her side, fingers brushing
+        over the edges of her reply.
+      </p>
+    </div>
+
+    <!-- LETTER FROM NAO — CH7 -->
+    <div class="letter-block from-nao">
+      <span class="letter-label">✉ Letter from Nao</span>
+      <p class="letter-text">
+        Haruki,<br /><br />
+        I like <em>Kitchen</em> by Banana Yoshimoto.<br /><br />
+        It's quiet. Like the kind of sadness that doesn't scream.<br />
+        The kind that just... lives in a room with you.<br /><br />
+        I think that's why I've stayed with your letters so long.<br />
+        They feel like company.<br /><br />
+        And yes.<br />
+        If we ever met—really met—I'd still want to write.<br />
+        But maybe... I'd want to say things out loud too.
+      </p>
+      <span class="letter-sig">— Nao</span>
+    </div>
+
+    <!-- PROSE 2 -->
+    <div class="prose" id="novel-content-2">
+      <p>
+        She folded the letter, slower than usual. Slid it gently into the
+        book.
+      </p>
+
+      <p><span class="thought">Then paused.</span></p>
+
+      <p><span class="thought">She didn't know why.</span></p>
+
+      <p>
+        But something made her linger—eyes resting on the sakura blossoms,
+        breathing in the scent of quiet rain and new petals.
+      </p>
+
+      <p>
+        <span class="emphasis">And that's when she heard footsteps.</span>
+      </p>
+
+      <p><span class="thought">Slow. Familiar.</span></p>
+
+      <p>She looked up.</p>
+    </div>
+
+    <!-- MOMENT BLOCK -->
+    <div class="moment-block">
+      <div class="moment-icon">👤</div>
+      <div class="moment-meta">
+        <span class="moment-title">There he was.</span>
+        <span class="moment-sub">No longer a mystery. No longer just letters.</span>
+      </div>
+    </div>
+
+    <!-- PROSE 3 -->
+    <div class="prose" id="novel-content-3">
+      <p>
+        Same boy she'd passed in the hall. Tall, hair slightly damp, holding a
+        book in one hand and a thermos in the other.
+        <span class="thought">Not a student—not anymore. She could tell by the lanyard clipped to
+          his bag. Library assistant.</span>
+      </p>
+
+      <p>He didn't look surprised to see her.</p>
+
+      <p>
+        Instead, he offered the faintest smile.
+        <span class="thought">One that flickered like he hadn't used it in a while.</span>
+      </p>
+
+      <p><span class="dialogue">"…Hey," he said.</span></p>
+
+      <p>
+        <span class="thought">His voice was soft. Just like she imagined.</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"Sorry," he added, nodding toward the bench. "Didn't mean to
+          intrude. I just—come here sometimes."</span>
+      </p>
+
+      <p>Nao stared for a second too long.</p>
+
+      <p>
+        <span class="thought">Then slowly stood, heart thudding in her chest.</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"It's okay," she murmured. "I don't mind."</span>
+      </p>
+
+      <p>
+        He moved to the other side of the bench, careful not to sit too close.
+        He rested his book on his lap, but didn't open it.
+      </p>
+
+      <p>
+        <span class="thought">For a while, they said nothing. Just sat under the tree, listening
+          to the rain and the wind and the thousand unsaid things blooming
+          between them.</span>
+      </p>
+
+      <p>And then—</p>
+
+      <p>
+        <span class="dialogue">"I think I've seen you before," he said quietly.</span>
+      </p>
+
+      <p>She turned. <span class="dialogue">"Where?"</span></p>
+
+      <p>
+        He gave a soft shrug.
+        <span class="dialogue">"Around. You're usually here before me."</span>
+      </p>
+
+      <p><span class="thought">That was all he said.</span></p>
+
+      <p>
+        <span class="thought">But the way he glanced at the bench—at the floorboard—made her
+          wonder if he already knew.</span>
+      </p>
+
+      <p>
+        <span class="thought">If this moment wasn't an accident at all.</span>
+      </p>
+
+      <p>She didn't ask.</p>
+
+      <p><span class="thought">And he didn't offer.</span></p>
+    </div>
+
+    <!-- PETAL MOMENT -->
+    <div class="petal-block">
+      <span class="petal-visual">🌸</span>
+      <span class="petal-label">The Confession</span>
+      <p class="petal-caption">
+        Two people. One name. The moment everything changes.
+      </p>
+    </div>
+
+    <!-- PROSE 4 -->
+    <div class="prose" id="novel-content-4">
+      <p>But when she stood to leave, she looked at him and said,</p>
+
+      <p><span class="dialogue">"My name's Nao."</span></p>
+
+      <p>He blinked.</p>
+
+      <p><span class="thought">Then smiled.</span></p>
+
+      <p>
+        And maybe it was the rain or the season or the letter still hidden
+        between the pages—
+      </p>
+
+      <p>But when he said,</p>
+
+      <p><span class="dialogue">"Nice to meet you, Nao,"</span></p>
+
+      <p>—<span class="emphasis">it sounded like he already had.</span></p>
+    </div>
+
+    <!-- OBSERVATION BLOCK -->
+    <div class="observation-block">
+      <span class="observation-label">🌸 Recognition</span>
+      <p class="observation-text">
+        Sometimes, when two people meet,<br />
+        it's not really meeting at all.<br /><br />
+        It's remembering.<br />
+        It's knowing.<br />
+        It's the sound of something<br />
+        finally becoming real.
+      </p>
+    </div>
+
+    <!-- ═══════════════════════════════ CHAPTER 4 ═══════════════════════════════ -->
+
+    <div class="chapter-divider">
+      <div class="chapter-divider-inner">
+        <div class="chapter-divider-badge">
+          <span class="chapter-icon">🌸</span>
+        </div>
+        <div class="chapter-divider-title">What We Already Knew</div>
+        <div class="chapter-divider-sub">
+          The bridge between fear and honesty.
+        </div>
+      </div>
+    </div>
+
+    <!-- PROSE 5 -->
+    <div class="prose" id="novel-content-5">
+      <p>Nao didn't go to the bench the next day.</p>
+
+      <p>
+        <span class="thought">She told herself she was busy. That midterms were creeping up. That
+          the rain made the floorboards too damp to open.</span>
+      </p>
+
+      <p>But the truth was simpler.</p>
+
+      <p><span class="emphasis">She was scared.</span></p>
+
+      <p><span class="thought">Not of Haruki. Not really.</span></p>
+
+      <p><span class="thought">But of knowing.</span></p>
+
+      <p>
+        <span class="thought">Because for the first time, it felt real.</span>
+      </p>
+
+      <p><span class="thought">Not letters.</span></p>
+
+      <p><span class="thought">Not mystery.</span></p>
+
+      <p>
+        <span class="thought">Just two people—sitting side by side beneath a blooming tree.</span>
+      </p>
+
+      <p><span class="thought">What if it changed everything?</span></p>
+
+      <p>
+        <span class="thought">What if it ruined the only place she felt honest?</span>
+      </p>
+
+      <p>But by Friday, the pull was too strong.</p>
+
+      <p>
+        She came after school, when the hallways were nearly empty and the sky
+        had turned the color of quiet ash.
+      </p>
+
+      <p>The bench looked the same.</p>
+
+      <p>
+        <span class="petal">The blossoms had opened more, soft petals gathering like
+          confessions on the wood.</span>
+      </p>
+
+      <p>She knelt down, gently opened the floorboard—</p>
+
+      <p><span class="thought">And paused.</span></p>
+
+      <p><span class="emphasis">There was no letter.</span></p>
+
+      <p><span class="thought">Just the paperback.</span></p>
+
+      <p>
+        <span class="thought">And a folded page tucked behind the cover. Not in the usual place.
+          Not between notes.</span>
+      </p>
+
+      <p>
+        <span class="thought">This one had only one line written across the middle:</span>
+      </p>
+    </div>
+
+    <!-- THE NOTE -->
+    <div class="petal-block">
+      <span class="petal-visual">✉</span>
+      <span class="petal-label">His Note</span>
+      <p class="petal-caption">"I think I already know who you are."</p>
+    </div>
+
+    <!-- PROSE 6 -->
+    <div class="prose" id="novel-content-6">
+      <p><span class="emphasis">Nao's heart stilled.</span></p>
+
+      <p>She looked around.</p>
+
+      <p><span class="thought">No one.</span></p>
+
+      <p><span class="thought">Not yet.</span></p>
+
+      <p>
+        She sat slowly.
+        <span class="thought">Her thoughts loud. Her hands trembling slightly</span>
+        as she pulled out her pen.
+      </p>
+    </div>
+
+    <!-- LETTER FROM NAO — CH8 -->
+    <div class="letter-block from-nao">
+      <span class="letter-label">✉ Letter from Nao</span>
+      <p class="letter-text">
+        Then say it.<br /><br />
+        Not in a letter.<br />
+        Just… say it.<br /><br />
+        I'll be here.<br />
+        Tomorrow.<br />
+        4 PM.<br /><br />
+        No more pages.
+      </p>
+      <span class="letter-sig">— Nao</span>
+    </div>
+
+    <!-- PROSE 7 -->
+    <div class="prose" id="novel-content-7">
+      <p>
+        She folded it and tucked it back where it began—in the paperback's
+        center—and closed the floorboard with care.
+      </p>
+
+      <p>
+        As she stood, <span class="petal">the wind picked up again.</span>
+      </p>
+
+      <p><span class="petal">A sakura petal landed in her hair.</span></p>
+
+      <p><span class="thought">She didn't brush it away.</span></p>
+    </div>
+
+    <!-- OBSERVATION BLOCK -->
+    <div class="observation-block">
+      <span class="observation-label">🌸 The Threshold</span>
+      <p class="observation-text">
+        Sometimes, the most honest thing<br />
+        is knowing when words aren't enough.<br /><br />
+        Sometimes, love is simply saying:<br />
+        <em>"I'm ready. Meet me in the real world."</em>
+      </p>
+    </div>
+
+    <!-- CHAPTER END -->
+    <div class="chapter-end">
+      <span class="end-label">End of Chapters 4</span>
+      <div class="end-line">She didn't brush it away.</div>
+      <div class="end-sub">— The Petal That Falls With a Smile, Vol. 2</div>
+      <div class="chapter-nav">
+        <a href="tptfwasv2-3.html" class="nav-btn nav-prev">← Previous Chapters</a>
+        <a href="../index.html" class="nav-btn nav-home">🏠 Home</a>
+        <a href="tptfwasv2-5.html" class="nav-btn nav-next">Next Chapters →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fontSize = 19;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 26) fontSize += 2;
+      else if (action === -1 && fontSize > 14) fontSize -= 2;
+      else if (action === 0) fontSize = 19;
+      var ids = [
+        "novel-content-1",
+        "novel-content-2",
+        "novel-content-3",
+        "novel-content-4",
+        "novel-content-5",
+        "novel-content-6",
+        "novel-content-7",
+      ];
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.style.fontSize = fontSize + "px";
+      });
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+
+    window.onscroll = function () {
+      var scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      var total =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+      var btn = document.getElementById("scrollBtn");
+      if (scrollTop > 300) btn.classList.add("visible");
+      else btn.classList.remove("visible");
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

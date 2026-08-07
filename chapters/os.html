@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Girl Who Was Deleted</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --black: #060608;
+      --teal: #0affe8;
+      --red: #ff2d55;
+      --white: #e8e8f0;
+      --dim: #3a3a4a;
+      --mid: #8888a0;
+      --mono: "Share Tech Mono", monospace;
+      --body: "Inter", sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.08) 2px,
+          rgba(0, 0, 0, 0.08) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* === HERO === */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    #hero canvas {
+      position: absolute;
+      inset: 0;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s ease forwards;
+    }
+
+    h1 {
+      font-family: var(--mono);
+      font-size: clamp(2rem, 6vw, 4.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s ease forwards;
+    }
+
+    h1 .accent {
+      color: var(--teal);
+    }
+
+    h1 .deleted {
+      color: var(--red);
+      position: relative;
+      display: inline-block;
+    }
+
+    .subtitle {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--mid);
+      margin-top: 2.5rem;
+      letter-spacing: 0.12em;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s ease forwards;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--dim);
+      letter-spacing: 0.2em;
+      animation: pulse 2s infinite;
+    }
+
+    /* === STORY SECTION === */
+    #story {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 6rem 2rem 10rem;
+    }
+
+    /* Meta bar */
+    .meta-bar {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--dim);
+      border-left: 2px solid var(--teal);
+      padding-left: 1rem;
+      margin-bottom: 4rem;
+      line-height: 1.9;
+    }
+
+    .meta-bar span {
+      color: var(--teal);
+    }
+
+    /* Prose paragraphs */
+    .beat {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+      margin-bottom: 1.6rem;
+      color: var(--white);
+      font-weight: 300;
+    }
+
+    .beat.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Bold titles from story */
+    .beat strong {
+      font-family: var(--mono);
+      font-weight: 400;
+      color: var(--teal);
+      font-size: 0.85em;
+      letter-spacing: 0.05em;
+    }
+
+    /* System alert blocks */
+    .alert-block {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      border: 1px solid var(--red);
+      color: var(--red);
+      padding: 0.9rem 1.2rem;
+      margin: 2.5rem 0;
+      letter-spacing: 0.08em;
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+      position: relative;
+    }
+
+    .alert-block.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .alert-block::before {
+      content: "⚠";
+      margin-right: 0.6rem;
+      animation: blink 1s step-end infinite;
+    }
+
+    /* Dialogue / terminal style */
+    .dialogue {
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: var(--teal);
+      padding: 1.4rem 1.6rem;
+      border-left: 2px solid var(--teal);
+      background: rgba(10, 255, 232, 0.04);
+      margin: 2rem 0;
+      line-height: 2;
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .dialogue.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .dialogue .speaker {
+      color: var(--mid);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    /* Data block */
+    .data-block {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--dim);
+      padding: 1.2rem 1.4rem;
+      margin: 2.5rem 0;
+      line-height: 2;
+      color: var(--mid);
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .data-block.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .data-block .field {
+      color: var(--white);
+    }
+
+    .data-block .anomaly {
+      color: var(--red);
+      animation: flicker 1.5s infinite;
+    }
+
+    /* Section divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 4rem 0;
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .divider.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .divider span {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--dim);
+      letter-spacing: 0.2em;
+      white-space: nowrap;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--dim);
+    }
+
+    /* Coordinates */
+    .coordinates {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      color: var(--teal);
+      text-align: center;
+      padding: 2rem;
+      letter-spacing: 0.1em;
+      border: 1px solid rgba(10, 255, 232, 0.2);
+      margin: 2.5rem 0;
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+      text-shadow: 0 0 20px rgba(10, 255, 232, 0.5);
+    }
+
+    .coordinates.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Ending reveal */
+    .ending {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity 1s ease,
+        transform 1s ease;
+    }
+
+    .ending.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .ending .star-line {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--mid);
+      letter-spacing: 0.25em;
+      margin-bottom: 2rem;
+    }
+
+    .ending h2 {
+      font-family: var(--mono);
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .ending p {
+      color: var(--mid);
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    .the-end {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      color: var(--dim);
+      text-align: center;
+      margin-top: 6rem;
+      padding-bottom: 4rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s ease forwards;
+    }
+
+    .the-end.visible {
+      opacity: 1;
+    }
+
+    /* Blinking cursor */
+    .cursor {
+      display: inline-block;
+      width: 0.55em;
+      height: 1.1em;
+      background: var(--teal);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+      margin-left: 2px;
+    }
+
+    /* Glitch on title */
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      color: var(--red);
+      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+      animation: glitch-a 3.5s infinite steps(1);
+      opacity: 0;
+    }
+
+    .glitch::after {
+      color: var(--teal);
+      clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+      animation: glitch-b 3.5s infinite steps(1);
+      left: 2px;
+    }
+
+    /* Keyframes */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes flicker {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      92% {
+        opacity: 1;
+      }
+
+      93% {
+        opacity: 0.2;
+      }
+
+      94% {
+        opacity: 1;
+      }
+
+      97% {
+        opacity: 0.4;
+      }
+
+      98% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes glitch-a {
+
+      0%,
+      90%,
+      100% {
+        opacity: 0;
+      }
+
+      91% {
+        opacity: 0.7;
+        transform: translate(-3px, 0);
+      }
+
+      93% {
+        opacity: 0.7;
+        transform: translate(3px, 0);
+      }
+
+      95% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes glitch-b {
+
+      0%,
+      88%,
+      100% {
+        opacity: 0;
+      }
+
+      89% {
+        opacity: 0.6;
+        transform: translate(3px, 0);
+      }
+
+      92% {
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #story {
+        padding: 4rem 1.4rem 8rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      .beat,
+      .dialogue,
+      .data-block,
+      .alert-block,
+      .divider,
+      .coordinates,
+      .ending {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span>Library</span></a>
+  <!-- HERO -->
+  <section id="hero">
+    <canvas id="starfield"></canvas>
+    <div class="eyebrow">Archive Corp — Restricted File Access</div>
+    <h1>
+      The <span class="accent">Girl</span> Who Was<br />
+      <span class="deleted glitch" data-text="Deleted">Deleted</span>
+    </h1>
+    <div class="subtitle">
+      Subject: Unknown &nbsp;/&nbsp; Status: Deceased &nbsp;/&nbsp; Last
+      Login: <span style="color: var(--red)">5 Minutes Ago</span>
+    </div>
+    <div class="scroll-cue">▼ &nbsp; ACCESS FILE &nbsp; ▼</div>
+  </section>
+
+  <!-- STORY -->
+  <main id="story">
+    <div class="meta-bar beat">
+      <span>FILE_ID:</span> ARC-∅∅∅-UNKNOWN<br />
+      <span>OPERATOR:</span> Kaito — Night Shift, 02:47<br />
+      <span>CLEARANCE:</span> Maintenance Level 3<br />
+      <span>WARNING:</span> Anomalous activity detected
+    </div>
+
+    <p class="beat">The cursor blinked.</p>
+    <p class="beat">That was the only thing moving in the dark office.</p>
+    <p class="beat">
+      Kaito rubbed his tired eyes and glanced at the clock. 02:47 AM. Another
+      night shift. Another pile of dead people's memories to clean.
+    </p>
+    <p class="beat">
+      He worked for Archive Corp, the company responsible for storing human
+      consciousness after death. Every thought, memory, and emotion was
+      preserved in a digital archive. Families could visit loved ones whenever
+      they wanted. At least that was what the advertisements claimed.
+    </p>
+    <p class="beat">
+      Kaito's job was less glamorous. He deleted corrupted files. Memories
+      that glitched. Archives that broke. Ghosts made of damaged data.
+    </p>
+
+    <div class="divider beat"><span>FILE OPENED</span></div>
+
+    <div class="data-block beat">
+      <div><span class="field">Subject:</span> Unknown</div>
+      <div><span class="field">Status:</span> Deceased</div>
+      <div><span class="field">Date of Death:</span> 10 Years Ago</div>
+      <div>
+        <span class="field">Last Login:</span>
+        <span class="anomaly">5 Minutes Ago ⚡</span>
+      </div>
+    </div>
+
+    <p class="beat">
+      Kaito froze. That wasn't possible. Dead archives couldn't log in. He
+      checked the data again. Same result. Five minutes ago. A chill crawled
+      up his spine.
+    </p>
+    <p class="beat">
+      He opened the file. The screen flashed white. Then a room appeared. A
+      small bedroom. A girl sat on the floor. She looked around seventeen.
+      Long black hair. Gray hoodie. Fear in her eyes.
+    </p>
+    <p class="beat">The moment she saw Kaito, she stood up.</p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Unknown Subject</span>
+      "Finally."
+    </div>
+
+    <p class="beat">
+      Kaito nearly fell out of his chair. Archives never reacted to visitors.
+      They repeated stored memories. Nothing more. Yet this girl stared
+      directly at him.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Unknown Subject</span>
+      "You can hear me, right?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "...What are you?"
+    </div>
+
+    <p class="beat">The girl's expression tightened.</p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Unknown Subject</span>
+      "You don't have much time."
+    </div>
+
+    <p class="beat">
+      Every monitor in the office flickered. The room's lights dimmed. The
+      archive system emitted a warning tone.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "Who are you?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Unknown Subject</span>
+      "My name is Aira."<br /><br />
+      She took a shaky breath.<br /><br />
+      "And if you're seeing this, then they've finally found me."
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "Who?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "The people deleting history."
+    </div>
+
+    <p class="beat">Kaito laughed nervously. "Okay, that's not funny."</p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "I'm serious."<br /><br />
+      She stepped closer.<br /><br />
+      "I'm not a memory."
+    </div>
+
+    <p class="beat">The words hit him like a truck.</p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "I'm alive."
+    </div>
+
+    <p class="beat">
+      Kaito stared. Impossible. The file clearly listed her as deceased.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "Ten years ago, I discovered something hidden inside the archive
+      network."
+    </div>
+
+    <p class="beat">The lights flickered again. This time harder.</p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "The world isn't what you think it is."
+    </div>
+
+    <p class="beat">
+      Every instinct screamed at Kaito to close the file. Yet curiosity held
+      him hostage.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "What did you find?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "The world is a simulation."
+    </div>
+
+    <div class="divider beat"><span>SYSTEM INTERRUPT</span></div>
+
+    <p class="beat">
+      The office suddenly lost power. Darkness swallowed everything. Every
+      monitor turned black. Then one screen reignited. A single message
+      appeared.
+    </p>
+
+    <div class="alert-block beat">UNAUTHORIZED ACCESS DETECTED</div>
+
+    <p class="beat">
+      Kaito's heartbeat accelerated. Aira's image distorted. Pixels broke
+      apart.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "No... They found us."
+    </div>
+
+    <p class="beat">
+      The archive tried to shut itself down. Kaito slammed commands into his
+      keyboard. The system resisted. Files disappeared. Records vanished.
+      Entire archives were being erased in real time. Millions of lives. Gone.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "What is happening?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "Every person who discovers the truth gets deleted."
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "Deleted?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "Not killed."<br /><br />
+      She shook her head.<br /><br />
+      "Worse."<br /><br />
+      She pointed toward the endless sea of digital files.<br /><br />
+      "They erase every record that you ever existed."
+    </div>
+
+    <p class="beat">
+      Kaito opened a search window. He typed random names. Thousands returned
+      errors. Empty spaces. Missing data. People who had vanished completely.
+      As if they had never lived. His stomach twisted. Aira was right. Someone
+      was cleaning history. And they were doing it on a massive scale.
+    </p>
+
+    <p class="beat">
+      Suddenly the walls of the archive began cracking. The virtual room
+      collapsed around her. Chunks of reality disappeared. Aira backed away.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "Kaito. If I disappear, find the coordinates."
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "What coordinates?"
+    </div>
+
+    <p class="beat">She quickly typed numbers onto the screen.</p>
+
+    <div class="alert-block beat">PURGE INITIATED</div>
+
+    <div class="coordinates beat">
+      37.2691° N &nbsp; / &nbsp; 114.0579° W<br />
+      <span style="
+            font-size: 0.65rem;
+            color: var(--mid);
+            display: block;
+            margin-top: 0.5rem;
+            letter-spacing: 0.2em;
+          ">PROMISE ME</span>
+      <span class="cursor"></span>
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "They're coming."<br /><br />
+      She smiled sadly.<br /><br />
+      "For once..."<br /><br />
+      Her voice broke.<br /><br />
+      "...look beyond the sky."
+    </div>
+
+    <p class="beat">
+      Then she vanished. The archive closed. Silence returned. Kaito sat
+      frozen. The coordinates remained. Nothing else.
+    </p>
+
+    <div class="divider beat"><span>72 HOURS LATER</span></div>
+
+    <p class="beat">
+      For three days he searched. No sleep. No rest. No answers. Eventually
+      the coordinates led him to an abandoned research facility buried beneath
+      a desert. It looked centuries old. Rust covered every wall. Dust filled
+      the air.
+    </p>
+    <p class="beat">
+      At the center of the facility stood a single metal door. Locked. Beside
+      it was a scanner. Kaito entered the coordinates. The door opened.
+    </p>
+    <p class="beat">
+      Inside was a cryogenic chamber. One pod remained active. A girl slept
+      inside. Long black hair. Gray hoodie.
+    </p>
+    <p class="beat">Aira.</p>
+    <p class="beat">Alive.</p>
+    <p class="beat">
+      His breath caught. The pod hissed open. Aira slowly opened her eyes. For
+      several seconds neither spoke. Then she smiled.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "You actually came."
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "I still don't know if you're insane."
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "Maybe."<br /><br />
+      She climbed out.<br /><br />
+      "But we're running out of time."
+    </div>
+
+    <p class="beat">
+      The facility shook violently. Alarms echoed everywhere. Red lights
+      flooded the room. Aira grabbed his hand. "Follow me." They ran through
+      collapsing hallways. Machines exploded. Steel doors ripped apart.
+      Finally they reached a massive elevator. The doors opened. Aira stepped
+      inside. Kaito followed.
+    </p>
+
+    <div class="divider beat"><span>ASCENDING</span></div>
+
+    <p class="beat">
+      The elevator rose. Higher. Higher. Higher. Until suddenly — the ceiling
+      above them disappeared. The world shattered. The sky cracked like glass.
+      Light exploded in every direction. Reality itself broke apart.
+    </p>
+    <p class="beat">
+      Kaito shielded his eyes. When the light faded — he froze.
+    </p>
+    <p class="beat">
+      There was no Earth. No cities. No oceans. No sky. Only darkness. Stars
+      stretched endlessly beyond giant windows. They stood aboard a colossal
+      spacecraft drifting through space. Ancient. Silent. Dying.
+    </p>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "The simulation was created after Earth died."
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Kaito</span>
+      "Died?"
+    </div>
+
+    <div class="dialogue beat">
+      <span class="speaker">Aira</span>
+      "Centuries ago. Humanity couldn't survive."<br /><br />
+      She looked toward countless cryogenic pods filling the ship. Millions of
+      sleeping people. Entire civilizations dreaming.<br /><br />
+      "The simulation became humanity's last home."
+    </div>
+
+    <p class="beat">
+      Kaito stared at the endless stars. All his life. Everything he knew.
+      Every memory. Every city. Every person. A dream. A beautiful lie. Yet
+      for the first time, the stars above him were real. No code. No
+      simulation. No illusion. Just reality.
+    </p>
+
+    <p class="beat">
+      Aira stood beside him. Together they watched the universe. And for the
+      first time in his life — Kaito looked at a real sky.
+    </p>
+
+    <div class="ending beat">
+      <div class="star-line">— END OF FILE —</div>
+      <h2>The Girl Who Was Deleted</h2>
+      <p>Some truths are worth being erased for.</p>
+    </div>
+
+    <div class="the-end" id="the-end">
+      THE &nbsp; END<span class="cursor" style="margin-left: 6px"></span>
+    </div>
+  </main>
+
+  <script>
+    // --- Starfield canvas ---
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initStars(n) {
+      stars = Array.from({ length: n }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2 + 0.2,
+        speed: Math.random() * 0.15 + 0.05,
+        opacity: Math.random(),
+      }));
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach((s) => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(10,255,232,${s.opacity * 0.6})`;
+        ctx.fill();
+        s.opacity += (Math.random() - 0.5) * 0.04;
+        s.opacity = Math.max(0.05, Math.min(1, s.opacity));
+      });
+      requestAnimationFrame(drawStars);
+    }
+
+    resizeCanvas();
+    initStars(160);
+    drawStars();
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      initStars(160);
+    });
+
+    // --- Scroll reveal ---
+    const revealEls = document.querySelectorAll(
+      ".beat, .dialogue, .data-block, .alert-block, .divider, .coordinates, .ending",
+    );
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    revealEls.forEach((el) => observer.observe(el));
+
+    // The End fade-in when at bottom
+    const endObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) e.target.style.opacity = 1;
+        });
+      },
+      { threshold: 0.5 },
+    );
+    endObserver.observe(document.getElementById("the-end"));
+  </script>
+</body>
+
+</html>

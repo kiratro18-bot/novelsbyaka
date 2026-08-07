@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Hours I Sold</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=Caveat:wght@400;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0d1117;
+      --parch: #eae6de;
+      --gold: #c9a84c;
+      --sage: #7a8c7e;
+      --ash: #3a3f4a;
+      --ink: #1e2229;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--navy);
+      color: var(--parch);
+      font-family: "Lora", Georgia, serif;
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      line-height: 1.85;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 60%,
+          rgba(201, 168, 76, 0.07) 0%,
+          transparent 70%),
+        radial-gradient(ellipse 40% 30% at 80% 20%,
+          rgba(122, 140, 126, 0.05) 0%,
+          transparent 60%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      font-family: "Lora", serif;
+      font-style: italic;
+      font-size: 0.8rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0.85;
+    }
+
+    h1 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(2.8rem, 8vw, 6rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--parch);
+      max-width: 14ch;
+      margin-bottom: 2.5rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .header-rule {
+      width: 3rem;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 2.5rem;
+      opacity: 0.7;
+    }
+
+    .header-sub {
+      font-family: "Lora", serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--sage);
+      letter-spacing: 0.05em;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--ash);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: pulse-down 2s ease-in-out infinite;
+    }
+
+    .scroll-hint svg {
+      opacity: 0.5;
+    }
+
+    @keyframes pulse-down {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(6px);
+        opacity: 1;
+      }
+    }
+
+    /* ── MAIN PROSE ── */
+    main {
+      max-width: 65ch;
+      margin: 0 auto;
+      padding: 5rem 2rem 8rem;
+    }
+
+    .prose-block {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+    }
+
+    .prose-block.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: var(--parch);
+    }
+
+    /* ── SECTION DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3.5rem 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right,
+          transparent,
+          var(--gold),
+          transparent);
+      opacity: 0.35;
+    }
+
+    .divider-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+
+    /* ── ITALICISED OPENER LINE ── */
+    .chapter-opening {
+      font-style: italic;
+      font-size: 1.25em;
+      color: var(--gold);
+      font-family: "Playfair Display", serif;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    /* ── GOAL LIST ── */
+    .goal-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(14ch, 1fr));
+      gap: 0.6rem 1.5rem;
+    }
+
+    .goal-list li {
+      font-style: italic;
+      color: var(--sage);
+      font-size: 0.95em;
+      padding-left: 1rem;
+      border-left: 2px solid var(--ash);
+      line-height: 1.5;
+    }
+
+    /* ── LETTER CARD ── */
+    .letter-card {
+      background: #1a1f26;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      border-radius: 2px;
+      padding: 2.5rem 2.5rem 2rem;
+      margin: 3rem 0;
+      position: relative;
+      box-shadow:
+        0 2px 0 rgba(201, 168, 76, 0.08),
+        0 0 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .letter-card::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      left: 2rem;
+      right: 2rem;
+      height: 2px;
+      background: linear-gradient(to right,
+          transparent,
+          var(--gold),
+          transparent);
+      opacity: 0.5;
+    }
+
+    .letter-label {
+      font-family: "Lora", serif;
+      font-style: italic;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.7;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .letter-card p {
+      font-family: "Caveat", cursive;
+      font-size: 1.3rem;
+      line-height: 1.7;
+      color: #cdc9bf;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── REGRET SECTION ── */
+    .regret-lines {
+      border-left: 2px solid rgba(201, 168, 76, 0.3);
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .regret-lines p {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    /* ── CLOSING / END ── */
+    .closing-statement {
+      text-align: center;
+      padding: 3rem 0 1rem;
+    }
+
+    .closing-statement p {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--parch);
+      line-height: 1.6;
+      max-width: 36ch;
+      margin: 0 auto 1rem;
+    }
+
+    .closing-statement .but-you-can {
+      color: var(--gold);
+      font-weight: 700;
+      font-style: normal;
+      font-size: 1.5rem;
+    }
+
+    .the-end {
+      font-family: "Lora", serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--ash);
+      margin-top: 3rem;
+      display: block;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--ash);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: clamp(2.2rem, 12vw, 3.5rem);
+      }
+
+      main {
+        padding: 3rem 1.5rem 5rem;
+      }
+
+      .letter-card {
+        padding: 1.8rem 1.5rem;
+      }
+
+      .goal-list {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .prose-block {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .scroll-hint {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="../index.html" class="back-link"><span class="back-arrow">←</span><span>Library</span></a>
+  <!-- ══ HEADER ══ -->
+  <header>
+    <span class="eyebrow">A One Shot</span>
+    <h1>The Hours I <em>Sold</em></h1>
+    <div class="header-rule"></div>
+    <p class="header-sub">Nobody ruins their life in a single day.</p>
+
+    <div class="scroll-hint">
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 1v14M1 9l6 6 6-6" stroke="#7A8C7E" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </div>
+  </header>
+
+  <!-- ══ MAIN ══ -->
+  <main>
+    <!-- Block 1 -->
+    <div class="prose-block">
+      <p>Nobody ruins their life in a single day.</p>
+      <p>That's the lie people tell themselves.</p>
+      <p>
+        They imagine failure as something dramatic. A car crash. A failed
+        exam. A public humiliation. Something loud. Something obvious.
+      </p>
+      <p>But some disasters arrive quietly.</p>
+      <p>
+        They knock on your door every night and ask for just one more hour.
+      </p>
+      <p>And you let them in. Again. And again. And again.</p>
+      <p>By the time you realize what happened, years are gone.</p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block 2 -->
+    <div class="prose-block">
+      <p>At sixteen, I thought I had unlimited time.</p>
+      <p>Everyone does. That's the privilege of being young.</p>
+      <p>
+        You think tomorrow is guaranteed. You think you'll start next week.
+        Next month. Next year. You think you'll become the person you're
+        supposed to be eventually.
+      </p>
+      <p>I believed that too.</p>
+      <p>
+        Every night I made promises. Tomorrow I'll study harder. Tomorrow I'll
+        start exercising. Tomorrow I'll finish that novel. Tomorrow I'll learn
+        guitar. Tomorrow I'll talk to her.
+      </p>
+      <p>Tomorrow. Tomorrow. Tomorrow.</p>
+      <p>The word became my favorite hiding place.</p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block 3 — Yuna -->
+    <div class="prose-block">
+      <p>There was a girl in my class. Her name was Yuna.</p>
+      <p>
+        She sat near the window. Whenever sunlight entered the room, it always
+        seemed to find her first.
+      </p>
+      <p>
+        She laughed loudly. Talked too much. Doodled stars in her notebooks.
+        The kind of person everyone remembered. The kind of person someone
+        like me only watched from a distance.
+      </p>
+      <p>
+        I liked her for three years. Three years. And I never said a word.
+      </p>
+      <p>
+        Not because she was out of my league. Not because she would reject me.
+        Because I kept waiting for the perfect version of myself. The
+        confident version. The successful version. The version that didn't
+        exist.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block 4 -->
+    <div class="prose-block">
+      <p>School ended. Life moved on.</p>
+      <p>
+        I told myself there would be another chance. There always is, right?
+        That's what people say.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block 5 — the photo -->
+    <div class="prose-block">
+      <p>One evening, years later, I saw a photo online.</p>
+      <p>
+        Yuna. Graduation cap. Bright smile. A guy standing beside her. His arm
+        wrapped around her shoulder. The caption was simple.
+      </p>
+      <p><em>"Couldn't have done it without you ❤️"</em></p>
+      <p>I stared at the photo for a long time. Longer than I should have.</p>
+      <p>
+        Not because she chose someone else. She never rejected me. The truth
+        hurt more.
+      </p>
+      <p>She never got the chance. Because I never tried.</p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block 6 — the notebook -->
+    <div class="prose-block">
+      <p>
+        That night I couldn't sleep. I opened my desk drawer looking for a
+        distraction.
+      </p>
+      <p>
+        Instead, I found an old notebook. My handwriting covered the first
+        page.
+      </p>
+      <p>A list. <em>"Things I want to do before I'm eighteen."</em></p>
+      <p>There were twenty-three goals. Twenty-three. I completed four.</p>
+      <p>
+        I sat on the floor holding that notebook while the room grew dark
+        around me.
+      </p>
+    </div>
+
+    <!-- Goal list -->
+    <div class="prose-block">
+      <ul class="goal-list">
+        <li>Learn guitar</li>
+        <li>Write a novel</li>
+        <li>Get stronger</li>
+        <li>Make new friends</li>
+        <li>Travel</li>
+        <li>Start a business</li>
+        <li>Learn another language</li>
+        <li>Talk to Yuna</li>
+      </ul>
+      <p>
+        Each goal felt like a ghost. A version of me that could have existed.
+        A future I abandoned one small decision at a time.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- The letter -->
+    <div class="prose-block">
+      <p>
+        Then something fell from the notebook. A folded piece of paper. I
+        opened it.
+      </p>
+      <p>Inside was a letter. Written by thirteen-year-old me.</p>
+
+      <div class="letter-card">
+        <span class="letter-label">A letter to the future</span>
+        <p>"Hey future me."</p>
+        <p>"You're probably awesome now."</p>
+        <p>"I bet you've done a lot of cool stuff."</p>
+        <p>"Did we become a writer?"</p>
+        <p>"Did we get fit?"</p>
+        <p>"Did we travel?"</p>
+        <p>"Did we finally get brave enough to talk to the girl we like?"</p>
+        <p>"Anyway, don't give up."</p>
+        <p>"I'm counting on you."</p>
+      </div>
+
+      <p>I read it three times. Then a fourth. Then a fifth.</p>
+      <p>
+        Because I couldn't accept it. That kid trusted me. He believed in me.
+        He thought I was going to become someone.
+      </p>
+      <p>
+        And I failed him. Not all at once. A little every day. One excuse at a
+        time. One wasted evening at a time. One tomorrow at a time.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — the real problem -->
+    <div class="prose-block">
+      <p>
+        For years I blamed temptation. Lust. Comfort. Distractions. Anything
+        but myself.
+      </p>
+      <p>But sitting there in the dark, I finally understood something.</p>
+      <p>
+        Those weren't the real problem. The real problem was that I kept
+        running. Whenever life became difficult, I escaped. Whenever I felt
+        lonely, I escaped. Whenever I felt afraid, I escaped.
+      </p>
+      <p>I wasn't chasing pleasure. I was avoiding reality.</p>
+      <p>
+        And reality kept waiting for me outside my door. Growing larger every
+        year.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — the father -->
+    <div class="prose-block">
+      <p>
+        A week later I visited my parents. My father was cleaning the garage.
+        He looked older than I remembered. I helped him move boxes in silence.
+      </p>
+      <p>After a while he asked, "So."</p>
+      <p>I looked up. "So what?"</p>
+      <p>He smiled. "What do you want to do with your life?"</p>
+      <p>
+        The question should have been easy. I couldn't answer. Not
+        immediately. Not honestly.
+      </p>
+      <p>
+        For a moment he studied me. Then nodded. Not angry. Not disappointed.
+        Just tired.
+      </p>
+      <p><em>"You still have time, you know."</em></p>
+      <p>
+        That sentence followed me home. Because it wasn't criticism. It was
+        mercy. And somehow mercy hurts more.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — mirror -->
+    <div class="prose-block">
+      <p>
+        That night I stood in front of the mirror. Really looked at myself.
+        Not the face. Not the body. The person. The choices. The years. The
+        excuses. Everything.
+      </p>
+      <p>And for the first time, I stopped asking:</p>
+      <p><em>"Why am I like this?"</em></p>
+      <p>Instead I asked:</p>
+      <p><em>"How many years am I willing to lose before I change?"</em></p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — the morning -->
+    <div class="prose-block">
+      <p>
+        The next morning wasn't magical. There was no dramatic transformation.
+        No motivational soundtrack. No sudden confidence. I was still me.
+      </p>
+      <p>
+        But I made my bed. Went for a walk. Read ten pages of a book. Wrote a
+        single paragraph.
+      </p>
+      <p>Small things. Pathetic things. Things nobody would celebrate.</p>
+      <p>
+        But they were real. And reality, I learned, is built from small
+        things.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — months passed -->
+    <div class="prose-block">
+      <p>
+        Months passed. Then a year. Then two. Slowly the fog lifted. Not
+        completely. Maybe it never does. But enough.
+      </p>
+      <p>
+        One evening I found that notebook again. The same one. The same list.
+        The same dreams. This time there were check marks beside many of them.
+        Not all. But enough to make thirteen-year-old me smile. I think.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — Yuna again -->
+    <div class="prose-block">
+      <p>
+        Sometimes I still think about Yuna. Not because I love her. Not
+        anymore. I think about what she represents. The chance I never took.
+        The story I never started. The life I never attempted.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Block — regret -->
+    <div class="prose-block">
+      <p>People think regret comes from failure. They're wrong.</p>
+      <p>Failure teaches. Failure hurts. Failure ends.</p>
+
+      <div class="regret-lines">
+        <p>
+          Regret is different. Regret stays. It sits beside you at night and
+          whispers:
+        </p>
+        <p>
+          "What if?" "What if you had tried?" "What if you had started
+          sooner?" "What if?"
+        </p>
+      </div>
+
+      <p>I still hear those questions. Maybe I always will.</p>
+      <p>But now they don't make me stop. They make me move.</p>
+      <p>
+        Because I finally learned something that took me years to understand.
+      </p>
+      <p>
+        You cannot get back the hours you've sold. You cannot rewrite
+        yesterday. You cannot become the person you could have been.
+      </p>
+    </div>
+
+    <div class="divider">
+      <div class="divider-dot"></div>
+    </div>
+
+    <!-- Closing -->
+    <div class="prose-block closing-statement">
+      <p>But you can still become someone.</p>
+      <p class="but-you-can">And sometimes... that's enough.</p>
+      <span class="the-end">— The End —</span>
+    </div>
+  </main>
+
+  <footer>&ldquo;The Hours I Sold&rdquo;</footer>
+
+  <script>
+    // Intersection Observer for fade-in
+    const blocks = document.querySelectorAll(".prose-block");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    blocks.forEach((b) => observer.observe(b));
+  </script>
+</body>
+
+</html>

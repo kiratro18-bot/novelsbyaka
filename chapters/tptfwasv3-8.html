@@ -1,0 +1,1633 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>The Petal That Falls With a Smile Vol. 3 - Chapters 12 & 13</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        :root {
+            --bg: #f5f3ef;
+            --surface: #ffffff;
+            --ink: #1a1a1a;
+            --ink-soft: #444;
+            --ink-muted: #888;
+            --accent: #7a6c8a;
+            --accent-light: rgba(122, 108, 138, 0.07);
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.14);
+            --petal: #c9a0b8;
+            --petal-light: rgba(201, 160, 184, 0.09);
+            --sage: #7a8c75;
+            --sage-light: rgba(122, 140, 117, 0.09);
+            --rain: #7fa3b8;
+            --rain-light: rgba(127, 163, 184, 0.09);
+        }
+
+        body.dark {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --ink: #e6edf3;
+            --ink-soft: #b0bec5;
+            --ink-muted: #6a7f99;
+            --accent: #c9a0b8;
+            --accent-light: rgba(201, 160, 184, 0.08);
+            --border: rgba(255, 255, 255, 0.07);
+            --border-strong: rgba(255, 255, 255, 0.12);
+            --petal: #d4a8c4;
+            --petal-light: rgba(212, 168, 196, 0.08);
+            --sage: #8fa889;
+            --sage-light: rgba(143, 168, 137, 0.08);
+            --rain: #8db8cc;
+            --rain-light: rgba(141, 184, 204, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            transition:
+                background-color 0.3s ease,
+                color 0.3s ease;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 999;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--ink-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-strong);
+            background: var(--bg);
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            color: var(--ink);
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .novel-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border-strong);
+            background: var(--bg);
+            color: var(--ink);
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .font-pill {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: var(--bg);
+            border: 1px solid var(--border-strong);
+            border-radius: 20px;
+            padding: 4px 8px;
+        }
+
+        .font-pill span {
+            font-size: 11px;
+            color: var(--ink-muted);
+            padding: 0 6px;
+            letter-spacing: 1px;
+        }
+
+        .font-pill button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: "DM Sans", sans-serif;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .font-pill button:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .reading-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 998;
+        }
+
+        .reading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--rain));
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 96px 24px 120px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .series-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 5px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(122, 108, 138, 0.18);
+            margin-bottom: 20px;
+        }
+
+        body.dark .series-badge {
+            border-color: rgba(201, 160, 184, 0.2);
+        }
+
+        .chapter-icon {
+            font-size: 16px;
+            animation: petalFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes petalFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            33% {
+                transform: translateY(-4px) rotate(-5deg);
+            }
+
+            66% {
+                transform: translateY(-2px) rotate(4deg);
+            }
+        }
+
+        .chapter-title {
+            font-family: "Crimson Pro", serif;
+            font-size: clamp(30px, 6vw, 50px);
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--ink);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .chapter-subtitle {
+            font-family: "Crimson Pro", serif;
+            font-size: 20px;
+            font-style: italic;
+            color: var(--ink-muted);
+            margin-bottom: 20px;
+        }
+
+        .chapter-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            font-size: 11px;
+            color: var(--ink-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .meta-dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--ink-muted);
+        }
+
+        .chapter-divider {
+            text-align: center;
+            margin: 56px 0 48px;
+            padding: 32px;
+            position: relative;
+        }
+
+        .chapter-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .chapter-divider-inner {
+            position: relative;
+            display: inline-block;
+            background: var(--bg);
+            padding: 0 24px;
+        }
+
+        .chapter-divider-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 6px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(122, 108, 138, 0.18);
+        }
+
+        body.dark .chapter-divider-badge {
+            border-color: rgba(201, 160, 184, 0.2);
+        }
+
+        .chapter-divider-title {
+            font-family: "Crimson Pro", serif;
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-top: 14px;
+            letter-spacing: -0.5px;
+        }
+
+        .chapter-divider-sub {
+            font-family: "Crimson Pro", serif;
+            font-size: 17px;
+            font-style: italic;
+            color: var(--ink-muted);
+            margin-top: 4px;
+        }
+
+        .big-chapter-break {
+            margin: 72px 0;
+            padding: 40px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .big-chapter-break::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center,
+                    var(--petal-light) 0%,
+                    transparent 70%);
+            pointer-events: none;
+        }
+
+        .bcb-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .bcb-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 14px;
+            animation: petalFloat 4s ease-in-out infinite;
+        }
+
+        .bcb-title {
+            font-family: "Crimson Pro", serif;
+            font-size: clamp(26px, 5vw, 38px);
+            font-weight: 600;
+            color: var(--ink);
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .bcb-sub {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-muted);
+        }
+
+        .prose {
+            font-family: "Crimson Pro", serif;
+            font-size: 19px;
+            line-height: 1.9;
+            color: var(--ink-soft);
+        }
+
+        .prose p {
+            margin-bottom: 1.6em;
+        }
+
+        .prose .dialogue {
+            font-style: italic;
+            color: var(--ink);
+        }
+
+        .prose .thought {
+            color: var(--ink-muted);
+            font-style: italic;
+        }
+
+        .prose .emphasis {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .prose .petal {
+            color: var(--petal);
+            font-weight: 600;
+        }
+
+        .prose .rain-accent {
+            color: var(--rain);
+            font-style: italic;
+        }
+
+        .memory-block {
+            margin: 40px 0;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--rain);
+            border-radius: 0 16px 16px 0;
+        }
+
+        .memory-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--rain);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .memory-text {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.85;
+        }
+
+        .rain-block {
+            margin: 40px auto;
+            padding: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rain-block::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top,
+                    var(--rain-light) 0%,
+                    transparent 70%);
+            pointer-events: none;
+        }
+
+        .rain-visual {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 14px;
+            animation: petalFloat 4s ease-in-out infinite;
+        }
+
+        .rain-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .rain-caption {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.65;
+        }
+
+        .moment-block {
+            margin: 40px auto;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .moment-icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: var(--accent-light);
+            border: 1px solid rgba(122, 108, 138, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        body.dark .moment-icon {
+            border-color: rgba(201, 160, 184, 0.2);
+        }
+
+        .moment-meta {
+            flex: 1;
+        }
+
+        .moment-title {
+            font-family: "Crimson Pro", serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ink);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .moment-sub {
+            font-size: 11px;
+            color: var(--ink-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .observation-block {
+            margin: 40px 0;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--petal);
+            border-radius: 0 16px 16px 0;
+        }
+
+        .observation-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--petal);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .observation-text {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.8;
+        }
+
+        .chapter-end {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .end-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .end-line {
+            font-family: "Crimson Pro", serif;
+            font-size: 24px;
+            font-style: italic;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .end-sub {
+            font-family: "Crimson Pro", serif;
+            font-size: 15px;
+            font-style: italic;
+            color: var(--ink-muted);
+            margin-bottom: 32px;
+        }
+
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: "DM Sans", sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid var(--border-strong);
+            cursor: pointer;
+            background: var(--surface);
+            color: var(--ink);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        #scrollBtn {
+            position: fixed;
+            bottom: 28px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--bg);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: all 0.2s;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #scrollBtn:hover {
+            transform: translateY(-2px);
+        }
+
+        #scrollBtn.visible {
+            display: flex;
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0 12px;
+            }
+
+            .novel-label {
+                display: none;
+            }
+
+            main {
+                padding: 80px 16px 100px;
+            }
+
+            .prose {
+                font-size: 17px;
+            }
+
+            .memory-block,
+            .observation-block {
+                padding: 20px;
+            }
+
+            .rain-block,
+            .moment-block,
+            .big-chapter-break {
+                padding: 20px;
+            }
+
+            .moment-block {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .chapter-divider {
+                padding: 24px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="tptfwasv3.html" class="back-btn">← Chapters</a>
+            <span class="novel-label">The Petal Vol. 3</span>
+        </div>
+        <div class="topbar-right">
+            <div class="font-pill">
+                <button onclick="changeFont(-1)">A−</button>
+                <span>Font</span>
+                <button onclick="changeFont(0)">A</button>
+                <span>·</span>
+                <button onclick="changeFont(1)">A+</button>
+            </div>
+            <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <div class="reading-progress">
+        <div class="reading-progress-bar" id="progressBar"></div>
+    </div>
+
+    <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+    <main>
+        <!-- ═══════════════════════════════════════════════════
+           CHAPTER 12 — UNIVERSITY FESTIVAL: DAY ONE
+      ════════════════════════════════════════════════════ -->
+
+        <div class="chapter-header">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <h1 class="chapter-title">University Festival: Day One</h1>
+            <p class="chapter-subtitle">
+                Things were… fine. At least on the surface.
+            </p>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Noa, Sora, Haruki & Ren</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Backstage</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">By AKA</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Noa -->
+        <div class="prose" id="c12-1">
+            <p>POV: <span class="emphasis">Noa</span></p>
+
+            <p><span class="thought">Things were… fine.</span></p>
+
+            <p><span class="thought">At least on the surface.</span></p>
+
+            <p>
+                The four of us were assigned to the lighting team, running cables,
+                fixing stands, adjusting switches backstage. Busy work. Loud work.
+                Safe work.
+            </p>
+
+            <p>But my eyes kept drifting.</p>
+
+            <p>Haruki was on the other side of the stage.</p>
+
+            <p>Ren was beside me, carrying lights.</p>
+
+            <p>
+                And Sora was gone — sent off with Haruki to buy meals for everyone.
+            </p>
+
+            <p><span class="thought">That bothered me more than I wanted to admit.</span></p>
+
+            <p><span class="thought">I wanted to enjoy the festival with him.</span></p>
+
+            <p><span class="thought">Not watch him walk away with someone else.</span></p>
+
+            <p>I shook my head and focused on the equipment.</p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Sora POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">Alone. With Haruki. Again.</div>
+                <div class="chapter-divider-sub">Why does this keep happening?</div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Sora</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Errand Run</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Sora -->
+        <div class="prose" id="c12-2">
+            <p>POV: <span class="emphasis">Sora</span></p>
+
+            <p><span class="thought">Alone.</span></p>
+
+            <p><span class="thought">With Haruki.</span></p>
+
+            <p><span class="thought">Again.</span></p>
+
+            <p><span class="thought">Why does this keep happening?</span></p>
+
+            <p>
+                <span class="dialogue">"Um… so,"</span> I said, trying to sound
+                normal, <span class="dialogue">"what exactly are we supposed to
+                    get?"</span>
+            </p>
+
+            <p>
+                <span class="dialogue">"Meals,"</span> Haruki replied.
+                <span class="dialogue">"For everyone."</span>
+            </p>
+
+            <p><span class="dialogue">"Oh. Right. I forgot."</span></p>
+
+            <p>Silence crept in.</p>
+
+            <p>My heart started racing for no reason.</p>
+
+            <p>And then—</p>
+
+            <p>I said the thing I shouldn't have.</p>
+
+            <p>
+                <span class="dialogue">"So… Haruki,"</span> I asked carefully,
+                <span class="dialogue">"are you in a relationship with Noa?"</span>
+            </p>
+
+            <p>He stopped walking.</p>
+
+            <p><span class="dialogue">"No,"</span> he said. Plain. Direct.</p>
+
+            <p>My breath caught.</p>
+
+            <p><span class="dialogue">"Oh…"</span></p>
+
+            <p><span class="thought">So he's single.</span></p>
+
+            <p>
+                I didn't say it out loud, but the thought lingered longer than it
+                should have.
+            </p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Haruki POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">Why Is She Asking This?</div>
+                <div class="chapter-divider-sub">
+                    I didn't feel the same pull anymore.
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Haruki</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Distance</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Haruki -->
+        <div class="prose" id="c12-3">
+            <p>POV: <span class="emphasis">Haruki</span></p>
+
+            <p><span class="thought">Why is she asking this?</span></p>
+
+            <p>I didn't look at her.</p>
+
+            <p><span class="thought">What does it matter now?</span></p>
+
+            <p><span class="thought">I didn't feel the same pull anymore.</span></p>
+
+            <p>
+                <span class="thought">Or maybe I was just tired of feeling anything
+                    at all.</span>
+            </p>
+
+            <p><span class="thought">Focus,</span> I told myself.</p>
+
+            <p><span class="thought">Just get the food and go back.</span></p>
+        </div>
+
+        <!-- MOMENT BLOCK — Backstage -->
+        <div class="moment-block">
+            <div class="moment-icon">🎭</div>
+            <div class="moment-meta">
+                <span class="moment-title">University Hall · Backstage</span>
+                <span class="moment-sub">Our two leads are sick.</span>
+            </div>
+        </div>
+
+        <!-- PROSE — The Announcement -->
+        <div class="prose" id="c12-4">
+            <p>
+                The drama team head rushed in, panic written all over his face.
+            </p>
+
+            <p>
+                <span class="dialogue">"Guys, we've got a problem,"</span> he said.
+                <span class="dialogue">"Our two lead actors are sick. They ate
+                    something bad and can't perform."</span>
+            </p>
+
+            <p>Murmurs spread.</p>
+
+            <p>
+                <span class="dialogue">"We just need one boy and one girl,"</span> he
+                added. <span class="dialogue">"Anyone willing to step in?"</span>
+            </p>
+
+            <p>Silence.</p>
+
+            <p>Then—</p>
+
+            <p><span class="dialogue">"I'll do it."</span></p>
+
+            <p><span class="emphasis">Ren</span> stepped forward.</p>
+
+            <p><span class="dialogue">"I'll take the male role."</span></p>
+
+            <p>Everyone turned.</p>
+
+            <p>Before anyone else could speak—</p>
+
+            <p><span class="dialogue">"I'll do it too."</span></p>
+
+            <p><span class="emphasis">Noa.</span></p>
+
+            <p><span class="dialogue">"I'll be the female lead."</span></p>
+
+            <p><span class="thought">Time froze.</span></p>
+
+            <p>Haruki's eyes widened.</p>
+
+            <p>Sora felt her chest tighten.</p>
+
+            <p>
+                <span class="dialogue">"No time to think,"</span> the team head
+                said. <span class="dialogue">"Costumes are ready. The act starts
+                    soon."</span>
+            </p>
+
+            <p>Ren and Noa were already being pulled away.</p>
+
+            <p>Haruki and Sora stood there, stunned.</p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Narrator -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">
+                    Roles None of Them Were Ready to Play
+                </div>
+                <div class="chapter-divider-sub">
+                    The festival lights flickered on.
+                </div>
+            </div>
+        </div>
+
+        <!-- PROSE — Narrator Closes -->
+        <div class="prose" id="c12-5">
+            <p>POV: <span class="emphasis">Narrator</span></p>
+
+            <p>The festival lights flickered on.</p>
+
+            <p>The stage filled with sound.</p>
+
+            <p>And without realizing it—</p>
+
+            <p>
+                The four of them had just been pushed into
+                <span class="emphasis">roles none of them were ready to play.</span>
+            </p>
+        </div>
+
+        <!-- OBSERVATION BLOCK -->
+        <div class="observation-block">
+            <span class="observation-label">🎭 Narrator</span>
+            <p class="observation-text">
+                Two who volunteered.<br />
+                Two who were stunned.<br />
+                None of them were ready.
+            </p>
+        </div>
+
+        <!-- CHAPTER END -->
+        <div class="chapter-end">
+            <span class="end-label">End of Chapter 12</span>
+            <div class="end-line">
+                "Pushed into roles none of them were ready to play."
+            </div>
+            <div class="end-sub">— The Petal That Falls With a Smile, Vol. 3</div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════
+           BIG BREAK BETWEEN CHAPTERS
+      ════════════════════════════════════════════════════ -->
+
+        <div class="big-chapter-break">
+            <span class="bcb-icon">🌸</span>
+            <span class="bcb-label">The Petal That Falls With a Smile · Vol. 3</span>
+            <div class="bcb-title">The Promise Beneath the Tree</div>
+            <div class="bcb-sub">
+                A bare tree. An old promise. A stage that felt too real.
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════
+           CHAPTER 13 — THE PROMISE BENEATH THE TREE
+      ════════════════════════════════════════════════════ -->
+
+        <div class="chapter-header">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <h1 class="chapter-title">The Promise Beneath the Tree</h1>
+            <p class="chapter-subtitle">
+                "If we ever get lost… let's meet here again."
+            </p>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Sora, Haruki, Noa & Ren</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">The Stage Play</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">By AKA</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Curtain Rises / Sora POV -->
+        <div class="prose" id="c13-1">
+            <p>The lights dimmed.</p>
+
+            <p>
+                The chatter of the crowd softened into silence as the curtain rose.
+            </p>
+
+            <p>
+                On stage stood a single tree prop — bare branches stretching
+                upward, simple and quiet.
+            </p>
+
+            <p><span class="thought">Too quiet.</span></p>
+
+            <p>POV: <span class="emphasis">Sora</span></p>
+
+            <p>My breath caught.</p>
+
+            <p><span class="thought">A tree…</span></p>
+
+            <p><span class="thought">Of course it was a tree.</span></p>
+
+            <p>
+                Ren stood on stage, posture straight, eyes focused forward. Beside
+                him was Noa, dressed plainly, her hands folded tightly in front of
+                her.
+            </p>
+
+            <p>They didn't look like actors.</p>
+
+            <p>They looked like people carrying something heavy.</p>
+        </div>
+
+        <!-- MOMENT BLOCK — Scene One -->
+        <div class="moment-block">
+            <div class="moment-icon">🎭</div>
+            <div class="moment-meta">
+                <span class="moment-title">Scene One — The Promise</span>
+                <span class="moment-sub">
+                    "If we ever get lost… let's meet here again."
+                </span>
+            </div>
+        </div>
+
+        <!-- PROSE — Scene One Dialogue -->
+        <div class="prose" id="c13-2">
+            <p>
+                <span class="emphasis">Ren</span>
+                <span class="rain-accent">(as the boy)</span>:
+            </p>
+
+            <p>
+                <span class="dialogue">"If we ever get lost… let's meet here
+                    again."</span>
+            </p>
+
+            <p>His voice was steady, but I heard it — the hesitation underneath.</p>
+
+            <p>
+                <span class="emphasis">Noa</span>
+                <span class="rain-accent">(as the girl)</span>:
+            </p>
+
+            <p><span class="dialogue">"Even if time changes us?"</span></p>
+
+            <p><span class="dialogue">"Yes,"</span> he replied.</p>
+
+            <p><span class="dialogue">"Even then."</span></p>
+
+            <p>My fingers curled into my sleeves.</p>
+
+            <p><span class="thought">That's not just acting…</span></p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Haruki POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">Why Am I Always Watching</div>
+                <div class="chapter-divider-sub">Instead of stepping forward?</div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Haruki</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Watching</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Haruki Watches -->
+        <div class="prose" id="c13-3">
+            <p>POV: <span class="emphasis">Haruki</span></p>
+
+            <p>I didn't mean to focus on Noa.</p>
+
+            <p>But she stood differently up there.</p>
+
+            <p>Confident. Clear. Like she chose to be seen.</p>
+
+            <p>
+                When she spoke, the stage felt smaller — quieter — like the words
+                were meant for someone specific.
+            </p>
+
+            <p>And for a moment, I wondered:</p>
+
+            <p>
+                <span class="thought">Why am I always watching instead of stepping
+                    forward?</span>
+            </p>
+        </div>
+
+        <!-- MOMENT BLOCK — Scene Two -->
+        <div class="moment-block">
+            <div class="moment-icon">🎭</div>
+            <div class="moment-meta">
+                <span class="moment-title">Scene Two — Separation</span>
+                <span class="moment-sub">"I was scared."</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Scene Two Dialogue -->
+        <div class="prose" id="c13-4">
+            <p>The girl on stage looked away.</p>
+
+            <p><span class="emphasis">Noa</span>:</p>
+
+            <p><span class="dialogue">"I'm leaving."</span></p>
+
+            <p>Ren turned sharply.</p>
+
+            <p><span class="emphasis">Ren</span>:</p>
+
+            <p><span class="dialogue">"When?"</span></p>
+
+            <p><span class="dialogue">"…Soon."</span></p>
+
+            <p><span class="dialogue">"Why didn't you tell me earlier?"</span></p>
+
+            <p>She hesitated.</p>
+
+            <p><span class="dialogue">"I was scared."</span></p>
+
+            <p>Those two words cracked something open.</p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Sora POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">This Is What I Did to Him</div>
+                <div class="chapter-divider-sub">Apologies don't rewind time.</div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Sora</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Regret</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Sora's Reaction -->
+        <div class="prose" id="c13-5">
+            <p>POV: <span class="emphasis">Sora</span></p>
+
+            <p>My chest hurt.</p>
+
+            <p><span class="thought">I said those same words.</span></p>
+
+            <p><span class="thought">Scared.</span></p>
+
+            <p><span class="thought">Of distance.</span></p>
+
+            <p><span class="thought">Of pain.</span></p>
+
+            <p><span class="thought">Of choosing.</span></p>
+
+            <p>Ren's voice shook when he spoke again.</p>
+
+            <p>
+                <span class="dialogue">"So you'll just leave… without letting me
+                    decide?"</span>
+            </p>
+
+            <p>I pressed my lips together.</p>
+
+            <p><span class="thought">This is what I did to him.</span></p>
+
+            <p>
+                I finally understood — not in my head, but in my body.
+            </p>
+
+            <p><span class="thought">Apologies don't rewind time.</span></p>
+        </div>
+
+        <!-- MOMENT BLOCK — Scene Three -->
+        <div class="moment-block">
+            <div class="moment-icon">🎭</div>
+            <div class="moment-meta">
+                <span class="moment-title">Scene Three — Reunion</span>
+                <span class="moment-sub">"We're different people now."</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Scene Three Dialogue -->
+        <div class="prose" id="c13-6">
+            <p>The lights shifted.</p>
+
+            <p>Years had passed.</p>
+
+            <p>The tree remained — dull, unblooming.</p>
+
+            <p>Ren stood beneath it again.</p>
+
+            <p>Noa approached slowly.</p>
+
+            <p>They faced each other, close but distant.</p>
+
+            <p><span class="emphasis">Noa</span>:</p>
+
+            <p><span class="dialogue">"You waited."</span></p>
+
+            <p><span class="emphasis">Ren</span>:</p>
+
+            <p><span class="dialogue">"I did."</span></p>
+
+            <p>Silence.</p>
+
+            <p>Then—</p>
+
+            <p><span class="dialogue">"We're different people now,"</span> she said softly.</p>
+
+            <p>Ren nodded.</p>
+
+            <p><span class="dialogue">"…Yeah."</span></p>
+
+            <p>They didn't touch.</p>
+
+            <p>They didn't cry.</p>
+
+            <p>They simply turned away from the tree — in opposite directions.</p>
+
+            <p>The lights went out.</p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Noa POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">Did I Cross a Line?</div>
+                <div class="chapter-divider-sub">
+                    I wasn't acting anymore by the end.
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Noa</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Applause</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Noa's Reaction -->
+        <div class="prose" id="c13-7">
+            <p>POV: <span class="emphasis">Noa</span></p>
+
+            <p>Applause thundered around us.</p>
+
+            <p>But my hands felt cold.</p>
+
+            <p><span class="thought">I wasn't acting anymore by the end.</span></p>
+
+            <p>
+                Those words… they stayed in my mouth longer than they should have.
+            </p>
+
+            <p>I glanced toward Haruki.</p>
+
+            <p>He was clapping.</p>
+
+            <p>But his eyes weren't smiling.</p>
+
+            <p><span class="thought">Did I cross a line?</span></p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Ren POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">Something I'd Been Holding</div>
+                <div class="chapter-divider-sub">Not happy. Just… lighter.</div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Ren</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Release</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Ren's Reaction -->
+        <div class="prose" id="c13-8">
+            <p>POV: <span class="emphasis">Ren</span></p>
+
+            <p>When the curtain fell, my chest felt lighter.</p>
+
+            <p><span class="thought">Not happy.</span></p>
+
+            <p><span class="thought">Just… lighter.</span></p>
+
+            <p>
+                Like I finally said something I'd been holding for years.
+            </p>
+
+            <p>I didn't look for Sora.</p>
+
+            <p>I already knew she was watching.</p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Haruki POV -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">Something Was Changing</div>
+                <div class="chapter-divider-sub">
+                    I wasn't sure I liked how long I'd been standing still.
+                </div>
+            </div>
+        </div>
+
+        <div class="chapter-header" style="
+          margin-top: 0;
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 32px;
+        ">
+            <div class="series-badge">
+                <span class="chapter-icon">🌸</span>
+                The Petal That Falls With a Smile Vol. 3 ·
+            </div>
+            <div class="chapter-meta">
+                <span class="meta-item">POV: Haruki</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Stillness</span>
+            </div>
+        </div>
+
+        <!-- PROSE — Haruki's Reaction -->
+        <div class="prose" id="c13-9">
+            <p>POV: <span class="emphasis">Haruki</span></p>
+
+            <p>Everyone stood, cheering.</p>
+
+            <p>I stayed seated.</p>
+
+            <p>The tree.</p>
+
+            <p>The waiting.</p>
+
+            <p>The girl who left.</p>
+
+            <p>The girl who chose to stay on stage.</p>
+
+            <p><span class="thought">Something was changing.</span></p>
+
+            <p>
+                <span class="thought">And I wasn't sure I liked how long I'd been
+                    standing still.</span>
+            </p>
+        </div>
+
+        <!-- CHAPTER DIVIDER — Narrator -->
+        <div class="chapter-divider">
+            <div class="chapter-divider-inner">
+                <div class="chapter-divider-badge">
+                    <span class="chapter-icon">🌸</span>
+                </div>
+                <div class="chapter-divider-title">
+                    The Real Drama Had Only Just Begun
+                </div>
+                <div class="chapter-divider-sub">
+                    Old promises. New feelings. Buried regrets.
+                </div>
+            </div>
+        </div>
+
+        <!-- PROSE — Narrator Closes -->
+        <div class="prose" id="c13-10">
+            <p>POV: <span class="emphasis">Narrator</span></p>
+
+            <p>That night, the festival lights shone bright.</p>
+
+            <p>But beneath them—</p>
+
+            <p>Old promises resurfaced.</p>
+
+            <p>New feelings crossed lines.</p>
+
+            <p>And regrets, once buried, found their way back into the open.</p>
+
+            <p>The performance had ended.</p>
+
+            <p>
+                But the
+                <span class="emphasis">real drama had only just begun.</span>
+            </p>
+        </div>
+
+        <!-- OBSERVATION BLOCK -->
+        <div class="observation-block">
+            <span class="observation-label">💭 Narrator</span>
+            <p class="observation-text">
+                The performance had ended.<br />
+                But the real drama had only just begun.
+            </p>
+        </div>
+
+        <!-- CHAPTER END -->
+        <div class="chapter-end">
+            <span class="end-label">End of Chapter </span>
+            <div class="end-line">"The real drama had only just begun."</div>
+            <div class="end-sub">— The Petal That Falls With a Smile, Vol. 3</div>
+            <div class="chapter-nav">
+                <a href="tptfwasv3-7.html" class="nav-btn">← Chapter </a>
+                <a href="../index.html" class="nav-btn">🏠 Home</a>
+                <a href="tptfwasv3-9.html" class="nav-disabled">Chapter →</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var fontSize = 19;
+
+        function changeFont(action) {
+            if (action === 1 && fontSize < 26) fontSize += 2;
+            else if (action === -1 && fontSize > 14) fontSize -= 2;
+            else if (action === 0) fontSize = 19;
+            var ids = [
+                "c12-1",
+                "c12-2",
+                "c12-3",
+                "c12-4",
+                "c12-5",
+                "c13-1",
+                "c13-2",
+                "c13-3",
+                "c13-4",
+                "c13-5",
+                "c13-6",
+                "c13-7",
+                "c13-8",
+                "c13-9",
+                "c13-10",
+            ];
+            ids.forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el) el.style.fontSize = fontSize + "px";
+            });
+        }
+
+        function toggleDark() {
+            document.body.classList.toggle("dark");
+            var on = document.body.classList.contains("dark");
+            document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+            localStorage.setItem("darkMode", on ? "on" : "off");
+        }
+
+        window.onscroll = function () {
+            var scrollTop =
+                document.documentElement.scrollTop || document.body.scrollTop;
+            var total =
+                document.documentElement.scrollHeight -
+                document.documentElement.clientHeight;
+            document.getElementById("progressBar").style.width =
+                (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+            var btn = document.getElementById("scrollBtn");
+            if (scrollTop > 300) btn.classList.add("visible");
+            else btn.classList.remove("visible");
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        window.onload = function () {
+            if (localStorage.getItem("darkMode") === "on") {
+                document.body.classList.add("dark");
+                document.getElementById("darkModeBtn").textContent = "☀️";
+            }
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1122 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Case File: You - Chapter 8: The Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #f5f3ef;
+      --surface: #ffffff;
+      --ink: #1a1a1a;
+      --ink-soft: #444;
+      --ink-muted: #888;
+      --accent: #3a3a5c;
+      --accent-light: rgba(58, 58, 92, 0.07);
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.14);
+      --red: #c62828;
+      --red-light: rgba(198, 40, 40, 0.07);
+      --gold: #b8860b;
+      --gold-light: rgba(184, 134, 11, 0.08);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --ink: #e6edf3;
+      --ink-soft: #b0bec5;
+      --ink-muted: #6a7f99;
+      --accent: #8b8bcc;
+      --accent-light: rgba(139, 139, 204, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --red: #ef5350;
+      --red-light: rgba(239, 83, 80, 0.08);
+      --gold: #d4a84c;
+      --gold-light: rgba(212, 168, 76, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      background-color: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    *:focus {
+      outline: none;
+    }
+
+    *:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 58, 92, 0.3);
+    }
+
+    ::selection {
+      background: rgba(58, 58, 92, 0.18);
+      color: var(--ink);
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 999;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .novel-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .font-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      padding: 4px 8px;
+    }
+
+    .font-pill span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .font-pill button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .font-pill button:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .reading-progress {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 998;
+    }
+
+    .reading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--red));
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    .flashback-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+      margin-top: 48px;
+    }
+
+    .flashback-label::before,
+    .flashback-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.3;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 96px 24px 120px;
+    }
+
+    .chapter-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .series-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 5px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(58, 58, 92, 0.18);
+      margin-bottom: 20px;
+    }
+
+    body.dark .series-badge {
+      border-color: rgba(139, 139, 204, 0.2);
+    }
+
+    .chapter-icon {
+      font-size: 16px;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(0.9);
+      }
+    }
+
+    .chapter-title {
+      font-family: "Crimson Pro", serif;
+      font-size: clamp(34px, 7vw, 54px);
+      font-weight: 600;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .chapter-subtitle {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .chapter-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-item {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ink-muted);
+    }
+
+    .prose {
+      font-family: "Crimson Pro", serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--ink-soft);
+    }
+
+    .prose p {
+      margin-bottom: 1.6em;
+    }
+
+    .prose .scene-break {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 14px;
+      letter-spacing: 8px;
+      margin: 2.5em 0;
+    }
+
+    .prose .dialogue {
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .prose .thought {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .prose .emphasis {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .prose .danger {
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    .prose .clue {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .prose .name {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .news-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 0 16px 16px 0;
+      position: relative;
+    }
+
+    .news-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .news-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: blink 1.2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.2;
+      }
+    }
+
+    .news-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .casefile-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .casefile-icon {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--accent-light);
+      border: 1px solid rgba(58, 58, 92, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    body.dark .casefile-icon {
+      border-color: rgba(139, 139, 204, 0.2);
+    }
+
+    .casefile-meta {
+      flex: 1;
+    }
+
+    .casefile-title {
+      font-family: "Crimson Pro", serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--ink);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .casefile-sub {
+      font-size: 11px;
+      color: var(--ink-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .evidence-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 0 16px 16px 0;
+      position: relative;
+    }
+
+    .evidence-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .evidence-item {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .evidence-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .ev-num {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: var(--red);
+      flex-shrink: 0;
+      min-width: 20px;
+    }
+
+    .ev-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .observation-block {
+      margin: 40px auto;
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .observation-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .observation-text {
+      font-family: "Crimson Pro", serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
+
+    .suspect-block {
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .suspect-block::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top,
+          var(--red-light) 0%,
+          transparent 70%);
+      pointer-events: none;
+    }
+
+    .suspect-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .suspect-name {
+      font-family: "Crimson Pro", serif;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .suspect-status {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: var(--red-light);
+      border: 1px solid rgba(198, 40, 40, 0.2);
+      color: var(--red);
+      margin-bottom: 20px;
+    }
+
+    body.dark .suspect-status {
+      border-color: rgba(239, 83, 80, 0.25);
+    }
+
+    .suspect-details {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .suspect-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .sd-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .sd-val {
+      font-family: "Crimson Pro", serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .chapter-end {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .end-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .end-line {
+      font-family: "Crimson Pro", serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .end-sub {
+      font-family: "Crimson Pro", serif;
+      font-size: 15px;
+      font-style: italic;
+      color: var(--ink-muted);
+      margin-bottom: 32px;
+    }
+
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      background: none;
+      color: var(--ink);
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+      transition: all 0.2s;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-2px);
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0 12px;
+      }
+
+      .novel-label {
+        display: none;
+      }
+
+      main {
+        padding: 80px 16px 100px;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .evidence-block,
+      .observation-block,
+      .news-block {
+        padding: 20px;
+      }
+
+      .casefile-block,
+      .suspect-block {
+        padding: 20px;
+      }
+
+      .casefile-block {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .suspect-details {
+        gap: 18px;
+      }
+
+      .chapter-nav {
+        justify-content: center;
+      }
+
+      .nav-btn {
+        padding: 10px 18px;
+        font-size: 12px;
+      }
+
+      .flashback-label {
+        margin-top: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="cfy.html" class="back-btn">← Chapters</a>
+      <span class="novel-label">Case File: You</span>
+    </div>
+    <div class="topbar-right">
+      <div class="font-pill">
+        <button onclick="changeFont(-1)" title="Smaller">A−</button>
+        <span>Font</span>
+        <button onclick="changeFont(0)" title="Reset">A</button>
+        <span>·</span>
+        <button onclick="changeFont(1)" title="Larger">A+</button>
+      </div>
+      <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <main>
+    <!-- CHAPTER HEADER -->
+    <div class="chapter-header">
+      <div class="series-badge">
+        <span class="chapter-icon">🔍</span>
+        Case File: You · Chapter 8
+      </div>
+      <h1 class="chapter-title">The Note</h1>
+      <p class="chapter-subtitle">Isn't it the same date Sengoku died?</p>
+      <div class="chapter-meta">
+        <span class="meta-item">Mystery</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Evidence</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">Dark</span>
+        <span class="meta-dot"></span>
+        <span class="meta-item">By AKA</span>
+      </div>
+    </div>
+
+    <!-- PROSE 1 — At the Apartment -->
+    <div class="prose" id="novel-content">
+      <p><span class="name">Sengoku's Apartment</span> — POV</p>
+
+      <p>
+        <span class="dialogue">"The body — how long has it been here?"</span>
+        <span class="name">Sato</span> asked.
+      </p>
+
+      <p>
+        <span class="dialogue">"Can't say much. Probably a day or two,"</span>
+        the <span class="name">Doctor</span> replied.
+      </p>
+
+      <p>
+        <span class="dialogue">"I see…"</span>
+        <span class="name">Sato</span> said.
+        <span class="dialogue">"Who reported it?"</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"Don't know. They didn't give their name. And there's no neighbor
+          on his floor,"</span>
+        the <span class="name">Officer</span> answered.
+      </p>
+
+      <p>
+        <span class="dialogue">"Interesting,"</span>
+        <span class="name">Sato</span> said.
+      </p>
+
+      <p>
+        <span class="dialogue">"Doctor, how long until the post-check report?"</span>
+      </p>
+
+      <p><span class="dialogue">"Till midnight,"</span> the Doctor said.</p>
+
+      <p><span class="dialogue">"Okay."</span></p>
+
+      <p>
+        <span class="dialogue">"Akane, let's search the apartment,"</span>
+        <span class="name">Sato</span> said.
+      </p>
+
+      <p>
+        <span class="dialogue">"Roger!"</span>
+        <span class="name">Akane</span> replied.
+      </p>
+
+      <p>As they both searched the apartment, they found nothing — except…</p>
+
+      <p>
+        <span class="dialogue">"Why isn't this photo frame nailed properly?"</span>
+        <span class="name">Akane</span> muttered.
+      </p>
+
+      <p>As she took the photo frame off the wall, a note dropped out.</p>
+
+      <p><span class="dialogue">"A note?"</span></p>
+
+      <p>She opened it, and—</p>
+    </div>
+
+    <!-- EVIDENCE BLOCK — The Note -->
+    <div class="evidence-block">
+      <span class="evidence-label">📁 Evidence · The Note</span>
+      <div class="evidence-item">
+        <span class="ev-num">—</span>
+        <span class="ev-text">The symbol again. The same.</span>
+      </div>
+      <div class="evidence-item">
+        <span class="ev-num">—</span>
+        <span class="ev-text">A triangle.</span>
+      </div>
+      <div class="evidence-item">
+        <span class="ev-num">—</span>
+        <span class="ev-text">In the middle, a bleeding eye.</span>
+      </div>
+      <div class="evidence-item">
+        <span class="ev-num">—</span>
+        <span class="ev-text">And three lines…</span>
+      </div>
+      <div class="evidence-item">
+        <span class="ev-num">—</span>
+        <span class="ev-text"><span class="clue">15.8.2023</span></span>
+      </div>
+    </div>
+
+    <!-- PROSE 2 — The Date -->
+    <div class="prose" id="novel-content-2">
+      <p>
+        <span class="dialogue">"It's the symbol, and there's a date mentioned,"</span>
+        <span class="name">Akane</span> said.
+      </p>
+
+      <p><span class="dialogue">"15.8.2023."</span></p>
+
+      <p>
+        <span class="dialogue">"A date?… What does it—"</span>
+      </p>
+
+      <p><span class="name">Sato</span>…</p>
+
+      <p><span class="dialogue">"Did you find something?"</span> he asked.</p>
+
+      <p><span class="dialogue">"A lot, I think…"</span></p>
+
+      <p><span class="dialogue">"Show me."</span></p>
+
+      <p><span class="dialogue">"Here…"</span></p>
+
+      <p><span class="name">Sato</span> examined the mysterious note.</p>
+
+      <p>
+        <span class="dialogue">"The date mentioned — 15.8.2023."</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"Isn't it the same date
+          <span class="danger">Sengoku</span> died?"</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"It is,"</span>
+        <span class="name">Akane</span> said.
+        <span class="dialogue">"And it's not a coincidence now."</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"Definitely. Let's go — we're done here,"</span>
+        <span class="name">Sato</span> said.
+      </p>
+    </div>
+
+    <!-- OBSERVATION BLOCK -->
+    <div class="observation-block">
+      <span class="observation-label">🔍 New Lead</span>
+      <p class="observation-text">
+        Same symbol. Same date.<br />
+        Hidden behind a photo frame that shouldn't have moved.<br /><br />
+        Not a coincidence.
+      </p>
+    </div>
+
+    <!-- SCENE BREAK — Detective Agency -->
+    <div class="flashback-label">Detective Agency</div>
+
+    <!-- PROSE 3 — The Chief -->
+    <div class="prose" id="novel-content-3">
+      <p><span class="name">Detective Agency</span> — POV</p>
+
+      <p>
+        <span class="dialogue">"Chief, what do you think?"</span>
+        <span class="name">Akane</span> asked.
+      </p>
+
+      <p>
+        <span class="dialogue">"Hmm… I think we underestimated him. Sengoku's surrender that day
+          was an ambush,"</span>
+        the <span class="name">Chief</span> said.
+      </p>
+
+      <p>
+        <span class="dialogue">"I don't get it,"</span>
+        <span class="name">Sato</span> said.
+      </p>
+
+      <p>
+        <span class="dialogue">"I think the Sengoku who was hanged that day wasn't real…"</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"What?"</span>
+        <span class="name">Sato</span> said.
+      </p>
+
+      <p>The door knocked.</p>
+
+      <p><span class="dialogue">"Come in,"</span> the Chief said.</p>
+
+      <p>
+        <span class="dialogue">"Officer — the report on the captain is here."</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"Wait outside, I'll come,"</span>
+        <span class="name">Sato</span> said.
+      </p>
+
+      <p><span class="dialogue">"Okay…"</span> the Officer said.</p>
+
+      <p>
+        <span class="dialogue">"Chief, if the real Sengoku is out there and he's done anything in
+          the past three years — why now?"</span>
+        <span class="name">Sato</span> asked.
+      </p>
+
+      <p>…</p>
+
+      <p>
+        <span class="thought">Wait — did he plan all of this? Faked his own death?</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"I think there's only one way to find out,"</span>
+        the Chief said.
+      </p>
+
+      <p>
+        <span class="dialogue">"Yeah —"</span>
+        <span class="name">Sato</span> said.
+        <span class="dialogue">"<span class="danger">The 8 Organization</span>."</span>
+      </p>
+
+      <p>
+        <span class="dialogue">"I'll look into where they operate mostly,"</span>
+        <span class="name">Akane</span> said.
+      </p>
+    </div>
+
+    <!-- SUSPECT BLOCK — The 8 Organization -->
+    <div class="suspect-block">
+      <span class="suspect-label">Case Reopened · Real Identity Unconfirmed</span>
+      <div class="suspect-name">Sengoku</div>
+      <span class="suspect-status">Presumed Dead · Status Uncertain</span>
+      <div class="suspect-details">
+        <div class="suspect-detail">
+          <span class="sd-label">Last Record</span>
+          <span class="sd-val">Executed, 3 Years Ago</span>
+        </div>
+        <div class="suspect-detail">
+          <span class="sd-label">Suspected Link</span>
+          <span class="sd-val">The 8 Organization</span>
+        </div>
+        <div class="suspect-detail">
+          <span class="sd-label">Symbol</span>
+          <span class="sd-val">Triangle · Bleeding Eye</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAPTER END -->
+    <div class="chapter-end">
+      <span class="end-label">End of Chapter 8</span>
+      <div class="end-line">"The Sengoku who was hanged wasn't real."</div>
+      <div class="end-sub">— Case File: You</div>
+      <div class="chapter-nav">
+        <a href="cfy7.html" class="nav-btn">← Chapter 7</a>
+        <a href="../index.html" class="nav-btn">🏠 Home</a>
+        <a href="cfy9.html" class="nav-btn">Chapter 9 →</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    var fontSize = 19;
+
+    function changeFont(action) {
+      if (action === 1 && fontSize < 26) fontSize += 2;
+      else if (action === -1 && fontSize > 14) fontSize -= 2;
+      else if (action === 0) fontSize = 19;
+      ["novel-content", "novel-content-2", "novel-content-3"].forEach(
+        function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.fontSize = fontSize + "px";
+        },
+      );
+    }
+
+    function toggleDark() {
+      document.body.classList.toggle("dark");
+      var on = document.body.classList.contains("dark");
+      document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", on ? "on" : "off");
+    }
+
+    window.onscroll = function () {
+      var scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      var total =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      document.getElementById("progressBar").style.width =
+        (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+      var btn = document.getElementById("scrollBtn");
+      if (scrollTop > 300) btn.classList.add("visible");
+      else btn.classList.remove("visible");
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.onload = function () {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+        document.getElementById("darkModeBtn").textContent = "☀️";
+      }
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>The Petal That Falls With A Smile — Vol. 2</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    :root {
+      --bg: #fdf6f9;
+      --surface: #ffffff;
+
+      --petal-1: #f9c7d9;
+      --petal-2: #e8a0b8;
+      --petal-3: #c97fa0;
+
+      --ink: #2a1a22;
+      --ink-soft: #5a3a48;
+      --ink-muted: #9a7a88;
+
+      --border: rgba(201, 127, 160, 0.15);
+      --border-strong: rgba(201, 127, 160, 0.3);
+
+      --glow: rgba(249, 199, 217, 0.4);
+    }
+
+    body.dark {
+      --bg: #120a0e;
+      --surface: #1e1018;
+
+      --petal-1: #6b2d48;
+      --petal-2: #a05070;
+      --petal-3: #c97fa0;
+
+      --ink: #f5e6ee;
+      --ink-soft: #d4b0c4;
+      --ink-muted: #7a5068;
+
+      --border: rgba(201, 127, 160, 0.1);
+      --border-strong: rgba(201, 127, 160, 0.25);
+
+      --glow: rgba(106, 45, 72, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
+      position: relative;
+    }
+
+    /* ───────────────────── */
+    /* FALLING PETALS        */
+    /* ───────────────────── */
+
+    .petal-el {
+      position: fixed;
+      top: -40px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      animation: petalDrop linear infinite;
+    }
+
+    @keyframes petalDrop {
+      0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 0;
+      }
+
+      5% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(540deg) translateX(40px);
+        opacity: 0;
+      }
+    }
+
+    /* ───────────────────── */
+    /* TOP BUTTONS           */
+    /* ───────────────────── */
+
+    #darkBtn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+
+      width: 42px;
+      height: 42px;
+
+      border-radius: 50%;
+      border: 1px solid var(--border-strong);
+
+      background: var(--surface);
+      color: var(--ink);
+
+      cursor: pointer;
+      z-index: 9999;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 17px;
+
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+      transition: 0.25s ease;
+    }
+
+    #darkBtn:hover {
+      transform: scale(1.08);
+    }
+
+    #backBtn {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+
+      padding: 8px 16px;
+
+      border-radius: 20px;
+      border: 1px solid var(--border-strong);
+
+      background: var(--surface);
+      color: var(--ink-muted);
+
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+
+      z-index: 9999;
+
+      transition: 0.25s ease;
+    }
+
+    #backBtn:hover {
+      color: var(--petal-3);
+      border-color: var(--petal-3);
+      transform: translateX(-2px);
+    }
+
+    /* ───────────────────── */
+    /* HERO                  */
+    /* ───────────────────── */
+
+    .hero {
+      min-height: 100vh;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      padding: 90px 24px 60px;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 30%,
+          rgba(249, 199, 217, 0.3) 0%,
+          transparent 70%),
+        radial-gradient(ellipse 40% 30% at 70% 70%,
+          rgba(201, 127, 160, 0.15) 0%,
+          transparent 60%);
+
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+
+      position: absolute;
+      inset: 0;
+
+      background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px,
+          transparent 1px);
+
+      background-size: 4px 4px;
+
+      opacity: 0.25;
+
+      pointer-events: none;
+    }
+
+    .vol-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+
+      color: var(--petal-3);
+
+      border: 1px solid var(--border-strong);
+
+      padding: 6px 18px;
+
+      border-radius: 30px;
+
+      background: var(--surface);
+
+      margin-bottom: 32px;
+
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .petal-spin {
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .hero-vol {
+      font-family: "Playfair Display", serif;
+
+      font-size: clamp(13px, 3vw, 16px);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+
+      color: var(--ink-muted);
+
+      margin-bottom: 12px;
+
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    .hero-title {
+      font-family: "Playfair Display", serif;
+
+      font-size: clamp(38px, 8vw, 76px);
+      font-weight: 700;
+
+      line-height: 1.05;
+      letter-spacing: -1px;
+
+      color: var(--ink);
+
+      margin-bottom: 10px;
+
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+
+    .hero-title em {
+      color: var(--petal-3);
+      font-style: italic;
+    }
+
+    .hero-sub-title {
+      font-family: "Playfair Display", serif;
+
+      font-size: clamp(18px, 4vw, 28px);
+      font-style: italic;
+
+      color: var(--ink-muted);
+
+      margin-bottom: 28px;
+
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-desc {
+      max-width: 520px;
+
+      font-size: 15px;
+      line-height: 1.8;
+
+      color: var(--ink-muted);
+
+      margin-bottom: 40px;
+
+      animation: fadeUp 0.8s 0.25s ease both;
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      justify-content: center;
+
+      margin-bottom: 50px;
+
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+
+      padding: 5px 14px;
+
+      border-radius: 20px;
+
+      letter-spacing: 0.5px;
+    }
+
+    .tag-romance {
+      background: rgba(249, 199, 217, 0.2);
+      color: var(--petal-2);
+      border: 1px solid var(--border);
+    }
+
+    .tag-drama {
+      background: rgba(201, 127, 160, 0.12);
+      color: var(--petal-3);
+      border: 1px solid var(--border-strong);
+    }
+
+    .tag-sol {
+      background: rgba(123, 167, 201, 0.1);
+      color: #5a90b8;
+      border: 1px solid rgba(123, 167, 201, 0.3);
+    }
+
+    .hero-scroll {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+
+      color: var(--ink-muted);
+
+      animation:
+        fadeUp 0.8s 0.4s ease both,
+        bounce 2s 1.5s infinite;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(6px);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ───────────────────── */
+    /* DIVIDER               */
+    /* ───────────────────── */
+
+    .divider {
+      width: 100%;
+      max-width: 700px;
+
+      margin: 0 auto 60px;
+
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      padding: 0 24px;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-strong);
+    }
+
+    .divider-petal {
+      font-size: 18px;
+      animation: sway 3s ease-in-out infinite;
+    }
+
+    @keyframes sway {
+
+      0%,
+      100% {
+        transform: rotate(-10deg);
+      }
+
+      50% {
+        transform: rotate(10deg);
+      }
+    }
+
+    /* ───────────────────── */
+    /* CHAPTERS              */
+    /* ───────────────────── */
+
+    .chapter-section {
+      max-width: 720px;
+      margin: 0 auto;
+
+      padding: 0 24px 120px;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .section-note {
+      font-size: 12px;
+      color: var(--ink-muted);
+
+      letter-spacing: 1px;
+    }
+
+    .chapter-card {
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      background: var(--surface);
+
+      border: 1px solid var(--border);
+
+      border-radius: 22px;
+
+      padding: 24px 28px;
+
+      margin-bottom: 14px;
+
+      overflow: hidden;
+
+      text-decoration: none;
+
+      transition: 0.25s ease;
+    }
+
+    .chapter-card::before {
+      content: "";
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 3px;
+      height: 100%;
+
+      background: linear-gradient(180deg, var(--petal-1), var(--petal-3));
+
+      opacity: 0;
+
+      transition: opacity 0.25s ease;
+    }
+
+    .chapter-card:hover {
+      transform: translateX(6px);
+
+      border-color: var(--border-strong);
+
+      box-shadow: 0 8px 32px var(--glow);
+    }
+
+    .chapter-card:hover::before {
+      opacity: 1;
+    }
+
+    .chapter-card.available {
+      cursor: pointer;
+    }
+
+    .chapter-card.tbd {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .ch-num {
+      font-family: "Playfair Display", serif;
+
+      font-size: 32px;
+      font-weight: 700;
+
+      min-width: 56px;
+
+      text-align: center;
+
+      color: var(--border-strong);
+
+      transition: 0.25s ease;
+    }
+
+    .chapter-card.available:hover .ch-num {
+      color: var(--petal-3);
+    }
+
+    .ch-body {
+      flex: 1;
+    }
+
+    .ch-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+
+      color: var(--ink-muted);
+
+      margin-bottom: 6px;
+    }
+
+    .ch-title {
+      font-family: "Playfair Display", serif;
+
+      font-size: 20px;
+      font-weight: 700;
+      font-style: italic;
+
+      color: var(--ink);
+
+      line-height: 1.3;
+
+      margin-bottom: 8px;
+    }
+
+    .ch-desc {
+      font-size: 13px;
+      line-height: 1.6;
+
+      color: var(--ink-muted);
+    }
+
+    .ch-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      margin-top: 12px;
+    }
+
+    .ch-pill {
+      font-size: 10px;
+      font-weight: 500;
+
+      padding: 4px 10px;
+
+      border-radius: 20px;
+
+      border: 1px solid var(--border-strong);
+
+      letter-spacing: 0.5px;
+
+      color: var(--ink-muted);
+    }
+
+    .ch-pill.new {
+      background: rgba(201, 127, 160, 0.1);
+      color: var(--petal-3);
+    }
+
+    .tbd-pill {
+      background: transparent;
+    }
+
+    .ch-arrow {
+      font-size: 22px;
+      color: var(--petal-3);
+
+      opacity: 0;
+
+      transition: 0.25s ease;
+    }
+
+    .chapter-card:hover .ch-arrow {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+
+    .ch-lock {
+      font-size: 20px;
+      color: var(--border-strong);
+    }
+
+    /* ───────────────────── */
+    /* VOL 1 LINK            */
+    /* ───────────────────── */
+
+    .vol1-bar {
+      margin-top: 40px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 20px;
+
+      background: var(--surface);
+
+      border: 1px solid var(--border);
+
+      border-radius: 18px;
+
+      padding: 22px 24px;
+
+      text-decoration: none;
+
+      transition: 0.25s ease;
+    }
+
+    .vol1-bar:hover {
+      border-color: var(--petal-3);
+      box-shadow: 0 4px 20px var(--glow);
+    }
+
+    .vol1-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+
+      color: var(--ink-muted);
+
+      margin-bottom: 5px;
+    }
+
+    .vol1-title {
+      font-family: "Playfair Display", serif;
+
+      font-size: 17px;
+      font-weight: 700;
+      font-style: italic;
+
+      color: var(--ink);
+    }
+
+    .vol1-arrow {
+      font-size: 22px;
+      color: var(--petal-3);
+    }
+
+    /* ───────────────────── */
+    /* SCROLL BTN            */
+    /* ───────────────────── */
+
+    #scrollBtn {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+
+      width: 46px;
+      height: 46px;
+
+      border: none;
+      border-radius: 50%;
+
+      background: var(--ink);
+      color: var(--bg);
+
+      cursor: pointer;
+
+      font-size: 16px;
+
+      z-index: 999;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+
+      transition: 0.25s ease;
+    }
+
+    #scrollBtn.visible {
+      display: flex;
+    }
+
+    #scrollBtn:hover {
+      transform: translateY(-3px);
+    }
+
+    /* ───────────────────── */
+    /* MOBILE                */
+    /* ───────────────────── */
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: 100px 20px 60px;
+      }
+
+      .chapter-card {
+        padding: 20px;
+        gap: 14px;
+      }
+
+      .ch-num {
+        font-size: 24px;
+        min-width: 40px;
+      }
+
+      .ch-title {
+        font-size: 17px;
+      }
+
+      .vol1-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      #backBtn {
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- TOP BUTTONS -->
+  <a href="../index.html" id="backBtn">← Back to Home</a>
+
+  <button id="darkBtn" onclick="toggleDark()">🌙</button>
+
+  <!-- SCROLL BUTTON -->
+  <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+  <!-- PETALS -->
+  <div id="petalContainer"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="vol-badge">
+      <span class="petal-spin">🌸</span>
+      Volume 2 · Completed
+    </div>
+
+    <p class="hero-vol">Volume II</p>
+
+    <h1 class="hero-title">
+      The Petal<br />
+      That Falls<br />
+      <em>With A Smile</em>
+    </h1>
+
+    <p class="hero-sub-title">— A New Season Begins —</p>
+
+    <p class="hero-desc">
+      Some stories don’t end when spring fades. They continue quietly — in
+      forgotten books, unfinished feelings, and petals carried by the wind.
+    </p>
+
+    <div class="hero-tags">
+      <span class="tag tag-romance">Romance</span>
+      <span class="tag tag-drama">Drama</span>
+      <span class="tag tag-sol">Slice of Life</span>
+    </div>
+
+    <p class="hero-scroll">↓ Chapters Below</p>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-petal">🌸</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- CHAPTERS -->
+  <section class="chapter-section">
+    <div class="section-header">
+      <h2 class="section-title">Chapters</h2>
+
+      <span class="section-note"> Vol. 2 · Completed </span>
+    </div>
+
+    <!-- CH 1 -->
+    <a class="chapter-card available" href="tptfwasv2-1.html">
+      <div class="ch-num">01</div>
+
+      <div class="ch-body">
+        <p class="ch-label">Chapter 1</p>
+
+        <p class="ch-title">The Book With No Cover</p>
+
+        <div class="ch-meta">
+          <span class="ch-pill new"> 🌸 </span>
+        </div>
+      </div>
+
+      <span class="ch-arrow">→</span>
+    </a>
+
+    <!-- CH 2 -->
+
+    <a class="chapter-card available" href="tptfwasv2-2.html">
+      <div class="ch-num">01</div>
+
+      <div class="ch-body">
+        <p class="ch-label">Chapter 2</p>
+
+        <p class="ch-title">Letters in a Cold Spring</p>
+
+        <div class="ch-meta">
+          <span class="ch-pill new"> 🌸 </span>
+        </div>
+      </div>
+
+      <span class="ch-arrow">→</span>
+    </a>
+    <!-- CH 3 -->
+
+    <a class="chapter-card available" href="tptfwasv2-3.html">
+      <div class="ch-num">03</div>
+
+      <div class="ch-body">
+        <p class="ch-label">Chapter 3</p>
+
+        <p class="ch-title">A Name Beneath The Ink.</p>
+
+        <div class="ch-meta">
+          <span class="ch-pill new"> 🌸 </span>
+        </div>
+      </div>
+
+      <span class="ch-arrow">→</span>
+    </a>
+    <!-- CH 4 -->
+    <a class="chapter-card available" href="tptfwasv2-4.html">
+      <div class="ch-num">04</div>
+
+      <div class="ch-body">
+        <p class="ch-label">Chapter 4</p>
+
+        <p class="ch-title">The Space Between Glances</p>
+
+        <div class="ch-meta">
+          <span class="ch-pill new"> 🌸 </span>
+        </div>
+      </div>
+
+      <span class="ch-arrow">→</span>
+    </a>
+    <!-- CH 5 -->
+    <a class="chapter-card available" href="tptfwasv2-5.html">
+      <div class="ch-num">05</div>
+
+      <div class="ch-body">
+        <p class="ch-label">Chapter 5</p>
+
+        <p class="ch-title">The Final Letter Isn’t Written</p>
+
+        <div class="ch-meta">
+          <span class="ch-pill new"> new🌸 </span>
+        </div>
+      </div>
+
+      <span class="ch-arrow">→</span>
+    </a>
+    <!-- CH 6 -->
+    <span class="ch-lock"></span>
+    </div>
+
+    <!-- VOL 1 LINK -->
+    <a href="tptfwas.html" class="vol1-bar">
+      <div>
+        <p class="vol1-label">Haven't read it yet?</p>
+
+        <p class="vol1-title">
+          The Petal That Falls With A Smile — Volume 1 →
+        </p>
+      </div>
+
+      <span class="vol1-arrow"> 🌸 </span>
+    </a>
+
+    <!-- VOL  3 LINK -->
+    <a href="tptfwasv3.html" class="vol1-bar tbd">
+      <div>
+        <p class="vol1-label">is out!</p>
+
+        <p class="vol1-title">
+          The Petal That Falls With A Smile — Volume 3
+        </p>
+      </div>
+
+      <span class="vol1-arrow"> 🌸 </span>
+    </a>
+  </section>
+
+  <!-- DIVIDER -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-petal">🌸</span>
+    <div class="divider-line"></div>
+  </div>
+
+
+  <script>
+    /* DARK MODE */
+
+    function toggleDark() {
+      const dark = document.body.classList.toggle("dark");
+
+      document.getElementById("darkBtn").textContent = dark ? "☀️" : "🌙";
+
+      localStorage.setItem("darkMode", dark ? "on" : "off");
+    }
+
+    window.onload = () => {
+      if (localStorage.getItem("darkMode") === "on") {
+        document.body.classList.add("dark");
+
+        document.getElementById("darkBtn").textContent = "☀️";
+      }
+
+      spawnPetals();
+    };
+
+    /* SCROLL BUTTON */
+
+    window.onscroll = () => {
+      const scroll =
+        document.documentElement.scrollTop || document.body.scrollTop;
+
+      const btn = document.getElementById("scrollBtn");
+
+      if (scroll > 300) {
+        btn.classList.add("visible");
+      } else {
+        btn.classList.remove("visible");
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+
+    /* PETALS */
+
+    const colors = [
+      "#f9c7d9",
+      "#ffd4e8",
+      "#e8b4c8",
+      "#c97fa0",
+      "#f4a7c3",
+      "#ffe0ee",
+    ];
+
+    function spawnPetals() {
+      for (let i = 0; i < 18; i++) {
+        setTimeout(makePetal, i * 400);
+      }
+    }
+
+    function makePetal() {
+      const el = document.createElement("div");
+
+      el.className = "petal-el";
+
+      const size = Math.random() * 12 + 6;
+      const speed = Math.random() * 6 + 5;
+      const delay = Math.random() * 4;
+      const left = Math.random() * 100;
+
+      const color = colors[Math.floor(Math.random() * colors.length)];
+
+      el.style.cssText = `
+        width:${size}px;
+        height:${size}px;
+        left:${left}vw;
+        background:${color};
+        border-radius:150% 0 150% 0;
+        animation-duration:${speed}s;
+        animation-delay:${delay}s;
+      `;
+
+      document.getElementById("petalContainer").appendChild(el);
+
+      setTimeout(
+        () => {
+          el.remove();
+          makePetal();
+        },
+        (speed + delay + 1) * 1000,
+      );
+    }
+  </script>
+</body>
+
+</html>
