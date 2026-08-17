@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bell That Rang for the Dead</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --ink:#121319;
+  --panel:#1b1d25;
+  --bone:#e9e4d8;
+  --bone-dim:#bcb6a8;
+  --ash:#83858f;
+  --iron:#7a2e24;
+  --iron-bright:#b8503f;
+  --moss:#414f3f;
+  --brass:#8a7648;
+  --rule: rgba(233,228,216,0.09);
+  --font-display:'Fraunces', serif;
+  --font-body:'Newsreader', serif;
+  --font-mono:'JetBrains Mono', monospace;
+}
+
+*{box-sizing:border-box;}
+
+html{background:var(--ink);}
+
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--bone-dim);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:0.035;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+body::after{
+  content:"";
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse at center, transparent 38%, rgba(0,0,0,0.6) 100%);
+  animation:breathe 9s ease-in-out infinite;
+  transition:background 1.4s ease;
+}
+
+@keyframes breathe{
+  0%,100%{opacity:0.8;}
+  50%{opacity:1;}
+}
+
+body.summoned::after{
+  background:radial-gradient(ellipse at center, rgba(122,46,36,0.16) 0%, rgba(0,0,0,0.78) 100%);
+}
+
+.wrap{
+  position:relative;
+  z-index:2;
+  max-width:660px;
+  margin:0 auto;
+  padding:6vh 24px 14vh;
+}
+
+/* ---------- Header / Bell ---------- */
+
+.hero{
+  text-align:center;
+  padding-bottom:8vh;
+  border-bottom:1px solid var(--rule);
+  margin-bottom:8vh;
+}
+
+.bell{
+  background:none;
+  border:none;
+  cursor:pointer;
+  position:relative;
+  padding:18px;
+  margin-bottom:6px;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.bell:focus-visible{
+  outline:1.5px solid var(--iron-bright);
+  outline-offset:6px;
+  border-radius:50%;
+}
+
+.bell svg{
+  display:block;
+  transition:filter 0.4s ease, transform 0.25s ease;
+  filter:drop-shadow(0 0 0 rgba(184,80,63,0));
+}
+
+.bell:hover svg{
+  transform:translateY(-1px);
+}
+
+.bell.rung svg{
+  filter:drop-shadow(0 0 14px rgba(184,80,63,0.55));
+}
+
+.ripple-layer{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.ripple{
+  position:absolute;
+  left:50%; top:50%;
+  width:10px; height:10px;
+  margin:-5px 0 0 -5px;
+  border:1px solid var(--iron-bright);
+  border-radius:50%;
+  opacity:0.75;
+  animation:ripple-expand 1.15s ease-out forwards;
+}
+
+@keyframes ripple-expand{
+  to{
+    width:150px; height:150px;
+    margin:-75px 0 0 -75px;
+    opacity:0;
+  }
+}
+
+.toll-caption{
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--ash);
+  margin:14px 0 0;
+  min-height:1.2em;
+}
+
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:0.72rem;
+  letter-spacing:0.38em;
+  text-transform:uppercase;
+  color:var(--iron-bright);
+  margin:34px 0 18px;
+}
+
+h1{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:clamp(2.3rem, 7.5vw, 4rem);
+  line-height:1.06;
+  letter-spacing:-0.01em;
+  color:var(--bone);
+  margin:0;
+}
+
+.subtitle{
+  font-family:var(--font-body);
+  font-style:italic;
+  color:var(--ash);
+  font-size:1.02rem;
+  margin:20px 0 0;
+}
+
+/* ---------- Story ---------- */
+
+.scene{
+  padding:1vh 0;
+}
+
+.scene > p:first-child::first-letter{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:3.3em;
+  float:left;
+  line-height:0.78;
+  padding:0.03em 0.09em 0 0;
+  color:var(--iron-bright);
+}
+
+.story p{
+  font-size:clamp(1.05rem, 1.4vw + 0.7rem, 1.22rem);
+  line-height:1.85;
+  color:var(--bone-dim);
+  margin:0 0 0.95em;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+
+.story p.visible{
+  opacity:1;
+  transform:none;
+}
+
+.story p.speech{
+  color:var(--bone);
+  font-style:italic;
+  padding-left:1.1em;
+  border-left:2px solid var(--rule);
+}
+
+.story p.toll{
+  text-align:center;
+  font-family:var(--font-display);
+  font-style:italic;
+  font-weight:600;
+  font-size:1.7rem;
+  letter-spacing:0.06em;
+  color:var(--iron-bright);
+  margin:0.5em 0 0.7em;
+}
+
+.story p.toll em{
+  font-style:italic;
+}
+
+.story p.finale{
+  text-align:center;
+  font-family:var(--font-display);
+  font-size:1.3rem;
+  letter-spacing:0.03em;
+  color:var(--bone);
+  margin-top:1.4em;
+}
+
+.scene-break{
+  display:flex;
+  justify-content:center;
+  margin:5.5vh 0;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scene-break.visible{
+  opacity:1;
+  transform:none;
+}
+
+footer{
+  text-align:center;
+  margin-top:10vh;
+  font-family:var(--font-mono);
+  font-size:0.68rem;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+  color:var(--ash);
+  opacity:0.6;
+}
+
+@media (max-width:480px){
+  .wrap{padding:5vh 18px 12vh;}
+  .hero{padding-bottom:6vh; margin-bottom:6vh;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .story p, .scene-break{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+  body::after{animation:none;}
+  .ripple{animation:none; display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <button class="bell" id="bellBtn" aria-label="Toll the bell">
+      <svg viewBox="0 0 64 64" width="54" height="54">
+        <path d="M32 6c-3 0-5 2-5 5v2c-9 2.2-14 9.5-14 18.3v9.2l-5.5 8H56.5l-5.5-8v-9.2c0-8.8-5-16.1-14-18.3v-2c0-3-2-5-5-5z"
+              fill="var(--brass)" stroke="var(--bone-dim)" stroke-width="1"/>
+        <rect x="23" y="48.5" width="18" height="4" rx="2" fill="var(--panel)" stroke="var(--rule)"/>
+        <circle cx="32" cy="57" r="2.6" fill="var(--brass)"/>
+      </svg>
+      <span class="ripple-layer" id="rippleLayer"></span>
+    </button>
+    <p class="toll-caption" id="tollCaption">toll the bell</p>
+
+    <p class="eyebrow">A tale of Veyr</p>
+    <h1>The Bell That Rang<br>for the Dead</h1>
+    <p class="subtitle">In Veyr, the dead were burned. Never buried.</p>
+  </header>
+
+  <main class="story">
+
+    <section class="scene">
+      <p>In the kingdom of Veyr, the dead were not buried.</p>
+      <p>They were burned.</p>
+      <p>Everyone knew why.</p>
+      <p>A dead body left underground for more than three days would eventually stand up.</p>
+      <p>Nobody knew what happened after that.</p>
+      <p>Nobody wanted to.</p>
+      <p>So every town had a bell.</p>
+      <p>When someone died, the bell rang once.</p>
+      <p>When the body was taken to the furnace, it rang twice.</p>
+      <p>And if it ever rang three times...</p>
+      <p>Everyone ran.</p>
+    </section>
+
+    <div class="scene-break" aria-hidden="true">
+      <svg width="72" height="24" viewBox="0 0 72 24">
+        <circle cx="36" cy="12" r="2" fill="var(--iron-bright)"/>
+        <circle cx="36" cy="12" r="8" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.5"/>
+        <circle cx="36" cy="12" r="14" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <section class="scene">
+      <p>Elias had been the Bellkeeper of Veyr for six years.</p>
+      <p>He hated the job.</p>
+      <p>Not because of the dead.</p>
+      <p>Because of the waiting.</p>
+      <p>Every night, he climbed the stone tower and sat beside the bell with a lantern, listening to the wind scrape against the windows.</p>
+      <p>Most nights were quiet.</p>
+      <p>Some nights weren't.</p>
+      <p>He had heard the bell ring twice more times than he could remember.</p>
+      <p>He had never heard it ring three times.</p>
+      <p>Until tonight.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>Elias froze.</p>
+      <p>The sound rolled across the town.</p>
+      <p>Once.</p>
+      <p>He slowly stood.</p>
+      <p>His hand tightened around the lantern.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>Twice.</p>
+      <p>Below him, windows opened.</p>
+      <p>People looked outside.</p>
+      <p>Nobody spoke.</p>
+      <p>Elias stared at the bell.</p>
+      <p>Then came the third sound.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>The entire town went silent.</p>
+      <p>Somewhere below, a child started crying.</p>
+      <p>Elias didn't move.</p>
+      <p>He knew the rule.</p>
+      <p>When the bell rang three times, you didn't investigate.</p>
+      <p>You didn't look for the body.</p>
+      <p>You didn't ask who had died.</p>
+      <p>You left.</p>
+      <p>But then he heard something else.</p>
+      <p>A voice.</p>
+      <p>Coming from inside the tower.</p>
+      <p class="speech">&ldquo;Elias.&rdquo;</p>
+      <p>His blood went cold.</p>
+      <p>He knew that voice.</p>
+      <p>It belonged to his brother.</p>
+      <p>His brother had been dead for eleven years.</p>
+    </section>
+
+    <div class="scene-break" aria-hidden="true">
+      <svg width="72" height="24" viewBox="0 0 72 24">
+        <circle cx="36" cy="12" r="2" fill="var(--iron-bright)"/>
+        <circle cx="36" cy="12" r="8" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.5"/>
+        <circle cx="36" cy="12" r="14" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <section class="scene">
+      <p>Elias ran downstairs.</p>
+      <p>The streets were already empty.</p>
+      <p>Doors slammed shut as he passed.</p>
+      <p>People had abandoned everything.</p>
+      <p>A basket of bread.</p>
+      <p>A child's wooden toy.</p>
+      <p>A horse still tied outside a shop.</p>
+      <p>The whole town was running toward the eastern gate.</p>
+      <p>Elias ran in the opposite direction.</p>
+      <p>Toward the old cemetery.</p>
+      <p>He didn't know why.</p>
+      <p>Maybe because his brother's voice was coming from there.</p>
+      <p>Maybe because some stupid part of him wanted to hear it again.</p>
+      <p>The cemetery gates were open.</p>
+      <p>They were never supposed to be open.</p>
+      <p>He stepped inside.</p>
+      <p>The graves were empty.</p>
+      <p>Every single one.</p>
+      <p>Not disturbed.</p>
+      <p>Not broken.</p>
+      <p>Just empty.</p>
+      <p>Elias raised his lantern.</p>
+      <p>Hundreds of open graves stretched across the field.</p>
+      <p>Then he saw the footprints.</p>
+      <p>Bare feet.</p>
+      <p>Too many.</p>
+      <p>All of them leading toward the forest.</p>
+      <p>He followed.</p>
+    </section>
+
+    <div class="scene-break" aria-hidden="true">
+      <svg width="72" height="24" viewBox="0 0 72 24">
+        <circle cx="36" cy="12" r="2" fill="var(--iron-bright)"/>
+        <circle cx="36" cy="12" r="8" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.5"/>
+        <circle cx="36" cy="12" r="14" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <section class="scene">
+      <p>The forest had been dead for as long as Elias could remember.</p>
+      <p>No birds.</p>
+      <p>No insects.</p>
+      <p>No wind.</p>
+      <p>The trees stood completely still, their branches twisted together like fingers.</p>
+      <p>He walked for nearly an hour.</p>
+      <p>Then he found the village.</p>
+      <p>It wasn't on any map.</p>
+      <p>There were houses.</p>
+      <p>A well.</p>
+      <p>A church.</p>
+      <p>People walking through the streets.</p>
+      <p>Elias stared.</p>
+      <p>Every person he saw was dead.</p>
+      <p>He recognized some of them.</p>
+      <p>The baker.</p>
+      <p>The old blacksmith.</p>
+      <p>A woman who had died during winter.</p>
+      <p>Children.</p>
+      <p>Dozens of them.</p>
+      <p>Hundreds.</p>
+      <p>All walking quietly.</p>
+      <p>All heading toward the church.</p>
+      <p>Elias stepped backward.</p>
+      <p>Someone grabbed his shoulder.</p>
+      <p>He nearly screamed.</p>
+      <p>An old man stood behind him.</p>
+      <p>His face was gray.</p>
+      <p>His eyes were completely black.</p>
+      <p class="speech">&ldquo;You shouldn't be here.&rdquo;</p>
+      <p>Elias couldn't speak.</p>
+      <p>The old man pointed toward the church.</p>
+      <p class="speech">&ldquo;He's waiting.&rdquo;</p>
+      <p class="speech">&ldquo;Who?&rdquo;</p>
+      <p>The old man smiled.</p>
+      <p class="speech">&ldquo;The King beneath the earth.&rdquo;</p>
+    </section>
+
+    <div class="scene-break" aria-hidden="true">
+      <svg width="72" height="24" viewBox="0 0 72 24">
+        <circle cx="36" cy="12" r="2" fill="var(--iron-bright)"/>
+        <circle cx="36" cy="12" r="8" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.5"/>
+        <circle cx="36" cy="12" r="14" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <section class="scene">
+      <p>Inside the church, there were no candles.</p>
+      <p>Only bones.</p>
+      <p>Thousands of them.</p>
+      <p>Stacked along the walls.</p>
+      <p>At the end of the room sat a man on a throne.</p>
+      <p>He looked young.</p>
+      <p>Maybe twenty.</p>
+      <p>Maybe a thousand.</p>
+      <p>A crown of black iron rested on his head.</p>
+      <p>Elias knew him immediately.</p>
+      <p>Not because he had seen him before.</p>
+      <p>Because everyone in Veyr had heard the story.</p>
+      <p>The first king of Veyr.</p>
+      <p>The man who supposedly disappeared before the kingdom existed.</p>
+      <p>The man who had made the first bell.</p>
+      <p>Elias stared at him.</p>
+      <p class="speech">&ldquo;You're dead.&rdquo;</p>
+      <p>The king laughed.</p>
+      <p class="speech">&ldquo;So are you.&rdquo;</p>
+      <p>Elias looked down.</p>
+      <p>His hands were transparent.</p>
+      <p>His lantern fell through his fingers.</p>
+      <p class="speech">&ldquo;No.&rdquo;</p>
+      <p>The king stood.</p>
+      <p class="speech">&ldquo;Your town burned you six years ago.&rdquo;</p>
+      <p>Elias shook his head.</p>
+      <p class="speech">&ldquo;I've been the Bellkeeper for six years.&rdquo;</p>
+      <p class="speech">&ldquo;Yes.&rdquo;</p>
+      <p class="speech">&ldquo;People spoke to me.&rdquo;</p>
+      <p class="speech">&ldquo;Yes.&rdquo;</p>
+      <p class="speech">&ldquo;I ate.&rdquo;</p>
+      <p class="speech">&ldquo;Yes.&rdquo;</p>
+      <p class="speech">&ldquo;I slept.&rdquo;</p>
+      <p>The king smiled.</p>
+      <p class="speech">&ldquo;You remember what you ate?&rdquo;</p>
+      <p>Elias went silent.</p>
+      <p class="speech">&ldquo;Do you remember your mother's face?&rdquo;</p>
+      <p>Nothing.</p>
+      <p class="speech">&ldquo;Your brother?&rdquo;</p>
+      <p>Elias felt something crack inside him.</p>
+      <p class="speech">&ldquo;Stop.&rdquo;</p>
+      <p class="speech">&ldquo;Your own death?&rdquo;</p>
+      <p>He couldn't breathe.</p>
+      <p>The king walked closer.</p>
+      <p class="speech">&ldquo;You were the first body to rise when the bell rang three times.&rdquo;</p>
+      <p>Elias looked toward the doorway.</p>
+      <p>The dead villagers were watching him.</p>
+      <p class="speech">&ldquo;They've been waiting for you.&rdquo;</p>
+      <p class="speech">&ldquo;Why?&rdquo;</p>
+      <p>The king pointed toward the ceiling.</p>
+      <p>Far above them, beyond the forest, beyond the abandoned cemetery...</p>
+      <p>the bell began to ring.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>Elias stared upward.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>The dead began kneeling.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>The king lowered his head.</p>
+      <p>And for the first time, Elias understood.</p>
+      <p>The bell had never been warning the living.</p>
+      <p>It had been calling the dead.</p>
+    </section>
+
+    <div class="scene-break" aria-hidden="true">
+      <svg width="72" height="24" viewBox="0 0 72 24">
+        <circle cx="36" cy="12" r="2" fill="var(--iron-bright)"/>
+        <circle cx="36" cy="12" r="8" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.5"/>
+        <circle cx="36" cy="12" r="14" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <section class="scene">
+      <p>The king removed his crown.</p>
+      <p>Then he placed it in Elias's hands.</p>
+      <p class="speech">&ldquo;I've been ringing the bell for a thousand years.&rdquo;</p>
+      <p>Elias stared at the crown.</p>
+      <p class="speech">&ldquo;What happens if I don't take it?&rdquo;</p>
+      <p>The king smiled sadly.</p>
+      <p class="speech">&ldquo;Then someone else will.&rdquo;</p>
+      <p class="speech">&ldquo;And if I do?&rdquo;</p>
+      <p class="speech">&ldquo;You become the thing that keeps this kingdom alive.&rdquo;</p>
+      <p>Elias looked toward the distant town.</p>
+      <p>He could almost see it.</p>
+      <p>The people running.</p>
+      <p>The locked doors.</p>
+      <p>The frightened children.</p>
+      <p>People who still believed the dead were something to fear.</p>
+      <p>He looked back at the king.</p>
+      <p class="speech">&ldquo;Why me?&rdquo;</p>
+      <p>The king's expression changed.</p>
+      <p class="speech">&ldquo;Because you were the only one who came looking.&rdquo;</p>
+      <p>Elias looked at the crown.</p>
+      <p>It was warm.</p>
+      <p>Almost like it had a heartbeat.</p>
+      <p>He put it on.</p>
+      <p>The old king disappeared.</p>
+      <p>The church went dark.</p>
+      <p>And somewhere far away, every grave in Veyr opened at once.</p>
+    </section>
+
+    <div class="scene-break" aria-hidden="true">
+      <svg width="72" height="24" viewBox="0 0 72 24">
+        <circle cx="36" cy="12" r="2" fill="var(--iron-bright)"/>
+        <circle cx="36" cy="12" r="8" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.5"/>
+        <circle cx="36" cy="12" r="14" fill="none" stroke="var(--iron)" stroke-width="1" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <section class="scene">
+      <p>The next morning, the people of Veyr returned.</p>
+      <p>There was no Bellkeeper in the tower.</p>
+      <p>Only a lantern.</p>
+      <p>And beside it, a crown made of black iron.</p>
+      <p>Nobody touched it.</p>
+      <p>Nobody knew what had happened.</p>
+      <p>Years passed.</p>
+      <p>The kingdom rebuilt itself.</p>
+      <p>Children grew up.</p>
+      <p>Wars were fought.</p>
+      <p>Kings died.</p>
+      <p>And eventually, people stopped believing in the old stories.</p>
+      <p>They said the dead were harmless.</p>
+      <p>They said the bells were only bells.</p>
+      <p>They said monsters didn't exist.</p>
+      <p>Then, one winter night, a boy climbing the tower heard a sound behind him.</p>
+      <p>A man stood in the darkness.</p>
+      <p>Black crown.</p>
+      <p>Pale face.</p>
+      <p>Eyes like empty wells.</p>
+      <p>The boy dropped his candle.</p>
+      <p class="speech">&ldquo;Who are you?&rdquo;</p>
+      <p>The man looked toward the sleeping kingdom.</p>
+      <p>Then he pulled the rope.</p>
+      <p class="toll"><em>Dong.</em></p>
+      <p>The boy screamed.</p>
+      <p>The man smiled.</p>
+      <p class="speech">&ldquo;I'm the Bellkeeper.&rdquo;</p>
+      <p class="finale">And beneath the earth...</p>
+      <p class="finale">something answered.</p>
+    </section>
+
+  </main>
+
+  <footer>Veyr</footer>
+
+</div>
+
+<script>
+(function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Scroll reveal
+  var targets = document.querySelectorAll('.story p, .scene-break');
+  if(reduceMotion || !('IntersectionObserver' in window)){
+    targets.forEach(function(el){ el.classList.add('visible'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.15, rootMargin: '0px 0px -40px 0px'});
+    targets.forEach(function(el){ io.observe(el); });
+  }
+
+  // Bell toll interaction
+  var bellBtn = document.getElementById('bellBtn');
+  var rippleLayer = document.getElementById('rippleLayer');
+  var caption = document.getElementById('tollCaption');
+  var audioCtx = null;
+  var tollCount = 0;
+  var labels = ['toll the bell', 'once.', 'twice.', 'three times.'];
+
+  function ensureAudio(){
+    if(!audioCtx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(AC) audioCtx = new AC();
+    }
+    if(audioCtx && audioCtx.state === 'suspended'){
+      audioCtx.resume();
+    }
+  }
+
+  function playBell(){
+    if(!audioCtx) return;
+    var now = audioCtx.currentTime;
+    var fundamental = 220;
+    var partials = [1, 2.01, 2.76, 4.07];
+    var master = audioCtx.createGain();
+    master.gain.setValueAtTime(0.0001, now);
+    master.gain.exponentialRampToValueAtTime(0.35, now + 0.01);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 2.6);
+    master.connect(audioCtx.destination);
+
+    partials.forEach(function(ratio, i){
+      var osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = fundamental * ratio;
+      var g = audioCtx.createGain();
+      var amp = 1 / (i + 1.6);
+      g.gain.setValueAtTime(amp, now);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 2.2 - i * 0.25);
+      osc.connect(g);
+      g.connect(master);
+      osc.start(now);
+      osc.stop(now + 2.6);
+    });
+  }
+
+  function spawnRipple(){
+    var r = document.createElement('span');
+    r.className = 'ripple';
+    rippleLayer.appendChild(r);
+    setTimeout(function(){ r.remove(); }, 1200);
+  }
+
+  function toll(){
+    ensureAudio();
+    playBell();
+    if(!reduceMotion) spawnRipple();
+
+    bellBtn.classList.add('rung');
+    setTimeout(function(){ bellBtn.classList.remove('rung'); }, 700);
+
+    tollCount++;
+    var stage = tollCount % 4;
+    if(stage === 0){
+      caption.textContent = labels[0];
+    } else {
+      caption.textContent = labels[stage];
+    }
+
+    if(tollCount % 3 === 0){
+      document.body.classList.add('summoned');
+      setTimeout(function(){
+        document.body.classList.remove('summoned');
+      }, 2600);
+    }
+  }
+
+  bellBtn.addEventListener('click', toll);
+  bellBtn.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      toll();
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

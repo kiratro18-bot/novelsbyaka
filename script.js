@@ -70,7 +70,7 @@ var novels = [
         blurb: "A simple story about him, her, and the quiet spaces between their words.", grad: "135deg,#4a3a2a,#6a5230", collections: ["best-romance", "completed"]
     },
     {
-        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 9, rating: 4.4, views: 4200, releaseOffsetDays: 570,
+        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 10, rating: 4.4, views: 4200, releaseOffsetDays: 570,
         blurb: "A mystery that begins with a single file. Who are you, really, when the world isn't looking?", grad: "135deg,#3a2a4a,#5a2a30", collections: ["editors-choice"]
     },
     {
@@ -114,7 +114,7 @@ var novels = [
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "#", genres: ["romance", "drama", "slice"], status: "upcoming", ch: 0, rating: null, views: 0, releaseOffsetDays: 0,
+        order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     }
 ];
@@ -753,10 +753,10 @@ function renderHeatmap() {
    ============================================================ */
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { daysOut: 6, title: 'Case File: You — Chapter 10' },
+    { daysOut: 14, title: 'Case File: You — Chapter 11' },
     { daysOut: 10, title: 'Before I Forget Your Name — Chapter 2' },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
-    { daysOut: 99, title: 'thb' },
+    { daysOut: 99, title: 'ND' },
 ];
 var calSorted = [];
 function calRemind(idx) {
