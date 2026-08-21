@@ -635,6 +635,15 @@ function weekendReadFlag() {
     });
     return found ? 1 : 0;
 }
+function distinctReadingDays() {
+    return Object.keys(readingLog).filter(function (k) { return readingLog[k] > 0; }).length;
+}
+function notesWritten() {
+    return typeof comments !== 'undefined' && Array.isArray(comments) ? comments.length : 0;
+}
+function favoritesCount() {
+    return Object.keys(bookmarks).filter(function (k) { return bookmarks[k]; }).length;
+}
 function computeReaderStats() {
     return {
         read: totalRead(),
@@ -643,6 +652,9 @@ function computeReaderStats() {
         week: chaptersInLastDays(7),
         bookmarked: currentlyReadingOrder ? 1 : 0,
         weekend: weekendReadFlag(),
+        days: distinctReadingDays(),
+        notes: notesWritten(),
+        favorites: favoritesCount(),
         oneDay: store.get('oneDayRead', 0),
         oneShots: novels.filter(function (n) { return isOneShot(n) && getRead(n) >= n.ch; }).length
     };
@@ -651,13 +663,18 @@ var readerAchievementDefs = [
     { icon: '📖', title: 'First Stamp', hint: 'Read your first chapter', rarity: 'common', metric: function (s) { return s.read; }, target: 1 },
     { icon: '🔖', title: 'Bookmarked', hint: 'Set a novel as Currently Reading', rarity: 'common', metric: function (s) { return s.bookmarked; }, target: 1 },
     { icon: '🌈', title: 'Shelf Hopper', hint: 'Read from 3 different genres', rarity: 'common', metric: function (s) { return s.genres; }, target: 3 },
+    { icon: '🧭', title: 'Genre Compass', hint: 'Read from 4 different genres', rarity: 'rare', metric: function (s) { return s.genres; }, target: 4 },
     { icon: '🏆', title: 'Full Return', hint: 'Finish a novel start to finish', rarity: 'rare', metric: function (s) { return s.completed; }, target: 1 },
     { icon: '⚡', title: 'Marathoner', hint: 'Read 10+ chapters in a single week', rarity: 'rare', metric: function (s) { return s.week; }, target: 10 },
     { icon: '🌅', title: 'Weekend Reader', hint: 'Read on a Saturday or Sunday', rarity: 'rare', metric: function (s) { return s.weekend; }, target: 1 },
+    { icon: '💬', title: 'Margin Writer', hint: 'Leave a note in the margins', rarity: 'rare', metric: function (s) { return s.notes; }, target: 1 },
     { icon: '🎬', title: 'One-Shot Wonder', hint: 'Complete all ' + oneShotTotal + ' one-shots on the Shelf', rarity: 'rare', metric: function (s) { return s.oneShots; }, target: oneShotTotal },
+    { icon: '📚', title: 'Chapter Collector', hint: 'Read 25 chapters total', rarity: 'epic', metric: function (s) { return s.read; }, target: 25 },
     { icon: '🔥', title: 'Bookworm', hint: 'Read 45+ chapters total', rarity: 'epic', metric: function (s) { return s.read; }, target: 45 },
-    { icon: '👑', title: 'Genre Omnivore', hint: 'Read from all 6 genres', rarity: 'legendary', metric: function (s) { return s.genres; }, target: 6 },
-   
+    { icon: '🌙', title: 'Afterglow Reader', hint: 'Read on 7 different days', rarity: 'epic', metric: function (s) { return s.days; }, target: 7 },
+    { icon: '🧡', title: 'Story Curator', hint: 'Favorite 3 stories', rarity: 'epic', metric: function (s) { return s.favorites; }, target: 3 },
+    { icon: '🗂️', title: 'Archive Diver', hint: 'Finish 3 stories start to finish', rarity: 'epic', metric: function (s) { return s.completed; }, target: 3 },
+    { icon: '👑', title: 'Genre Omnivore', hint: 'Read from all 6 genres', rarity: 'legendary', metric: function (s) { return s.genres; }, target: 6 }
 ];
 var readerAchUnlocks = store.get('readerAchUnlocks', {});
 function renderReaderAchievements() {
@@ -792,6 +809,7 @@ function renderCalendar() {
    ============================================================ */
 var newsItems = [
     { daysAgo: 2, type: 'update', title: 'Version 2.8 is live', excerpt: " The old version is archived for anyone who wants to visit." },
+    { daysAgo: 6, type: 'note', title: 'Version 3.0 is being drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
     { daysAgo: 60, type: 'release', title: 'Petal Vol. 3 wrapped the arc', excerpt: "Nine chapters, and the petals finally settle. Vol. 4 will be the last one — more on that soon." }
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
