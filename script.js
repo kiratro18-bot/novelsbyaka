@@ -106,7 +106,7 @@ var novels = [
         blurb: "An emotional rollercoaster that explores the fragility of memory and love.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
     },
     {
-        order: 15, title: "The Petal That Falls With a Smile — Manga Version", img: "./bg/tptfwas-manga.jpg", link: "./chapters/tptfwas-manga.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: null, views: 2100, releaseOffsetDays: 0,
+        order: 15, title: "The Petal That Falls With a Smile — Manga Version", img: "./bg/tptfwas-manga.jpg", link: "./chapters/tptfwas-manga.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.5, views: 2100, releaseOffsetDays: 0,
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -114,11 +114,17 @@ var novels = [
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
+        order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: [ "drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
-    }
+    },
+    {
+       order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "#", genres: ["romance", "drama", "slice"], status: "upcoming", ch: 0, rating: null, views: null, releaseOffsetDays: 0,
+        blurb: ".", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+    },
 ];
 var badgeLabel = { romance: "Romance", drama: "Drama", slice: "Slice", sad: "Sad", mystery: "Mystery", action: "Action" };
+function isOneShot(n) { return n.ch === 1 && n.status === 'completed'; }
+var oneShotTotal = novels.filter(isOneShot).length;
 function nowMs() { return Date.now(); }
 function releaseDate(n) { return new Date(nowMs() - n.releaseOffsetDays * 86400000); }
 function lastUpdate(n) { return new Date(nowMs() - (n.updatedDaysAgo != null ? n.updatedDaysAgo : n.releaseOffsetDays) * 86400000); }
@@ -462,6 +468,11 @@ document.addEventListener('DOMContentLoaded', function () {
         this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active'); renderLeaderboard(btn.dataset.lb);
     });
+    document.getElementById('newsTabs').addEventListener('click', function (e) {
+        var btn = e.target.closest('.pill-btn'); if (!btn) return;
+        this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active'); activeNewsType = btn.dataset.newstype || 'all'; renderNews();
+    });
 });
 function renderCatalog() {
     var grid = document.getElementById('catalogGrid');
@@ -532,10 +543,10 @@ function openSpotlight(order) {
     document.getElementById('spPlus').disabled = read >= n.ch;
     var chList = document.getElementById('spChapterList');
     var html = '';
-    var isOneShot = n.ch === 1;
+    var isSingleChapter = n.ch === 1;
     for (var i = 1; i <= Math.min(n.ch, 10); i++) {
         var isRead = i <= read;
-        var cName = isOneShot ? 'One Shot' : 'Chapter ' + i;
+        var cName = isSingleChapter ? 'One Shot' : 'Chapter ' + i;
         html += '<a class="sp-ch-item" href="' + (n.link || '#') + '"><div class="sp-ch-num' + (isRead ? ' read' : '') + '">' + (isRead ? '✓' : i) + '</div><span style="flex:1">' + cName + '</span>' +
             (isRead ? '<span style="font-size:10px;color:var(--sage)">Read</span>' : '<span style="font-size:10px;color:var(--muted)">→</span>') + '</a>';
     }
@@ -586,8 +597,8 @@ function renderChallenges() {
     var weekCh = chaptersInLastDays(7);
     var monthDone = completedCount();
     var challenges = [
-        { id: 'weekly', title: 'Turn 10 Pages', sub: 'Read 10 chapters this week', target: 10, cur: Math.min(weekCh, 10), xp: 150 },
-        { id: 'monthly', title: 'Finish a Full Story', sub: 'Complete one novel', target: 1, cur: Math.min(monthDone, 1), xp: 400 },
+        { id: 'weekly', title: 'Turn 10 Pages', sub: 'Read 20 chapters this week', target: 20, cur: Math.min(weekCh, 20), xp: 150 },
+        { id: 'monthly', title: 'Finish 2 Full Story', sub: 'Complete two novel', target: 2, cur: Math.min(monthDone, 2), xp: 400 },
         { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 }
     ];
     document.getElementById('challengesList').innerHTML = challenges.map(function (c) {
@@ -632,7 +643,8 @@ function computeReaderStats() {
         week: chaptersInLastDays(7),
         bookmarked: currentlyReadingOrder ? 1 : 0,
         weekend: weekendReadFlag(),
-        oneDay: store.get('oneDayRead', 0)
+        oneDay: store.get('oneDayRead', 0),
+        oneShots: novels.filter(function (n) { return isOneShot(n) && getRead(n) >= n.ch; }).length
     };
 }
 var readerAchievementDefs = [
@@ -642,10 +654,10 @@ var readerAchievementDefs = [
     { icon: '🏆', title: 'Full Return', hint: 'Finish a novel start to finish', rarity: 'rare', metric: function (s) { return s.completed; }, target: 1 },
     { icon: '⚡', title: 'Marathoner', hint: 'Read 10+ chapters in a single week', rarity: 'rare', metric: function (s) { return s.week; }, target: 10 },
     { icon: '🌅', title: 'Weekend Reader', hint: 'Read on a Saturday or Sunday', rarity: 'rare', metric: function (s) { return s.weekend; }, target: 1 },
+    { icon: '🎬', title: 'One-Shot Wonder', hint: 'Complete all ' + oneShotTotal + ' one-shots on the Shelf', rarity: 'rare', metric: function (s) { return s.oneShots; }, target: oneShotTotal },
     { icon: '🔥', title: 'Bookworm', hint: 'Read 45+ chapters total', rarity: 'epic', metric: function (s) { return s.read; }, target: 45 },
     { icon: '👑', title: 'Genre Omnivore', hint: 'Read from all 6 genres', rarity: 'legendary', metric: function (s) { return s.genres; }, target: 6 },
-    { icon: '🎯', title: 'One-Day Read', hint: 'Finish a novel in a single day', rarity: 'UPCOMING SOON!', metric: function (s) { return s.oneDay; }, target: 1 },
-    { icon: '🏅', title: 'Completionist', hint: 'finish 3 novels start to finish', rarity: 'UPCOMING SOON!', metric: function (s) { return s.oneDay; }, target: 3 },
+   
 ];
 var readerAchUnlocks = store.get('readerAchUnlocks', {});
 function renderReaderAchievements() {
@@ -754,9 +766,9 @@ function renderHeatmap() {
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { daysOut: 14, title: 'Case File: You — Chapter 11' },
-    { daysOut: 10, title: 'Before I Forget Your Name — Chapter 2' },
+    { daysOut: 3, title: 'The Other Day' },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
-    { daysOut: 99, title: 'ND' },
+    { daysOut: 10, title: 'Before i forget your name - chapter 2' },
 ];
 var calSorted = [];
 function calRemind(idx) {
@@ -773,6 +785,37 @@ function renderCalendar() {
             '<div class="cal-info"><div class="cal-title">' + esc(r.title) + '</div><div class="cal-count">in ' + r.daysOut + ' day' + (r.daysOut === 1 ? '' : 's') + '</div></div>' +
             '<button class="pill-btn" onclick="calRemind(' + idx + ')">Remind me</button></div>';
     }).join('');
+}
+
+/* ============================================================
+   NEWS
+   ============================================================ */
+var newsItems = [
+    { daysAgo: 2, type: 'update', title: 'Version 2.8 is live', excerpt: " The old version is archived for anyone who wants to visit." },
+    { daysAgo: 60, type: 'release', title: 'Petal Vol. 3 wrapped the arc', excerpt: "Nine chapters, and the petals finally settle. Vol. 4 will be the last one — more on that soon." }
+];
+var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
+var activeNewsType = 'all';
+function renderNews() {
+    var list = document.getElementById('newsList');
+    if (!list) return;
+    var filtered = activeNewsType === 'all' ? newsItems : newsItems.filter(function (a) { return a.type === activeNewsType; });
+    filtered = filtered.slice().sort(function (a, b) { return a.daysAgo - b.daysAgo; });
+    var countEl = document.getElementById('newsCount');
+    if (countEl) countEl.textContent = filtered.length + ' note' + (filtered.length !== 1 ? 's' : '') + ' from the author.';
+    if (!filtered.length) { list.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:12.5px">Nothing here yet.</div>'; return; }
+    list.innerHTML = filtered.map(function (a) {
+        var d = new Date(Date.now() - a.daysAgo * 86400000);
+        return '<div class="news-item" onclick="openNewsToast(this)">' +
+            '<div class="news-date-block"><div class="news-day">' + d.getDate() + '</div><div class="news-mon">' + d.toLocaleDateString('en-US', { month: 'short' }) + '</div></div>' +
+            '<div class="news-body"><div class="news-tag-row"><span class="news-tag ' + a.type + '">' + newsTagLabel[a.type] + '</span><span class="news-time">' + timeAgo(d.getTime()) + '</span></div>' +
+            '<div class="news-title">' + esc(a.title) + '</div>' +
+            '<div class="news-excerpt">' + esc(a.excerpt) + '</div></div></div>';
+    }).join('');
+}
+function openNewsToast(el) {
+    var titleEl = el.querySelector('.news-title');
+    showToast((titleEl ? titleEl.textContent : 'This note') + ' — full post coming soon ✦');
 }
 
 /* ============================================================
@@ -1001,6 +1044,7 @@ window.addEventListener('load', function () {
     renderLeaderboard('views');
     renderHeatmap();
     renderCalendar();
+    renderNews();
     renderComments();
     populateCommentSelect();
 
