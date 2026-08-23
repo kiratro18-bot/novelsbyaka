@@ -3360,6 +3360,129 @@
             color: var(--plum);
         }
     </style>
+    <style>
+        /* FINAL ARCHIVE UPDATE */
+        .final-update-section,
+        .personal-shelf-section {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 var(--sp-6) var(--sp-8);
+        }
+        .final-update-section { padding-top: var(--sp-7); }
+        .final-update-grid,
+        .personal-shelf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+        .final-update-card,
+        .personal-shelf-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: var(--sp-5);
+            box-shadow: var(--shadow-sm);
+        }
+        .final-update-card { min-height: 230px; display: flex; flex-direction: column; }
+        .final-update-primary { background: var(--cream); border-color: var(--plum); }
+        .final-update-kicker,
+        .personal-card-label,
+        .reader-mode-eyebrow,
+        .reader-filter-label,
+        .reader-mode-small-label {
+            color: var(--mauve);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+        .final-update-card h3 { margin: 12px 0 9px; color: var(--ink); font-family: var(--font-display); font-size: 21px; font-style: italic; line-height: 1.2; }
+        .final-update-card p { color: var(--mauve); font-size: 12px; line-height: 1.75; }
+        .final-update-btn { align-self: flex-start; margin-top: auto; padding: 9px 14px; border: 1px solid var(--plum); border-radius: var(--r-sm); background: var(--plum); color: white; cursor: pointer; font-family: var(--font-mono); font-size: 10px; transition: all var(--tr); }
+        .final-update-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+        .final-update-btn.ghost { background: transparent; color: var(--plum); }
+        .personal-shelf-section { padding-top: 0; }
+        .personal-shelf-card { min-height: 178px; display: flex; flex-direction: column; }
+        .personal-card-label { margin-bottom: 14px; }
+        .personal-story-row { display: flex; align-items: center; gap: 12px; flex: 1; }
+        .personal-cover { width: 48px; height: 68px; flex-shrink: 0; overflow: hidden; border-radius: var(--r-sm); }
+        .personal-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .personal-story-info { min-width: 0; }
+        .personal-story-info h3 { overflow: hidden; color: var(--ink); font-family: var(--font-display); font-size: 16px; font-style: italic; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+        .personal-story-meta { margin-top: 5px; color: var(--mauve); font-family: var(--font-mono); font-size: 9px; }
+        .personal-progress { height: 5px; margin-top: 10px; overflow: hidden; border-radius: 5px; background: var(--cream); }
+        .personal-progress span { display: block; height: 100%; border-radius: inherit; background: var(--plum); }
+        .personal-card-action { margin-top: 14px; }
+        .personal-empty { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: 5px; color: var(--mauve); font-size: 11px; line-height: 1.5; }
+        .personal-empty strong { color: var(--ink); font-family: var(--font-display); font-size: 16px; font-style: italic; }
+        .personal-empty-icon { color: var(--plum); font-size: 19px; }
+        .novel-fav-btn { width: 26px; height: 26px; flex-shrink: 0; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--cream); color: var(--mauve); cursor: pointer; opacity: 0; transition: all var(--tr); }
+        .novel-item:hover .novel-fav-btn,
+        .novel-fav-btn:focus-visible,
+        .novel-fav-btn.active { opacity: 1; }
+        .novel-fav-btn.active { color: var(--plum); border-color: var(--plum); }
+        .novel-fav-btn:hover { color: var(--plum); border-color: var(--plum); }
+        .sp-focus-btn { width: 100%; margin-top: 8px; padding: 12px 16px; border: 1px solid var(--plum); border-radius: var(--r-sm); background: transparent; color: var(--plum); cursor: pointer; font-family: var(--font-mono); font-size: 10px; transition: all var(--tr); }
+        .sp-focus-btn:hover, .sp-focus-btn.bookmarked { background: var(--cream); }
+        .sp-focus-btn:disabled { opacity: .45; cursor: default; }
+        .comment-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
+        .reader-filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+        .reader-filter { padding: 7px 11px; border: 1px solid var(--border); border-radius: var(--r-sm); background: transparent; color: var(--mauve); cursor: pointer; font-family: var(--font-mono); font-size: 9px; }
+        .reader-filter.active, .reader-filter:hover { border-color: var(--plum); background: var(--cream); color: var(--plum); }
+        .reader-mode-overlay { position: fixed; inset: 0; z-index: 940; background: rgba(36,31,26,.76); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+        .reader-mode-overlay.open { opacity: 1; pointer-events: all; }
+        .reader-mode-panel { position: fixed; inset: 18px; z-index: 941; display: flex; flex-direction: column; overflow: hidden; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); transform: translateY(18px) scale(.98); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+        .reader-mode-panel.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
+        body.reader-mode-active { overflow: hidden; }
+        .reader-mode-header, .reader-mode-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0; padding: 16px 22px; border-bottom: 1px solid var(--border); background: var(--mist); }
+        .reader-mode-footer { justify-content: flex-end; border-top: 1px solid var(--border); border-bottom: 0; }
+        .reader-mode-brand, .reader-mode-header-actions { display: flex; align-items: center; gap: 9px; }
+        .reader-mode-brand { color: var(--ink); font-family: var(--font-display); font-size: 17px; font-style: italic; }
+        .reader-mode-mark { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--plum); border-radius: var(--r-sm); background: var(--cream); color: var(--plum); font-style: normal; }
+        .reader-mode-icon { min-width: 38px; height: 38px; padding: 0 9px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface); color: var(--ink); cursor: pointer; font-family: var(--font-mono); font-size: 10px; }
+        .reader-mode-icon:hover { border-color: var(--plum); color: var(--plum); }
+        .reader-mode-scroll { flex: 1; overflow-y: auto; padding: 28px 22px 44px; }
+        .reader-mode-progress-wrap, .reader-mode-copy { width: min(720px, 100%); margin-left: auto; margin-right: auto; }
+        .reader-mode-progress-wrap { margin-bottom: 38px; }
+        .reader-mode-progress-label { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--mauve); font-family: var(--font-mono); font-size: 10px; }
+        .reader-mode-progress { height: 5px; overflow: hidden; border-radius: 5px; background: var(--cream); }
+        .reader-mode-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--plum); transition: width .3s ease; }
+        .reader-mode-copy { color: var(--ink); line-height: 1.9; transition: font-size .2s ease; }
+        .reader-mode-copy h1 { max-width: 680px; margin: 8px 0; color: var(--ink); font-family: var(--font-display); font-size: clamp(34px, 5vw, 62px); font-weight: 500; line-height: 1.06; }
+        .reader-mode-byline { color: var(--mauve); font-family: var(--font-mono); font-size: 10px; }
+        .reader-mode-rule { width: 90px; height: 1px; margin: 28px 0; background: var(--plum); }
+        .reader-mode-intro { color: var(--ink); font-family: var(--font-display); font-size: 19px; font-style: italic; line-height: 1.55; }
+        .reader-mode-copy blockquote { margin: 24px 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--plum); color: var(--plum); font-family: var(--font-display); font-size: 18px; font-style: italic; line-height: 1.6; }
+        .reader-mode-chapter-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 34px; padding: 16px; border: 1px dashed var(--border); border-radius: var(--r-md); background: var(--surface); }
+        .reader-mode-chapter-card strong { display: block; margin-top: 3px; color: var(--ink); font-family: var(--font-display); font-size: 18px; }
+        .reader-mode-stepper { display: flex; gap: 6px; }
+        .reader-mode-stepper button { width: 40px; height: 40px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--cream); color: var(--ink); cursor: pointer; font-size: 18px; }
+        .reader-mode-footer .sp-read-btn, .reader-mode-footer .sp-bookmark-btn, .reader-mode-footer .sp-focus-btn { width: auto; margin: 0; min-width: 150px; }
+        .reader-mode-footer button:disabled { opacity: .45; cursor: default; }
+        .reader-mobile-dock { display: none; }
+        @media (hover: none) {
+            .novel-fav-btn { opacity: 1; }
+        }
+        @media (max-width: 760px) {
+            .final-update-section, .personal-shelf-section { padding-left: var(--sp-4); padding-right: var(--sp-4); }
+            .final-update-grid, .personal-shelf-grid { grid-template-columns: 1fr; }
+            .final-update-card { min-height: 0; }
+            .reader-mode-panel { inset: 0; border: 0; border-radius: 0; }
+            .reader-mode-header, .reader-mode-footer { padding: 13px 14px; }
+            .reader-mode-footer { flex-wrap: wrap; padding-bottom: calc(13px + env(safe-area-inset-bottom)); }
+            .reader-mode-footer .sp-read-btn, .reader-mode-footer .sp-bookmark-btn, .reader-mode-footer .sp-focus-btn { width: 100%; min-width: 0; }
+            .reader-mode-scroll { padding: 22px 17px 34px; }
+            .reader-mode-copy h1 { font-size: 36px; }
+            .reader-mode-intro { font-size: 17px; }
+            .comment-toolbar { align-items: flex-start; flex-direction: column; }
+            .reader-mobile-dock { position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 400; display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; padding: 6px; border: 1px solid var(--ink); border-radius: 10px; background: var(--mist); box-shadow: var(--shadow-lg); }
+            .reader-mobile-dock a, .reader-mobile-dock button { display: flex; min-width: 0; min-height: 48px; align-items: center; justify-content: center; flex-direction: column; gap: 3px; border: 0; background: transparent; color: var(--ink); text-decoration: none; cursor: pointer; font-family: var(--font-mono); font-size: 8px; }
+            .reader-mobile-dock a:hover, .reader-mobile-dock button:hover { background: var(--cream); color: var(--plum); border-radius: 6px; }
+            .reader-mobile-dock span { color: var(--plum); font-size: 15px; line-height: 1; }
+            body { padding-bottom: 82px; }
+        }
+        @media (max-width: 420px) {
+            .reader-mode-header-actions { gap: 4px; }
+            .reader-mode-icon { min-width: 34px; padding: 0 7px; }
+            .reader-mode-copy h1 { font-size: 32px; }
+        }
+    </style>
 </head>
 
 <body>
@@ -3367,8 +3490,8 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <div class="archive-notice" role="note">
-        <span>📌 You're viewing an archived version of this site.</span>
-        <a href="index.html">Go to the latest version →</a>
+        <span>📌 Final archive edition · Reader Layer ready.</span>
+        <a href="#readerLayer">Jump to the Reader Layer →</a>
     </div>
 
     <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()" aria-hidden="true"></div>
@@ -3409,44 +3532,8 @@
             </div>
              <div class="sph-row">
                 <span class="sph-row-label">Redirect to latest Version</span>
-                <a href="index.html" class="pill-btn" style="text-decoration:none">new Version 2.8 ↗ </a>
+                <a href="index.html" class="pill-btn" style="text-decoration:none"> ↗ </a>
             </div>
-            <div class="sph-section">
-                <span class="sph-section-label">Interface</span>
-                <div class="sph-row">
-                    <div>
-                        <div class="sph-row-label">UI Style</div>
-                        <div class="sph-row-sub">
-                            Choose the website appearance [ ERROR ]
-                        </div>
-                    </div>
-                    <select id="uiTheme" class="sp-select" aria-label="UI Style">
-                        <option value="liquid">💧 Liquid Glass</option>
-                        <option value="minimal">✨ Minimal</option>
-                        <option value="classic">📚 Classic</option>
-                        <option value="glass">🪟 Glass</option>
-                    </select>
-                </div>
-            </div>
-            <div class="sph-section">
-                <span class="sph-section-label">Accent Colour</span>
-                <div class="accent-picker">
-                    <div class="ap-dot selected" style="background: #8c3b32"
-                        onclick="setAccent(this, '#8c3b32', '#8a7355')" role="button" aria-label="Oxblood" tabindex="0">
-                    </div>
-                    <div class="ap-dot" style="background: #2c3e5c" onclick="setAccent(this, '#2c3e5c', '#6c7a96')"
-                        role="button" aria-label="Ink Blue" tabindex="0"></div>
-                    <div class="ap-dot" style="background: #34503f" onclick="setAccent(this, '#34503f', '#6e8c74')"
-                        role="button" aria-label="Forest" tabindex="0"></div>
-                    <div class="ap-dot" style="background: #8a6b2e" onclick="setAccent(this, '#8a6b2e', '#c2a15d')"
-                        role="button" aria-label="Brass" tabindex="0"></div>
-                    <div class="ap-dot" style="background: #4a3355" onclick="setAccent(this, '#4a3355', '#8c7a9a')"
-                        role="button" aria-label="Violet" tabindex="0"></div>
-                    <div class="ap-dot" style="background: #6e3226" onclick="setAccent(this, '#6e3226', '#a66f5d')"
-                        role="button" aria-label="Rust" tabindex="0"></div>
-                </div>
-            </div>
-            <div class="sph-section">
                 <span class="sph-section-label">Reading</span>
                 <div class="sph-row">
                     <div>
@@ -3539,8 +3626,47 @@
             <button class="sp-bookmark-btn" id="spBookmarkBtn" onclick="toggleBookmark()">
                 🔖 Set as Currently Reading
             </button>
+            <button class="sp-focus-btn" id="spFocusBtn" onclick="openReaderMode(spotlightOrder)">
+                ✦ Open Focus Reading Mode
+            </button>
         </div>
     </aside>
+
+    <div class="reader-mode-overlay" id="readerModeOverlay" onclick="closeReaderMode()"></div>
+    <article class="reader-mode-panel" id="readerModePanel" role="dialog" aria-modal="true" aria-label="Focus reading mode">
+        <header class="reader-mode-header">
+            <div class="reader-mode-brand"><span class="reader-mode-mark">✦</span><span>Focus Reading</span></div>
+            <div class="reader-mode-header-actions">
+                <button class="reader-mode-icon" onclick="adjustReaderFont(-1)" aria-label="Decrease text size">A−</button>
+                <button class="reader-mode-icon" onclick="adjustReaderFont(1)" aria-label="Increase text size">A+</button>
+                <button class="reader-mode-icon" onclick="closeReaderMode()" aria-label="Close focus reading mode">✕</button>
+            </div>
+        </header>
+        <div class="reader-mode-scroll">
+            <div class="reader-mode-progress-wrap">
+                <div class="reader-mode-progress-label"><span id="readerModeProgressLabel">Chapter 1</span><span id="readerModeProgressPct">0%</span></div>
+                <div class="reader-mode-progress"><span id="readerModeProgressFill"></span></div>
+            </div>
+            <div class="reader-mode-copy">
+                <div class="reader-mode-eyebrow">Now reading</div>
+                <h1 id="readerModeTitle">A story waiting to open</h1>
+                <p class="reader-mode-byline" id="readerModeByline"></p>
+                <div class="reader-mode-rule"></div>
+                <p class="reader-mode-intro" id="readerModeIntro"></p>
+                <blockquote>Every chapter is a small room. Take your time here.</blockquote>
+                <p id="readerModeBody">This is your focused reading space: keep the catalogue behind you, follow your progress, and return to the full chapter whenever you are ready.</p>
+                <div class="reader-mode-chapter-card">
+                    <div><span class="reader-mode-small-label">Your place in the story</span><strong id="readerModeChapterText">Chapter 1</strong></div>
+                    <div class="reader-mode-stepper"><button onclick="adjustReaderChapter(-1)" aria-label="Previous chapter">−</button><button onclick="adjustReaderChapter(1)" aria-label="Next chapter">+</button></div>
+                </div>
+            </div>
+        </div>
+        <footer class="reader-mode-footer">
+            <button class="sp-bookmark-btn" id="readerModeBookmarkBtn" onclick="readerModeBookmark()">🔖 Set as Currently Reading</button>
+            <button class="sp-focus-btn" id="readerModeMarkBtn" onclick="readerModeMarkComplete()">Mark chapter as read</button>
+            <button class="sp-read-btn" id="readerModeOpenBtn" onclick="readerModeOpenStory()">Open full chapter →</button>
+        </footer>
+    </article>
 
     <nav class="site-nav" id="siteNav" role="navigation">
         <div class="nav-brand">
@@ -3586,15 +3712,15 @@
             <div class="hero-divider"></div>
             <div class="hero-stats">
                 <div class="stat">
-                    <div class="stat-num">15</div>
+                    <div class="stat-num">16</div>
                     <div class="stat-label">Titles</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-num">66+</div>
+                    <div class="stat-num">74+</div>
                     <div class="stat-label">Chapters</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-num">3</div>
+                    <div class="stat-num">2</div>
                     <div class="stat-label">Ongoing</div>
                 </div>
             </div>
@@ -3685,7 +3811,7 @@
         </div>
     </div>
 
-    <div class="library-wrap">
+    <div class="library-wrap" id="library">
         <div>
             <div class="section-header">
                 <h2 class="section-title">The Catalog</h2>
@@ -3767,6 +3893,45 @@
             </div>
         </aside>
     </div>
+
+    <section class="final-update-section" id="readerLayer">
+        <div class="section-header">
+            <h2 class="section-title">The Final <em>Reader Layer</em></h2>
+            <span class="section-count">A calmer way to keep your place</span>
+        </div>
+        <div class="final-update-grid">
+            <article class="final-update-card final-update-primary">
+                <span class="final-update-kicker">01 · Focus</span>
+                <h3>Read without the dashboard noise.</h3>
+                <p>Open any catalogue story in a quieter reading space, change text size, step through chapters, and mark your place when you finish.</p>
+                <button class="final-update-btn" onclick="openReaderMode(selectedOrder > 0 ? selectedOrder : 1)">Open Focus Reading →</button>
+            </article>
+            <article class="final-update-card">
+                <span class="final-update-kicker">02 · Shelf memory</span>
+                <h3>Your shelf remembers what matters.</h3>
+                <p>Currently reading, favorites, finished stories, and total progress now live together in one small reader dashboard.</p>
+                <button class="final-update-btn ghost" onclick="document.getElementById('personalShelf').scrollIntoView({behavior:'smooth'})">View personal shelf ↓</button>
+            </article>
+            <article class="final-update-card">
+                <span class="final-update-kicker">03 · Notes</span>
+                <h3>Keep the margins useful.</h3>
+                <p>Reader notes can be filtered by all notes, rated notes, or newest notes so the archive stays easy to revisit.</p>
+                <button class="final-update-btn ghost" onclick="document.getElementById('marginalia').scrollIntoView({behavior:'smooth'})">Open marginalia ↓</button>
+            </article>
+        </div>
+    </section>
+
+    <section class="personal-shelf-section" id="personalShelf">
+        <div class="section-header">
+            <h2 class="section-title">Your <em>Personal Shelf</em></h2>
+            <span class="section-count">Saved in this browser</span>
+        </div>
+        <div class="personal-shelf-grid">
+            <article class="personal-shelf-card" id="personalCurrentCard"></article>
+            <article class="personal-shelf-card" id="personalFavoritesCard"></article>
+            <article class="personal-shelf-card" id="personalFinishedCard"></article>
+        </div>
+    </section>
 
     <section class="mr-section">
         <div class="section-header" style="padding: 0">
@@ -3882,10 +4047,10 @@
                         </div>
                     </div>
                 </a>
-                <a href="./chapters/rpc.html" class="grid-card">
+                <a href="./chapters/rp.html" class="grid-card">
                     <div class="gc-rank">#7</div>
                     <div class="gc-cover" style="background: linear-gradient(135deg, #5e4a78, #8b3030)">
-                        <img src="./bg/rpc.jpg" alt="The Rain Pact" onerror="this.style.display = 'none'" />
+                        <img src="./bg/rp.jpg" alt="The Rain Pact" onerror="this.style.display = 'none'" />
                     </div>
                     <div class="gc-info">
                         <h3 class="gc-title">The Rain Pact</h3>
@@ -3963,7 +4128,7 @@
         </div>
     </section>
 
-    <div class="comment-section">
+    <div class="comment-section" id="marginalia">
         <div class="section-header">
             <h2 class="section-title">Marginalia</h2>
             <span class="section-count" id="commentCount">0 comments</span>
@@ -4029,6 +4194,14 @@
                 </button>
             </div>
         </div>
+        <div class="comment-toolbar" id="commentToolbar" role="toolbar" aria-label="Filter reader notes">
+            <span class="reader-filter-label">Note library</span>
+            <div class="reader-filter-pills">
+                <button class="reader-filter active" data-notefilter="all">All notes</button>
+                <button class="reader-filter" data-notefilter="rated">Rated</button>
+                <button class="reader-filter" data-notefilter="newest">Newest</button>
+            </div>
+        </div>
         <div id="commentsList">
             <div id="noComments" style="
             text-align: center;
@@ -4044,8 +4217,16 @@
         </div>
     </div>
 
+    <nav class="reader-mobile-dock" aria-label="Quick reader navigation">
+        <a href="#library"><span>▤</span> Shelf</a>
+        <a href="#readerLayer"><span>✦</span> Focus</a>
+        <a href="#personalShelf"><span>♥</span> Saved</a>
+        <a href="#marginalia"><span>✎</span> Notes</a>
+        <button onclick="openSettings()" aria-label="Open settings"><span>⚙</span> Settings</button>
+    </nav>
+
     <footer>
-        Filed &amp; maintained by AKA · Last Updated: July 2026 · Version old<br />
+        Filed &amp; maintained by AKA · Final archive update · Reader Layer<br />
         Please do not repost, copy, or reupload stories without permission.
         Sharing links is always appreciated.
     </footer>
@@ -4270,6 +4451,17 @@
                 grad: "135deg,#5f7489,#8a7355",
                 badges: [ "drama", "slice"],
             },
+            {
+                title: "The other day ",
+                img: "./bg2/tod.jpg",
+                link: "./chapters/tod.html",
+                genres: "drama slice",
+                status: "ongoing",
+                ch: 1,
+                order: 16,
+                grad: "135deg,#5f7489,#8a7355",
+                badges: [ "drama", "slice"],
+            },
         ];
 
         var badgeClass = {
@@ -4315,6 +4507,7 @@
             renderNovels();
             renderProgressSummary();
             renderCurrentlyReading();
+            renderPersonalShelf();
             updateJourney();
         }
         function adjustProgress(order, delta) {
@@ -4352,6 +4545,8 @@
 
         /* ── currently reading ── */
         var currentlyReadingOrder = store.get("currentlyReading", null);
+        var readerFavorites = store.get("readerFavorites", {});
+        if (!readerFavorites || typeof readerFavorites !== "object" || Array.isArray(readerFavorites)) readerFavorites = {};
         function renderCurrentlyReading() {
             var card = document.getElementById("crCard");
             var n =
@@ -4373,8 +4568,31 @@
             document.getElementById("crBtn").dataset.link = n.link || "#";
         }
         function continuReading() {
-            var link = document.getElementById("crBtn").dataset.link;
-            if (link && link !== "#") window.location.href = link;
+            var n = currentlyReadingOrder && novels.find(function (x) { return x.order === currentlyReadingOrder; });
+            if (n) openReaderMode(n.order);
+        }
+        function personalMiniCard(n, label, actionText) {
+            if (!n) return '<div class="personal-empty"><span class="personal-empty-icon">✦</span><strong>Nothing here yet</strong><span>Choose a story from the catalogue to start building this space.</span></div>';
+            var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
+            return '<div class="personal-card-label">' + label + '</div><div class="personal-story-row"><div class="personal-cover" style="background:linear-gradient(' + n.grad + ')"><img src="' + esc(n.img) + '" alt="" onerror="this.style.display=\'none\'"></div><div class="personal-story-info"><h3>' + esc(n.title) + '</h3><div class="personal-story-meta">' + read + ' / ' + n.ch + ' chapters · ' + pct + '%</div><div class="personal-progress"><span style="width:' + pct + '%"></span></div></div></div><button class="final-update-btn ghost personal-card-action" onclick="openReaderMode(' + n.order + ')">' + actionText + ' →</button>';
+        }
+        function renderPersonalShelf() {
+            var current = currentlyReadingOrder && novels.find(function (n) { return n.order === currentlyReadingOrder; });
+            var favoriteOrders = Object.keys(readerFavorites).filter(function (k) { return readerFavorites[k]; }).map(function (k) { return parseInt(k, 10); });
+            var favorite = favoriteOrders.length ? novels.find(function (n) { return n.order === favoriteOrders[favoriteOrders.length - 1]; }) : null;
+            var finished = novels.filter(function (n) { return n.ch > 0 && getRead(n) >= n.ch; }).sort(function (a, b) { return b.order - a.order; })[0];
+            var currentEl = document.getElementById('personalCurrentCard'), favEl = document.getElementById('personalFavoritesCard'), doneEl = document.getElementById('personalFinishedCard');
+            if (!currentEl || !favEl || !doneEl) return;
+            currentEl.innerHTML = personalMiniCard(current, 'Currently reading', current ? 'Continue' : 'Choose a story');
+            favEl.innerHTML = personalMiniCard(favorite, 'A favorite from your shelf', favorite ? 'Open favorite' : 'Add a favorite');
+            doneEl.innerHTML = personalMiniCard(finished, 'Recently finished', finished ? 'Revisit' : 'Finish your first story');
+        }
+        function toggleReaderFavorite(order) {
+            readerFavorites[order] = !readerFavorites[order];
+            if (!readerFavorites[order]) delete readerFavorites[order];
+            store.set('readerFavorites', readerFavorites);
+            refreshAll();
+            showToast(readerFavorites[order] ? 'Added to your Reader Shelf ♥' : 'Removed from Reader Shelf');
         }
 
         /* ── spotlight panel ── */
@@ -4394,6 +4612,7 @@
             13: "If time was a currency, how much would you pay for a single hour of the past?",
             14: "An emotional rollercoaster that explores the fragility of memory and love.",
             15: "Manga adaptation of the beloved novel-by use of AI.",
+            16: "normal days?"
         };
 
         var spotlightOrder = null;
@@ -4498,10 +4717,8 @@
             openSpotlight(spotlightOrder);
         }
         function goToNovel() {
-            var n = novels.find(function (x) {
-                return x.order === spotlightOrder;
-            });
-            if (n && n.link && n.link !== "#") window.location.href = n.link;
+            var n = novels.find(function (x) { return x.order === spotlightOrder; });
+            if (n) openReaderMode(n.order);
         }
         function toggleBookmark() {
             if (!spotlightOrder) return;
@@ -4518,8 +4735,82 @@
                 showToast((n ? n.title : "Novel") + " set as currently reading 🔖");
             }
             renderCurrentlyReading();
+            renderPersonalShelf();
             updateJourney();
             openSpotlight(spotlightOrder);
+        }
+
+        var readerModeOrder = null, readerModeChapter = 1, readerFontScale = store.get('readerFontScale', 1);
+        function openReaderMode(order) {
+            var n = novels.find(function (x) { return x.order === order; });
+            if (!n) return;
+            readerModeOrder = order;
+            readerModeChapter = n.ch ? (getRead(n) >= n.ch ? n.ch : Math.max(1, getRead(n) + 1)) : 1;
+            closeSpotlight();
+            updateReaderMode();
+            document.getElementById('readerModeOverlay').classList.add('open');
+            document.getElementById('readerModePanel').classList.add('open');
+            document.body.classList.add('reader-mode-active');
+        }
+        function updateReaderMode() {
+            var n = novels.find(function (x) { return x.order === readerModeOrder; });
+            if (!n) return;
+            var read = getRead(n), total = n.ch || 1, pct = n.ch ? Math.round(read / n.ch * 100) : 0;
+            document.getElementById('readerModeTitle').textContent = n.title;
+            document.getElementById('readerModeByline').textContent = 'A Novel by AKA · ' + (n.status === 'ongoing' ? 'Ongoing' : 'Complete') + ' · ' + callNo(n);
+            document.getElementById('readerModeIntro').textContent = novelBlurbs[n.order] || 'A novel by AKA.';
+            document.getElementById('readerModeProgressLabel').textContent = 'Chapter ' + readerModeChapter + ' of ' + total;
+            document.getElementById('readerModeProgressPct').textContent = pct + '%';
+            document.getElementById('readerModeProgressFill').style.width = pct + '%';
+            document.getElementById('readerModeChapterText').textContent = n.ch ? 'Chapter ' + readerModeChapter : 'Coming soon';
+            document.getElementById('readerModeBody').textContent = n.ch ? 'You are in the focus space for chapter ' + readerModeChapter + '. Mark it as read when you finish, or open the full chapter when you are ready to continue.' : 'This story is waiting for its next chapter. Keep it on your Reader Shelf and return when it lands.';
+            document.getElementById('readerModeMarkBtn').textContent = n.ch && read >= readerModeChapter ? '✓ Chapter marked as read' : 'Mark chapter as read';
+            document.getElementById('readerModeMarkBtn').disabled = !n.ch || read >= readerModeChapter;
+            document.getElementById('readerModeOpenBtn').disabled = !n.link || n.link === '#';
+            document.getElementById('readerModeOpenBtn').textContent = n.link && n.link !== '#' ? 'Open full chapter →' : 'Story link coming soon';
+            var bbtn = document.getElementById('readerModeBookmarkBtn');
+            bbtn.textContent = currentlyReadingOrder === n.order ? '✓ Currently Reading' : '🔖 Set as Currently Reading';
+            bbtn.classList.toggle('bookmarked', currentlyReadingOrder === n.order);
+            document.querySelector('.reader-mode-copy').style.fontSize = readerFontScale + 'em';
+        }
+        function closeReaderMode() {
+            document.getElementById('readerModeOverlay').classList.remove('open');
+            document.getElementById('readerModePanel').classList.remove('open');
+            document.body.classList.remove('reader-mode-active');
+            readerModeOrder = null;
+        }
+        function adjustReaderChapter(delta) {
+            var n = novels.find(function (x) { return x.order === readerModeOrder; });
+            if (!n || !n.ch) return;
+            readerModeChapter = Math.max(1, Math.min(readerModeChapter + delta, n.ch));
+            updateReaderMode();
+        }
+        function adjustReaderFont(delta) {
+            readerFontScale = Math.max(.9, Math.min(1.25, +(readerFontScale + delta * .05).toFixed(2)));
+            store.set('readerFontScale', readerFontScale);
+            updateReaderMode();
+        }
+        function readerModeBookmark() {
+            var n = novels.find(function (x) { return x.order === readerModeOrder; });
+            if (!n) return;
+            currentlyReadingOrder = currentlyReadingOrder === n.order ? null : n.order;
+            store.set('currentlyReading', currentlyReadingOrder);
+            refreshAll();
+            updateReaderMode();
+            showToast(currentlyReadingOrder === n.order ? 'Added to Currently Reading 🔖' : 'Bookmark removed.');
+        }
+        function readerModeMarkComplete() {
+            var n = novels.find(function (x) { return x.order === readerModeOrder; });
+            if (!n || !n.ch) return;
+            var delta = readerModeChapter - getRead(n);
+            if (delta > 0) adjustProgress(n.order, delta);
+            if (readerModeChapter < n.ch) readerModeChapter++;
+            updateReaderMode();
+        }
+        function readerModeOpenStory() {
+            var n = novels.find(function (x) { return x.order === readerModeOrder; });
+            if (!n || !n.link || n.link === '#') { showToast('The full chapter link is coming soon ✦'); return; }
+            window.location.href = n.link;
         }
 
         /* ── mood picker (filters by any matching genre keyword) ── */
@@ -4755,6 +5046,7 @@
                         })
                         .join("");
                     var href = n.link ? esc(n.link) : "#";
+                    var isReaderFavorite = !!readerFavorites[n.order];
                     var read = getRead(n),
                         pct = n.ch ? Math.round((read / n.ch) * 100) : 0;
                     var progressHtml = n.ch
@@ -4811,6 +5103,7 @@
                         '<div class="novel-byline">A Novel by AKA</div>' +
                         progressHtml +
                         "</div>" +
+                        '<button class="novel-fav-btn' + (isReaderFavorite ? ' active' : '') + '" onclick="event.preventDefault();event.stopPropagation();toggleReaderFavorite(' + n.order + ')" aria-label="' + (isReaderFavorite ? 'Remove from Reader Shelf' : 'Add to Reader Shelf') + '">' + (isReaderFavorite ? '♥' : '♡') + '</button>' +
                         '<button class="novel-quick-btn" onclick="event.preventDefault();event.stopPropagation();openSpotlight(' +
                         n.order +
                         ')" aria-label="Quick view ' +
@@ -4878,6 +5171,7 @@
             if (e.key === "Escape") {
                 closeSettings();
                 closeSpotlight();
+                closeReaderMode();
                 return;
             }
             var items = document.querySelectorAll(".novel-item");
@@ -4914,35 +5208,16 @@
                 if (r >= n.ch && n.ch > 0) completed++;
             });
             var genreCount = Object.keys(genres).length;
+            var favoriteCount = Object.keys(readerFavorites).length;
             var badges = [
-                {
-                    id: "first",
-                    icon: "📖",
-                    title: "First Stamp",
-                    hint: "Read your first chapter",
-                    check: totalRead >= 1,
-                },
-                {
-                    id: "hopper",
-                    icon: "🌈",
-                    title: "Shelf Hopper",
-                    hint: "Read 3+ genres",
-                    check: genreCount >= 3,
-                },
-                {
-                    id: "comp",
-                    icon: "🏆",
-                    title: "Full Return",
-                    hint: "Finish a novel",
-                    check: completed >= 1,
-                },
-                {
-                    id: "worm",
-                    icon: "🔥",
-                    title: "Bookworm",
-                    hint: "Read 35+ chapters",
-                    check: totalRead >= 45,
-                },
+                { id: "first", icon: "📖", title: "First Stamp", hint: "Read your first chapter", check: totalRead >= 1 },
+                { id: "bookmark", icon: "🔖", title: "Bookmarked", hint: "Set a story as Currently Reading", check: !!currentlyReadingOrder },
+                { id: "hopper", icon: "🌈", title: "Shelf Hopper", hint: "Read from 3 genres", check: genreCount >= 3 },
+                { id: "comp", icon: "🏆", title: "Full Return", hint: "Finish a novel start to finish", check: completed >= 1 },
+                { id: "collector", icon: "📚", title: "Chapter Collector", hint: "Read 25 chapters total", check: totalRead >= 25 },
+                { id: "margin", icon: "💬", title: "Margin Writer", hint: "Leave a note in the margins", check: typeof comments !== "undefined" && comments.length >= 1 },
+                { id: "curator", icon: "♥", title: "Story Curator", hint: "Save 3 stories to your Reader Shelf", check: favoriteCount >= 3 },
+                { id: "omnivore", icon: "👑", title: "Genre Omnivore", hint: "Read from all 6 genres", check: genreCount >= 6 },
             ];
             var grid = document.getElementById("achievementGrid");
             if (!grid) return;
@@ -4963,7 +5238,7 @@
                 .join("");
             var rank = "Novice Reader";
             if (totalRead >= 50) rank = "Legendary Librarian";
-            else if (totalRead >= 20) rank = "Dedicated Scholar";
+            else if (totalRead >= 25) rank = "Dedicated Scholar";
             else if (totalRead >= 5) rank = "Avid Reader";
             document.getElementById("journeyRank").textContent = rank;
             document.getElementById("journeyStats").textContent =
@@ -5191,23 +5466,26 @@
             return s;
         }
 
+        var activeNoteFilter = "all";
         function renderComments() {
             var list = document.getElementById("commentsList"),
-                none = document.getElementById("noComments");
+                none = document.getElementById("noComments"),
+                entries = comments.map(function (c, i) { return { comment: c, index: i }; });
+            if (activeNoteFilter === "rated") entries = entries.filter(function (e) { return e.comment.stars > 0; });
+            entries.sort(function (a, b) { return b.comment.ts - a.comment.ts; });
+            var visibleCount = entries.length;
             document.getElementById("commentCount").textContent =
-                comments.length + " comment" + (comments.length !== 1 ? "s" : "");
-            if (!comments.length) {
+                visibleCount + " note" + (visibleCount !== 1 ? "s" : "");
+            if (!visibleCount) {
                 none.style.display = "block";
                 list.innerHTML = "";
                 list.appendChild(none);
                 return;
             }
             none.style.display = "none";
-            list.innerHTML = comments
-                .slice()
-                .reverse()
-                .map(function (c, i) {
-                    var ri = comments.length - 1 - i;
+            list.innerHTML = entries
+                .map(function (entry) {
+                    var c = entry.comment, ri = entry.index;
                     return (
                         '<div class="comment-card" id="cc-' +
                         ri +
@@ -5419,6 +5697,15 @@
             refreshAll();
             handleListScroll();
             renderComments();
+            var noteToolbar = document.getElementById('commentToolbar');
+            if (noteToolbar) noteToolbar.addEventListener('click', function (e) {
+                var btn = e.target.closest('.reader-filter');
+                if (!btn) return;
+                noteToolbar.querySelectorAll('.reader-filter').forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                activeNoteFilter = btn.dataset.notefilter || 'all';
+                renderComments();
+            });
             loadDashboard();
             loadGoals();
 

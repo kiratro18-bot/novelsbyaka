@@ -118,8 +118,8 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-       order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "#", genres: ["romance", "drama", "slice"], status: "upcoming", ch: 0, rating: null, views: null, releaseOffsetDays: 0,
-        blurb: ".", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+       order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: [ "drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 1400, releaseOffsetDays: 0,
+        blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
 ];
 var badgeLabel = { romance: "Romance", drama: "Drama", slice: "Slice", sad: "Sad", mystery: "Mystery", action: "Action" };
@@ -783,7 +783,7 @@ function renderHeatmap() {
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { daysOut: 14, title: 'Case File: You — Chapter 11' },
-    { daysOut: 3, title: 'The Other Day' },
+    { daysOut: null, title: null },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
     { daysOut: 10, title: 'Before i forget your name - chapter 2' },
 ];
@@ -808,9 +808,9 @@ function renderCalendar() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: 2, type: 'update', title: 'Version 2.8 is live', excerpt: " The old version is archived for anyone who wants to visit." },
+    { daysAgo: 2, type: 'update', title: 'Version 2.9 is live', excerpt: " The old version is archived for anyone who wants to visit and fixed bug." },
     { daysAgo: 6, type: 'note', title: 'Version 3.0 is being drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: 60, type: 'release', title: 'Petal Vol. 3 wrapped the arc', excerpt: "Nine chapters, and the petals finally settle. Vol. 4 will be the last one — more on that soon." }
+    
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
 var activeNewsType = 'all';
