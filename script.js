@@ -106,7 +106,7 @@ var novels = [
         blurb: "Continuing the journey of Him and Her into a new chapter of their lives.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
     },
     {
-        order: 15, title: "The Petal That Falls With a Smile — Manga Version", img: "./bg/tptfwas-manga.jpg", link: "./chapters/tptfwas-manga.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.5, views: 2100, releaseOffsetDays: 0,
+        order: 15, title: "The Petal That Falls With a Smile — Manga Version", img: "./bg/tptfwas-manga.jpg", link: "manga.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.5, views: 2100, releaseOffsetDays: 0,
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
