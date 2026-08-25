@@ -102,8 +102,8 @@ var novels = [
         blurb: "If time was a currency, how much would you pay for a single hour of the past?", grad: "135deg,#3a2a2a,#5a3a30", collections: ["hidden-gems", "completed"]
     },
     {
-        order: 14, title: "Before I Forget Your Name", img: "./bg/bikyn.jpg", link: "./chapters/bikyn.html", genres: ["romance", "drama", "slice", "sad"], status: "ongoing", ch: 1, rating: 5.0, views: 3400, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
-        blurb: "An emotional rollercoaster that explores the fragility of memory and love.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
+        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "#", genres: ["romance", "drama", "slice", "sad"], status: "upcoming", ch: 0, rating: null, views: null, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
+        blurb: "Continuing the journey of Him and Her into a new chapter of their lives.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
     },
     {
         order: 15, title: "The Petal That Falls With a Smile — Manga Version", img: "./bg/tptfwas-manga.jpg", link: "./chapters/tptfwas-manga.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.5, views: 2100, releaseOffsetDays: 0,
@@ -118,7 +118,7 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-       order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: [ "drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 1400, releaseOffsetDays: 0,
+       order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: [ "drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 2000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
 ];
@@ -227,15 +227,21 @@ function initTheme() {
    3D TILT
    ============================================================ */
 function attachTilt(el) {
-    if (!tiltEnabled) return;
+    if (!tiltEnabled || window.matchMedia('(hover: none)').matches) return;
+    var raf = 0, px = 0, py = 0;
+    function paintTilt() {
+        raf = 0;
+        if (!tiltEnabled) return;
+        el.style.transform = 'perspective(700px) rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 8) + 'deg) translateY(-4px)';
+    }
     el.addEventListener('mousemove', function (e) {
         if (!tiltEnabled) return;
         var r = el.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width - 0.5;
-        var py = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = 'perspective(700px) rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 8) + 'deg) translateY(-4px)';
-    });
-    el.addEventListener('mouseleave', function () { el.style.transform = ''; });
+        px = (e.clientX - r.left) / r.width - 0.5;
+        py = (e.clientY - r.top) / r.height - 0.5;
+        if (!raf) raf = requestAnimationFrame(paintTilt);
+    }, { passive: true });
+    el.addEventListener('mouseleave', function () { if (raf) cancelAnimationFrame(raf); raf = 0; el.style.transform = ''; });
 }
 
 /* ============================================================
@@ -312,7 +318,8 @@ function advanceHeroFeature() {
 }
 function startHeroRotate() {
     clearInterval(heroRotateTimer);
-    if (motionEnabled && heroFeaturedList.length > 1) {
+    heroRotateTimer = null;
+    if (motionEnabled && !document.hidden && heroFeaturedList.length > 1) {
         heroRotateTimer = setInterval(advanceHeroFeature, 6000);
     }
 }
@@ -354,12 +361,30 @@ function renderReaderStreak() {
 
 function refreshReadingUI() {
     renderContinueReading();
+    renderPersonalShelf();
     renderProgressJourney();
     renderChallenges();
     renderCatalog();
     renderReaderAchievements();
     renderHeatmap();
     renderReaderStreak();
+}
+function personalMiniCard(n, label, actionText) {
+    if (!n) return '<div class="personal-empty"><span class="personal-empty-icon">✦</span><strong>Nothing here yet</strong><span>Choose a story from the Shelf to start building this space.</span></div>';
+    var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
+    return '<div class="personal-card-label">' + label + '</div><div class="personal-story-row"><div class="personal-cover" style="background:linear-gradient(' + n.grad + ')"><img src="' + esc(n.img) + '" alt="" onerror="imgFail(this)"></div><div class="personal-story-info"><h3>' + esc(n.title) + '</h3><div class="personal-story-meta">' + (n.status === 'upcoming' ? 'Coming soon' : read + ' / ' + n.ch + ' chapters') + '</div>' + (n.ch ? '<div class="personal-progress"><span style="width:' + pct + '%"></span></div>' : '') + '</div></div><button class="pill-btn personal-card-action" onclick="openReaderMode(' + n.order + ')">' + actionText + ' →</button>';
+}
+function renderPersonalShelf() {
+    var current = currentlyReadingOrder && novels.find(function (n) { return n.order === currentlyReadingOrder; });
+    var favorites = novels.filter(function (n) { return bookmarks[n.order] && n.status !== 'upcoming'; }).sort(function (a, b) { return b.order - a.order; })[0];
+    var finished = novels.filter(function (n) { return n.ch > 0 && getRead(n) >= n.ch; }).sort(function (a, b) { return b.order - a.order; })[0];
+    var currentEl = document.getElementById('personalCurrentCard');
+    var favoriteEl = document.getElementById('personalFavoritesCard');
+    var finishedEl = document.getElementById('personalFinishedCard');
+    if (!currentEl || !favoriteEl || !finishedEl) return;
+    currentEl.innerHTML = personalMiniCard(current, 'Currently reading', current ? 'Continue' : 'Choose a story');
+    favoriteEl.innerHTML = personalMiniCard(favorites, 'A favorite from your shelf', favorites ? 'Open favorite' : 'Add a favorite');
+    finishedEl.innerHTML = personalMiniCard(finished, 'Recently finished', finished ? 'Revisit' : 'Finish your first story');
 }
 function renderContinueReading() {
     var body = document.getElementById('crBody');
@@ -440,7 +465,7 @@ function pickMood(el, genreStr) {
     document.querySelectorAll('#genrePills .pill-btn').forEach(function (p) { p.classList.remove('active'); });
     document.querySelector('#genrePills .pill-btn[data-genre="all"]').classList.add('active');
     activeGenre = 'all';
-    renderCatalog();
+    scheduleCatalogRender();
     scrollToId('catalog');
     showToast('Showing ' + el.querySelector('.mood-label').textContent + ' reads ✦');
 }
@@ -448,7 +473,11 @@ function pickMood(el, genreStr) {
 /* ============================================================
    CATALOG (THE SHELF)
    ============================================================ */
-var activeGenre = 'all', activeStatus = 'all';
+var activeGenre = 'all', activeStatus = 'all', catalogRenderTimer = null;
+function scheduleCatalogRender() {
+    clearTimeout(catalogRenderTimer);
+    catalogRenderTimer = setTimeout(function () { catalogRenderTimer = null; renderCatalog(); }, 70);
+}
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('genrePills').addEventListener('click', function (e) {
         var btn = e.target.closest('.pill-btn'); if (!btn) return;
@@ -473,10 +502,28 @@ document.addEventListener('DOMContentLoaded', function () {
         this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active'); activeNewsType = btn.dataset.newstype || 'all'; renderNews();
     });
+    document.getElementById('commentToolbar').addEventListener('click', function (e) {
+        var btn = e.target.closest('.pill-btn'); if (!btn) return;
+        this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active'); activeNoteFilter = btn.dataset.notefilter || 'all'; renderComments();
+    });
 });
+function clearShelfFilters() {
+    activeGenre = 'all';
+    activeStatus = 'all';
+    activeMoodGenres = null;
+    var search = document.getElementById('shelfSearch');
+    if (search) search.value = '';
+    document.querySelectorAll('#genrePills .pill-btn').forEach(function (p) { p.classList.toggle('active', p.dataset.genre === 'all'); });
+    document.querySelectorAll('#statusPills .pill-btn').forEach(function (p) { p.classList.toggle('active', p.dataset.status === 'all'); });
+    document.querySelectorAll('.mood-card').forEach(function (c) { c.classList.toggle('active', c.dataset.mood === 'all'); });
+    scheduleCatalogRender();
+    showToast('Shelf filters cleared ✦');
+}
 function renderCatalog() {
     var grid = document.getElementById('catalogGrid');
-    var q = sanitize(document.getElementById('shelfSearch').value).toLowerCase();
+    var searchEl = document.getElementById('shelfSearch');
+    var q = sanitize(searchEl ? searchEl.value : '').toLowerCase();
     var filtered = novels.filter(function (n) {
         var matchesMood = !activeMoodGenres || activeMoodGenres.some(function (g) { return n.genres.indexOf(g) > -1; });
         var matchesQ = !q || n.title.toLowerCase().indexOf(q) > -1 || n.genres.join(' ').indexOf(q) > -1;
@@ -484,7 +531,18 @@ function renderCatalog() {
         var matchesStatus = activeStatus === 'all' || n.status === activeStatus;
         return matchesMood && matchesQ && matchesGenre && matchesStatus;
     }).sort(function (a, b) { return b.order - a.order; });
-    document.getElementById('shelfCount').textContent = filtered.length + ' stories, filed and ready to open.';
+    document.getElementById('shelfCount').textContent = filtered.length + ' stor' + (filtered.length === 1 ? 'y' : 'ies') + ', filed and ready to open.';
+    var summaryEl = document.getElementById('catalogFilterSummary');
+    if (summaryEl) {
+        var summary = [];
+        if (q) summary.push('Search: ' + q);
+        if (activeGenre !== 'all') summary.push(badgeLabel[activeGenre] || activeGenre);
+        if (activeStatus !== 'all') summary.push(activeStatus);
+        if (activeMoodGenres) summary.push('mood');
+        summaryEl.textContent = summary.length ? summary.join(' · ') : 'Showing everything';
+    }
+    var clearBtn = document.getElementById('clearShelfBtn');
+    if (clearBtn) clearBtn.disabled = !q && activeGenre === 'all' && activeStatus === 'all' && !activeMoodGenres;
     grid.innerHTML = filtered.map(function (n, i) {
         var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
         var statusCls = n.status === 'ongoing' ? 'status-ongoing' : n.status === 'upcoming' ? 'status-upcoming' : 'status-completed';
@@ -510,7 +568,7 @@ function toggleLikeNovel(order) {
     bookmarks[order] = !bookmarks[order];
     store.set('bookmarks', bookmarks);
     showToast(bookmarks[order] ? 'Added to your favorites ♥' : 'Removed from favorites');
-    renderCatalog();
+    refreshReadingUI();
 }
 function shareNovelQuick(order) {
     var n = novels.find(function (x) { return x.order === order; });
@@ -523,6 +581,9 @@ function shareNovelQuick(order) {
    SPOTLIGHT PANEL
    ============================================================ */
 var spotlightOrder = null;
+var readerModeOrder = null;
+var readerModeChapter = 1;
+var readerFontScale = store.get('readerFontScale', 1);
 function openSpotlight(order) {
     var n = novels.find(function (x) { return x.order === order; });
     if (!n) return;
@@ -566,7 +627,83 @@ function closeSpotlight() {
     spotlightOrder = null;
 }
 function spAdjust(delta) { if (spotlightOrder === null) return; adjustProgress(spotlightOrder, delta); openSpotlight(spotlightOrder); }
-function goToNovel() { var n = novels.find(function (x) { return x.order === spotlightOrder; }); if (n && n.link) window.location.href = n.link; }
+function goToNovel() {
+    var n = novels.find(function (x) { return x.order === spotlightOrder; });
+    if (n) openReaderMode(n.order);
+}
+function openReaderMode(order) {
+    var n = novels.find(function (x) { return x.order === order; });
+    if (!n) return;
+    readerModeOrder = order;
+    readerModeChapter = n.ch ? (getRead(n) >= n.ch ? n.ch : Math.max(1, getRead(n) + 1)) : 1;
+    closeSpotlight();
+    updateReaderMode();
+    document.getElementById('readerModeOverlay').classList.add('open');
+    document.getElementById('readerModePanel').classList.add('open');
+    document.body.classList.add('reader-mode-active');
+}
+function updateReaderMode() {
+    var n = novels.find(function (x) { return x.order === readerModeOrder; });
+    if (!n) return;
+    var total = n.ch || 1;
+    var read = getRead(n);
+    var pct = n.ch ? Math.round(read / n.ch * 100) : 0;
+    document.getElementById('readerModeTitle').textContent = n.title;
+    document.getElementById('readerModeByline').textContent = 'A Novel by AKA · ' + (n.status === 'ongoing' ? 'Ongoing' : 'Completed');
+    document.getElementById('readerModeIntro').textContent = n.blurb;
+    document.getElementById('readerModeProgressLabel').textContent = 'Chapter ' + readerModeChapter + ' of ' + total;
+    document.getElementById('readerModeProgressPct').textContent = pct + '%';
+    document.getElementById('readerModeProgressFill').style.width = pct + '%';
+    document.getElementById('readerModeChapterText').textContent = n.ch ? ('Chapter ' + readerModeChapter) : 'Coming on release day';
+    document.getElementById('readerModeBody').textContent = n.ch ? ('You are in the focus space for chapter ' + readerModeChapter + '. Mark it as read when you finish, or open the full chapter when you are ready to continue.') : 'This story is part of the upcoming shelf. Keep it bookmarked and return when the chapter lands.';
+    document.getElementById('readerModeMarkBtn').textContent = n.ch && read >= readerModeChapter ? '✓ Chapter marked as read' : 'Mark chapter as read';
+    document.getElementById('readerModeMarkBtn').disabled = !n.ch || read >= readerModeChapter;
+    document.getElementById('readerModeOpenBtn').textContent = n.link && n.link !== '#' ? 'Open full chapter →' : 'Story link coming soon';
+    document.getElementById('readerModeOpenBtn').disabled = !n.link || n.link === '#';
+    var bbtn = document.getElementById('readerModeBookmarkBtn');
+    bbtn.textContent = currentlyReadingOrder === n.order ? '✓ Currently Reading' : '🔖 Set as Currently Reading';
+    bbtn.classList.toggle('active', currentlyReadingOrder === n.order);
+    document.querySelector('.reader-mode-copy').style.fontSize = readerFontScale + 'em';
+}
+function closeReaderMode() {
+    document.getElementById('readerModeOverlay').classList.remove('open');
+    document.getElementById('readerModePanel').classList.remove('open');
+    document.body.classList.remove('reader-mode-active');
+    readerModeOrder = null;
+}
+function adjustReaderChapter(delta) {
+    var n = novels.find(function (x) { return x.order === readerModeOrder; });
+    if (!n || !n.ch) return;
+    readerModeChapter = Math.max(1, Math.min(readerModeChapter + delta, n.ch));
+    updateReaderMode();
+}
+function adjustReaderFont(delta) {
+    readerFontScale = Math.max(.9, Math.min(1.25, +(readerFontScale + delta * .05).toFixed(2)));
+    store.set('readerFontScale', readerFontScale);
+    updateReaderMode();
+}
+function readerModeBookmark() {
+    var n = novels.find(function (x) { return x.order === readerModeOrder; });
+    if (!n) return;
+    currentlyReadingOrder = currentlyReadingOrder === n.order ? null : n.order;
+    store.set('currentlyReading', currentlyReadingOrder);
+    refreshReadingUI();
+    updateReaderMode();
+    showToast(currentlyReadingOrder === n.order ? 'Added to Currently Reading 🔖' : 'Bookmark removed.');
+}
+function readerModeMarkComplete() {
+    var n = novels.find(function (x) { return x.order === readerModeOrder; });
+    if (!n || !n.ch) return;
+    var delta = readerModeChapter - getRead(n);
+    if (delta > 0) adjustProgress(n.order, delta);
+    if (readerModeChapter < n.ch) readerModeChapter++;
+    updateReaderMode();
+}
+function readerModeOpenStory() {
+    var n = novels.find(function (x) { return x.order === readerModeOrder; });
+    if (!n || !n.link || n.link === '#') { showToast('The full chapter link is coming soon ✦'); return; }
+    window.location.href = n.link;
+}
 function toggleBookmark() {
     if (!spotlightOrder) return;
     if (currentlyReadingOrder === spotlightOrder) { currentlyReadingOrder = null; store.set('currentlyReading', null); showToast('Bookmark removed.'); }
@@ -785,7 +922,7 @@ var upcomingReleases = [
     { daysOut: 14, title: 'Case File: You — Chapter 11' },
     { daysOut: null, title: null },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
-    { daysOut: 10, title: 'Before i forget your name - chapter 2' },
+    { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
 function calRemind(idx) {
@@ -808,8 +945,9 @@ function renderCalendar() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: 2, type: 'update', title: 'Version 2.9 is live', excerpt: " The old version is archived for anyone who wants to visit and fixed bug." },
-    { daysAgo: 6, type: 'note', title: 'Version 3.0 is being drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo: null, type: 'update', title: 'Version 3.0 is live', excerpt: " The old version is archived for anyone who wants to visit." },
+    { daysAgo: null, type: 'note', title: 'Version 3.0 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo: null, type: 'note', title: " About Before i forget your name", excerpt:"The Novel is HITAUS for a while we are very sorry for it."}
     
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
@@ -849,12 +987,16 @@ var activityTemplates = [
     { icon: '❤️', text: '<b>Ten Percent of Forever</b> just passed 7.6k views' },
     { icon: '📚', text: 'A reader finished <b>Him and Her</b> start to finish' }
 ];
-var activityFeedItems = [];
+var activityFeedItems = [], activityTimer = null;
 function pushActivity() {
     var t = activityTemplates[Math.floor(Math.random() * activityTemplates.length)];
     activityFeedItems.unshift({ icon: t.icon, text: t.text, ts: Date.now() });
     activityFeedItems = activityFeedItems.slice(0, 10);
     renderActivity();
+}
+function startActivityFeed() {
+    clearInterval(activityTimer);
+    activityTimer = motionEnabled && !document.hidden ? setInterval(pushActivity, 12000) : null;
 }
 function renderActivity() {
     document.getElementById('activityList').innerHTML = activityFeedItems.map(function (a, i) {
@@ -915,7 +1057,7 @@ function cmdkOpen(order) {
 }
 document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCmdk(); return; }
-    if (e.key === 'Escape') { closeCmdk(); closeSettings(); closeSpotlight(); return; }
+    if (e.key === 'Escape') { closeCmdk(); closeSettings(); closeSpotlight(); closeReaderMode(); return; }
     if (document.getElementById('cmdkPanel').classList.contains('open')) {
         var rows = document.querySelectorAll('.cmdk-row');
         if (!rows.length) return;
@@ -950,6 +1092,7 @@ function toggleMotionPref() {
     motionEnabled = btn.classList.contains('on'); store.set('motionEnabled', motionEnabled);
     btn.setAttribute('aria-checked', String(motionEnabled));
     startHeroRotate();
+    if (typeof startActivityFeed === 'function') startActivityFeed();
 }
 function toggleTilt() {
     var btn = document.getElementById('tiltToggle'); btn.classList.toggle('on');
@@ -992,12 +1135,17 @@ var avatarColors = ['#ff7d9c', '#a78bfa', '#68d8c4', '#ffc46b', '#7fa8d6', '#ff7
 function getInitials(n) { return n.trim().split(/\s+/).map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2); }
 function getAvColor(n) { var i = 0; for (var c = 0; c < n.length; c++) i += n.charCodeAt(c); return avatarColors[i % avatarColors.length]; }
 function starsHtml(n) { var s = ''; for (var i = 1; i <= 5; i++) s += '<span style="color:' + (i <= n ? 'var(--gold)' : 'var(--panel-border-strong)') + '">★</span>'; return s; }
+var activeNoteFilter = 'all';
 function renderComments() {
     var list = document.getElementById('commentsList');
-    document.getElementById('commentCount').textContent = comments.length + ' note' + (comments.length !== 1 ? 's' : '') + ' left in the margins';
-    if (!comments.length) { list.innerHTML = '<div class="glass" style="padding:40px;text-align:center;font-family:var(--font-display);font-style:italic;color:var(--muted)">The margin is empty — be the first to write in it…</div>'; return; }
-    list.innerHTML = comments.slice().reverse().map(function (c, i) {
-        var ri = comments.length - 1 - i;
+    var entries = comments.map(function (c, i) { return { comment: c, index: i }; });
+    if (activeNoteFilter === 'rated') entries = entries.filter(function (e) { return e.comment.stars > 0; });
+    if (activeNoteFilter === 'newest') entries = entries.slice().sort(function (a, b) { return b.comment.ts - a.comment.ts; });
+    else entries = entries.slice().sort(function (a, b) { return b.comment.ts - a.comment.ts; });
+    document.getElementById('commentCount').textContent = (activeNoteFilter === 'all' ? comments.length : entries.length) + ' note' + ((activeNoteFilter === 'all' ? comments.length : entries.length) !== 1 ? 's' : '') + ' in the margins';
+    if (!entries.length) { list.innerHTML = '<div class="glass" style="padding:40px;text-align:center;font-family:var(--font-display);font-style:italic;color:var(--muted)">No notes match this view yet…</div>'; return; }
+    list.innerHTML = entries.map(function (entry) {
+        var c = entry.comment, ri = entry.index;
         return '<div class="comment-card glass" id="cc-' + ri + '">' +
             '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
             '<div class="c-avatar" style="background:' + getAvColor(c.name) + '">' + esc(getInitials(c.name)) + '</div>' +
@@ -1066,8 +1214,9 @@ window.addEventListener('load', function () {
     renderComments();
     populateCommentSelect();
 
-    for (var k = 0; k < 4; k++) pushActivity();
-    if (motionEnabled) { setInterval(pushActivity, 9000); }
+    for (var k = 0; k < 2; k++) pushActivity();
+    startActivityFeed();
+    document.addEventListener('visibilitychange', function () { startHeroRotate(); startActivityFeed(); });
 });
 /* ============================================================
    NAVIGATION DOCK

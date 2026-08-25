@@ -83,7 +83,7 @@
                 <a href="oldindex.html" class="pill-btn" style="text-decoration:none">Previous Version  ↗ </a>
             </div>
             <div style="margin-top:20px;font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.8">
-                Version 2.9 · Rebuilt August 2026<br>Progress and comments are saved in your browser's local storage.
+                Version 3.0 · Rebuilt August 2026<br>Progress and comments are saved in your browser's local storage.
             </div>
         </div>
     </aside>
@@ -125,6 +125,43 @@
         </div>
     </aside>
 
+    <!-- ============ FOCUS READING MODE ============ -->
+    <div class="reader-mode-overlay" id="readerModeOverlay" onclick="closeReaderMode()"></div>
+    <article class="reader-mode-panel" id="readerModePanel" role="dialog" aria-modal="true" aria-label="Focus reading mode">
+        <header class="reader-mode-header">
+            <div class="reader-mode-brand"><span class="reader-mode-mark">✦</span><span>Focus Reading</span></div>
+            <div class="reader-mode-header-actions">
+                <button class="reader-mode-icon" onclick="adjustReaderFont(-1)" aria-label="Decrease text size">A−</button>
+                <button class="reader-mode-icon" onclick="adjustReaderFont(1)" aria-label="Increase text size">A+</button>
+                <button class="reader-mode-icon" onclick="closeReaderMode()" aria-label="Close focus reading mode">✕</button>
+            </div>
+        </header>
+        <div class="reader-mode-scroll">
+            <div class="reader-mode-progress-wrap">
+                <div class="reader-mode-progress-label"><span id="readerModeProgressLabel">Chapter 1</span><span id="readerModeProgressPct">0%</span></div>
+                <div class="reader-mode-progress"><span id="readerModeProgressFill"></span></div>
+            </div>
+            <div class="reader-mode-copy">
+                <div class="eyebrow">Now reading</div>
+                <h1 id="readerModeTitle">A story waiting to open</h1>
+                <p class="reader-mode-byline" id="readerModeByline"></p>
+                <div class="reader-mode-rule"></div>
+                <p class="reader-mode-intro" id="readerModeIntro"></p>
+                <blockquote id="readerModeQuote">Every chapter is a small room. Take your time here.</blockquote>
+                <p id="readerModeBody">This is your focused reading space: keep the dashboard behind you, follow your progress, and return to the full chapter whenever you are ready.</p>
+                <div class="reader-mode-chapter-card">
+                    <div><span class="side-label">Your place in the story</span><strong id="readerModeChapterText">Chapter 1</strong></div>
+                    <div class="reader-mode-stepper"><button onclick="adjustReaderChapter(-1)" aria-label="Previous chapter">−</button><button onclick="adjustReaderChapter(1)" aria-label="Next chapter">+</button></div>
+                </div>
+            </div>
+        </div>
+        <footer class="reader-mode-footer">
+            <button class="sp-btn ghost" id="readerModeBookmarkBtn" onclick="readerModeBookmark()">🔖 Set as Currently Reading</button>
+            <button class="sp-btn ghost" id="readerModeMarkBtn" onclick="readerModeMarkComplete()">Mark chapter as read</button>
+            <button class="sp-btn primary" id="readerModeOpenBtn" onclick="readerModeOpenStory()">Open full chapter →</button>
+        </footer>
+    </article>
+
     <!-- ============ NAV ============ -->
     <nav class="site-nav">
         <div class="nav-brand">
@@ -136,8 +173,7 @@
         <div class="nav-actions">
             <button class="search-trigger" onclick="openCmdk()" aria-label="Open search"><span>🔍</span><span
                     class="nav-search-label">Search</span><span class="kbd">⌘K</span></button>
-           
-
+            <button class="icon-btn nav-settings-btn" onclick="openSettings()" aria-label="Open settings" title="Settings">⚙</button>
         </div>
     </nav>
 
@@ -194,7 +230,7 @@
                     <div class="xp-bar">
                         <div class="xp-fill" id="authorXpFill" style="width:76%"></div>
                     </div>
-                    <div class="xp-label" id="authorXpLabel">17,500/ 20,000 XP to Level 8</div>
+                    <div class="xp-label" id="authorXpLabel">18,000/ 20,000 XP to Level 8</div>
                     <div class="streak-chip">🔥 <span id="authorStreak">7-release streak</span></div>
                     <div class="author-quote">"Every chapter is a small room. I just leave the light on and hope someone
                         stays a
@@ -227,7 +263,7 @@
                     <h2 class="section-title">Version <em>3.0</em> is being written</h2>
                     <p class="section-sub">A forward-looking space for the features, stories, and reader rituals planned for the next release.</p>
                 </div>
-                <span class="pill-btn roadmap-live">In development</span>
+                <span class="pill-btn roadmap-live">Foundation in progress</span>
             </div>
             <div class="version30-hero glass">
                 <div class="version30-copy">
@@ -287,7 +323,7 @@
             </div>
             <div class="roadmap-grid">
                 <article class="glass roadmap-card roadmap-now">
-                    <div class="roadmap-topline"><span class="roadmap-number">01</span><span class="roadmap-status">In progress</span></div>
+                    <div class="roadmap-topline"><span class="roadmap-number">01</span><span class="roadmap-status">Active foundation</span></div>
                     <h3>Foundation</h3>
                     <p>Polish the current shelf, clarify the catalogue, and make the 3.0 visual language feel at home.</p>
                     <div class="roadmap-items"><span>Interface polish</span><span>Story archive</span><span>Release notes</span></div>
@@ -345,10 +381,15 @@
     <!-- ============ THE SHELF ============ -->
     <section class="section" id="catalog">
         <div class="wrap">
-            <div class="section-head">
+            <div class="section-head shelf-section-head">
                 <div>
+                    <span class="eyebrow">The archive</span>
                     <h2 class="section-title">The <em>Shelf</em></h2>
                     <p class="section-sub" id="shelfCount">18 stories, filed and ready to open.</p>
+                </div>
+                <div class="shelf-heading-actions">
+                    <span class="catalog-filter-summary" id="catalogFilterSummary">Showing everything</span>
+                    <button class="pill-btn" id="clearShelfBtn" onclick="clearShelfFilters()">Clear filters</button>
                 </div>
             </div>
             <div class="shelf-wrap">
@@ -357,7 +398,8 @@
                     <div class="side-card glass">
                         <span class="side-label">Search &amp; Filter</span>
                         <div class="search-mini"><span aria-hidden="true">🔍</span><input id="shelfSearch"
-                                placeholder="Search…" oninput="renderCatalog()" aria-label="Search shelf"></div>
+                                placeholder="Search titles or genres…" oninput="scheduleCatalogRender()" aria-label="Search shelf"></div>
+                        <div class="filter-section-label">Genre</div>
                         <div class="filter-pills" id="genrePills">
                             <button class="pill-btn active" data-genre="all">All</button>
                             <button class="pill-btn" data-genre="romance">Romance</button>
@@ -367,7 +409,8 @@
                             <button class="pill-btn" data-genre="mystery">Mystery</button>
                             <button class="pill-btn" data-genre="action">Action</button>
                         </div>
-                        <div class="filter-pills" id="statusPills" style="margin-top:8px">
+                        <div class="filter-section-label filter-section-label-status">Status</div>
+                        <div class="filter-pills" id="statusPills">
                             <button class="pill-btn active" data-status="all">All status</button>
                             <button class="pill-btn" data-status="ongoing">Ongoing</button>
                             <button class="pill-btn" data-status="completed">Completed</button>
@@ -387,6 +430,25 @@
                             ↓</button>
                     </div>
                 </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ PERSONAL SHELF ============ -->
+    <section class="section personal-shelf-section" id="reader-shelf">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Your reader layer</span>
+                    <h2 class="section-title">Your <em>Shelf</em></h2>
+                    <p class="section-sub">A quick home for what you are reading, loving, and ready to finish next.</p>
+                </div>
+                <button class="pill-btn" onclick="scrollToId('achievements')">View milestones ↓</button>
+            </div>
+            <div class="personal-shelf-grid">
+                <article class="glass personal-shelf-card personal-current-card" id="personalCurrentCard"></article>
+                <article class="glass personal-shelf-card" id="personalFavoritesCard"></article>
+                <article class="glass personal-shelf-card" id="personalFinishedCard"></article>
             </div>
         </div>
     </section>
@@ -516,6 +578,14 @@
                     <button class="cta cta-primary" onclick="submitComment()">Post Note →</button>
                 </div>
             </div>
+            <div class="comment-toolbar" id="commentToolbar" role="toolbar" aria-label="Filter reader notes">
+                <span class="side-label">Note library</span>
+                <div class="filter-pills">
+                    <button class="pill-btn active" data-notefilter="all">All notes</button>
+                    <button class="pill-btn" data-notefilter="rated">Rated</button>
+                    <button class="pill-btn" data-notefilter="newest">Newest</button>
+                </div>
+            </div>
             <div id="commentsList"></div>
         </div>
     </section>
@@ -529,7 +599,7 @@
                         <div class="nav-brand" style="margin-bottom:10px">A <em>Novel</em> Web</div>
                         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.7;max-width:280px">Original
                             romance, drama,
-                            and slice-of-life fiction by AKA. Rebuilt as Version 2.8 — a living reading dashboard
+                            and slice-of-life fiction by AKA. Rebuilt as Version 3.0 — a living reading dashboard
                             instead of a static
                             page.</p>
                         <div class="newsletter-row">
@@ -573,7 +643,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <span>Filed &amp; maintained by AKA · Version 2.9 · August 2026</span>
+                    <span>Filed &amp; maintained by AKA · Version 3.0 · August 2026</span>
                     <span>Please don't repost or reupload stories without permission. Sharing links is always
                         appreciated.</span>
                 </div>
