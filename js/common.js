@@ -1,71 +1,128 @@
-// Shared helpers: settings storage, reading progress, manifest loading.
-const Manga = (() => {
-  const KEYS = {
-    theme: 'manga:setting:theme',
-    mode: 'manga:setting:mode',       // 'scroll' | 'page'
-    direction: 'manga:setting:direction', // 'ltr' | 'rtl'
-    progressPrefix: 'manga:progress:',
-    lastRead: 'manga:lastRead',
-  };
+/* common.js — shared across index.html and reader.html
+ * No build step, no dependencies. Everything lives under the `manga:` prefix
+ * in localStorage so this can sit alongside other sites on the same origin.
+ */
+(function (global) {
+  "use strict";
 
-  function getSetting(key, fallback) {
+  var NS = "manga:";
+  var THEME_KEY = NS + "theme";
+  var SETTINGS_KEY = NS + "settings";
+  var PROGRESS_PREFIX = NS + "progress:";
+  var LAST_KEY = NS + "last";
+
+  var MANIFEST_URL = "chapters.json";
+  var _manifestCache = null;
+
+  // ---------- tiny dom helpers ----------
+  function qs(sel, root) { return (root || document).querySelector(sel); }
+  function qsa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function escapeHtml(str) {
+    return String(str == null ? "" : str).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------- theme ----------
+  function systemPrefersLight() {
+    return global.matchMedia && global.matchMedia("(prefers-color-scheme: light)").matches;
+  }
+  function getTheme() {
     try {
-      const v = localStorage.getItem(key);
-      return v === null ? fallback : v;
-    } catch (e) { return fallback; }
+      var t = localStorage.getItem(THEME_KEY);
+      if (t === "light" || t === "dark") return t;
+    } catch (e) { /* storage unavailable */ }
+    return systemPrefersLight() ? "light" : "dark";
   }
-
-  function setSetting(key, value) {
-    try { localStorage.setItem(key, value); } catch (e) {}
+  function applyTheme(t) {
+    document.documentElement.setAttribute("data-theme", t);
   }
-
-  function applyTheme() {
-    const theme = getSetting(KEYS.theme, 'dark');
-    document.documentElement.setAttribute('data-theme', theme);
-    return theme;
+  function setTheme(t) {
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) { /* ignore */ }
+    applyTheme(t);
   }
-
   function toggleTheme() {
-    const current = getSetting(KEYS.theme, 'dark');
-    const next = current === 'dark' ? 'light' : 'dark';
-    setSetting(KEYS.theme, next);
-    document.documentElement.setAttribute('data-theme', next);
+    var next = getTheme() === "light" ? "dark" : "light";
+    setTheme(next);
     return next;
   }
 
+  // ---------- reading settings (mode / direction), shared across chapters ----------
+  function getSettings() {
+    var defaults = { mode: "scroll", direction: "ltr" };
+    try {
+      var raw = localStorage.getItem(SETTINGS_KEY);
+      if (raw) return Object.assign(defaults, JSON.parse(raw));
+    } catch (e) { /* ignore */ }
+    return defaults;
+  }
+  function setSettings(patch) {
+    var next = Object.assign(getSettings(), patch);
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(next)); } catch (e) { /* ignore */ }
+    return next;
+  }
+
+  // ---------- per-chapter progress + "continue reading" pointer ----------
   function getProgress(chapterId) {
     try {
-      const raw = localStorage.getItem(KEYS.progressPrefix + chapterId);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) { return null; }
+      var raw = localStorage.getItem(PROGRESS_PREFIX + chapterId);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    return null;
   }
-
   function setProgress(chapterId, page, total) {
-    const data = { page, total, ts: Date.now() };
+    var data = { page: page, total: total, updatedAt: Date.now() };
     try {
-      localStorage.setItem(KEYS.progressPrefix + chapterId, JSON.stringify(data));
-      localStorage.setItem(KEYS.lastRead, JSON.stringify({ chapterId, ...data }));
-    } catch (e) {}
+      localStorage.setItem(PROGRESS_PREFIX + chapterId, JSON.stringify(data));
+      localStorage.setItem(LAST_KEY, JSON.stringify({ chapterId: chapterId, page: page, total: total, updatedAt: data.updatedAt }));
+    } catch (e) { /* ignore */ }
+    return data;
   }
-
-  function getLastRead() {
+  function getLast() {
     try {
-      const raw = localStorage.getItem(KEYS.lastRead);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) { return null; }
+      var raw = localStorage.getItem(LAST_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    return null;
   }
 
-  async function loadManifest() {
-    const res = await fetch('chapters.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error('Could not load chapters.json');
-    return res.json();
+  // ---------- manifest ----------
+  function loadManifest() {
+    if (_manifestCache) return Promise.resolve(_manifestCache);
+    return fetch(MANIFEST_URL, { cache: "no-cache" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        data.chapters = data.chapters || [];
+        _manifestCache = data;
+        return data;
+      });
   }
 
-  function pageUrl(chapter, filename) {
-    return `${chapter.folder}/${filename}`;
+  // ---------- wire up a theme toggle button, if this page has one ----------
+  function initThemeToggle(buttonId) {
+    var btn = document.getElementById(buttonId || "themeToggle");
+    if (!btn) return;
+    btn.addEventListener("click", function () { toggleTheme(); });
   }
 
-  return { KEYS, getSetting, setSetting, applyTheme, toggleTheme, getProgress, setProgress, getLastRead, loadManifest, pageUrl };
-})();
+  applyTheme(getTheme());
 
-Manga.applyTheme();
+  global.Manga = {
+    qs: qs,
+    qsa: qsa,
+    escapeHtml: escapeHtml,
+    getTheme: getTheme,
+    setTheme: setTheme,
+    toggleTheme: toggleTheme,
+    initThemeToggle: initThemeToggle,
+    getSettings: getSettings,
+    setSettings: setSettings,
+    getProgress: getProgress,
+    setProgress: setProgress,
+    getLast: getLast,
+    loadManifest: loadManifest,
+  };
+})(window);
