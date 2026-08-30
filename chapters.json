@@ -1,19 +1,19 @@
 {
-  "title": "My Manga",
+  "title": "AKA Manga",
   "chapters": [
     {
-      "id": "chapter-1",
-      "title": "Volume 1",
+      "id": "Volume-1",
+      "title": "The Petal That Falls With a Smile VOL1",
       "folder": "chapters/chapter-1",
       "pages": [
-        "001.png",
-        "002.png",
-        "003.png",
-        "004.png",
-        "005.png",
-        "006.png",
-        "007.png"
+        "001.jpg",
+        "002.jpg",
+        "003.jpg",
+        "004.jpg",
+        "005.jpg",
+        "006.jpg",
+        "007.jpg"
       ]
     }
   ]
-}
+} 

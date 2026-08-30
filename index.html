@@ -61,26 +61,22 @@
                     <button class="theme-swatch active" data-theme="rose" style="background:#ff7d9c"
                         onclick="setTheme('rose')" role="radio" aria-checked="true" aria-label="Rose theme"
                         title="Rose"></button>
-                    <button class="theme-swatch" data-theme="blue" style="background:#5b9dff"
-                        onclick="setTheme('blue')" role="radio" aria-checked="false" aria-label="Blue theme"
-                        title="Blue"></button>
-                    <button class="theme-swatch" data-theme="red" style="background:#ff6b6b"
-                        onclick="setTheme('red')" role="radio" aria-checked="false" aria-label="Red theme"
-                        title="Red"></button>
+                    <button class="theme-swatch" data-theme="blue" style="background:#5b9dff" onclick="setTheme('blue')"
+                        role="radio" aria-checked="false" aria-label="Blue theme" title="Blue"></button>
+                    <button class="theme-swatch" data-theme="red" style="background:#ff6b6b" onclick="setTheme('red')"
+                        role="radio" aria-checked="false" aria-label="Red theme" title="Red"></button>
                     <button class="theme-swatch" data-theme="violet" style="background:#a78bfa"
                         onclick="setTheme('violet')" role="radio" aria-checked="false" aria-label="Violet theme"
                         title="Violet"></button>
-                    <button class="theme-swatch" data-theme="gold" style="background:#ffc46b"
-                        onclick="setTheme('gold')" role="radio" aria-checked="false" aria-label="Gold theme"
-                        title="Gold"></button>
-                    <button class="theme-swatch" data-theme="teal" style="background:#68d8c4"
-                        onclick="setTheme('teal')" role="radio" aria-checked="false" aria-label="Teal theme"
-                        title="Teal"></button>
+                    <button class="theme-swatch" data-theme="gold" style="background:#ffc46b" onclick="setTheme('gold')"
+                        role="radio" aria-checked="false" aria-label="Gold theme" title="Gold"></button>
+                    <button class="theme-swatch" data-theme="teal" style="background:#68d8c4" onclick="setTheme('teal')"
+                        role="radio" aria-checked="false" aria-label="Teal theme" title="Teal"></button>
                 </div>
             </div>
             <div class="sph-row">
                 <span class="sph-row-label">Looking for the old site? </span>
-                <a href="oldindex.html" class="pill-btn" style="text-decoration:none">Previous Version  ↗ </a>
+                <a href="oldindex.html" class="pill-btn" style="text-decoration:none">Previous Version ↗ </a>
             </div>
             <div style="margin-top:20px;font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.8">
                 Version 3.0 · Rebuilt August 2026<br>Progress and comments are saved in your browser's local storage.
@@ -127,18 +123,23 @@
 
     <!-- ============ FOCUS READING MODE ============ -->
     <div class="reader-mode-overlay" id="readerModeOverlay" onclick="closeReaderMode()"></div>
-    <article class="reader-mode-panel" id="readerModePanel" role="dialog" aria-modal="true" aria-label="Focus reading mode">
+    <article class="reader-mode-panel" id="readerModePanel" role="dialog" aria-modal="true"
+        aria-label="Focus reading mode">
         <header class="reader-mode-header">
             <div class="reader-mode-brand"><span class="reader-mode-mark">✦</span><span>Focus Reading</span></div>
             <div class="reader-mode-header-actions">
-                <button class="reader-mode-icon" onclick="adjustReaderFont(-1)" aria-label="Decrease text size">A−</button>
-                <button class="reader-mode-icon" onclick="adjustReaderFont(1)" aria-label="Increase text size">A+</button>
-                <button class="reader-mode-icon" onclick="closeReaderMode()" aria-label="Close focus reading mode">✕</button>
+                <button class="reader-mode-icon" onclick="adjustReaderFont(-1)"
+                    aria-label="Decrease text size">A−</button>
+                <button class="reader-mode-icon" onclick="adjustReaderFont(1)"
+                    aria-label="Increase text size">A+</button>
+                <button class="reader-mode-icon" onclick="closeReaderMode()"
+                    aria-label="Close focus reading mode">✕</button>
             </div>
         </header>
         <div class="reader-mode-scroll">
             <div class="reader-mode-progress-wrap">
-                <div class="reader-mode-progress-label"><span id="readerModeProgressLabel">Chapter 1</span><span id="readerModeProgressPct">0%</span></div>
+                <div class="reader-mode-progress-label"><span id="readerModeProgressLabel">Chapter 1</span><span
+                        id="readerModeProgressPct">0%</span></div>
                 <div class="reader-mode-progress"><span id="readerModeProgressFill"></span></div>
             </div>
             <div class="reader-mode-copy">
@@ -148,17 +149,24 @@
                 <div class="reader-mode-rule"></div>
                 <p class="reader-mode-intro" id="readerModeIntro"></p>
                 <blockquote id="readerModeQuote">Every chapter is a small room. Take your time here.</blockquote>
-                <p id="readerModeBody">This is your focused reading space: keep the dashboard behind you, follow your progress, and return to the full chapter whenever you are ready.</p>
+                <p id="readerModeBody">This is your focused reading space: keep the dashboard behind you, follow your
+                    progress, and return to the full chapter whenever you are ready.</p>
                 <div class="reader-mode-chapter-card">
-                    <div><span class="side-label">Your place in the story</span><strong id="readerModeChapterText">Chapter 1</strong></div>
-                    <div class="reader-mode-stepper"><button onclick="adjustReaderChapter(-1)" aria-label="Previous chapter">−</button><button onclick="adjustReaderChapter(1)" aria-label="Next chapter">+</button></div>
+                    <div><span class="side-label">Your place in the story</span><strong
+                            id="readerModeChapterText">Chapter 1</strong></div>
+                    <div class="reader-mode-stepper"><button onclick="adjustReaderChapter(-1)"
+                            aria-label="Previous chapter">−</button><button onclick="adjustReaderChapter(1)"
+                            aria-label="Next chapter">+</button></div>
                 </div>
             </div>
         </div>
         <footer class="reader-mode-footer">
-            <button class="sp-btn ghost" id="readerModeBookmarkBtn" onclick="readerModeBookmark()">🔖 Set as Currently Reading</button>
-            <button class="sp-btn ghost" id="readerModeMarkBtn" onclick="readerModeMarkComplete()">Mark chapter as read</button>
-            <button class="sp-btn primary" id="readerModeOpenBtn" onclick="readerModeOpenStory()">Open full chapter →</button>
+            <button class="sp-btn ghost" id="readerModeBookmarkBtn" onclick="readerModeBookmark()">🔖 Set as Currently
+                Reading</button>
+            <button class="sp-btn ghost" id="readerModeMarkBtn" onclick="readerModeMarkComplete()">Mark chapter as
+                read</button>
+            <button class="sp-btn primary" id="readerModeOpenBtn" onclick="readerModeOpenStory()">Open full chapter
+                →</button>
         </footer>
     </article>
 
@@ -173,7 +181,8 @@
         <div class="nav-actions">
             <button class="search-trigger" onclick="openCmdk()" aria-label="Open search"><span>🔍</span><span
                     class="nav-search-label">Search</span><span class="kbd">⌘K</span></button>
-            <button class="icon-btn nav-settings-btn" onclick="openSettings()" aria-label="Open settings" title="Settings">⚙</button>
+            <button class="icon-btn nav-settings-btn" onclick="openSettings()" aria-label="Open settings"
+                title="Settings">⚙</button>
         </div>
     </nav>
 
@@ -260,23 +269,27 @@
             <div class="section-head">
                 <div>
                     <span class="eyebrow">The next chapter</span>
-                    <h2 class="section-title">Version <em>3.0</em> is being written</h2>
-                    <p class="section-sub">A forward-looking space for the features, stories, and reader rituals planned for the next release.</p>
+                    <h2 class="section-title">Version <em>3.0-3.2</em> is being written</h2>
+                    <p class="section-sub">A forward-looking space for the features, stories, and reader rituals planned
+                        for the next release.</p>
                 </div>
-                <span class="pill-btn roadmap-live">Foundation in progress</span>
+                <span class="pill-btn roadmap-live" style="cursor:default">Foundation in progress</span>
             </div>
             <div class="version30-hero glass">
                 <div class="version30-copy">
                     <div class="v30-kicker">AKA · Roadmap note 01</div>
                     <h3>More ways to stay with a story.</h3>
-                    <p>Version 3.0 will deepen the reading lounge with a more visual archive, richer progress moments, and a clearer home for everything coming next. This is a preview of the direction, not a locked release promise.</p>
+                    <p>Version 3.0-3.2 will deepen the reading lounge with a more visual archive, richer progress
+                        moments,
+                        and a clearer home for everything coming next. This is a preview of the direction, not a locked
+                        release promise.</p>
                     <div class="v30-actions">
                         <button class="cta cta-primary" onclick="scrollToId('roadmap30')">Explore the roadmap →</button>
                         <button class="cta cta-ghost" onclick="scrollToId('news')">Read the latest notes</button>
                     </div>
                 </div>
                 <div class="version30-signal">
-                    <div class="v30-orbit"><span>3.0</span></div>
+                    <div class="v30-orbit"><span>3.0-3.2</span></div>
                     <div class="v30-signal-label">Drafting the next release</div>
                     <div class="v30-progress"><span style="width:35%"></span></div>
                     <div class="v30-progress-meta"><span>Early preview</span><span>35%</span></div>
@@ -299,7 +312,8 @@
                     <span class="v30-feature-icon">✎</span>
                     <div class="v30-feature-phase">03 · Notes</div>
                     <h3>Better margin notes</h3>
-                    <p>Make reader reactions easier to revisit, discover, and connect to the stories that inspired them.</p>
+                    <p>Make reader reactions easier to revisit, discover, and connect to the stories that inspired them.
+                    </p>
                 </article>
                 <article class="glass v30-feature-card">
                     <span class="v30-feature-icon">✦</span>
@@ -317,28 +331,36 @@
             <div class="section-head">
                 <div>
                     <span class="eyebrow">A living roadmap</span>
-                    <h2 class="section-title">The 3.0 <em>Roadmap</em></h2>
+                    <h2 class="section-title">The 3.0-3.2 <em>Roadmap</em></h2>
                     <p class="section-sub">A few signposts for where the reading lounge is heading next.</p>
                 </div>
             </div>
             <div class="roadmap-grid">
                 <article class="glass roadmap-card roadmap-now">
-                    <div class="roadmap-topline"><span class="roadmap-number">01</span><span class="roadmap-status">Active foundation</span></div>
+                    <div class="roadmap-topline"><span class="roadmap-number">01</span><span
+                            class="roadmap-status">Active foundation</span></div>
                     <h3>Foundation</h3>
-                    <p>Polish the current shelf, clarify the catalogue, and make the 3.0 visual language feel at home.</p>
-                    <div class="roadmap-items"><span>Interface polish</span><span>Story archive</span><span>Release notes</span></div>
+                    <p>Polish the current shelf, clarify the catalogue, and make the 3.0 visual language feel at home.
+                    </p>
+                    <div class="roadmap-items"><span>Interface polish</span><span>Story archive</span><span>Release
+                            notes</span></div>
                 </article>
                 <article class="glass roadmap-card">
-                    <div class="roadmap-topline"><span class="roadmap-number">02</span><span class="roadmap-status">Next up</span></div>
+                    <div class="roadmap-topline"><span class="roadmap-number">02</span><span class="roadmap-status">Next
+                            up</span></div>
                     <h3>Reader layer</h3>
-                    <p>Build on progress, achievements, and notes so every reader can shape a personal shelf history.</p>
-                    <div class="roadmap-items"><span>New badges</span><span>Reading mode</span><span>Better milestones</span></div>
+                    <p>Build on progress, achievements, and notes so every reader can shape a personal shelf history.
+                    </p>
+                    <div class="roadmap-items"><span>New badges</span><span>Reading mode</span><span>Better
+                            milestones</span></div>
                 </article>
                 <article class="glass roadmap-card">
-                    <div class="roadmap-topline"><span class="roadmap-number">03</span><span class="roadmap-status">On the horizon</span></div>
+                    <div class="roadmap-topline"><span class="roadmap-number">03</span><span class="roadmap-status">On
+                            the horizon</span></div>
                     <h3>Beyond the shelf</h3>
                     <p>Give adaptations, community touchpoints, and future formats a more intentional home.</p>
-                    <div class="roadmap-items"><span>Manga corner</span><span>Reader notes</span><span>Future formats</span></div>
+                    <div class="roadmap-items"><span>Manga corner</span><span>Reader notes</span><span>Future
+                            formats</span></div>
                 </article>
             </div>
         </div>
@@ -398,7 +420,8 @@
                     <div class="side-card glass">
                         <span class="side-label">Search &amp; Filter</span>
                         <div class="search-mini"><span aria-hidden="true">🔍</span><input id="shelfSearch"
-                                placeholder="Search titles or genres…" oninput="scheduleCatalogRender()" aria-label="Search shelf"></div>
+                                placeholder="Search titles or genres…" oninput="scheduleCatalogRender()"
+                                aria-label="Search shelf"></div>
                         <div class="filter-section-label">Genre</div>
                         <div class="filter-pills" id="genrePills">
                             <button class="pill-btn active" data-genre="all">All</button>
@@ -621,7 +644,7 @@
                             <a href="#" onclick="return false"> The Rain Pact Manga Version — Aug 2026</a><a href="#"
                                 onclick="return false">Petal
                                 Vol. 4 — planned University → Adulthood Arc ( last volume )</a>
-                            <a href="#version30">Version 3.0 preview</a><a href="#roadmap30">3.0 roadmap</a>
+                            <a href="#version30">Version 3.0-3.2 preview</a><a href="#roadmap30">3.0-3.2 roadmap</a>
                             <a href="#" onclick="return false">Case File: vol 2</a><a href="#"
                                 onclick="return false">Mobile reading
                                 mode</a>
@@ -660,7 +683,7 @@
             <span class="dock-icon">▤</span>
         </a>
 
-                <a href="#achievements" class="dock-item" data-label="Achievements">
+        <a href="#achievements" class="dock-item" data-label="Achievements">
             <span class="dock-icon">✦</span>
         </a>
 

@@ -114,11 +114,11 @@ var novels = [
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: [ "drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
+        order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: ["drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-       order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: [ "drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 2000, releaseOffsetDays: 0,
+        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 2000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
 ];
@@ -555,7 +555,7 @@ function renderCatalog() {
             '<button class="nc-qbtn' + (isLiked ? ' liked' : '') + '" onclick="event.stopPropagation();toggleLikeNovel(' + n.order + ')" aria-label="Like">' + (isLiked ? '♥' : '♡') + '</button>' +
             '<button class="nc-qbtn" onclick="event.stopPropagation();shareNovelQuick(' + n.order + ')" aria-label="Share">↗</button>' +
             '</div>' +
-            '<div class="nc-body"><div class="nc-genres">' + n.genres.map(function (g) { return '<span class="nc-tag">' + badgeLabel[g] + '</span>'; }).join('') + '</div>' +
+            '<div class="nc-body"><div class="nc-genres">' + n.genres.slice(0, 3).map(function (g) { return '<span class="nc-tag">' + badgeLabel[g] + '</span>'; }).join('') + '</div>' +
             '<div class="nc-title">' + esc(n.title) + '</div>' +
             '<div class="nc-meta"><span>' + (n.rating ? ('⭐ ' + n.rating) : '—') + '</span><span>👁 ' + fmtNum(n.views) + '</span><span>📖 ' + (n.ch || '0') + ' ch</span></div>' +
             (n.ch ? '<div class="nc-progress"><div class="nc-progress-fill" style="width:' + pct + '%"></div></div><div class="nc-progress-label">' + read + ' / ' + n.ch + ' read</div>' : '<div class="nc-progress-label">Releasing soon</div>') +
@@ -734,9 +734,10 @@ function renderChallenges() {
     var weekCh = chaptersInLastDays(7);
     var monthDone = completedCount();
     var challenges = [
-        { id: 'weekly', title: 'Turn 10 Pages', sub: 'Read 20 chapters this week', target: 20, cur: Math.min(weekCh, 20), xp: 150 },
+        { id: 'weekly', title: 'Turn 20 Pages', sub: 'Read 20 chapters this week', target: 20, cur: Math.min(weekCh, 20), xp: 150 },
         { id: 'monthly', title: 'Finish 2 Full Story', sub: 'Complete two novel', target: 2, cur: Math.min(monthDone, 2), xp: 400 },
-        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 }
+        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 },
+        { id: 'weekly', title: 'Complete a ONE SHOT', sub: 'Read any 1 ONE SHOT', target: 1, cur: Math.min(weekCh, 1), xp: 450 },
     ];
     document.getElementById('challengesList').innerHTML = challenges.map(function (c) {
         var pct = Math.round(c.cur / c.target * 100);
@@ -920,9 +921,9 @@ function renderHeatmap() {
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { daysOut: 14, title: 'Case File: You — Chapter 11' },
-    { daysOut: null, title: null },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
     { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
+    { daysOut: null, title: null }
 ];
 var calSorted = [];
 function calRemind(idx) {
@@ -947,8 +948,8 @@ function renderCalendar() {
 var newsItems = [
     { daysAgo: null, type: 'update', title: 'Version 3.0 is live', excerpt: " The old version is archived for anyone who wants to visit." },
     { daysAgo: null, type: 'note', title: 'Version 3.0 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: null, type: 'note', title: " About Before i forget your name", excerpt:"The Novel is HITAUS for a while we are very sorry for it."}
-    
+    { daysAgo: null, type: 'note', title: " About Before i forget your name", excerpt: "The Novel is HITAUS for a while we are very sorry for it." }
+
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
 var activeNewsType = 'all';
@@ -1040,7 +1041,7 @@ function cmdkRender() {
     if (!matches.length) { results.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:12.5px">No stories match "' + esc(q) + '"</div>'; return; }
     results.innerHTML = '<div class="cmdk-section-label">Stories</div>' + matches.map(function (n, i) {
         return '<div class="cmdk-row" data-i="' + i + '" onclick="cmdkOpen(' + n.order + ')"><div class="cmdk-row-icon"><img src="' + esc(n.img) + '" onerror="imgFail(this)"></div>' +
-            '<div><div class="cmdk-row-title">' + esc(n.title) + '</div><div class="cmdk-row-sub">' + n.genres.map(function (g) { return badgeLabel[g]; }).join(' · ') + '</div></div></div>';
+            '<div class="cmdk-row-text"><div class="cmdk-row-title">' + esc(n.title) + '</div><div class="cmdk-row-sub">' + n.genres.map(function (g) { return badgeLabel[g]; }).join(' · ') + '</div></div></div>';
     }).join('');
 }
 function cmdkSearchTerm(term) { document.getElementById('cmdkInput').value = term; cmdkRender(); }
