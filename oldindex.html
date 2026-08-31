@@ -3368,9 +3368,18 @@
             margin: 0 auto;
             padding: 0 var(--sp-6) var(--sp-8);
         }
-        .final-update-section { padding-top: var(--sp-7); }
+
+        .final-update-section {
+            padding-top: var(--sp-7);
+        }
+
         .final-update-grid,
-        .personal-shelf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-4); }
+        .personal-shelf-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--sp-4);
+        }
+
         .final-update-card,
         .personal-shelf-card {
             background: var(--surface);
@@ -3379,8 +3388,18 @@
             padding: var(--sp-5);
             box-shadow: var(--shadow-sm);
         }
-        .final-update-card { min-height: 230px; display: flex; flex-direction: column; }
-        .final-update-primary { background: var(--cream); border-color: var(--plum); }
+
+        .final-update-card {
+            min-height: 230px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .final-update-primary {
+            background: var(--cream);
+            border-color: var(--plum);
+        }
+
         .final-update-kicker,
         .personal-card-label,
         .reader-mode-eyebrow,
@@ -3392,95 +3411,611 @@
             letter-spacing: .14em;
             text-transform: uppercase;
         }
-        .final-update-card h3 { margin: 12px 0 9px; color: var(--ink); font-family: var(--font-display); font-size: 21px; font-style: italic; line-height: 1.2; }
-        .final-update-card p { color: var(--mauve); font-size: 12px; line-height: 1.75; }
-        .final-update-btn { align-self: flex-start; margin-top: auto; padding: 9px 14px; border: 1px solid var(--plum); border-radius: var(--r-sm); background: var(--plum); color: white; cursor: pointer; font-family: var(--font-mono); font-size: 10px; transition: all var(--tr); }
-        .final-update-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-        .final-update-btn.ghost { background: transparent; color: var(--plum); }
-        .personal-shelf-section { padding-top: 0; }
-        .personal-shelf-card { min-height: 178px; display: flex; flex-direction: column; }
-        .personal-card-label { margin-bottom: 14px; }
-        .personal-story-row { display: flex; align-items: center; gap: 12px; flex: 1; }
-        .personal-cover { width: 48px; height: 68px; flex-shrink: 0; overflow: hidden; border-radius: var(--r-sm); }
-        .personal-cover img { width: 100%; height: 100%; object-fit: cover; }
-        .personal-story-info { min-width: 0; }
-        .personal-story-info h3 { overflow: hidden; color: var(--ink); font-family: var(--font-display); font-size: 16px; font-style: italic; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
-        .personal-story-meta { margin-top: 5px; color: var(--mauve); font-family: var(--font-mono); font-size: 9px; }
-        .personal-progress { height: 5px; margin-top: 10px; overflow: hidden; border-radius: 5px; background: var(--cream); }
-        .personal-progress span { display: block; height: 100%; border-radius: inherit; background: var(--plum); }
-        .personal-card-action { margin-top: 14px; }
-        .personal-empty { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: 5px; color: var(--mauve); font-size: 11px; line-height: 1.5; }
-        .personal-empty strong { color: var(--ink); font-family: var(--font-display); font-size: 16px; font-style: italic; }
-        .personal-empty-icon { color: var(--plum); font-size: 19px; }
-        .novel-fav-btn { width: 26px; height: 26px; flex-shrink: 0; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--cream); color: var(--mauve); cursor: pointer; opacity: 0; transition: all var(--tr); }
+
+        .final-update-card h3 {
+            margin: 12px 0 9px;
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-style: italic;
+            line-height: 1.2;
+        }
+
+        .final-update-card p {
+            color: var(--mauve);
+            font-size: 12px;
+            line-height: 1.75;
+        }
+
+        .final-update-btn {
+            align-self: flex-start;
+            margin-top: auto;
+            padding: 9px 14px;
+            border: 1px solid var(--plum);
+            border-radius: var(--r-sm);
+            background: var(--plum);
+            color: white;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            transition: all var(--tr);
+        }
+
+        .final-update-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .final-update-btn.ghost {
+            background: transparent;
+            color: var(--plum);
+        }
+
+        .personal-shelf-section {
+            padding-top: 0;
+        }
+
+        .personal-shelf-card {
+            min-height: 178px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .personal-card-label {
+            margin-bottom: 14px;
+        }
+
+        .personal-story-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .personal-cover {
+            width: 48px;
+            height: 68px;
+            flex-shrink: 0;
+            overflow: hidden;
+            border-radius: var(--r-sm);
+        }
+
+        .personal-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .personal-story-info {
+            min-width: 0;
+        }
+
+        .personal-story-info h3 {
+            overflow: hidden;
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-style: italic;
+            line-height: 1.25;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .personal-story-meta {
+            margin-top: 5px;
+            color: var(--mauve);
+            font-family: var(--font-mono);
+            font-size: 9px;
+        }
+
+        .personal-progress {
+            height: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: var(--cream);
+        }
+
+        .personal-progress span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--plum);
+        }
+
+        .personal-card-action {
+            margin-top: 14px;
+        }
+
+        .personal-empty {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            color: var(--mauve);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .personal-empty strong {
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-style: italic;
+        }
+
+        .personal-empty-icon {
+            color: var(--plum);
+            font-size: 19px;
+        }
+
+        .novel-fav-btn {
+            width: 26px;
+            height: 26px;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--cream);
+            color: var(--mauve);
+            cursor: pointer;
+            opacity: 0;
+            transition: all var(--tr);
+        }
+
         .novel-item:hover .novel-fav-btn,
         .novel-fav-btn:focus-visible,
-        .novel-fav-btn.active { opacity: 1; }
-        .novel-fav-btn.active { color: var(--plum); border-color: var(--plum); }
-        .novel-fav-btn:hover { color: var(--plum); border-color: var(--plum); }
-        .sp-focus-btn { width: 100%; margin-top: 8px; padding: 12px 16px; border: 1px solid var(--plum); border-radius: var(--r-sm); background: transparent; color: var(--plum); cursor: pointer; font-family: var(--font-mono); font-size: 10px; transition: all var(--tr); }
-        .sp-focus-btn:hover, .sp-focus-btn.bookmarked { background: var(--cream); }
-        .sp-focus-btn:disabled { opacity: .45; cursor: default; }
-        .comment-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
-        .reader-filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-        .reader-filter { padding: 7px 11px; border: 1px solid var(--border); border-radius: var(--r-sm); background: transparent; color: var(--mauve); cursor: pointer; font-family: var(--font-mono); font-size: 9px; }
-        .reader-filter.active, .reader-filter:hover { border-color: var(--plum); background: var(--cream); color: var(--plum); }
-        .reader-mode-overlay { position: fixed; inset: 0; z-index: 940; background: rgba(36,31,26,.76); backdrop-filter: blur(8px); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
-        .reader-mode-overlay.open { opacity: 1; pointer-events: all; }
-        .reader-mode-panel { position: fixed; inset: 18px; z-index: 941; display: flex; flex-direction: column; overflow: hidden; background: var(--paper); border: 1px solid var(--ink); border-radius: var(--r-lg); box-shadow: var(--shadow-lg); transform: translateY(18px) scale(.98); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
-        .reader-mode-panel.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
-        body.reader-mode-active { overflow: hidden; }
-        .reader-mode-header, .reader-mode-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0; padding: 16px 22px; border-bottom: 1px solid var(--border); background: var(--mist); }
-        .reader-mode-footer { justify-content: flex-end; border-top: 1px solid var(--border); border-bottom: 0; }
-        .reader-mode-brand, .reader-mode-header-actions { display: flex; align-items: center; gap: 9px; }
-        .reader-mode-brand { color: var(--ink); font-family: var(--font-display); font-size: 17px; font-style: italic; }
-        .reader-mode-mark { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--plum); border-radius: var(--r-sm); background: var(--cream); color: var(--plum); font-style: normal; }
-        .reader-mode-icon { min-width: 38px; height: 38px; padding: 0 9px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--surface); color: var(--ink); cursor: pointer; font-family: var(--font-mono); font-size: 10px; }
-        .reader-mode-icon:hover { border-color: var(--plum); color: var(--plum); }
-        .reader-mode-scroll { flex: 1; overflow-y: auto; padding: 28px 22px 44px; }
-        .reader-mode-progress-wrap, .reader-mode-copy { width: min(720px, 100%); margin-left: auto; margin-right: auto; }
-        .reader-mode-progress-wrap { margin-bottom: 38px; }
-        .reader-mode-progress-label { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--mauve); font-family: var(--font-mono); font-size: 10px; }
-        .reader-mode-progress { height: 5px; overflow: hidden; border-radius: 5px; background: var(--cream); }
-        .reader-mode-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--plum); transition: width .3s ease; }
-        .reader-mode-copy { color: var(--ink); line-height: 1.9; transition: font-size .2s ease; }
-        .reader-mode-copy h1 { max-width: 680px; margin: 8px 0; color: var(--ink); font-family: var(--font-display); font-size: clamp(34px, 5vw, 62px); font-weight: 500; line-height: 1.06; }
-        .reader-mode-byline { color: var(--mauve); font-family: var(--font-mono); font-size: 10px; }
-        .reader-mode-rule { width: 90px; height: 1px; margin: 28px 0; background: var(--plum); }
-        .reader-mode-intro { color: var(--ink); font-family: var(--font-display); font-size: 19px; font-style: italic; line-height: 1.55; }
-        .reader-mode-copy blockquote { margin: 24px 0; padding: 4px 0 4px 18px; border-left: 2px solid var(--plum); color: var(--plum); font-family: var(--font-display); font-size: 18px; font-style: italic; line-height: 1.6; }
-        .reader-mode-chapter-card { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 34px; padding: 16px; border: 1px dashed var(--border); border-radius: var(--r-md); background: var(--surface); }
-        .reader-mode-chapter-card strong { display: block; margin-top: 3px; color: var(--ink); font-family: var(--font-display); font-size: 18px; }
-        .reader-mode-stepper { display: flex; gap: 6px; }
-        .reader-mode-stepper button { width: 40px; height: 40px; border: 1px solid var(--border); border-radius: var(--r-sm); background: var(--cream); color: var(--ink); cursor: pointer; font-size: 18px; }
-        .reader-mode-footer .sp-read-btn, .reader-mode-footer .sp-bookmark-btn, .reader-mode-footer .sp-focus-btn { width: auto; margin: 0; min-width: 150px; }
-        .reader-mode-footer button:disabled { opacity: .45; cursor: default; }
-        .reader-mobile-dock { display: none; }
+        .novel-fav-btn.active {
+            opacity: 1;
+        }
+
+        .novel-fav-btn.active {
+            color: var(--plum);
+            border-color: var(--plum);
+        }
+
+        .novel-fav-btn:hover {
+            color: var(--plum);
+            border-color: var(--plum);
+        }
+
+        .sp-focus-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--plum);
+            border-radius: var(--r-sm);
+            background: transparent;
+            color: var(--plum);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            transition: all var(--tr);
+        }
+
+        .sp-focus-btn:hover,
+        .sp-focus-btn.bookmarked {
+            background: var(--cream);
+        }
+
+        .sp-focus-btn:disabled {
+            opacity: .45;
+            cursor: default;
+        }
+
+        .comment-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 14px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            background: var(--surface);
+        }
+
+        .reader-filter-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .reader-filter {
+            padding: 7px 11px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: transparent;
+            color: var(--mauve);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 9px;
+        }
+
+        .reader-filter.active,
+        .reader-filter:hover {
+            border-color: var(--plum);
+            background: var(--cream);
+            color: var(--plum);
+        }
+
+        .reader-mode-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 940;
+            background: rgba(36, 31, 26, .76);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease;
+        }
+
+        .reader-mode-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .reader-mode-panel {
+            position: fixed;
+            inset: 18px;
+            z-index: 941;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--paper);
+            border: 1px solid var(--ink);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(18px) scale(.98);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease, transform .25s ease;
+        }
+
+        .reader-mode-panel.open {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        body.reader-mode-active {
+            overflow: hidden;
+        }
+
+        .reader-mode-header,
+        .reader-mode-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-shrink: 0;
+            padding: 16px 22px;
+            border-bottom: 1px solid var(--border);
+            background: var(--mist);
+        }
+
+        .reader-mode-footer {
+            justify-content: flex-end;
+            border-top: 1px solid var(--border);
+            border-bottom: 0;
+        }
+
+        .reader-mode-brand,
+        .reader-mode-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .reader-mode-brand {
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-style: italic;
+        }
+
+        .reader-mode-mark {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--plum);
+            border-radius: var(--r-sm);
+            background: var(--cream);
+            color: var(--plum);
+            font-style: normal;
+        }
+
+        .reader-mode-icon {
+            min-width: 38px;
+            height: 38px;
+            padding: 0 9px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--surface);
+            color: var(--ink);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 10px;
+        }
+
+        .reader-mode-icon:hover {
+            border-color: var(--plum);
+            color: var(--plum);
+        }
+
+        .reader-mode-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 22px 44px;
+        }
+
+        .reader-mode-progress-wrap,
+        .reader-mode-copy {
+            width: min(720px, 100%);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .reader-mode-progress-wrap {
+            margin-bottom: 38px;
+        }
+
+        .reader-mode-progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            color: var(--mauve);
+            font-family: var(--font-mono);
+            font-size: 10px;
+        }
+
+        .reader-mode-progress {
+            height: 5px;
+            overflow: hidden;
+            border-radius: 5px;
+            background: var(--cream);
+        }
+
+        .reader-mode-progress span {
+            display: block;
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--plum);
+            transition: width .3s ease;
+        }
+
+        .reader-mode-copy {
+            color: var(--ink);
+            line-height: 1.9;
+            transition: font-size .2s ease;
+        }
+
+        .reader-mode-copy h1 {
+            max-width: 680px;
+            margin: 8px 0;
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: clamp(34px, 5vw, 62px);
+            font-weight: 500;
+            line-height: 1.06;
+        }
+
+        .reader-mode-byline {
+            color: var(--mauve);
+            font-family: var(--font-mono);
+            font-size: 10px;
+        }
+
+        .reader-mode-rule {
+            width: 90px;
+            height: 1px;
+            margin: 28px 0;
+            background: var(--plum);
+        }
+
+        .reader-mode-intro {
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: 19px;
+            font-style: italic;
+            line-height: 1.55;
+        }
+
+        .reader-mode-copy blockquote {
+            margin: 24px 0;
+            padding: 4px 0 4px 18px;
+            border-left: 2px solid var(--plum);
+            color: var(--plum);
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .reader-mode-chapter-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 34px;
+            padding: 16px;
+            border: 1px dashed var(--border);
+            border-radius: var(--r-md);
+            background: var(--surface);
+        }
+
+        .reader-mode-chapter-card strong {
+            display: block;
+            margin-top: 3px;
+            color: var(--ink);
+            font-family: var(--font-display);
+            font-size: 18px;
+        }
+
+        .reader-mode-stepper {
+            display: flex;
+            gap: 6px;
+        }
+
+        .reader-mode-stepper button {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            background: var(--cream);
+            color: var(--ink);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .reader-mode-footer .sp-read-btn,
+        .reader-mode-footer .sp-bookmark-btn,
+        .reader-mode-footer .sp-focus-btn {
+            width: auto;
+            margin: 0;
+            min-width: 150px;
+        }
+
+        .reader-mode-footer button:disabled {
+            opacity: .45;
+            cursor: default;
+        }
+
+        .reader-mobile-dock {
+            display: none;
+        }
+
         @media (hover: none) {
-            .novel-fav-btn { opacity: 1; }
+            .novel-fav-btn {
+                opacity: 1;
+            }
         }
+
         @media (max-width: 760px) {
-            .final-update-section, .personal-shelf-section { padding-left: var(--sp-4); padding-right: var(--sp-4); }
-            .final-update-grid, .personal-shelf-grid { grid-template-columns: 1fr; }
-            .final-update-card { min-height: 0; }
-            .reader-mode-panel { inset: 0; border: 0; border-radius: 0; }
-            .reader-mode-header, .reader-mode-footer { padding: 13px 14px; }
-            .reader-mode-footer { flex-wrap: wrap; padding-bottom: calc(13px + env(safe-area-inset-bottom)); }
-            .reader-mode-footer .sp-read-btn, .reader-mode-footer .sp-bookmark-btn, .reader-mode-footer .sp-focus-btn { width: 100%; min-width: 0; }
-            .reader-mode-scroll { padding: 22px 17px 34px; }
-            .reader-mode-copy h1 { font-size: 36px; }
-            .reader-mode-intro { font-size: 17px; }
-            .comment-toolbar { align-items: flex-start; flex-direction: column; }
-            .reader-mobile-dock { position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); z-index: 400; display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; padding: 6px; border: 1px solid var(--ink); border-radius: 10px; background: var(--mist); box-shadow: var(--shadow-lg); }
-            .reader-mobile-dock a, .reader-mobile-dock button { display: flex; min-width: 0; min-height: 48px; align-items: center; justify-content: center; flex-direction: column; gap: 3px; border: 0; background: transparent; color: var(--ink); text-decoration: none; cursor: pointer; font-family: var(--font-mono); font-size: 8px; }
-            .reader-mobile-dock a:hover, .reader-mobile-dock button:hover { background: var(--cream); color: var(--plum); border-radius: 6px; }
-            .reader-mobile-dock span { color: var(--plum); font-size: 15px; line-height: 1; }
-            body { padding-bottom: 82px; }
+
+            .final-update-section,
+            .personal-shelf-section {
+                padding-left: var(--sp-4);
+                padding-right: var(--sp-4);
+            }
+
+            .final-update-grid,
+            .personal-shelf-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .final-update-card {
+                min-height: 0;
+            }
+
+            .reader-mode-panel {
+                inset: 0;
+                border: 0;
+                border-radius: 0;
+            }
+
+            .reader-mode-header,
+            .reader-mode-footer {
+                padding: 13px 14px;
+            }
+
+            .reader-mode-footer {
+                flex-wrap: wrap;
+                padding-bottom: calc(13px + env(safe-area-inset-bottom));
+            }
+
+            .reader-mode-footer .sp-read-btn,
+            .reader-mode-footer .sp-bookmark-btn,
+            .reader-mode-footer .sp-focus-btn {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .reader-mode-scroll {
+                padding: 22px 17px 34px;
+            }
+
+            .reader-mode-copy h1 {
+                font-size: 36px;
+            }
+
+            .reader-mode-intro {
+                font-size: 17px;
+            }
+
+            .comment-toolbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .reader-mobile-dock {
+                position: fixed;
+                left: 10px;
+                right: 10px;
+                bottom: calc(10px + env(safe-area-inset-bottom));
+                z-index: 400;
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 3px;
+                padding: 6px;
+                border: 1px solid var(--ink);
+                border-radius: 10px;
+                background: var(--mist);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .reader-mobile-dock a,
+            .reader-mobile-dock button {
+                display: flex;
+                min-width: 0;
+                min-height: 48px;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 3px;
+                border: 0;
+                background: transparent;
+                color: var(--ink);
+                text-decoration: none;
+                cursor: pointer;
+                font-family: var(--font-mono);
+                font-size: 8px;
+            }
+
+            .reader-mobile-dock a:hover,
+            .reader-mobile-dock button:hover {
+                background: var(--cream);
+                color: var(--plum);
+                border-radius: 6px;
+            }
+
+            .reader-mobile-dock span {
+                color: var(--plum);
+                font-size: 15px;
+                line-height: 1;
+            }
+
+            body {
+                padding-bottom: 82px;
+            }
         }
+
         @media (max-width: 420px) {
-            .reader-mode-header-actions { gap: 4px; }
-            .reader-mode-icon { min-width: 34px; padding: 0 7px; }
-            .reader-mode-copy h1 { font-size: 32px; }
+            .reader-mode-header-actions {
+                gap: 4px;
+            }
+
+            .reader-mode-icon {
+                min-width: 34px;
+                padding: 0 7px;
+            }
+
+            .reader-mode-copy h1 {
+                font-size: 32px;
+            }
         }
     </style>
 </head>
@@ -3530,64 +4065,29 @@
                         aria-label="Toggle animations"></button>
                 </div>
             </div>
-             <div class="sph-row">
+            <div class="sph-row">
                 <span class="sph-row-label">Redirect to latest Version</span>
                 <a href="index.html" class="pill-btn" style="text-decoration:none"> ↗ </a>
             </div>
-                <span class="sph-section-label">Reading</span>
-                <div class="sph-row">
-                    <div>
-                        <div class="sph-row-label">Default font size</div>
-                    </div>
-                    <div class="font-control">
-                        <button class="fc-btn" onclick="changeFontSize(-1)" aria-label="Decrease font size">
-                            −
-                        </button>
-                        <span class="fc-val" id="fontSizeVal">19</span>
-                        <button class="fc-btn" onclick="changeFontSize(1)" aria-label="Increase font size">
-                            +
-                        </button>
-                    </div>
+            <span class="sph-section-label">Reading</span>
+            <div class="sph-row">
+                <div>
+                    <div class="sph-row-label">Default font size</div>
                 </div>
-                <div class="sph-row">
-                    <div>
-                        <div class="sph-row-label">Sort library</div>
-                    </div>
-                    <select class="sp-select" id="sortSelect" onchange="applySort()" aria-label="Sort library">
-                        <option value="newest">Newest first</option>
-                        <option value="oldest">Oldest first</option>
-                        <option value="alpha">A → Z</option>
-                    </select>
+                <div class="font-control">
+                    <button class="fc-btn" onclick="changeFontSize(-1)" aria-label="Decrease font size">
+                        −
+                    </button>
+                    <span class="fc-val" id="fontSizeVal">19</span>
+                    <button class="fc-btn" onclick="changeFontSize(1)" aria-label="Increase font size">
+                        +
+                    </button>
                 </div>
             </div>
-            <div class="sph-section">
-                <span class="sph-section-label">About</span>
-                <div class="sph-row">
-                    <div>
-                        <div class="sph-row-label">Version</div>
-                    </div>
-                    <div style="
-                font-family: var(--font-mono);
-                font-size: 12px;
-                color: var(--mauve);
-              ">
-                        old
-                    </div>
+            <div class="sph-row">
+                <div>
+                    <div class="sph-row-label">Sort library</div>
                 </div>
-                <div class="sph-row">
-                    <div>
-                        <div class="sph-row-label">Last updated</div>
-                    </div>
-                    <div style="
-                font-family: var(--font-mono);
-                font-size: 12px;
-                color: var(--mauve);
-              ">
-                        July 2026
-                    </div>
-                </div>
-            </div>
-        </div>
     </aside>
 
     <div class="spotlight-overlay" id="spotlightOverlay" onclick="closeSpotlight()" aria-hidden="true"></div>
@@ -3633,18 +4133,23 @@
     </aside>
 
     <div class="reader-mode-overlay" id="readerModeOverlay" onclick="closeReaderMode()"></div>
-    <article class="reader-mode-panel" id="readerModePanel" role="dialog" aria-modal="true" aria-label="Focus reading mode">
+    <article class="reader-mode-panel" id="readerModePanel" role="dialog" aria-modal="true"
+        aria-label="Focus reading mode">
         <header class="reader-mode-header">
             <div class="reader-mode-brand"><span class="reader-mode-mark">✦</span><span>Focus Reading</span></div>
             <div class="reader-mode-header-actions">
-                <button class="reader-mode-icon" onclick="adjustReaderFont(-1)" aria-label="Decrease text size">A−</button>
-                <button class="reader-mode-icon" onclick="adjustReaderFont(1)" aria-label="Increase text size">A+</button>
-                <button class="reader-mode-icon" onclick="closeReaderMode()" aria-label="Close focus reading mode">✕</button>
+                <button class="reader-mode-icon" onclick="adjustReaderFont(-1)"
+                    aria-label="Decrease text size">A−</button>
+                <button class="reader-mode-icon" onclick="adjustReaderFont(1)"
+                    aria-label="Increase text size">A+</button>
+                <button class="reader-mode-icon" onclick="closeReaderMode()"
+                    aria-label="Close focus reading mode">✕</button>
             </div>
         </header>
         <div class="reader-mode-scroll">
             <div class="reader-mode-progress-wrap">
-                <div class="reader-mode-progress-label"><span id="readerModeProgressLabel">Chapter 1</span><span id="readerModeProgressPct">0%</span></div>
+                <div class="reader-mode-progress-label"><span id="readerModeProgressLabel">Chapter 1</span><span
+                        id="readerModeProgressPct">0%</span></div>
                 <div class="reader-mode-progress"><span id="readerModeProgressFill"></span></div>
             </div>
             <div class="reader-mode-copy">
@@ -3654,17 +4159,24 @@
                 <div class="reader-mode-rule"></div>
                 <p class="reader-mode-intro" id="readerModeIntro"></p>
                 <blockquote>Every chapter is a small room. Take your time here.</blockquote>
-                <p id="readerModeBody">This is your focused reading space: keep the catalogue behind you, follow your progress, and return to the full chapter whenever you are ready.</p>
+                <p id="readerModeBody">This is your focused reading space: keep the catalogue behind you, follow your
+                    progress, and return to the full chapter whenever you are ready.</p>
                 <div class="reader-mode-chapter-card">
-                    <div><span class="reader-mode-small-label">Your place in the story</span><strong id="readerModeChapterText">Chapter 1</strong></div>
-                    <div class="reader-mode-stepper"><button onclick="adjustReaderChapter(-1)" aria-label="Previous chapter">−</button><button onclick="adjustReaderChapter(1)" aria-label="Next chapter">+</button></div>
+                    <div><span class="reader-mode-small-label">Your place in the story</span><strong
+                            id="readerModeChapterText">Chapter 1</strong></div>
+                    <div class="reader-mode-stepper"><button onclick="adjustReaderChapter(-1)"
+                            aria-label="Previous chapter">−</button><button onclick="adjustReaderChapter(1)"
+                            aria-label="Next chapter">+</button></div>
                 </div>
             </div>
         </div>
         <footer class="reader-mode-footer">
-            <button class="sp-bookmark-btn" id="readerModeBookmarkBtn" onclick="readerModeBookmark()">🔖 Set as Currently Reading</button>
-            <button class="sp-focus-btn" id="readerModeMarkBtn" onclick="readerModeMarkComplete()">Mark chapter as read</button>
-            <button class="sp-read-btn" id="readerModeOpenBtn" onclick="readerModeOpenStory()">Open full chapter →</button>
+            <button class="sp-bookmark-btn" id="readerModeBookmarkBtn" onclick="readerModeBookmark()">🔖 Set as
+                Currently Reading</button>
+            <button class="sp-focus-btn" id="readerModeMarkBtn" onclick="readerModeMarkComplete()">Mark chapter as
+                read</button>
+            <button class="sp-read-btn" id="readerModeOpenBtn" onclick="readerModeOpenStory()">Open full chapter
+                →</button>
         </footer>
     </article>
 
@@ -3903,20 +4415,10 @@
             <article class="final-update-card final-update-primary">
                 <span class="final-update-kicker">01 · Focus</span>
                 <h3>Read without the dashboard noise.</h3>
-                <p>Open any catalogue story in a quieter reading space, change text size, step through chapters, and mark your place when you finish.</p>
-                <button class="final-update-btn" onclick="openReaderMode(selectedOrder > 0 ? selectedOrder : 1)">Open Focus Reading →</button>
-            </article>
-            <article class="final-update-card">
-                <span class="final-update-kicker">02 · Shelf memory</span>
-                <h3>Your shelf remembers what matters.</h3>
-                <p>Currently reading, favorites, finished stories, and total progress now live together in one small reader dashboard.</p>
-                <button class="final-update-btn ghost" onclick="document.getElementById('personalShelf').scrollIntoView({behavior:'smooth'})">View personal shelf ↓</button>
-            </article>
-            <article class="final-update-card">
-                <span class="final-update-kicker">03 · Notes</span>
-                <h3>Keep the margins useful.</h3>
-                <p>Reader notes can be filtered by all notes, rated notes, or newest notes so the archive stays easy to revisit.</p>
-                <button class="final-update-btn ghost" onclick="document.getElementById('marginalia').scrollIntoView({behavior:'smooth'})">Open marginalia ↓</button>
+                <p>Open any catalogue story in a quieter reading space, change text size, step through chapters, and
+                    mark your place when you finish.</p>
+                <button class="final-update-btn" onclick="openReaderMode(selectedOrder > 0 ? selectedOrder : 1)">Open
+                    Focus Reading →</button>
             </article>
         </div>
     </section>
@@ -4127,83 +4629,9 @@
             </div>
         </div>
     </section>
-
-    <div class="comment-section" id="marginalia">
-        <div class="section-header">
-            <h2 class="section-title">Marginalia</h2>
-            <span class="section-count" id="commentCount">0 comments</span>
-        </div>
-        <div class="comment-form-wrap">
-            <div class="comment-form-title">💬 Leave a Note in the Margin</div>
-            <div class="comment-fields">
-                <input class="comment-input" id="commentName" type="text" placeholder="Your name…" maxlength="30"
-                    autocomplete="off" spellcheck="false" aria-label="Your name" />
-                <select class="comment-select" id="commentNovel" aria-label="Which novel is this about">
-                    <option value="">About which novel?</option>
-                    <option>The Rain Pact</option>
-                    <option>Ten Percent of Forever</option>
-                    <option>The Petal That Falls With a Smile Vol. 1</option>
-                    <option>The Petal That Falls With a Smile Vol. 2</option>
-                    <option>The Petal That Falls With a Smile Vol. 3</option>
-                    <option>The Petal That Falls With a Smile — Manga Version</option>
-                    <option>The Hours I Sold: ONE SHOT</option>
-                    <option>The Day She Stayed</option>
-                    <option>Him and Her</option>
-                    <option>Him and Her Vol. 2</option>
-                    <option>Case File: You</option>
-                    <option>The Other Side of Rain</option>
-                    <option>The Girl Who Was Deleted: ONE SHOT</option>
-                    <option>Second Place Forever: ONE SHOT</option>
-                    <option>Before I Forget Your Name</option>
-                    <option>General / All novels</option>
-                </select>
-            </div>
-            <div class="star-rating" id="starRating" aria-label="Rate this novel">
-                <span class="star-rating-label">Rate:</span>
-                <button class="star-btn" data-star="1" onclick="setStar(1)" aria-label="1 star">
-                    ★
-                </button>
-                <button class="star-btn" data-star="2" onclick="setStar(2)" aria-label="2 stars">
-                    ★
-                </button>
-                <button class="star-btn" data-star="3" onclick="setStar(3)" aria-label="3 stars">
-                    ★
-                </button>
-                <button class="star-btn" data-star="4" onclick="setStar(4)" aria-label="4 stars">
-                    ★
-                </button>
-                <button class="star-btn" data-star="5" onclick="setStar(5)" aria-label="5 stars">
-                    ★
-                </button>
-            </div>
-            <textarea class="comment-textarea" id="commentText" maxlength="500" oninput="updateCharCount()"
-                placeholder="Share your thoughts…" aria-label="Your comment"></textarea>
-            <div class="comment-footer">
-                <span style="
-              font-family: var(--font-mono);
-              font-size: 10px;
-              color: var(--mauve);
-            " id="charCount" aria-live="polite">0 / 500</span>
-                <span style="
-              font-family: var(--font-mono);
-              font-size: 10px;
-              color: var(--mauve);
-            ">✦ Be kind · No spoilers · Max 500 chars</span>
-                <button class="comment-submit" onclick="submitComment()">
-                    Post Note →
-                </button>
-            </div>
-        </div>
-        <div class="comment-toolbar" id="commentToolbar" role="toolbar" aria-label="Filter reader notes">
-            <span class="reader-filter-label">Note library</span>
-            <div class="reader-filter-pills">
-                <button class="reader-filter active" data-notefilter="all">All notes</button>
-                <button class="reader-filter" data-notefilter="rated">Rated</button>
-                <button class="reader-filter" data-notefilter="newest">Newest</button>
-            </div>
-        </div>
-        <div id="commentsList">
-            <div id="noComments" style="
+    </div>
+    <div id="commentsList">
+        <div id="noComments" style="
             text-align: center;
             padding: 44px;
             font-family: var(--font-display);
@@ -4212,9 +4640,8 @@
             color: var(--mauve);
             opacity: 0.6;
           ">
-                The margin is empty — be the first to write in it…
-            </div>
         </div>
+    </div>
     </div>
 
     <nav class="reader-mobile-dock" aria-label="Quick reader navigation">
@@ -4449,18 +4876,29 @@
                 ch: 1,
                 order: 15,
                 grad: "135deg,#5f7489,#8a7355",
-                badges: [ "drama", "slice"],
+                badges: ["drama", "slice"],
             },
             {
                 title: "The other day ",
                 img: "./bg2/tod.jpg",
-                link: "./chapters/tod.html",
+                link: "./chapters2/tod.html",
                 genres: "drama slice",
                 status: "ongoing",
                 ch: 1,
                 order: 16,
                 grad: "135deg,#5f7489,#8a7355",
-                badges: [ "drama", "slice"],
+                badges: ["drama", "slice"],
+            },
+            {
+                title: "The other day ",
+                img: "./bg2/tsbm.jpg",
+                link: "./chapters2/tsbm.html",
+                genres: "drama slice",
+                status: "completed",
+                ch: 1,
+                order: 17,
+                grad: "135deg,#5f7489,#8a7355",
+                badges: ["drama", "sad"],
             },
         ];
 
@@ -4612,7 +5050,8 @@
             13: "If time was a currency, how much would you pay for a single hour of the past?",
             14: ".",
             15: "Manga adaptation of the beloved novel-by use of AI.",
-            16: "normal days?"
+            16: "normal days?",
+            17: "."
         };
 
         var spotlightOrder = null;
@@ -4840,8 +5279,8 @@
 
         /* ── carousel ── */
         var carPos = 0,
-            carCardW = 265,
-            carGap = 16,
+            carCardW = 500,
+            carGap = 1,
             carDragging = false,
             carDragStartX = 0,
             carDragDelta = 0,
@@ -4855,7 +5294,7 @@
                 tag: "new",
                 tagLabel: "New update",
             },
-           
+
         ];
 
         function buildCarousel() {
@@ -6048,48 +6487,6 @@
                 <div class="ach-card-num" data-counter>2</div>
                 <div class="ach-card-label">Novel Series</div>
                 <div class="ach-card-sub">Ongoing sagas</div>
-            </div>
-        </div>
-    </div>
-
-   
-
-    <!-- ═══ READING GOALS ═══ -->
-    <div class="goals-section">
-        <div class="section-header">
-            <h2 class="section-title">Reading Goals</h2>
-            <span class="section-count">Track your daily targets</span>
-        </div>
-        <div class="goals-card">
-            <div class="goals-header">📋 Your Daily Reading Goal</div>
-            <div class="goals-set-row">
-                <span class="goals-set-label">I want to read</span>
-                <input type="number" class="goals-input" id="goalsInput" min="1" max="30" value="5"
-                    aria-label="Daily chapter goal" />
-                <span class="goals-set-label">chapters per day</span>
-                <button class="goals-set-btn" onclick="setGoal()">Set Goal</button>
-            </div>
-            <div class="goals-progress-wrap">
-                <div class="goals-progress-bar">
-                    <div class="goals-progress-fill" id="goalsFill" style="width:0%"></div>
-                </div>
-            </div>
-            <div class="goals-stats">
-                <div class="goals-pct" id="goalsPct">0%</div>
-                <div class="goals-count" id="goalsCount">0 / 5 chapters today</div>
-            </div>
-            <div class="goals-add-chapter">
-                <select class="goals-add-select" id="goalsAddSelect" aria-label="Select novel">
-                    <option value="">Select a novel to mark a chapter read…</option>
-                </select>
-                <button class="goals-add-btn" onclick="addGoalChapter()">+1 Chapter</button>
-            </div>
-            <div class="goals-milestones" id="goalsMilestones">
-                <div class="goals-milestone" data-threshold="5">5 — First Step</div>
-                <div class="goals-milestone" data-threshold="10">10 — Dedicated</div>
-                <div class="goals-milestone" data-threshold="25">25 — Devoted</div>
-                <div class="goals-milestone" data-threshold="50">50 — Scholar</div>
-                <div class="goals-milestone" data-threshold="100">100 — Legendary</div>
             </div>
         </div>
     </div>

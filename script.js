@@ -115,12 +115,16 @@ var novels = [
     },
     {
         order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: ["drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
-        blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+        blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
         order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 2000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
+    {
+        order: 19, title: "The Seat Beside Me", img: "./bg2/tsbm.jpg", link: "./chapters2/tsbm.html", genres: ["drama", "sad"], status: "completed", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 0,
+        blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+    }
 ];
 var badgeLabel = { romance: "Romance", drama: "Drama", slice: "Slice", sad: "Sad", mystery: "Mystery", action: "Action" };
 function isOneShot(n) { return n.ch === 1 && n.status === 'completed'; }
@@ -158,7 +162,11 @@ function adjustProgress(order, delta) {
     if (next === cur) return;
     readProgress[order] = next;
     store.set('readProgress', readProgress);
-    if (delta > 0) logReadingActivity(delta);
+    if (delta > 0) {
+        logReadingActivity(delta);
+        var hr = new Date().getHours();
+        if (hr >= 23 || hr < 5) markFlag('nightOwlRead');
+    }
     if (next === n.ch && cur !== n.ch) showToast(n.title + ' — all caught up! ✦');
     refreshReadingUI();
 }
@@ -210,6 +218,7 @@ function setTheme(theme) {
     var moodKey = activeMoodCard ? activeMoodCard.dataset.mood : 'all';
     if (moodKey === 'all') paintAurora(themeAccents[theme]);
     showToast('Theme set to ' + theme.charAt(0).toUpperCase() + theme.slice(1) + ' ✦');
+    if (markFlag('themeChanged')) setTimeout(renderReaderAchievements, 3000);
 }
 function initTheme() {
     var saved = store.get('theme', 'rose');
@@ -575,6 +584,7 @@ function shareNovelQuick(order) {
     var url = window.location.href.split('#')[0] + (n.link || '');
     if (navigator.clipboard) { navigator.clipboard.writeText(url).catch(function () { }); }
     showToast('Link copied for "' + n.title + '" ↗');
+    if (markFlag('sharedOnce')) setTimeout(renderReaderAchievements, 3000);
 }
 
 /* ============================================================
@@ -734,10 +744,9 @@ function renderChallenges() {
     var weekCh = chaptersInLastDays(7);
     var monthDone = completedCount();
     var challenges = [
-        { id: 'weekly', title: 'Turn 20 Pages', sub: 'Read 20 chapters this week', target: 20, cur: Math.min(weekCh, 20), xp: 150 },
+        { id: 'weekly', title: 'Turn 10 Pages', sub: 'Read 20 chapters this week', target: 20, cur: Math.min(weekCh, 20), xp: 150 },
         { id: 'monthly', title: 'Finish 2 Full Story', sub: 'Complete two novel', target: 2, cur: Math.min(monthDone, 2), xp: 400 },
-        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 },
-        { id: 'weekly', title: 'Complete a ONE SHOT', sub: 'Read any 1 ONE SHOT', target: 1, cur: Math.min(weekCh, 1), xp: 450 },
+        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 }
     ];
     document.getElementById('challengesList').innerHTML = challenges.map(function (c) {
         var pct = Math.round(c.cur / c.target * 100);
@@ -782,6 +791,9 @@ function notesWritten() {
 function favoritesCount() {
     return Object.keys(bookmarks).filter(function (k) { return bookmarks[k]; }).length;
 }
+function longFormCompleted() {
+    return novels.some(function (n) { return n.ch >= 9 && getRead(n) >= n.ch; }) ? 1 : 0;
+}
 function computeReaderStats() {
     return {
         read: totalRead(),
@@ -794,8 +806,22 @@ function computeReaderStats() {
         notes: notesWritten(),
         favorites: favoritesCount(),
         oneDay: store.get('oneDayRead', 0),
-        oneShots: novels.filter(function (n) { return isOneShot(n) && getRead(n) >= n.ch; }).length
+        oneShots: novels.filter(function (n) { return isOneShot(n) && getRead(n) >= n.ch; }).length,
+        bestStreak: computeBestStreak(),
+        nightOwl: store.get('nightOwlRead', false) ? 1 : 0,
+        searched: store.get('searchedOnce', false) ? 1 : 0,
+        themed: store.get('themeChanged', false) ? 1 : 0,
+        shared: store.get('sharedOnce', false) ? 1 : 0,
+        longForm: longFormCompleted()
     };
+}
+/* One-time flags for achievements tied to trying a feature, not just reading.
+   Returns true only the first time a given flag is set (so callers know
+   whether to refresh the achievements grid). */
+function markFlag(key) {
+    if (store.get(key, false)) return false;
+    store.set(key, true);
+    return true;
 }
 var readerAchievementDefs = [
     { icon: '📖', title: 'First Stamp', hint: 'Read your first chapter', rarity: 'common', metric: function (s) { return s.read; }, target: 1 },
@@ -814,16 +840,38 @@ var readerAchievementDefs = [
     { icon: '🗂️', title: 'Archive Diver', hint: 'Finish 3 stories start to finish', rarity: 'epic', metric: function (s) { return s.completed; }, target: 3 },
     { icon: '👑', title: 'Genre Omnivore', hint: 'Read from all 6 genres', rarity: 'legendary', metric: function (s) { return s.genres; }, target: 6 }
 ];
+readerAchievementDefs.push(
+    { icon: '🔍', title: 'Master Searcher', hint: 'Use search to find a story', rarity: 'common', metric: function (s) { return s.searched; }, target: 1 },
+    { icon: '🎨', title: 'Own Your Look', hint: 'Switch to a different color theme', rarity: 'common', metric: function (s) { return s.themed; }, target: 1 },
+    { icon: '↗️', title: 'Storyteller', hint: 'Share a story with someone', rarity: 'rare', metric: function (s) { return s.shared; }, target: 1 },
+    { icon: '🌌', title: 'Night Owl', hint: 'Read a chapter between 11pm and 5am', rarity: 'rare', metric: function (s) { return s.nightOwl; }, target: 1 },
+    { icon: '🚀', title: 'On a Roll', hint: 'Reach a 3-day reading streak', rarity: 'rare', metric: function (s) { return s.bestStreak; }, target: 3 },
+    { icon: '🐋', title: 'Deep Diver', hint: 'Finish one of the longer sagas (9+ chapters) start to finish', rarity: 'epic', metric: function (s) { return s.longForm; }, target: 1 },
+    { icon: '📅', title: 'Unstoppable', hint: 'Reach a 7-day reading streak', rarity: 'epic', metric: function (s) { return s.bestStreak; }, target: 7 }
+);
+var readerAchievementCoreCount = readerAchievementDefs.length;
+readerAchievementDefs.push({
+    icon: '🌟', title: 'Living Legend', hint: 'Unlock every other reader achievement', rarity: 'legendary',
+    metric: function (s) {
+        var count = 0;
+        for (var i = 0; i < readerAchievementCoreCount; i++) {
+            if (readerAchievementDefs[i].metric(s) >= readerAchievementDefs[i].target) count++;
+        }
+        return count;
+    },
+    target: readerAchievementCoreCount
+});
 var readerAchUnlocks = store.get('readerAchUnlocks', {});
 function renderReaderAchievements() {
     var s = computeReaderStats();
     var grid = document.getElementById('achievementGrid');
     if (!grid) return;
+    var newlyUnlocked = [];
     grid.innerHTML = readerAchievementDefs.map(function (a, idx) {
         var cur = a.metric(s);
         var pct = Math.min(100, Math.round(cur / a.target * 100));
         var unlocked = cur >= a.target;
-        if (unlocked && !readerAchUnlocks[idx]) { readerAchUnlocks[idx] = new Date().toISOString(); store.set('readerAchUnlocks', readerAchUnlocks); }
+        if (unlocked && !readerAchUnlocks[idx]) { readerAchUnlocks[idx] = new Date().toISOString(); store.set('readerAchUnlocks', readerAchUnlocks); newlyUnlocked.push(a.title); }
         var dateLabel = unlocked && readerAchUnlocks[idx] ? new Date(readerAchUnlocks[idx]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : null;
         return '<div class="glass milestone-tile' + (unlocked ? ' unlocked' : '') + '">' +
             '<div class="m-icon-row"><div class="m-icon">' + a.icon + '</div><span class="rarity-tag rarity-' + a.rarity + '">' + a.rarity + '</span></div>' +
@@ -833,6 +881,11 @@ function renderReaderAchievements() {
             '<div class="m-footer">' + (unlocked ? '<span class="m-date">Unlocked ' + dateLabel + '</span>' : '<span class="m-date" style="color:var(--muted)">Locked</span>') +
             '<button class="m-share" onclick="shareReaderAch(' + idx + ')" aria-label="Share achievement">↗</button></div></div>';
     }).join('');
+    if (newlyUnlocked.length === 1) {
+        showToast('🏆 Achievement unlocked: ' + newlyUnlocked[0] + '!');
+    } else if (newlyUnlocked.length > 1) {
+        showToast('🏆 ' + newlyUnlocked.length + ' achievements unlocked!');
+    }
 }
 function shareReaderAch(idx) {
     var a = readerAchievementDefs[idx];
@@ -921,9 +974,9 @@ function renderHeatmap() {
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { daysOut: 14, title: 'Case File: You — Chapter 11' },
+    { daysOut: null, title: null },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
     { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
-    { daysOut: null, title: null }
 ];
 var calSorted = [];
 function calRemind(idx) {
@@ -946,9 +999,9 @@ function renderCalendar() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: null, type: 'update', title: 'Version 3.0 is live', excerpt: " The old version is archived for anyone who wants to visit." },
-    { daysAgo: null, type: 'note', title: 'Version 3.0 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: null, type: 'note', title: " About Before i forget your name", excerpt: "The Novel is HITAUS for a while we are very sorry for it." }
+    { daysAgo: null, type: 'update', title: 'Version 3.1 is live', excerpt: " The old version is archived for anyone who wants to visit." },
+    { daysAgo: null, type: 'note', title: 'Version 3.1 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo: null, type: 'note', title: "The Seat beside me", excerpt: "A  ONE SHOT IS NOW AVAILABLE TO READ." }
 
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
@@ -1018,6 +1071,7 @@ function openCmdk() {
     document.getElementById('cmdkInput').value = '';
     cmdkRender();
     setTimeout(function () { document.getElementById('cmdkInput').focus(); }, 50);
+    if (markFlag('searchedOnce')) renderReaderAchievements();
 }
 function closeCmdk() {
     document.getElementById('cmdkOverlay').classList.remove('open');

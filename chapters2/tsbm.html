@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Seat Beside Me</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #2c241d;
+            --ink-soft: #5c4f42;
+            --paper: #f8f4ec;
+            --paper-edge: #efe7d8;
+            --accent: #bd5a35;
+            --accent-soft: #c98a5e;
+            --rain: #5f7688;
+            --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+            --hand: 'Caveat', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--serif);
+            color: var(--ink);
+            background: linear-gradient(to bottom,
+                    #e7eef1 0%,
+                    #edeae1 9%,
+                    #f2e6d2 23%,
+                    #ecdcc3 36%,
+                    #cfd6da 49%,
+                    #93a6b4 60%,
+                    #a7847a 69%,
+                    #dcaf85 79%,
+                    #e7a468 88%,
+                    #d97435 96%,
+                    #b04f27 100%);
+            background-attachment: scroll;
+        }
+
+        /* ---------- Hero ---------- */
+
+        .hero {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 6.5rem 1.5rem 4rem;
+            text-align: center;
+        }
+
+        .hero-chair {
+            width: 84px;
+            height: auto;
+            margin: 0 auto 1.6rem;
+            display: block;
+            opacity: 0;
+            animation: rise 1.4s ease-out 0.2s forwards;
+        }
+
+        .hero-chair path,
+        .hero-chair line {
+            stroke: var(--ink-soft);
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-weight: 500;
+            font-size: clamp(2.1rem, 5vw, 3.1rem);
+            letter-spacing: -0.01em;
+            margin: 0 0 0.6rem;
+            color: var(--ink);
+            opacity: 0;
+            animation: rise 1.4s ease-out 0.45s forwards;
+        }
+
+        .hero-sub {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--ink-soft);
+            font-size: 1.05rem;
+            margin: 0;
+            opacity: 0;
+            animation: rise 1.4s ease-out 0.65s forwards;
+        }
+
+        /* ---------- Reading column ---------- */
+
+        main {
+            max-width: 660px;
+            margin: 0 auto;
+            background: var(--paper);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.12);
+            padding: 0.5rem clamp(1.5rem, 6vw, 4.5rem) 1rem;
+        }
+
+        section {
+            padding: 1.6rem 0;
+        }
+
+        p {
+            font-size: 1.14rem;
+            line-height: 1.8;
+            margin: 0 0 0.7em;
+            max-width: 34em;
+        }
+
+        em {
+            font-style: italic;
+            color: var(--ink-soft);
+        }
+
+        /* scene divider */
+        .divider {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2.4rem 0;
+        }
+
+        .divider span {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent-soft);
+            display: block;
+        }
+
+        /* marginal handwritten note on the worksheet line */
+        .margin-note {
+            font-family: var(--hand);
+            color: var(--accent);
+            font-size: 1.55rem;
+            line-height: 1.3;
+            transform: rotate(-2deg);
+            margin: 0.2rem 0 1rem 0.4rem;
+        }
+
+        /* the letter fragments */
+        .letter {
+            background: #fbf7ee;
+            border: 1px solid var(--paper-edge);
+            box-shadow: 0 6px 18px rgba(70, 50, 30, 0.1);
+            border-radius: 2px;
+            padding: 1.4rem 1.7rem;
+            margin: 1.6rem auto;
+            max-width: 30em;
+            transform: rotate(-0.6deg);
+        }
+
+        .letter:nth-of-type(2n) {
+            transform: rotate(0.6deg);
+        }
+
+        .letter p {
+            font-family: var(--hand);
+            font-size: 1.65rem;
+            line-height: 1.45;
+            color: #4a3626;
+            margin: 0 0 0.35em;
+            max-width: none;
+        }
+
+        .letter p:last-child {
+            margin-bottom: 0;
+        }
+
+        .aside {
+            text-align: center;
+            font-style: italic;
+            color: var(--ink-soft);
+            font-size: 1rem;
+        }
+
+        /* ---------- Closing ---------- */
+
+        .closing {
+            max-width: 660px;
+            margin: 0 auto;
+            background: var(--paper);
+            padding: 0 clamp(1.5rem, 6vw, 4.5rem) 3rem;
+        }
+
+        .sunset-mark {
+            display: block;
+            margin: 3rem auto 0;
+            width: 100%;
+            max-width: 720px;
+            padding: 3.5rem 1.5rem 5rem;
+        }
+
+        .sun {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #fff3e4;
+            margin: 0 auto;
+            box-shadow: 0 0 30px 6px rgba(255, 240, 225, 0.55);
+            opacity: 0.9;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .hero-chair,
+            h1,
+            .hero-sub {
+                animation: none;
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            p {
+                font-size: 1.06rem;
+            }
+
+            .letter p {
+                font-size: 1.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero">
+        <svg class="hero-chair" viewBox="0 0 100 120" fill="none" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M22 46 L22 100 M78 46 L78 100" />
+            <path d="M22 46 L78 46" />
+            <path d="M22 70 L78 70" />
+            <path d="M22 46 L18 8 M78 46 L82 8" />
+            <path d="M18 8 L82 8" />
+            <path d="M22 100 L18 116 M78 100 L82 116" />
+        </svg>
+        <h1>The Seat Beside Me</h1>
+        <p class="hero-sub">a short story</p>
+    </div>
+
+    <main>
+
+        <section>
+            <p>The first thing I noticed about her was that she was late.</p>
+            <p>Not dramatically late.</p>
+            <p>Not the kind of late that makes an entire classroom turn around.</p>
+            <p>She slipped through the door three minutes after the bell, apologized to the teacher with a smile, and
+                walked straight toward the only empty seat in the room.</p>
+            <p>The seat beside me.</p>
+            <p>&ldquo;Is this taken?&rdquo;</p>
+            <p>I looked at the empty chair.</p>
+            <p>&ldquo;No.&rdquo;</p>
+            <p>&ldquo;Great.&rdquo;</p>
+            <p>She dropped her bag onto it.</p>
+            <p>I stared at her.</p>
+            <p>She stared back.</p>
+            <p>Then she smiled.</p>
+            <p>&ldquo;I'm Yuna.&rdquo;</p>
+            <p>&ldquo;I didn't ask.&rdquo;</p>
+            <p>&ldquo;I know.&rdquo;</p>
+            <p>She pulled out her notebook.</p>
+            <p>&ldquo;But you looked like you were going to.&rdquo;</p>
+            <p>I went back to my book.</p>
+            <p>She laughed quietly.</p>
+            <p>That was how it started.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>Yuna was annoying.</p>
+            <p>At least, that's what I told myself.</p>
+            <p>She talked too much.</p>
+            <p>She asked questions I didn't want to answer.</p>
+            <p>She borrowed my notes without asking.</p>
+            <p>She once drew a tiny cat in the corner of my mathematics worksheet and wrote:</p>
+            <p class="margin-note">You look like someone who needs a cat.</p>
+            <p>I crossed it out.</p>
+            <p>The next day, there were three cats.</p>
+            <p>I crossed those out too.</p>
+            <p>The day after that, she drew a whole family.</p>
+            <p>I stopped fighting.</p>
+            <p>Somehow, she became part of my routine.</p>
+            <p>The sound of her chair scraping against the floor.</p>
+            <p>Her tapping pencil.</p>
+            <p>Her quiet humming during independent work.</p>
+            <p>The way she'd whisper, &ldquo;Hey,&rdquo; whenever she wanted my attention.</p>
+            <p>And every morning, before I realized it, I'd look toward the classroom door.</p>
+            <p>Waiting.</p>
+            <p>I hated that.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>One afternoon, she asked me to stay after school.</p>
+            <p>&ldquo;Why?&rdquo;</p>
+            <p>&ldquo;Because I said so.&rdquo;</p>
+            <p>&ldquo;That's not a reason.&rdquo;</p>
+            <p>&ldquo;Fine. Because I'm hungry.&rdquo;</p>
+            <p>&ldquo;You're always hungry.&rdquo;</p>
+            <p>&ldquo;Exactly. You understand me.&rdquo;</p>
+            <p>We went to a small convenience store near the station.</p>
+            <p>She bought two ice creams.</p>
+            <p>&ldquo;You're paying.&rdquo;</p>
+            <p>&ldquo;Why?&rdquo;</p>
+            <p>&ldquo;Because you look richer.&rdquo;</p>
+            <p>I looked at my uniform.</p>
+            <p>&ldquo;You've never seen my bank account.&rdquo;</p>
+            <p>&ldquo;You have smart-person energy.&rdquo;</p>
+            <p>&ldquo;That's not how money works.&rdquo;</p>
+            <p>&ldquo;Still paying?&rdquo;</p>
+            <p>I sighed.</p>
+            <p>&ldquo;Yes.&rdquo;</p>
+            <p>She smiled.</p>
+            <p>&ldquo;See? We're becoming friends.&rdquo;</p>
+            <p>&ldquo;We're not.&rdquo;</p>
+            <p>&ldquo;Sure.&rdquo;</p>
+            <p>She took the ice cream from my hand.</p>
+            <p>&ldquo;Thanks, friend.&rdquo;</p>
+            <p>I didn't correct her.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>After that, we started walking home together.</p>
+            <p>Sometimes we talked.</p>
+            <p>Sometimes she talked and I listened.</p>
+            <p>Sometimes we walked for ten minutes without saying anything.</p>
+            <p>Those were my favorite days.</p>
+            <p>Yuna seemed to like silence too, although she never admitted it.</p>
+            <p>One evening, we sat on a bench near the river.</p>
+            <p>The sky was turning orange.</p>
+            <p>She leaned back and closed her eyes.</p>
+            <p>&ldquo;Pretty, isn't it?&rdquo;</p>
+            <p>&ldquo;It's just a sunset.&rdquo;</p>
+            <p>She opened one eye.</p>
+            <p>&ldquo;You really don't know how to enjoy anything.&rdquo;</p>
+            <p>&ldquo;I enjoy things.&rdquo;</p>
+            <p>&ldquo;Name three.&rdquo;</p>
+            <p>&ldquo;Books.&rdquo;</p>
+            <p>&ldquo;That's one.&rdquo;</p>
+            <p>&ldquo;Sleep.&rdquo;</p>
+            <p>&ldquo;Two.&rdquo;</p>
+            <p>&ldquo;Being alone.&rdquo;</p>
+            <p>She frowned.</p>
+            <p>&ldquo;That's depressing.&rdquo;</p>
+            <p>&ldquo;It's peaceful.&rdquo;</p>
+            <p>She smiled.</p>
+            <p>&ldquo;Maybe.&rdquo;</p>
+            <p>For a while, neither of us spoke.</p>
+            <p>Then she said quietly,</p>
+            <p>&ldquo;I like places where nobody expects anything from me.&rdquo;</p>
+            <p>I looked at her.</p>
+            <p>She was still smiling.</p>
+            <p>But somehow, it didn't look like her usual smile.</p>
+            <p>I wanted to ask why.</p>
+            <p>I didn't.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>The first strange thing happened a few weeks later.</p>
+            <p>Yuna didn't come to school.</p>
+            <p>I didn't think much of it.</p>
+            <p>People get sick.</p>
+            <p>The next day, she returned.</p>
+            <p>She looked completely normal.</p>
+            <p>&ldquo;Morning.&rdquo;</p>
+            <p>&ldquo;Where were you?&rdquo;</p>
+            <p>She froze for half a second.</p>
+            <p>Then smiled.</p>
+            <p>&ldquo;Family stuff.&rdquo;</p>
+            <p>&ldquo;What kind?&rdquo;</p>
+            <p>&ldquo;Boring stuff.&rdquo;</p>
+            <p>&ldquo;You're lying.&rdquo;</p>
+            <p>Her smile disappeared.</p>
+            <p>Only for a moment.</p>
+            <p>Then it returned.</p>
+            <p>&ldquo;You're scary when you're observant.&rdquo;</p>
+            <p>&ldquo;Answer me.&rdquo;</p>
+            <p>&ldquo;I'm fine.&rdquo;</p>
+            <p>I didn't like that answer.</p>
+            <p>Not because it was vague.</p>
+            <p>Because she said it too quickly.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>After that, I started noticing things.</p>
+            <p>She sometimes disappeared during lunch.</p>
+            <p>She carried a small medicine pouch inside her bag.</p>
+            <p>She avoided talking about the future.</p>
+            <p>Whenever someone asked what she wanted to do after graduation, she'd laugh and say,</p>
+            <p>&ldquo;Who knows?&rdquo;</p>
+            <p>Once, I heard her coughing in an empty hallway.</p>
+            <p>When I turned the corner, she was already smiling.</p>
+            <p>&ldquo;Were you following me?&rdquo;</p>
+            <p>&ldquo;No.&rdquo;</p>
+            <p>&ldquo;Good.&rdquo;</p>
+            <p>She walked past me.</p>
+            <p>I looked at her bag.</p>
+            <p>Then at her.</p>
+            <p>Something was wrong.</p>
+            <p>I just didn't know what.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>I found out on a rainy Thursday.</p>
+            <p>I had gone back to school because I'd forgotten my phone.</p>
+            <p>The building was almost empty.</p>
+            <p>As I passed the nurse's office, I heard her voice.</p>
+            <p>&ldquo;I know.&rdquo;</p>
+            <p>I stopped.</p>
+            <p>&ldquo;I know, Mom.&rdquo;</p>
+            <p>A pause.</p>
+            <p>&ldquo;I'll be careful.&rdquo;</p>
+            <p>Another pause.</p>
+            <p>&ldquo;No. Please don't tell them.&rdquo;</p>
+            <p>Her voice became quieter.</p>
+            <p>&ldquo;Especially him.&rdquo;</p>
+            <p>I froze.</p>
+            <p>I didn't know why.</p>
+            <p>Maybe because I already knew who <em>him</em> was.</p>
+            <p>I stepped away before she could come out.</p>
+            <p>I waited outside in the rain.</p>
+            <p>She found me five minutes later.</p>
+            <p>She stared at me.</p>
+            <p>I stared back.</p>
+            <p>&ldquo;You heard.&rdquo;</p>
+            <p>&ldquo;Yes.&rdquo;</p>
+            <p>Her smile slowly disappeared.</p>
+            <p>&ldquo;How much?&rdquo;</p>
+            <p>&ldquo;Enough.&rdquo;</p>
+            <p>She looked down.</p>
+            <p>For the first time since I'd met her, Yuna didn't know what to say.</p>
+            <p>So I asked the only question I could think of.</p>
+            <p>&ldquo;How long?&rdquo;</p>
+            <p>She didn't answer.</p>
+            <p>That was answer enough.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>We sat beneath the school entrance while the rain came down around us.</p>
+            <p>&ldquo;You weren't supposed to know.&rdquo;</p>
+            <p>&ldquo;You weren't supposed to lie.&rdquo;</p>
+            <p>&ldquo;I wasn't lying.&rdquo;</p>
+            <p>&ldquo;You said you were fine.&rdquo;</p>
+            <p>&ldquo;I am fine.&rdquo;</p>
+            <p>&ldquo;You're dying.&rdquo;</p>
+            <p>She looked at me.</p>
+            <p>Then, somehow, she smiled.</p>
+            <p>&ldquo;See?&rdquo;</p>
+            <p>&ldquo;What?&rdquo;</p>
+            <p>&ldquo;You finally said it.&rdquo;</p>
+            <p>I clenched my hands.</p>
+            <p>&ldquo;You knew.&rdquo;</p>
+            <p>&ldquo;Of course I knew.&rdquo;</p>
+            <p>&ldquo;And you were just going to keep pretending?&rdquo;</p>
+            <p>&ldquo;Yes.&rdquo;</p>
+            <p>&ldquo;Why?&rdquo;</p>
+            <p>She looked toward the rain.</p>
+            <p>&ldquo;Because everyone changes when they know.&rdquo;</p>
+            <p>&ldquo;They stop talking normally.&rdquo;</p>
+            <p>&ldquo;They become careful.&rdquo;</p>
+            <p>&ldquo;They look at you differently.&rdquo;</p>
+            <p>Her fingers tightened around her sleeve.</p>
+            <p>&ldquo;I don't want to become the girl everyone feels sorry for.&rdquo;</p>
+            <p>I looked at her.</p>
+            <p>&ldquo;You're still Yuna.&rdquo;</p>
+            <p>She smiled faintly.</p>
+            <p>&ldquo;That's what I wanted you to say.&rdquo;</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>After that day, nothing really changed.</p>
+            <p>And somehow, everything changed.</p>
+            <p>We still went to the convenience store.</p>
+            <p>She still stole my food.</p>
+            <p>I still complained.</p>
+            <p>She still drew cats on my notes.</p>
+            <p>Except now, I noticed every little thing.</p>
+            <p>Every laugh.</p>
+            <p>Every stupid joke.</p>
+            <p>Every walk home.</p>
+            <p>Every time she said my name.</p>
+            <p>I started taking pictures.</p>
+            <p>She hated it.</p>
+            <p>&ldquo;Delete that!&rdquo;</p>
+            <p>&ldquo;No.&rdquo;</p>
+            <p>&ldquo;My hair looks terrible.&rdquo;</p>
+            <p>&ldquo;It always does.&rdquo;</p>
+            <p>&ldquo;Rude.&rdquo;</p>
+            <p>She tried to grab my phone.</p>
+            <p>I moved it away.</p>
+            <p>She laughed.</p>
+            <p>I took another picture.</p>
+            <p>That one was blurry.</p>
+            <p>It was perfect.</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>One evening, she gave me a small envelope.</p>
+            <p>&ldquo;Don't open it yet.&rdquo;</p>
+            <p>&ldquo;What is it?&rdquo;</p>
+            <p>&ldquo;A secret.&rdquo;</p>
+            <p>&ldquo;I hate secrets.&rdquo;</p>
+            <p>&ldquo;I know.&rdquo;</p>
+            <p>She smiled.</p>
+            <p>&ldquo;That's why I'm giving you one.&rdquo;</p>
+            <p>I put it in my bag.</p>
+            <p>&ldquo;Can I open it tomorrow?&rdquo;</p>
+            <p>She nodded.</p>
+            <p>&ldquo;Tomorrow.&rdquo;</p>
+        </section>
+
+        <div class="divider"><span></span><span></span><span></span></div>
+
+        <section>
+            <p>The next morning, her seat was empty.</p>
+            <p>I waited.</p>
+            <p>Five minutes.</p>
+            <p>Ten.</p>
+            <p>The teacher entered.</p>
+            <p>&ldquo;Everyone, take your seats.&rdquo;</p>
+            <p>I looked at the empty chair beside me.</p>
+            <p>I kept expecting the door to open.</p>
+            <p>It didn't.</p>
+            <p>Classes passed.</p>
+            <p>Lunch came.</p>
+            <p>The chair remained empty.</p>
+            <p>At the end of the day, I finally understood.</p>
+            <p>Some empty spaces don't stay empty because someone is late.</p>
+            <p>Sometimes they're empty because someone isn't coming back.</p>
+            <p>I took the envelope from my bag.</p>
+            <p>My hands were shaking.</p>
+            <p>Inside was a single sheet of paper.</p>
+            <p>Her handwriting.</p>
+        </section>
+
+        <div class="letter">
+            <p>You know what's funny?</p>
+            <p>When I first sat beside you, you looked like you wanted me to disappear.</p>
+            <p>I thought you hated me.</p>
+            <p>Then you started waiting for me every morning.</p>
+            <p>I noticed.</p>
+            <p>I noticed everything.</p>
+        </div>
+
+        <p class="aside">There was a small pause between the lines.</p>
+        <p class="aside">Then:</p>
+
+        <div class="letter">
+            <p>Thank you for never treating me like I was already gone.</p>
+        </div>
+
+        <section style="padding-top:0">
+            <p>I stopped reading.</p>
+            <p>For some reason, I couldn't continue.</p>
+            <p>But there was one final sentence.</p>
+        </section>
+
+        <div class="letter">
+            <p>And if you ever miss me, don't look at the empty seat.</p>
+            <p>Look outside.</p>
+        </div>
+
+    </main>
+
+    <div class="closing">
+        <p>I looked toward the window.</p>
+        <p>The sky was orange.</p>
+        <p>Just like that evening by the river.</p>
+        <p>I smiled.</p>
+        <p>For the first time, I understood why she always liked sunsets.</p>
+        <p>Not because they were beautiful.</p>
+        <p>Because they ended quietly.</p>
+        <p>Without asking anyone to be sad.</p>
+        <p>The bell rang.</p>
+        <p>Everyone began leaving.</p>
+        <p>I stayed where I was.</p>
+        <p>Looking at the seat beside me.</p>
+        <p>The seat that had once been nothing.</p>
+        <p>The seat that had become my favorite place in the world.</p>
+        <p>And for the first time since she left,</p>
+        <p>I didn't feel like waiting for her to return.</p>
+        <p>I simply whispered,</p>
+        <p>&ldquo;See you tomorrow, Yuna.&rdquo;</p>
+        <p>Then I picked up my bag.</p>
+        <p>And went home.</p>
+    </div>
+
+    <div class="sunset-mark">
+        <div class="sun"></div>
+    </div>
+
+</body>
+
+</html>
