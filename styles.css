@@ -4576,3 +4576,326 @@ textarea {
         animation: none;
     }
 }
+
+/* ============================================================
+   BROWSER-STYLE FLOATING NAVIGATION
+   ============================================================ */
+
+.browser-dock {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    z-index: 800;
+
+    width: max-content;
+    max-width: calc(100vw - 28px);
+
+    padding: 7px;
+
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(180deg,
+            rgba(35, 28, 48, .88),
+            rgba(14, 11, 23, .88));
+
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+
+    box-shadow:
+        0 18px 50px rgba(0, 0, 0, .42),
+        inset 0 1px 0 rgba(255, 255, 255, .08);
+
+    animation: browserDockIn .65s cubic-bezier(.16, 1, .3, 1);
+}
+
+.browser-dock-inner {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+/* individual navigation item */
+
+.browser-tab {
+    position: relative;
+
+    height: 42px;
+    min-width: 42px;
+
+    padding: 0 11px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background: transparent;
+    color: var(--muted);
+
+    text-decoration: none;
+    cursor: pointer;
+
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+
+    transition:
+        width .25s cubic-bezier(.16, 1, .3, 1),
+        padding .25s cubic-bezier(.16, 1, .3, 1),
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.browser-tab-icon {
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    line-height: 1;
+
+    flex-shrink: 0;
+
+    transition:
+        transform .25s cubic-bezier(.16, 1, .3, 1),
+        color .2s ease;
+}
+
+.browser-tab-text {
+    max-width: 0;
+    overflow: hidden;
+
+    opacity: 0;
+    white-space: nowrap;
+
+    transition:
+        max-width .25s cubic-bezier(.16, 1, .3, 1),
+        opacity .18s ease;
+}
+
+/* hover */
+
+.browser-tab:hover {
+    color: var(--ink);
+
+    background: rgba(255, 255, 255, .075);
+
+    transform: translateY(-2px);
+}
+
+.browser-tab:hover .browser-tab-icon {
+    transform: scale(1.12);
+}
+
+/* reveal label on hover */
+
+.browser-tab:hover .browser-tab-text {
+    max-width: 100px;
+    opacity: 1;
+}
+
+/* active */
+
+.browser-tab.active {
+    color: var(--ink);
+
+    padding-left: 13px;
+    padding-right: 13px;
+
+    background:
+        linear-gradient(135deg,
+            rgba(var(--accent-rgb), .24),
+            rgba(var(--accent-rgb), .09));
+
+    box-shadow:
+        inset 0 0 0 1px rgba(var(--accent-rgb), .20),
+        0 4px 16px rgba(var(--accent-rgb), .10);
+}
+
+.browser-tab.active .browser-tab-text {
+    max-width: 70px;
+    opacity: 1;
+}
+
+.browser-tab.active .browser-tab-icon {
+    color: var(--rose);
+}
+
+/* tiny active indicator */
+
+.browser-tab.active::after {
+    content: "";
+
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+
+    width: 4px;
+    height: 4px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: var(--rose);
+
+    box-shadow:
+        0 0 8px var(--rose),
+        0 0 14px rgba(var(--accent-rgb), .5);
+}
+
+/* divider */
+
+.browser-divider {
+    width: 1px;
+    height: 22px;
+
+    margin: 0 4px;
+
+    background: rgba(255, 255, 255, .10);
+}
+
+/* settings */
+
+.browser-settings {
+    padding: 0 11px;
+}
+
+.browser-settings:hover .browser-tab-icon {
+    transform: rotate(25deg) scale(1.1);
+}
+
+/* glow underneath */
+
+.browser-dock-glow {
+    position: absolute;
+
+    left: 15%;
+    right: 15%;
+    bottom: -8px;
+
+    height: 14px;
+
+    background: rgba(var(--accent-rgb), .16);
+
+    filter: blur(18px);
+
+    pointer-events: none;
+
+    z-index: -1;
+}
+
+/* entrance */
+
+@keyframes browserDockIn {
+    from {
+        opacity: 0;
+        transform:
+            translateX(-50%) translateY(25px) scale(.94);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+    .browser-dock {
+        bottom: calc(12px + env(safe-area-inset-bottom));
+
+        max-width: calc(100vw - 20px);
+
+        padding: 6px;
+
+        border-radius: 17px;
+    }
+
+    .browser-dock-inner {
+        gap: 2px;
+    }
+
+    .browser-tab {
+        width: 43px;
+        min-width: 43px;
+
+        height: 43px;
+
+        padding: 0;
+
+        border-radius: 12px;
+    }
+
+    .browser-tab-text {
+        display: none;
+    }
+
+    .browser-tab.active {
+        width: 43px;
+        min-width: 43px;
+
+        padding: 0;
+    }
+
+    .browser-tab.active .browser-tab-text {
+        display: none;
+    }
+
+    .browser-tab-icon {
+        font-size: 16px;
+    }
+
+    .browser-divider {
+        height: 20px;
+        margin: 0 2px;
+    }
+}
+
+/* very small phones */
+
+@media (max-width: 380px) {
+
+    .browser-dock {
+        max-width: calc(100vw - 12px);
+    }
+
+    .browser-tab {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+    }
+
+    .browser-tab.active {
+        width: 40px;
+        min-width: 40px;
+    }
+}
+
+/* accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .browser-dock,
+    .browser-tab,
+    .browser-tab-icon,
+    .browser-tab-text {
+        animation: none !important;
+        transition: none !important;
+    }
+}

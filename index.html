@@ -665,30 +665,47 @@
         </div>
     </section>
     <!-- Navigation Dock -->
-    <nav class="nav-dock" aria-label="Main navigation">
-        <a href="#hero" class="dock-item active" data-label="Home">
-            <span class="dock-icon">⌂</span>
-        </a>
+    <!-- ============ NEW BROWSER-STYLE NAVIGATION DOCK ============ -->
+    <nav class="browser-dock" aria-label="Main navigation">
 
-        <a href="#catalog" class="dock-item" data-label="The Shelf">
-            <span class="dock-icon">▤</span>
-        </a>
+        <div class="browser-dock-inner">
 
-        <a href="#achievements" class="dock-item" data-label="Achievements">
-            <span class="dock-icon">✦</span>
-        </a>
+            <a href="#hero" class="browser-tab active" data-label="Home">
+                <span class="browser-tab-icon">⌂</span>
+                <span class="browser-tab-text">Home</span>
+            </a>
 
-        <a href="#version30" class="dock-item" data-label="Version 3.0">
-            <span class="dock-icon">3.0</span>
-        </a>
+            <a href="#catalog" class="browser-tab" data-label="The Shelf">
+                <span class="browser-tab-icon">▤</span>
+                <span class="browser-tab-text">Shelf</span>
+            </a>
 
-        <a href="#leaderboard" class="dock-item" data-label="Leaderboard">
-            <span class="dock-icon">♜</span>
-        </a>
+            <a href="#achievements" class="browser-tab" data-label="Achievements">
+                <span class="browser-tab-icon">✦</span>
+                <span class="browser-tab-text">Achievements</span>
+            </a>
 
-        <button class="dock-item" id="dockSettings" data-label="Settings" onclick="openSettings()">
-            <span class="dock-icon">⚙</span>
-        </button>
+            <a href="#news" class="browser-tab" data-label="News">
+                <span class="browser-tab-icon">◈</span>
+                <span class="browser-tab-text">News</span>
+            </a>
+
+            <a href="#leaderboard" class="browser-tab" data-label="Leaderboard">
+                <span class="browser-tab-icon">♜</span>
+                <span class="browser-tab-text">Ranks</span>
+            </a>
+
+            <div class="browser-divider"></div>
+
+            <button class="browser-tab browser-settings" onclick="openSettings()" aria-label="Settings"
+                data-label="Settings">
+                <span class="browser-tab-icon">⚙</span>
+                <span class="browser-tab-text">Settings</span>
+            </button>
+
+        </div>
+
+        <div class="browser-dock-glow"></div>
     </nav>
     <button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
 

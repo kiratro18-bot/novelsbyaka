@@ -4017,10 +4017,963 @@
                 font-size: 32px;
             }
         }
+
+        /* ============================================================
+   FINAL UPDATE — VERSION 3.0
+   ============================================================ */
+
+        .final-update {
+            position: relative;
+            overflow: hidden;
+            padding-top: 110px;
+            padding-bottom: 110px;
+        }
+
+        .final-update-glow {
+            position: absolute;
+
+            width: 600px;
+            height: 600px;
+
+            right: -280px;
+            top: 20px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    rgba(var(--accent-rgb), .12),
+                    transparent 68%);
+
+            pointer-events: none;
+        }
+
+
+        /* HEADER */
+
+        .final-update-head {
+            align-items: flex-end;
+        }
+
+        .final-release-badge {
+
+            min-width: 170px;
+
+            padding: 15px 18px;
+
+            border:
+                1px solid rgba(var(--accent-rgb), .25);
+
+            border-radius: 10px;
+
+            background:
+                rgba(var(--accent-rgb), .045);
+
+            text-align: right;
+        }
+
+        .final-release-badge span {
+
+            display: block;
+
+            color: var(--rose);
+
+            font-family: var(--font-mono);
+
+            font-size: 7px;
+
+            letter-spacing: .16em;
+        }
+
+        .final-release-badge strong {
+
+            display: block;
+
+            margin: 3px 0;
+
+            color: var(--ink);
+
+            font-family: var(--font-display);
+
+            font-size: 30px;
+
+            line-height: 1;
+        }
+
+        .final-release-badge small {
+
+            color: var(--sage);
+
+            font-family: var(--font-mono);
+
+            font-size: 6px;
+
+            letter-spacing: .08em;
+        }
+
+
+        /* ============================================================
+   RELEASE WINDOW
+   ============================================================ */
+
+        .final-release {
+
+            overflow: hidden;
+
+            border:
+                1px solid rgba(var(--accent-rgb), .25);
+
+            background:
+                linear-gradient(135deg,
+                    rgba(var(--accent-rgb), .08),
+                    rgba(255, 255, 255, .02) 48%,
+                    rgba(167, 139, 250, .06));
+
+            box-shadow:
+                var(--shadow-glass),
+                0 30px 90px rgba(0, 0, 0, .18);
+        }
+
+        .final-release-top {
+
+            height: 40px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr 1fr;
+
+            align-items: center;
+
+            padding: 0 16px;
+
+            border-bottom:
+                1px solid var(--panel-border);
+
+            color: var(--muted-dim);
+
+            font-family: var(--font-mono);
+
+            font-size: 7px;
+
+            letter-spacing: .1em;
+        }
+
+        .final-release-top>span:nth-child(2) {
+            text-align: center;
+        }
+
+        .final-release-top>span:last-child {
+            text-align: right;
+        }
+
+        .release-window-dots {
+
+            display: flex;
+
+            gap: 5px;
+        }
+
+        .release-window-dots i {
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background:
+                var(--muted-dim);
+
+            opacity: .55;
+        }
+
+
+        /* ============================================================
+   MAIN
+   ============================================================ */
+
+        .final-release-main {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.2fr) minmax(280px, .8fr);
+
+            min-height: 390px;
+        }
+
+        .final-release-copy {
+
+            padding:
+                clamp(30px, 6vw, 65px);
+
+            border-right:
+                1px solid var(--panel-border);
+        }
+
+        .final-kicker {
+
+            margin-bottom: 15px;
+
+            color: var(--rose);
+
+            font-family: var(--font-mono);
+
+            font-size: 8px;
+
+            letter-spacing: .16em;
+        }
+
+        .final-release-copy h3 {
+
+            margin: 0;
+
+            font-family: var(--font-display);
+
+            font-size:
+                clamp(42px,
+                    6vw,
+                    70px);
+
+            line-height: .94;
+
+            letter-spacing: -.05em;
+        }
+
+        .final-release-copy h3 em {
+
+            color: var(--rose);
+
+            font-style: italic;
+        }
+
+        .final-release-copy p {
+
+            max-width: 550px;
+
+            margin-top: 20px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.8;
+        }
+
+
+        /* ============================================================
+   ARCHIVE VISUAL
+   ============================================================ */
+
+        .archive-visual {
+
+            position: relative;
+
+            min-height: 390px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(circle,
+                    rgba(var(--accent-rgb), .09),
+                    transparent 65%);
+        }
+
+        .archive-ring {
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            border:
+                1px solid rgba(255, 255, 255, .07);
+        }
+
+        .archive-ring-1 {
+
+            width: 220px;
+            height: 220px;
+
+            animation:
+                archiveSpin 20s linear infinite;
+        }
+
+        .archive-ring-2 {
+
+            width: 310px;
+            height: 150px;
+
+            transform: rotate(45deg);
+
+            border-color:
+                rgba(var(--accent-rgb), .16);
+
+            animation:
+                archiveSpin 28s linear infinite reverse;
+        }
+
+        .archive-ring-3 {
+
+            width: 370px;
+            height: 370px;
+
+            border-color:
+                rgba(255, 255, 255, .03);
+
+            animation:
+                archiveSpin 35s linear infinite;
+        }
+
+        @keyframes archiveSpin {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .archive-core {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: 150px;
+            height: 150px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid rgba(var(--accent-rgb), .3);
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(circle,
+                    rgba(var(--accent-rgb), .16),
+                    rgba(15, 10, 22, .88));
+
+            box-shadow:
+                0 0 55px rgba(var(--accent-rgb), .11);
+        }
+
+        .archive-core span {
+
+            color: var(--muted-dim);
+
+            font-family: var(--font-mono);
+
+            font-size: 7px;
+
+            letter-spacing: .2em;
+        }
+
+        .archive-core strong {
+
+            margin: 1px 0;
+
+            font-family: var(--font-display);
+
+            font-size: 50px;
+
+            line-height: 1;
+
+            color: var(--rose);
+        }
+
+        .archive-core small {
+
+            color: var(--sage);
+
+            font-family: var(--font-mono);
+
+            font-size: 6px;
+
+            letter-spacing: .15em;
+        }
+
+
+        /* ============================================================
+   IMPORTANT NOTE
+   ============================================================ */
+
+        .final-site-note {
+
+            display: grid;
+
+            grid-template-columns: 42px 1fr;
+
+            gap: 15px;
+
+            padding:
+                25px 30px;
+
+            border-top:
+                1px solid var(--panel-border);
+
+            background:
+                rgba(0, 0, 0, .12);
+        }
+
+        .final-note-mark {
+
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid rgba(var(--accent-rgb), .3);
+
+            border-radius: 8px;
+
+            color: var(--rose);
+
+            font-family: var(--font-display);
+
+            font-size: 17px;
+
+            background:
+                rgba(var(--accent-rgb), .06);
+        }
+
+        .final-note-content>span {
+
+            color: var(--rose);
+
+            font-family: var(--font-mono);
+
+            font-size: 7px;
+
+            letter-spacing: .15em;
+        }
+
+        .final-note-content h4 {
+
+            margin:
+                5px 0 7px;
+
+            font-family: var(--font-display);
+
+            font-size: 19px;
+        }
+
+        .final-note-content p {
+
+            max-width: 850px;
+
+            margin: 5px 0;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            line-height: 1.7;
+        }
+
+
+        /* ============================================================
+   FINAL FEATURE GRID
+   ============================================================ */
+
+        .final-feature-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+
+            margin-top: 12px;
+        }
+
+        .final-feature-card {
+
+            position: relative;
+
+            min-height: 175px;
+
+            padding: 20px;
+
+            transition:
+                transform .25s ease,
+                border-color .25s ease;
+        }
+
+        .final-feature-card:hover {
+
+            transform: translateY(-3px);
+
+            border-color:
+                rgba(var(--accent-rgb), .25);
+        }
+
+        .final-feature-number {
+
+            position: absolute;
+
+            top: 18px;
+            right: 18px;
+
+            color: var(--muted-dim);
+
+            font-family: var(--font-mono);
+
+            font-size: 8px;
+        }
+
+        .final-feature-icon {
+
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 17px;
+
+            border:
+                1px solid var(--panel-border);
+
+            border-radius: 8px;
+
+            color: var(--rose);
+
+            font-size: 15px;
+        }
+
+        .final-feature-card>span:not(.final-feature-number) {
+
+            color: var(--rose);
+
+            font-family: var(--font-mono);
+
+            font-size: 7px;
+
+            letter-spacing: .14em;
+        }
+
+        .final-feature-card h3 {
+
+            margin:
+                6px 0;
+
+            font-family: var(--font-display);
+
+            font-size: 18px;
+        }
+
+        .final-feature-card p {
+
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ============================================================
+   ENDING
+   ============================================================ */
+
+        .final-ending {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-top: 55px;
+
+            color: var(--muted-dim);
+
+            font-family: var(--font-mono);
+
+            font-size: 7px;
+
+            letter-spacing: .14em;
+        }
+
+        .final-ending div {
+
+            flex: 1;
+
+            height: 1px;
+
+            background:
+                var(--panel-border);
+        }
+
+        .final-ending strong {
+
+            color: var(--ink-soft);
+
+            font-family: var(--font-display);
+
+            font-size: 13px;
+
+            font-weight: 400;
+
+            letter-spacing: 0;
+        }
+
+
+        /* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+        @media (max-width: 850px) {
+
+            .final-update-head {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+
+            .final-release-badge {
+
+                text-align: left;
+            }
+
+            .final-release-main {
+
+                grid-template-columns: 1fr;
+            }
+
+            .final-release-copy {
+
+                border-right: 0;
+
+                border-bottom:
+                    1px solid var(--panel-border);
+            }
+
+            .archive-visual {
+
+                min-height: 320px;
+            }
+
+            .final-feature-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .final-update {
+
+                padding-top: 75px;
+                padding-bottom: 75px;
+            }
+
+            .final-release-copy {
+
+                padding: 28px 22px;
+            }
+
+            .final-release-copy h3 {
+
+                font-size: 43px;
+            }
+
+            .final-site-note {
+
+                padding: 21px;
+            }
+
+            .archive-visual {
+
+                min-height: 280px;
+            }
+
+            .archive-ring-1 {
+
+                width: 180px;
+                height: 180px;
+            }
+
+            .archive-ring-2 {
+
+                width: 240px;
+                height: 120px;
+            }
+
+            .archive-ring-3 {
+
+                width: 290px;
+                height: 290px;
+            }
+
+            .archive-core {
+
+                width: 120px;
+                height: 120px;
+            }
+
+            .archive-core strong {
+
+                font-size: 40px;
+            }
+
+            .final-ending {
+
+                flex-wrap: wrap;
+            }
+
+            .final-ending div {
+
+                display: none;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- ============================================================
+     VERSION 3.0 — FINAL RELEASE
+     ============================================================ -->
+
+    <section class="section final-update" id="version30">
+
+        <div class="final-update-glow"></div>
+
+        <div class="wrap">
+
+            <div class="section-head final-update-head">
+                <div>
+                    <span class="eyebrow">The final chapter</span>
+
+                    <h2 class="section-title">
+                        Version <em>3.0</em>
+                    </h2>
+
+                    <p class="section-sub">
+                        The final major update to the reading lounge.
+                    </p>
+                </div>
+
+                <div class="final-release-badge">
+                    <span>FINAL RELEASE</span>
+                    <strong>v3.0</strong>
+                    <small>NO FURTHER MAJOR UPDATES</small>
+                </div>
+            </div>
+
+
+            <!-- MAIN RELEASE CARD -->
+
+            <div class="final-release glass">
+
+                <div class="final-release-top">
+
+                    <div class="release-window-dots">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </div>
+
+                    <span>AKA / RELEASE NOTES</span>
+
+                    <span>03.00</span>
+
+                </div>
+
+
+                <div class="final-release-main">
+
+                    <div class="final-release-copy">
+
+                        <div class="final-kicker">
+                            ✦ FINAL FEATURE
+                        </div>
+
+                        <h3>
+                            The <em>Archive</em>
+                        </h3>
+
+                        <p>
+                            A permanent home for everything this
+                            lounge has become — stories, releases,
+                            achievements, memories, and the work
+                            that brought it here.
+                        </p>
+
+                        <p>
+                            This feature marks the completion of the
+                            site's core experience. From here,
+                            the lounge is meant to remain as it is.
+                        </p>
+
+                    </div>
+
+
+                    <div class="archive-visual">
+
+                        <div class="archive-ring archive-ring-1"></div>
+                        <div class="archive-ring archive-ring-2"></div>
+                        <div class="archive-ring archive-ring-3"></div>
+
+                        <div class="archive-core">
+
+                            <span>ARCHIVE</span>
+
+                            <strong>∞</strong>
+
+                            <small>PRESERVED</small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FINAL SITE NOTE -->
+
+                <div class="final-site-note">
+
+                    <div class="final-note-mark">
+                        !
+                    </div>
+
+                    <div class="final-note-content">
+
+                        <span>AN IMPORTANT NOTE</span>
+
+                        <h4>
+                            This is the last major update.
+                        </h4>
+
+                        <p>
+                            Version 3.0 is the final major release
+                            of this website. The site will not receive
+                            any further updates or new versions in
+                            the future.
+                        </p>
+
+                        <p>
+                            It will remain here as a finished piece —
+                            a place to read, explore, and revisit the
+                            stories that were created here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FINAL FEATURES -->
+
+            <div class="final-feature-grid">
+
+                <article class="glass final-feature-card">
+
+                    <span class="final-feature-number">01</span>
+
+                    <div class="final-feature-icon">▧</div>
+
+                    <span>ARCHIVE</span>
+
+                    <h3>
+                        Everything in one place
+                    </h3>
+
+                    <p>
+                        Stories, manga, one-shots, releases,
+                        and the history of the lounge.
+                    </p>
+
+                </article>
+
+
+                <article class="glass final-feature-card">
+
+                    <span class="final-feature-number">02</span>
+
+                    <div class="final-feature-icon">✦</div>
+
+                    <span>PROGRESS</span>
+
+                    <h3>
+                        The reader remembers
+                    </h3>
+
+                    <p>
+                        Achievements, milestones, shelves,
+                        and reading history stay part of
+                        the experience.
+                    </p>
+
+                </article>
+
+
+                <article class="glass final-feature-card final-feature-last">
+
+                    <span class="final-feature-number">03</span>
+
+                    <div class="final-feature-icon">∞</div>
+
+                    <span>FINAL STATE</span>
+
+                    <h3>
+                        Built to stay
+                    </h3>
+
+                    <p>
+                        No more major versions. No endless
+                        roadmap. Just a finished place for
+                        the stories.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <!-- CLOSING -->
+
+            <div class="final-ending">
+
+                <span>VERSION 3.0</span>
+
+                <div></div>
+
+                <strong>
+                    The update ends here.
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
     <div id="grain"></div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -4644,12 +5597,7 @@
     </div>
     </div>
 
-    <nav class="reader-mobile-dock" aria-label="Quick reader navigation">
-        <a href="#library"><span>▤</span> Shelf</a>
-        <a href="#readerLayer"><span>✦</span> Focus</a>
-        <a href="#personalShelf"><span>♥</span> Saved</a>
-        <button onclick="openSettings()" aria-label="Open settings"><span>⚙</span> Settings</button>
-    </nav>
+
 
     <footer>
         Filed &amp; maintained by AKA · Final archive update · Reader Layer<br />

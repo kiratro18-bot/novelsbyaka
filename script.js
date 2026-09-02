@@ -974,7 +974,7 @@ function renderHeatmap() {
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { daysOut: 14, title: 'Case File: You — Chapter 11' },
-    { daysOut: null, title: null },
+    { daysOut: 50, title: "Special" },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
     { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
 ];
@@ -999,9 +999,10 @@ function renderCalendar() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: null, type: 'update', title: 'Version 3.1 is live', excerpt: " The old version is archived for anyone who wants to visit." },
+    { daysAgo: null, type: 'update', title: 'Version 3.1 is live', excerpt: " The old version is archived for anyone who wants to visit and navigation dock is redisgned." },
     { daysAgo: null, type: 'note', title: 'Version 3.1 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: null, type: 'note', title: "The Seat beside me", excerpt: "A  ONE SHOT IS NOW AVAILABLE TO READ." }
+    { daysAgo: null, type: 'note', title: "The Seat beside me", excerpt: "A  ONE SHOT IS NOW AVAILABLE TO READ." },
+    { daysAgo: null, type: 'update', title: "Old version is archived.", excerpt: "The Site won't be updated anymore, but it's still available to visit if you want to. " }
 
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
