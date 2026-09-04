@@ -541,6 +541,7 @@ function renderCatalog() {
         return matchesMood && matchesQ && matchesGenre && matchesStatus;
     }).sort(function (a, b) { return b.order - a.order; });
     document.getElementById('shelfCount').textContent = filtered.length + ' stor' + (filtered.length === 1 ? 'y' : 'ies') + ', filed and ready to open.';
+    updateShelfSearchUI(filtered.length);
     var summaryEl = document.getElementById('catalogFilterSummary');
     if (summaryEl) {
         var summary = [];
@@ -973,8 +974,8 @@ function renderHeatmap() {
    ============================================================ */
 var upcomingReleases = [
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { daysOut: 14, title: 'Case File: You — Chapter 11' },
-    { daysOut: 50, title: "Special" },
+    { daysOut: 3, title: 'Case File: You — Chapter 12' },
+    { daysOut: 3, title: "The Other Day - Chapter 2" },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
     { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
 ];
@@ -1289,4 +1290,69 @@ dockItems.forEach(item => {
         // Activate clicked item
         item.classList.add("active");
     });
+});
+
+
+/* ============================================================
+   SHELF SEARCH UX
+   ============================================================ */
+
+function updateShelfSearchUI(resultCount) {
+    var input = document.getElementById('shelfSearch');
+    var searchBox = document.querySelector('.shelf-search');
+    var info = document.getElementById('searchResultInfo');
+
+    if (!input || !searchBox) return;
+
+    var value = input.value.trim();
+    searchBox.classList.toggle('has-value', value.length > 0);
+
+    if (info) {
+        if (!value) {
+            info.textContent = 'Search titles, genres, and stories';
+        } else if (typeof resultCount === 'number') {
+            info.textContent = resultCount + (resultCount === 1 ? ' story' : ' stories') +
+                ' found for "' + value + '"';
+        } else {
+            info.textContent = 'Searching the archive for "' + value + '"';
+        }
+    }
+}
+
+function handleShelfSearchInput() {
+    updateShelfSearchUI();
+    scheduleCatalogRender();
+}
+
+function clearShelfSearch() {
+    var input = document.getElementById('shelfSearch');
+    if (!input) return;
+
+    input.value = '';
+    updateShelfSearchUI();
+    scheduleCatalogRender();
+    input.focus();
+}
+
+document.addEventListener('keydown', function (event) {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        var input = document.getElementById('shelfSearch');
+        if (!input) return;
+
+        event.preventDefault();
+        input.focus();
+        input.select();
+    }
+
+    if (
+        event.key === 'Escape' &&
+        document.activeElement &&
+        document.activeElement.id === 'shelfSearch'
+    ) {
+        clearShelfSearch();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateShelfSearchUI();
 });
