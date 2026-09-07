@@ -70,7 +70,7 @@ var novels = [
         blurb: "A simple story about him, her, and the quiet spaces between their words.", grad: "135deg,#4a3a2a,#6a5230", collections: ["best-romance", "completed"]
     },
     {
-        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 10, rating: 4.4, views: 4200, releaseOffsetDays: 570,
+        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 12, rating: 4.6, views: 11200, releaseOffsetDays: 570,
         blurb: "A mystery that begins with a single file. Who are you, really, when the world isn't looking?", grad: "135deg,#3a2a4a,#5a2a30", collections: ["editors-choice"]
     },
     {
@@ -118,12 +118,16 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 1, rating: 3.9, views: 2000, releaseOffsetDays: 0,
+        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 2, rating: 3.9, views: 3000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 19, title: "The Seat Beside Me", img: "./bg2/tsbm.jpg", link: "./chapters2/tsbm.html", genres: ["drama", "sad"], status: "completed", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 0,
+        order: 19, title: "The SeatBeside Me", img: "./bg2/tsbm.jpg", link: "./chapters2/tsbm.html", genres: ["drama", "sad"], status: "completed", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 0,
         blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+    },
+    {
+        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "#", genres: ["drama", "sad"], status: "upcoming", ch: 0, rating: null, views: 0, releaseOffsetDays: 0,
+        blurb: "Sora and Ren story!", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     }
 ];
 var badgeLabel = { romance: "Romance", drama: "Drama", slice: "Slice", sad: "Sad", mystery: "Mystery", action: "Action" };
@@ -147,6 +151,7 @@ var bookmarks = store.get('bookmarks', {});
 var currentlyReadingOrder = store.get('currentlyReading', null);
 var readingLog = store.get('readingLog', {});
 var claimedChallenges = store.get('claimedChallenges', {});
+var privateReaderNotes = store.get('privateReaderNotes', {});
 
 function getRead(n) { var v = readProgress[n.order]; return typeof v === 'number' ? Math.max(0, Math.min(v, n.ch)) : 0; }
 function logReadingActivity(delta) {
@@ -606,6 +611,7 @@ function openSpotlight(order) {
     document.getElementById('spStatusRow').innerHTML = n.genres.map(function (g) { return '<span class="nc-tag" style="color:var(--ink);border-color:var(--panel-border-strong)">' + badgeLabel[g] + '</span>'; }).join('') +
         '<span class="nc-tag ' + statusCls + '" style="border:none">' + n.status + '</span>';
     document.getElementById('spTitle').textContent = n.title;
+    loadPrivateNote(n);
     document.getElementById('spByline').textContent = 'A Novel by AKA · ⭐ ' + (n.rating || '—') + ' · 👁 ' + fmtNum(n.views);
     document.getElementById('spDesc').textContent = n.blurb;
     var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
@@ -973,9 +979,10 @@ function renderHeatmap() {
    CALENDAR
    ============================================================ */
 var upcomingReleases = [
+    { daysOut: 4, title: 'Prequel of The Petal That Falls With A Smile ( Special Side Story )' },
     { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { daysOut: 3, title: 'Case File: You — Chapter 12' },
-    { daysOut: 3, title: "The Other Day - Chapter 2" },
+    { daysOut: 14, title: 'Case File: You — Chapter  13' },
+    { daysOut: 7, title: "The Other Day - Chapter 3" },
     { daysOut: 20, title: 'Manga Version — The rain pact' },
     { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
 ];
@@ -997,12 +1004,62 @@ function renderCalendar() {
 }
 
 /* ============================================================
+   3.2 — PRIVATE READER NOTES
+   ============================================================ */
+function loadPrivateNote(n) {
+    var input = document.getElementById('spPrivateNote');
+    var count = document.getElementById('spNotesCount');
+    var saved = document.getElementById('spNotesSaved');
+    if (!input || !n) return;
+
+    input.dataset.order = String(n.order);
+    input.value = privateReaderNotes[n.order] || '';
+    if (count) count.textContent = input.value.length + ' / 1000';
+    if (saved) {
+        saved.textContent = privateReaderNotes[n.order] ? 'Saved locally' : 'Not saved yet';
+        saved.classList.toggle('has-note', !!privateReaderNotes[n.order]);
+    }
+
+    if (!input.dataset.countBound) {
+        input.addEventListener('input', function () {
+            if (count) count.textContent = input.value.length + ' / 1000';
+            if (saved) {
+                saved.textContent = 'Unsaved changes';
+                saved.classList.remove('has-note');
+            }
+        });
+        input.dataset.countBound = '1';
+    }
+}
+
+function savePrivateNote() {
+    var input = document.getElementById('spPrivateNote');
+    var saved = document.getElementById('spNotesSaved');
+    if (!input || !input.dataset.order) return;
+
+    var order = Number(input.dataset.order);
+    var value = sanitize(input.value).slice(0, 1000);
+
+    if (value) privateReaderNotes[order] = value;
+    else delete privateReaderNotes[order];
+
+    store.set('privateReaderNotes', privateReaderNotes);
+
+    if (saved) {
+        saved.textContent = value ? 'Saved locally ✓' : 'Note cleared ✓';
+        saved.classList.add('has-note');
+    }
+
+    showToast(value ? 'Private note saved ✦' : 'Private note cleared ✦');
+}
+
+/* ============================================================
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: null, type: 'update', title: 'Version 3.1 is live', excerpt: " The old version is archived for anyone who wants to visit and navigation dock is redisgned." },
-    { daysAgo: null, type: 'note', title: 'Version 3.1 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: null, type: 'note', title: "The Seat beside me", excerpt: "A  ONE SHOT IS NOW AVAILABLE TO READ." },
+    { daysAgo: null, type: 'update', title: 'Version 3.2 is live', excerpt: " Add a Private note for each notes." },
+    { daysAgo: null, type: 'note', title: 'Version 3.2 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo: null, type: 'note', title: "Prequel of The Petal That Falls With A Smile", excerpt: "A Prequel of The Petal That Falls With A Smile." },
     { daysAgo: null, type: 'update', title: "Old version is archived.", excerpt: "The Site won't be updated anymore, but it's still available to visit if you want to. " }
 
 ];

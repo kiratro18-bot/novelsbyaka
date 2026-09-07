@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2 — Wednesday</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=Space+Grotesk:wght@500;700&family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&display=swap');
+
+        :root {
+            --paper: #EDEAE0;
+            --paper-2: #E1DECE;
+            --ink: #232A38;
+            --ink-soft: #59617a;
+            --rule: rgba(35, 42, 56, 0.075);
+            --margin: #c1442e;
+            --margin-soft: rgba(193, 68, 46, 0.38);
+            --entry-paper: #f4ecd2;
+            --entry-ink: #8a2d1f;
+            --highlight: #e7d089;
+            --tape: rgba(255, 255, 255, 0.6);
+
+            --font-body: 'Literata', serif;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-hand: 'Caveat', cursive;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            background-image: repeating-linear-gradient(var(--paper) 0px, var(--paper) 40px, var(--rule) 41px);
+            color: var(--ink);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .sheet {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 8vh 40px 14vh 100px;
+        }
+
+        .sheet::before {
+            content: "";
+            position: absolute;
+            left: 58px;
+            top: 0;
+            bottom: 0;
+            width: 1.5px;
+            background: var(--margin-soft);
+        }
+
+        .holes {
+            position: absolute;
+            left: 22px;
+            top: 70px;
+            bottom: 70px;
+            width: 16px;
+            background-repeat: repeat-y;
+            background-size: 16px 92px;
+            background-image:
+                radial-gradient(circle at 8px 7px, rgba(35, 42, 56, 0.14) 6px, transparent 6.6px),
+                radial-gradient(circle at 8px 9px, rgba(255, 255, 255, 0.55) 5.5px, transparent 6px);
+        }
+
+        header.cover {
+            margin-bottom: 7vh;
+        }
+
+        .stamp {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--margin);
+            border: 1.5px solid var(--margin);
+            border-radius: 2px;
+            padding: 4px 11px;
+            transform: rotate(-3deg);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(2rem, 6vw, 3.1rem);
+            line-height: 1.08;
+            color: var(--ink);
+            margin: 0 0 14px;
+        }
+
+        .sub {
+            font-family: var(--font-hand);
+            font-weight: 600;
+            font-size: 1.35rem;
+            color: var(--ink-soft);
+            margin: 0;
+        }
+
+        .story p {
+            font-size: clamp(1.02rem, 1.1vw + 0.7rem, 1.14rem);
+            line-height: 1.85;
+            color: var(--ink);
+            margin: 0 0 0.85em;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .story p.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .story p.speech {
+            position: relative;
+            padding-left: 1.3em;
+            color: #1b2130;
+        }
+
+        .story p.speech::before {
+            content: "\201C";
+            position: absolute;
+            left: 0;
+            top: -0.12em;
+            font-family: var(--font-display);
+            font-size: 1.35em;
+            color: var(--margin-soft);
+        }
+
+        .entry-page {
+            position: relative;
+            background: var(--entry-paper);
+            color: var(--entry-ink);
+            width: min(88%, 380px);
+            margin: 2.4em auto;
+            padding: 28px 26px 40px;
+            opacity: 0;
+            transform: rotate(0deg) scale(0.96);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            box-shadow: 0 12px 22px rgba(35, 20, 10, 0.2), 0 2px 5px rgba(35, 20, 10, 0.14);
+            clip-path: polygon(0% 0%, 100% 0%, 100% 91%, 96% 95%, 92% 90%, 88% 96%, 84% 91%, 80% 97%, 76% 91%, 72% 96%, 68% 90%, 64% 97%, 60% 91%, 56% 96%, 52% 90%, 48% 97%, 44% 91%, 40% 96%, 36% 90%, 32% 97%, 28% 91%, 24% 96%, 20% 90%, 16% 97%, 12% 91%, 8% 96%, 4% 90%, 0% 96%);
+        }
+
+        .entry-page.visible {
+            opacity: 1;
+            transform: rotate(-1.6deg) scale(1);
+        }
+
+        .entry-page .tape {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            width: 78px;
+            height: 24px;
+            background: var(--tape);
+            transform: translateX(-50%) rotate(-3deg);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+        }
+
+        .entry-date {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin: 0 0 10px;
+        }
+
+        .entry-text {
+            font-family: var(--font-hand);
+            font-weight: 700;
+            font-size: 1.65rem;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .hl {
+            background-image: linear-gradient(100deg, var(--highlight) 0%, var(--highlight) 100%);
+            background-repeat: no-repeat;
+            background-size: 0% 55%;
+            background-position: 0 68%;
+            transition: background-size 0.9s ease 0.2s;
+            padding: 0 0.04em;
+        }
+
+        .entry-page.visible .hl {
+            background-size: 100% 55%;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 8vh;
+            font-family: var(--font-hand);
+            font-size: 1.2rem;
+            color: var(--ink-soft);
+        }
+
+        @media (max-width:560px) {
+            .sheet {
+                padding: 6vh 24px 12vh 46px;
+            }
+
+            .sheet::before {
+                left: 26px;
+            }
+
+            .holes {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .story p,
+            .entry-page {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+
+            .hl {
+                background-size: 100% 55% !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sheet">
+        <div class="holes" aria-hidden="true"></div>
+
+        <header class="cover">
+            <span class="stamp">Ch. 02</span>
+            <h1>Wednesday</h1>
+            <p class="sub">the rain kept its appointment.</p>
+        </header>
+
+        <main class="story">
+
+            <p>The first thing I noticed that morning was that Haru was asleep.</p>
+            <p>Not metaphorically.</p>
+            <p>Actually asleep.</p>
+            <p>His head was resting on his folded arms, and he hadn't moved since I'd walked into the classroom.</p>
+            <p>Kenta dropped his bag onto the chair beside me.</p>
+            <p class="speech">"He's back for one day and already sleeping."</p>
+            <p>I looked at Haru.</p>
+            <p class="speech">"Maybe he's tired."</p>
+            <p class="speech">"Maybe he's been training for this."</p>
+            <p class="speech">"For what?"</p>
+            <p class="speech">"Professional sleeping."</p>
+            <p>I laughed.</p>
+            <p>Haru opened one eye.</p>
+            <p class="speech">"I can hear you."</p>
+            <p>Kenta froze.</p>
+            <p class="speech">"You're awake?"</p>
+            <p class="speech">"No."</p>
+            <p>He closed his eye again.</p>
+            <p>Kenta looked at me.</p>
+            <p class="speech">"See?"</p>
+            <p>I shook my head.</p>
+            <p>I put my bag down and took out the notebook.</p>
+            <p>It was still there.</p>
+            <p>I hadn't written anything in it.</p>
+            <p>I hadn't even touched the pages after last night.</p>
+            <p>I told myself I wasn't going to.</p>
+            <p>I opened it anyway.</p>
+
+            <div class="entry-page">
+                <span class="tape"></span>
+                <p class="entry-date">Wednesday.</p>
+                <p class="entry-text"><span class="hl">Someone will forget their umbrella.</span></p>
+            </div>
+
+            <p>I stared at the sentence.</p>
+            <p>Outside, the sky was cloudy.</p>
+            <p>Not rainy.</p>
+            <p>Just gray.</p>
+            <p>I checked the weather on my phone.</p>
+            <p>No rain expected.</p>
+            <p class="speech">"Looks like you're wrong," Kenta said.</p>
+            <p>I nearly dropped the notebook.</p>
+            <p class="speech">"What?"</p>
+            <p>He pointed at the window.</p>
+            <p class="speech">"You're staring at the sky like it personally offended you."</p>
+            <p class="speech">"Oh."</p>
+            <p>I closed the notebook.</p>
+            <p class="speech">"Nothing."</p>
+            <p class="speech">"You're weird."</p>
+            <p class="speech">"Thanks."</p>
+            <p class="speech">"You're welcome."</p>
+            <p>The morning passed normally.</p>
+            <p>That was probably the worst part.</p>
+            <p>Nothing happened.</p>
+            <p>Math was boring.</p>
+            <p>English was worse.</p>
+            <p>During the break, Kenta spent ten minutes trying to convince everyone that he'd seen a cat wearing a tiny
+                backpack on his way to school.</p>
+            <p>Nobody believed him.</p>
+            <p class="speech">"I swear."</p>
+            <p class="speech">"You said it had glasses too," Mina said.</p>
+            <p class="speech">"It did."</p>
+            <p class="speech">"Why would a cat need glasses?"</p>
+            <p class="speech">"How am I supposed to know?"</p>
+            <p class="speech">"Maybe it was going to school."</p>
+            <p class="speech">"Exactly."</p>
+            <p>She stared at him.</p>
+            <p class="speech">"You realize that makes it less believable, right?"</p>
+            <p>Kenta looked offended.</p>
+            <p>I laughed.</p>
+            <p>For a while, I forgot about the notebook.</p>
+            <p>Then lunch came.</p>
+            <p>Still nothing.</p>
+            <p>The sky outside had cleared up.</p>
+            <p>I looked at the notebook again.</p>
+            <p>Nothing.</p>
+            <p>Maybe I'd been stupid.</p>
+            <p>Obviously I'd been stupid.</p>
+            <p>A sentence written in a random notebook couldn't predict something as ordinary as someone forgetting an
+                umbrella.</p>
+            <p>There was no reason to believe that.</p>
+            <p>I felt relieved.</p>
+            <p>Which was strange.</p>
+            <p>I didn't realize how much I had been waiting for something to happen until I realized I didn't want
+                anything to happen.</p>
+            <p>After lunch, we had PE.</p>
+            <p>We played basketball.</p>
+            <p>I was terrible.</p>
+            <p>Not normal terrible.</p>
+            <p>Embarrassing terrible.</p>
+            <p>At one point I tried to pass the ball and accidentally threw it directly at Kenta's face.</p>
+            <p>He caught it.</p>
+            <p>Barely.</p>
+            <p class="speech">"You trying to kill me?"</p>
+            <p class="speech">"Sorry."</p>
+            <p class="speech">"You looked me dead in the eyes."</p>
+            <p class="speech">"I panicked."</p>
+            <p class="speech">"You panicked for three seconds?"</p>
+            <p class="speech">"Long three seconds."</p>
+            <p>He threw the ball back.</p>
+            <p>It hit my shoulder.</p>
+            <p class="speech">"Ow."</p>
+            <p class="speech">"Justice."</p>
+            <p>After class, everyone went back to change.</p>
+            <p>That's when I noticed Haru standing near the windows.</p>
+            <p>He wasn't changing.</p>
+            <p>He was looking outside.</p>
+            <p>I walked over.</p>
+            <p class="speech">"You okay?"</p>
+            <p>He turned.</p>
+            <p class="speech">"Yeah."</p>
+            <p class="speech">"You've been quiet."</p>
+            <p class="speech">"I'm always quiet."</p>
+            <p class="speech">"Not really."</p>
+            <p>He smiled.</p>
+            <p class="speech">"Maybe you're just noticing me more."</p>
+            <p>I didn't know what to say to that.</p>
+            <p>So I said the first thing that came into my head.</p>
+            <p class="speech">"Your hair looks weird."</p>
+            <p>He touched his hair.</p>
+            <p class="speech">"What?"</p>
+            <p class="speech">"I don't know."</p>
+            <p class="speech">"Why would you say that?"</p>
+            <p class="speech">"Because you made it awkward."</p>
+            <p class="speech">"You made it awkward."</p>
+            <p class="speech">"Yeah."</p>
+            <p>He laughed.</p>
+            <p>Then he went back to his desk.</p>
+            <p>I looked outside.</p>
+            <p>The clouds had returned.</p>
+            <p>A few drops of rain hit the window.</p>
+            <p>I stared.</p>
+            <p>Then another.</p>
+            <p>Then another.</p>
+            <p class="speech">"No way."</p>
+            <p>Kenta walked past me.</p>
+            <p class="speech">"What?"</p>
+            <p class="speech">"Nothing."</p>
+            <p>The rain started getting heavier.</p>
+            <p>Everyone rushed toward the windows.</p>
+            <p>Someone groaned.</p>
+            <p class="speech">"I didn't bring an umbrella."</p>
+            <p>Another person said, "Same."</p>
+            <p>I looked at the notebook.</p>
+            <p>I hadn't even realized I was holding it.</p>
+            <p>My fingers felt cold.</p>
+            <p>I opened it.</p>
+            <p>The sentence was still there.</p>
+
+            <div class="entry-page">
+                <span class="tape"></span>
+                <p class="entry-date">Wednesday.</p>
+                <p class="entry-text"><span class="hl">Someone will forget their umbrella.</span></p>
+            </div>
+
+            <p>A few seconds later, Mina walked into the classroom.</p>
+            <p>She stopped near the door.</p>
+            <p class="speech">"Oh, come on."</p>
+            <p>I looked at her.</p>
+            <p>She looked outside.</p>
+            <p>Then at her empty hands.</p>
+            <p class="speech">"I forgot my umbrella."</p>
+            <p>Nobody reacted.</p>
+            <p>It wasn't exactly strange.</p>
+            <p>It was raining.</p>
+            <p>People forget umbrellas.</p>
+            <p>That's what umbrellas are famous for.</p>
+            <p>But I couldn't move.</p>
+            <p>Kenta looked at me.</p>
+            <p class="speech">"Why are you making that face?"</p>
+            <p class="speech">"What face?"</p>
+            <p class="speech">"That face."</p>
+            <p class="speech">"I don't have a face."</p>
+            <p class="speech">"Everyone has a face."</p>
+            <p class="speech">"Shut up."</p>
+            <p>He laughed.</p>
+            <p>I closed the notebook.</p>
+            <p>Maybe it was still coincidence.</p>
+            <p>It had to be.</p>
+            <p>I kept telling myself that.</p>
+            <p>Even when I walked home in the rain.</p>
+            <p>Even when I noticed that Haru had left school before everyone else.</p>
+            <p>Even when I passed the convenience store and remembered what I'd thought the night before.</p>
+            <p>I didn't think about the notebook much that evening.</p>
+            <p>I tried not to.</p>
+            <p>I played games.</p>
+            <p>Watched half an episode of something.</p>
+            <p>Forgot to do my homework.</p>
+            <p>Then remembered at eleven.</p>
+            <p>Normal stuff.</p>
+            <p>At around midnight, I opened the notebook again.</p>
+            <p>I don't know why.</p>
+            <p>Maybe curiosity.</p>
+            <p>Maybe boredom.</p>
+            <p>I flipped past Wednesday.</p>
+            <p>The next page had a date.</p>
+            <p>Under it was a sentence.</p>
+            <p>I read it once.</p>
+            <p>Then again.</p>
+            <p>Then a third time.</p>
+
+            <div class="entry-page">
+                <span class="tape"></span>
+                <p class="entry-date">Thursday.</p>
+                <p class="entry-text"><span class="hl">Someone will ask me about this notebook.</span></p>
+            </div>
+
+            <p>I stared at the page.</p>
+            <p>There was no name.</p>
+            <p>No explanation.</p>
+            <p>Just that sentence.</p>
+            <p>I looked around my room.</p>
+            <p>Nothing had changed.</p>
+            <p>My phone buzzed.</p>
+            <p>A message from Kenta.</p>
+            <p class="speech">"u doing homework?"</p>
+            <p>I typed:</p>
+            <p class="speech">"no"</p>
+            <p>Three dots appeared.</p>
+            <p>Then disappeared.</p>
+            <p>Then appeared again.</p>
+            <p class="speech">"same"</p>
+            <p>I smiled.</p>
+            <p>I almost closed the notebook.</p>
+            <p>Then I noticed something.</p>
+            <p>The handwriting on the Thursday page looked slightly different.</p>
+            <p>Not enough to be obvious.</p>
+            <p>Just enough that I noticed.</p>
+            <p>I turned back to Wednesday.</p>
+            <p>Then Tuesday.</p>
+            <p>Same handwriting.</p>
+            <p>Mostly.</p>
+            <p>I ran my finger over the ink.</p>
+            <p>I couldn't explain what bothered me about it.</p>
+            <p>Maybe nothing.</p>
+            <p>Maybe I was starting to look for things that weren't there.</p>
+            <p>I closed the notebook.</p>
+            <p>Tomorrow, someone would ask me about it.</p>
+            <p>That was what it said.</p>
+            <p>I went to sleep thinking about who it could be.</p>
+            <p>I had three possibilities.</p>
+            <p>By morning, I would have four.</p>
+
+        </main>
+
+        <footer>— end of chapter two —</footer>
+    </div>
+
+    <script>
+        (function () {
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var targets = document.querySelectorAll('.story p, .entry-page');
+
+            if (reduceMotion || !('IntersectionObserver' in window)) {
+                targets.forEach(function (el) { el.classList.add('visible'); });
+                return;
+            }
+
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+
+            targets.forEach(function (el) { io.observe(el); });
+        })();
+    </script>
+
+</body>
+
+</html>
