@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The First Snow — Chapter 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --snow: #f3f6fa;
+    --snow-deep: #e7edf4;
+    --ink: #2b3b52;
+    --ink-soft: #5c6b81;
+    --plum: #79515e;
+    --petal: #e3a6b4;
+    --petal-soft: #f0d3da;
+    --rule: #c9d3e0;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--snow);
+  }
+
+  body {
+    font-family: "Source Serif 4", Georgia, serif;
+    color: var(--ink);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ambient snowfall — one deliberate motion moment, tied to the chapter's own weather */
+  .snowfall {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .flake {
+    position: absolute;
+    top: -10%;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px rgba(255,255,255,0.8);
+    opacity: 0;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes fall {
+    0%   { transform: translate(0, 0); opacity: 0; }
+    8%   { opacity: 0.85; }
+    92%  { opacity: 0.6; }
+    100% { transform: translate(var(--drift, 20px), 115vh); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flake { animation: none; opacity: 0.4; }
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 6rem 1.75rem 5rem;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .kicker {
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin: 0 0 1.1rem;
+  }
+
+  h1 {
+    font-family: "Shippori Mincho", serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 3.4rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    color: var(--ink);
+  }
+
+  .meta {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0 0 2.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  .meta::before,
+  .meta::after {
+    content: "·";
+    color: var(--petal);
+    margin: 0 0.6em;
+  }
+
+  .illustration {
+    width: 150px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .illustration svg { width: 100%; height: auto; display: block; }
+
+  main.story {
+    font-size: 1.12rem;
+    line-height: 1.75;
+  }
+
+  main.story p {
+    margin: 0 0 0.85em;
+  }
+
+  main.story p.dialogue {
+    color: var(--plum);
+  }
+
+  main.story p.whisper {
+    font-style: italic;
+    color: var(--plum);
+  }
+
+  main.story p.em-break {
+    margin-bottom: 1.6em;
+  }
+
+  .chapter-end {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2.2rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .chapter-end .mark {
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 0 auto 1rem;
+    background: var(--petal);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+
+  .chapter-end p {
+    font-family: "Shippori Mincho", serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    .page { padding: 4.5rem 1.25rem 4rem; }
+    main.story { font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="snowfall" aria-hidden="true">
+  <span class="flake" style="left:4%;  width:5px; height:5px; --drift:12px;  animation-duration:14s; animation-delay:0s;"></span>
+  <span class="flake" style="left:12%; width:3px; height:3px; --drift:-10px; animation-duration:11s; animation-delay:2s;"></span>
+  <span class="flake" style="left:20%; width:6px; height:6px; --drift:18px;  animation-duration:17s; animation-delay:1s;"></span>
+  <span class="flake" style="left:28%; width:4px; height:4px; --drift:-14px; animation-duration:13s; animation-delay:4s;"></span>
+  <span class="flake" style="left:36%; width:3px; height:3px; --drift:8px;   animation-duration:10s; animation-delay:6s;"></span>
+  <span class="flake" style="left:44%; width:5px; height:5px; --drift:-16px; animation-duration:15s; animation-delay:0.5s;"></span>
+  <span class="flake" style="left:52%; width:4px; height:4px; --drift:10px;  animation-duration:12s; animation-delay:3s;"></span>
+  <span class="flake" style="left:60%; width:6px; height:6px; --drift:-20px; animation-duration:18s; animation-delay:5s;"></span>
+  <span class="flake" style="left:68%; width:3px; height:3px; --drift:14px;  animation-duration:11s; animation-delay:1.5s;"></span>
+  <span class="flake" style="left:76%; width:5px; height:5px; --drift:-8px;  animation-duration:16s; animation-delay:2.5s;"></span>
+  <span class="flake" style="left:84%; width:4px; height:4px; --drift:16px;  animation-duration:13s; animation-delay:4.5s;"></span>
+  <span class="flake" style="left:92%; width:3px; height:3px; --drift:-12px; animation-duration:10s; animation-delay:0.8s;"></span>
+  <span class="flake" style="left:8%;  width:4px; height:4px; --drift:6px;   animation-duration:19s; animation-delay:7s;"></span>
+  <span class="flake" style="left:56%; width:3px; height:3px; --drift:-6px;  animation-duration:9s;  animation-delay:8s;"></span>
+  <span class="flake" style="left:32%; width:5px; height:5px; --drift:20px;  animation-duration:14s; animation-delay:6.5s;"></span>
+  <span class="flake" style="left:72%; width:4px; height:4px; --drift:-18px; animation-duration:12s; animation-delay:3.5s;"></span>
+</div>
+
+<div class="page">
+
+  <header class="hero">
+    <p class="kicker">Prequel — The Petal That Falls With a Smile</p>
+    <h1>The First Snow</h1>
+    <p class="meta">Chapter 1 &nbsp;POV: Sora</p>
+
+    <div class="illustration" aria-hidden="true">
+      <svg viewBox="0 0 200 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 165 L100 95" stroke="#2b3b52" stroke-width="3" stroke-linecap="round"/>
+        <path d="M100 120 C 85 108, 70 104, 58 88" stroke="#2b3b52" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M100 105 C 118 92, 128 86, 145 70" stroke="#2b3b52" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M100 95 C 96 78, 100 62, 90 45" stroke="#2b3b52" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M58 88 C 50 82, 44 80, 36 74" stroke="#2b3b52" stroke-width="2" stroke-linecap="round"/>
+        <path d="M145 70 C 152 62, 156 58, 164 50" stroke="#2b3b52" stroke-width="2" stroke-linecap="round"/>
+        <path d="M90 45 C 86 34, 88 26, 82 16" stroke="#2b3b52" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="46" cy="60" r="2.5" fill="#c9d3e0"/>
+        <circle cx="150" cy="40" r="2" fill="#c9d3e0"/>
+        <circle cx="118" cy="30" r="2.5" fill="#c9d3e0"/>
+        <path d="M83 15 c 3 -5 9 -5 12 0 c 3 5 -1 10 -6 13 c -5 -3 -9 -8 -6 -13 z" fill="#e3a6b4"/>
+      </svg>
+    </div>
+  </header>
+
+  <main class="story">
+    <p>The first snow always made the town quiet.</p>
+    <p>Not completely quiet.</p>
+    <p>You could still hear cars passing through the main road, the distant sound of a train, and children shouting somewhere behind the houses.</p>
+    <p>But everything felt softer.</p>
+    <p>The rooftops were white.</p>
+    <p>The streets were white.</p>
+    <p>Even the mountains in the distance looked like someone had erased their edges with a pencil.</p>
+    <p>I pressed my hand against the cold window.</p>
+    <p class="whisper">&ldquo;Snow&hellip;&rdquo;</p>
+    <p>I smiled.</p>
+    <p>I had been waiting for it all week.</p>
+
+    <p class="dialogue">&ldquo;Sora!&rdquo;</p>
+    <p>I turned around.</p>
+    <p>Ren stood in the doorway, wearing a thick winter jacket that was clearly too big for him.</p>
+    <p class="dialogue">&ldquo;What?&rdquo; I asked.</p>
+    <p class="dialogue">&ldquo;You said you'd come outside.&rdquo;</p>
+    <p class="dialogue">&ldquo;I know.&rdquo;</p>
+    <p class="dialogue">&ldquo;You've been staring at the snow for ten minutes.&rdquo;</p>
+    <p class="dialogue">&ldquo;I was appreciating it.&rdquo;</p>
+    <p>Ren stared at me.</p>
+    <p class="dialogue">&ldquo;You're weird.&rdquo;</p>
+    <p>I frowned.</p>
+    <p class="dialogue">&ldquo;I'm not.&rdquo;</p>
+    <p class="dialogue">&ldquo;You are.&rdquo;</p>
+    <p>I grabbed a pillow.</p>
+    <p>He immediately stepped backward.</p>
+    <p class="dialogue">&ldquo;Don't.&rdquo;</p>
+    <p class="dialogue">&ldquo;You called me weird.&rdquo;</p>
+    <p class="dialogue">&ldquo;I take it back.&rdquo;</p>
+    <p class="dialogue">&ldquo;Too late.&rdquo;</p>
+    <p>I threw the pillow.</p>
+    <p>It hit him directly in the face.</p>
+    <p>He stood there silently.</p>
+    <p>Then he picked it up.</p>
+    <p class="dialogue">&ldquo;You're going to regret that.&rdquo;</p>
+    <p>I laughed and ran.</p>
+    <p class="dialogue">&ldquo;Sora!&rdquo;</p>
+    <p>I rushed outside before he could catch me.</p>
+    <p>The cold air hit my face immediately.</p>
+    <p class="dialogue">&ldquo;Ah!&rdquo;</p>
+    <p>I pulled my scarf higher.</p>
+    <p>Ren came running after me.</p>
+    <p class="dialogue">&ldquo;You didn't even put your gloves on!&rdquo;</p>
+    <p class="dialogue">&ldquo;I forgot!&rdquo;</p>
+    <p class="dialogue">&ldquo;You always forget.&rdquo;</p>
+    <p class="dialogue">&ldquo;And you always complain.&rdquo;</p>
+    <p class="dialogue">&ldquo;Because you always forget!&rdquo;</p>
+    <p>I stuck my tongue out at him.</p>
+    <p>He sighed.</p>
+    <p>Then he smiled.</p>
+
+    <p>We walked toward the small hill behind the neighborhood.</p>
+    <p>It was where everyone went whenever it snowed.</p>
+    <p>Children were already there, dragging sleds and throwing snowballs.</p>
+    <p>Ren picked up a handful of snow.</p>
+    <p>I immediately became suspicious.</p>
+    <p class="dialogue">&ldquo;Ren.&rdquo;</p>
+    <p class="dialogue">&ldquo;What?&rdquo;</p>
+    <p class="dialogue">&ldquo;Don't.&rdquo;</p>
+    <p class="dialogue">&ldquo;I haven't done anything.&rdquo;</p>
+    <p class="dialogue">&ldquo;You're thinking about it.&rdquo;</p>
+    <p>He smiled.</p>
+    <p>That was enough.</p>
+    <p>I ran.</p>
+    <p>A snowball flew past my shoulder.</p>
+    <p class="dialogue">&ldquo;REN!&rdquo;</p>
+    <p>He laughed.</p>
+    <p>And I chased him through the snow.</p>
+
+    <p>For a while, there was nothing else.</p>
+    <p>No school.</p>
+    <p>No transfers.</p>
+    <p>No goodbyes.</p>
+    <p>No future.</p>
+    <p>Just two middle-school kids running through the snow in a small northern town.</p>
+
+    <p>Eventually, we collapsed beneath an old tree at the edge of the hill.</p>
+    <p>I looked up.</p>
+    <p>Its branches were completely bare.</p>
+    <p class="dialogue">&ldquo;Ren.&rdquo;</p>
+    <p class="dialogue">&ldquo;Hmm?&rdquo;</p>
+    <p class="dialogue">&ldquo;Do you think it'll bloom again?&rdquo;</p>
+    <p>He looked at the tree.</p>
+    <p class="dialogue">&ldquo;Of course.&rdquo;</p>
+    <p class="dialogue">&ldquo;Even after winter?&rdquo;</p>
+    <p class="dialogue">&ldquo;Yeah.&rdquo;</p>
+    <p class="dialogue">&ldquo;How do you know?&rdquo;</p>
+    <p>He shrugged.</p>
+    <p class="dialogue">&ldquo;Because trees don't just give up.&rdquo;</p>
+    <p>I smiled.</p>
+    <p class="dialogue">&ldquo;That sounds like something an old man would say.&rdquo;</p>
+    <p class="dialogue">&ldquo;Shut up.&rdquo;</p>
+    <p>I laughed again.</p>
+
+    <p>A tiny snowflake landed on my hand.</p>
+    <p>Then another.</p>
+    <p>I watched them disappear.</p>
+    <p class="dialogue">&ldquo;Ren?&rdquo;</p>
+    <p class="dialogue">&ldquo;Yeah?&rdquo;</p>
+    <p class="dialogue">&ldquo;Promise me something.&rdquo;</p>
+    <p>He turned toward me.</p>
+    <p class="dialogue">&ldquo;What?&rdquo;</p>
+    <p>I looked at the tree.</p>
+    <p class="dialogue">&ldquo;When we're older&hellip;&rdquo;</p>
+    <p>I paused.</p>
+    <p class="dialogue">&ldquo;&hellip;let's come back here.&rdquo;</p>
+    <p>Ren smiled.</p>
+    <p class="dialogue">&ldquo;Okay.&rdquo;</p>
+    <p class="dialogue">&ldquo;And if we forget?&rdquo;</p>
+    <p class="dialogue">&ldquo;I won't.&rdquo;</p>
+    <p class="dialogue">&ldquo;You don't know that.&rdquo;</p>
+    <p class="dialogue">&ldquo;I do.&rdquo;</p>
+    <p class="dialogue">&ldquo;How?&rdquo;</p>
+    <p>He looked at me with the most serious expression I'd ever seen on his face.</p>
+    <p class="dialogue">&ldquo;Because I'll remind you.&rdquo;</p>
+    <p>I smiled.</p>
+    <p class="dialogue">&ldquo;Promise?&rdquo;</p>
+    <p class="dialogue">&ldquo;Promise.&rdquo;</p>
+    <p>We bumped our fists together.</p>
+
+    <p>Neither of us knew how important that promise would become.</p>
+    <p class="em-break">At the time&mdash;</p>
+    <p>It was just another winter.</p>
+    <p>Just another day.</p>
+    <p>Just two kids making a promise they were certain they'd never forget.</p>
+  </main>
+
+  <footer class="chapter-end">
+    <span class="mark"></span>
+    <p>End of Chapter 1</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

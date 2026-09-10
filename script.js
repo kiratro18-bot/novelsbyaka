@@ -978,27 +978,50 @@ function renderHeatmap() {
 /* ============================================================
    CALENDAR
    ============================================================ */
+/* ============================================================
+   CALENDAR
+   ============================================================ */
 var upcomingReleases = [
-    { daysOut: 4, title: 'Prequel of The Petal That Falls With A Smile ( Special Side Story )' },
-    { daysOut: 45, title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { daysOut: 14, title: 'Case File: You — Chapter  13' },
-    { daysOut: 7, title: "The Other Day - Chapter 3" },
-    { daysOut: 20, title: 'Manga Version — The rain pact' },
-    { daysOut: 25, title: 'Him and Her vol 3 - chapter 1' },
+    { date: '2026-09-17', title: 'Prequel of The Petal That Falls With A Smile chp 2' },
+    { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
+    { date: '2026-09-20', title: 'Case File: You — Chapter  13' },
+    { date: '2026-09-13', title: "The Other Day - Chapter 3" },
+    { date: '2026-09-30', title: 'Manga Version — The rain pact' },
+    { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
+
+function daysUntil(dateStr) {
+    var target = new Date(dateStr + 'T00:00:00');
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.round((target - today) / 86400000);
+}
+
 function calRemind(idx) {
     var r = calSorted[idx];
     if (!r) return;
     showToast('Reminder noted for "' + r.title + '" ✦');
 }
+
 function renderCalendar() {
     var list = document.getElementById('calendarList');
-    calSorted = upcomingReleases.slice().sort(function (a, b) { return a.daysOut - b.daysOut; });
+
+    calSorted = upcomingReleases
+        .map(function (r) { return { title: r.title, date: r.date, daysOut: daysUntil(r.date) }; })
+        .filter(function (r) { return r.daysOut >= 0; }) // drop releases that already passed
+        .sort(function (a, b) { return a.daysOut - b.daysOut; });
+
+    if (!calSorted.length) {
+        list.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:12.5px">No upcoming releases right now.</div>';
+        return;
+    }
+
     list.innerHTML = calSorted.map(function (r, idx) {
-        var d = new Date(Date.now() + r.daysOut * 86400000);
+        var d = new Date(r.date + 'T00:00:00');
+        var countLabel = r.daysOut === 0 ? 'today' : r.daysOut === 1 ? 'tomorrow' : 'in ' + r.daysOut + ' days';
         return '<div class="cal-item"><div class="cal-date-block"><div class="cal-day">' + d.getDate() + '</div><div class="cal-mon">' + d.toLocaleDateString('en-US', { month: 'short' }) + '</div></div>' +
-            '<div class="cal-info"><div class="cal-title">' + esc(r.title) + '</div><div class="cal-count">in ' + r.daysOut + ' day' + (r.daysOut === 1 ? '' : 's') + '</div></div>' +
+            '<div class="cal-info"><div class="cal-title">' + esc(r.title) + '</div><div class="cal-count">' + countLabel + '</div></div>' +
             '<button class="pill-btn" onclick="calRemind(' + idx + ')">Remind me</button></div>';
     }).join('');
 }
