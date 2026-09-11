@@ -126,7 +126,7 @@ var novels = [
         blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "#", genres: ["drama", "sad"], status: "upcoming", ch: 0, rating: null, views: 0, releaseOffsetDays: 0,
+        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "p.html", genres: ["drama", "sad"], status: "ongoing", ch: 1, rating: 4.9, views: 1300, releaseOffsetDays: 0,
         blurb: "Sora and Ren story!", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     }
 ];
