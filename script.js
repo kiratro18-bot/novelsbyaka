@@ -985,7 +985,7 @@ var upcomingReleases = [
     { date: '2026-09-17', title: 'Prequel of The Petal That Falls With A Smile chp 2' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-09-20', title: 'Case File: You — Chapter  13' },
-    { date: '2026-09-13', title: "The Other Day - Chapter 3" },
+    { date: '2026-09-14', title: "The Other Day - Chapter 3" },
     { date: '2026-09-30', title: 'Manga Version — The rain pact' },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
