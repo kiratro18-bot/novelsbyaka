@@ -110,8 +110,8 @@ var novels = [
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 16, title: "The Rain Pact - Manga Version", img: "./bg2/trp-manga.jpg", link: "#", genres: ["romance", "drama", "slice"], status: "upcoming", ch: 0, rating: null, views: 0, releaseOffsetDays: -15,
-        blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+        order: 16, title: "The Day She Stayed:Prequel-ONESHOT", img: "./bg2/tdssp.jpg", link: "#", genres: ["romance", "drama", "slice"], status: "upcoming", ch: 0, rating: null, views: 0, releaseOffsetDays: -15,
+        blurb: "A PREQUEL ONESHOT OF THE DAY SHE STAYED.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
         order: 17, title: "The Bell That Rang for the Dead", img: "./bg2/osn.jpg", link: "./chapters/osn.html", genres: ["drama", "slice"], status: "completed", ch: 1, rating: 4.0, views: 1100, releaseOffsetDays: 0,
@@ -122,7 +122,7 @@ var novels = [
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 19, title: "The SeatBeside Me", img: "./bg2/tsbm.jpg", link: "./chapters2/tsbm.html", genres: ["drama", "sad"], status: "completed", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 0,
+        order: 19, title: "The Seat Beside Me", img: "./bg2/tsbm.jpg", link: "./chapters2/tsbm.html", genres: ["drama", "sad"], status: "completed", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 0,
         blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -986,7 +986,7 @@ var upcomingReleases = [
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-09-20', title: 'Case File: You — Chapter  13' },
     { date: '2026-09-21', title: "The Other Day - Chapter 3" },
-    { date: '2026-09-30', title: 'Manga Version — The rain pact' },
+    { date: '2026-09-30', title: 'The Day She Stayed Prequel-ONESHOT' },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
@@ -1080,9 +1080,9 @@ function savePrivateNote() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: null, type: 'update', title: 'Version 3.2 is live', excerpt: " Add a Private note for each notes." },
-    { daysAgo: null, type: 'note', title: 'Version 3.2 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: null, type: 'note', title: "Prequel of The Petal That Falls With A Smile", excerpt: "A Prequel of The Petal That Falls With A Smile." },
+    { daysAgo: null, type: 'update', title: 'Version 3.3 is live', excerpt: " Add a Private note for each notes." },
+    { daysAgo: null, type: 'note', title: 'Version 3.3 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo: null, type: 'note', title: "The Rain Pact MANGA VERSION", excerpt: "Manga version is cancelled." },
     { daysAgo: null, type: 'update', title: "Old version is archived.", excerpt: "The Site won't be updated anymore, but it's still available to visit if you want to. " }
 
 ];
