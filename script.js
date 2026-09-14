@@ -118,7 +118,7 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 2, rating: 3.9, views: 3000, releaseOffsetDays: 0,
+        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 3, rating: 4.1, views: 6000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -128,7 +128,7 @@ var novels = [
     {
         order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "p.html", genres: ["drama", "sad"], status: "ongoing", ch: 1, rating: 4.9, views: 1300, releaseOffsetDays: 0,
         blurb: "Sora and Ren story!", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
-    }
+    },
 ];
 var badgeLabel = { romance: "Romance", drama: "Drama", slice: "Slice", sad: "Sad", mystery: "Mystery", action: "Action" };
 function isOneShot(n) { return n.ch === 1 && n.status === 'completed'; }
@@ -985,7 +985,7 @@ var upcomingReleases = [
     { date: '2026-09-17', title: 'Prequel of The Petal That Falls With A Smile chp 2' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-09-20', title: 'Case File: You — Chapter  13' },
-    { date: '2026-09-14', title: "The Other Day - Chapter 3" },
+    { date: '2026-09-21', title: "The Other Day - Chapter 3" },
     { date: '2026-09-30', title: 'Manga Version — The rain pact' },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
@@ -1436,3 +1436,32 @@ document.addEventListener('keydown', function (event) {
 document.addEventListener('DOMContentLoaded', function () {
     updateShelfSearchUI();
 });
+const cursor = document.querySelector(".cursor");
+
+if (cursor) {
+    document.addEventListener("mousemove", (e) => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+        cursor.style.opacity = "1";
+    });
+
+    document.addEventListener("mouseleave", () => {
+        cursor.style.opacity = "0";
+    });
+
+    document.addEventListener("mouseenter", () => {
+        cursor.style.opacity = "1";
+    });
+
+    document.addEventListener("mouseover", (e) => {
+        if (e.target.closest("button, a, input, textarea, select, [role=button]")) {
+            cursor.classList.add("hover");
+        }
+    });
+
+    document.addEventListener("mouseout", (e) => {
+        if (e.target.closest("button, a, input, textarea, select, [role=button]")) {
+            cursor.classList.remove("hover");
+        }
+    });
+}
