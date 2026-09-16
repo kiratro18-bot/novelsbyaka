@@ -7,6 +7,15 @@
     <title>AKA · Original Fiction — The Reading Lounge</title>
     <meta name="description"
         content="Original fiction by AKA. Romance, drama, and slice-of-life novels, reimagined as a living reading dashboard." />
+    <!-- Security: restricts where scripts/styles/images/fonts/network calls can come from.
+         'unsafe-inline' is required for script-src/style-src because this page relies on
+         inline onclick="" handlers and inline style="" attributes throughout its markup.
+         That does not disable this CSP — it still blocks loading any external script,
+         stylesheet, font, image, or fetch/XHR target that isn't this origin (or Google Fonts),
+         which stops the most common data-exfiltration and script-injection vectors. -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
@@ -78,9 +87,18 @@
                 <span class="sph-row-label">Looking for the old site? </span>
                 <a href="oldindex.html" class="pill-btn" style="text-decoration:none">Previous Version ↗ </a>
             </div>
+            <div class="sph-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+                <span class="sph-row-label">Your data</span>
+                <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:0">
+                    Reading progress, bookmarks, private notes, and comments are stored only in this
+                    browser's local storage — nothing is sent to or saved on a server. They won't follow you
+                    to another device, browser, or private window.
+                </p>
+                <button class="pill-btn" id="clearDataBtn" onclick="confirmClearLocalData()">🗑 Clear my local
+                    data</button>
+            </div>
             <div style="margin-top:20px;font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.8">
-                Version 3.2 · Reader layer preview · September 2026<br>Progress and comments are saved in your browser's
-                local storage.
+                Version 3.4 · September 2026
             </div>
         </div>
     </aside>
@@ -214,6 +232,7 @@
         <div class="hero-bento">
             <div class="hero-feature" id="heroFeature">
                 <div class="hero-feature-bg"><img id="heroFeatureImg" src="" alt=""></div>
+                <div class="petal-field" id="petalField" aria-hidden="true"></div>
                 <div class="hero-feature-content">
                     <div id="heroFeatureText">
                         <span class="trend-badge">🔥 Trending Now · Vol. 3</span>
@@ -258,7 +277,7 @@
                     <div class="xp-bar">
                         <div class="xp-fill" id="authorXpFill" style="width:76%"></div>
                     </div>
-                    <div class="xp-label" id="authorXpLabel">1,700/ 20,000 XP to Level 9</div>
+                    <div class="xp-label" id="authorXpLabel">2,000/ 20,000 XP to Level 9</div>
                     <div class="streak-chip">🔥 <span id="authorStreak">7-release streak</span></div>
                     <div class="author-quote">"Every chapter is a small room. I just leave the light on and hope someone
                         stays a
@@ -543,7 +562,7 @@
                         <div class="nav-brand" style="margin-bottom:10px">A <em>Novel</em> Web</div>
                         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.7;max-width:280px">Original
                             romance, drama,
-                            and slice-of-life fiction by AKA. Rebuilt as Version 3.3 — a living reading dashboard
+                            and slice-of-life fiction by AKA. Rebuilt as Version 3.4 — a living reading dashboard
                             instead of a static
                             page.</p>
                         <div class="newsletter-row">
@@ -565,7 +584,7 @@
                             <a href="#" onclick="return false"> The Day She Stayed Prequel-ONESHOT</a><a href="#"
                                 onclick="return false">Petal
                                 Vol. 4 — planned University → Adulthood Arc ( last volume )</a>
-                            <a href="#version30">Version 3.3 is live</a>
+                            <a href="#version30">Version 3.4 is live</a>
                             <a href="#" onclick="return false">Case File: vol 2</a><a href="#"
                                 onclick="return false">Smooth UI UX
                                 </a>
@@ -587,7 +606,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <span>Filed &amp; maintained by AKA · Version 3.3 · September 2026</span>
+                    <span>Filed &amp; maintained by AKA · Version 3.4 · September 2026</span>
                     <span>Please don't repost or reupload stories without permission. Sharing links is always
                         appreciated.</span>
                 </div>
