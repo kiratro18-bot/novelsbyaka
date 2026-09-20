@@ -27,7 +27,7 @@ var APP_STORAGE_KEYS = [
     'privateReaderNotes', 'novelComments', 'recentSearches', 'lightMode', 'theme',
     'tiltEnabled', 'motionEnabled', 'readerFontScale', 'readerAchUnlocks',
     'goldenPetalCaught', 'nightOwlRead', 'oneDayRead', 'searchedOnce', 'sharedOnce',
-    'themeChanged', 'lastCommentAt'
+    'themeChanged', 'lastCommentAt', 'readerLevel'
 ];
 function confirmClearLocalData() {
     var ok = window.confirm('This permanently erases your reading progress, bookmarks, private notes, achievements, and comments saved in this browser. This can\'t be undone. Continue?');
@@ -96,7 +96,7 @@ var novels = [
         blurb: "A simple story about him, her, and the quiet spaces between their words.", grad: "135deg,#4a3a2a,#6a5230", collections: ["best-romance", "completed"]
     },
     {
-        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 12, rating: 4.6, views: 15200, releaseOffsetDays: 570,
+        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 13, rating: 4.8, views: 18200, releaseOffsetDays: 570,
         blurb: "A mystery that begins with a single file. Who are you, really, when the world isn't looking?", grad: "135deg,#3a2a4a,#5a2a30", collections: ["editors-choice"]
     },
     {
@@ -149,7 +149,7 @@ var novels = [
     },
     {
         order: 19, title: "The Seat Beside Me", img: "./bg2/tsbm.jpg", link: "./chapters2/tsbm.html", genres: ["drama", "sad"], status: "completed", ch: 1, rating: 4.0, views: 6000, releaseOffsetDays: 0,
-        blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
+        blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
         order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "./chapters2/p.html", genres: ["drama", "sad"], status: "ongoing", ch: 2, rating: 4.9, views: 2500, releaseOffsetDays: 0,
@@ -233,6 +233,7 @@ var themeAccents = {
     violet: ['#a78bfa', '#ff7d9c'],
     gold: ['#ffc46b', '#ff7d9c'],
     teal: ['#68d8c4', '#a78bfa'],
+    emerald: ['#3ddc97', '#a78bfa'],
 };
 function setTheme(theme) {
     if (!themeAccents[theme]) theme = 'rose';
@@ -846,9 +847,10 @@ function renderChallenges() {
     var monthDone = completedCount();
     var challenges = [
         { id: 'weekly', title: 'Turn 15 Pages', sub: 'Read 15 chapters this week', target: 15, cur: Math.min(weekCh, 15), xp: 150 },
+        { id: 'weekly',  title: 'turn 35 pages',  sub: 'Read 35 chapters this week',target:35,cur:Math.min(weekCh,35), xp:700},
         { id: 'monthly', title: 'Finish 2 Full Story', sub: 'Complete two novel', target: 2, cur: Math.min(monthDone, 2), xp: 400 },
         { id: 'monthly', title: 'Finish 4 ONESHOT', sub: 'Complete four oneshot novel', target: 4, cur: Math.min(monthDone, 4), xp: 600},                                                                                                                 
-        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 }
+        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 },
     ];
     document.getElementById('challengesList').innerHTML = challenges.map(function (c) {
         var pct = Math.round(c.cur / c.target * 100);
@@ -875,6 +877,21 @@ function renderProgressJourney() {
     var s = computeReaderStats();
     var unlockedCount = readerAchievementDefs.filter(function (a) { return a.metric(s) >= a.target; }).length;
     document.getElementById('journeyStats').textContent = unlockedCount + ' / ' + readerAchievementDefs.length + ' badges earned';
+
+    var lvl = computeReaderLevel(s, unlockedCount);
+    var badge = document.getElementById('readerLevelBadge');
+    var rankName = document.getElementById('readerRankName');
+    var levelSub = document.getElementById('readerLevelSub');
+    var xpFill = document.getElementById('readerXpFill');
+    var xpLabel = document.getElementById('readerXpLabel');
+    if (badge) badge.textContent = lvl.level;
+    if (rankName) rankName.textContent = rank;
+    if (levelSub) levelSub.textContent = 'Level ' + lvl.level;
+    if (xpFill) xpFill.style.width = lvl.pct + '%';
+    if (xpLabel) xpLabel.textContent = lvl.into + ' / ' + lvl.need + ' XP to Level ' + (lvl.level + 1);
+    var prevLevel = store.get('readerLevel', null);
+    store.set('readerLevel', lvl.level);
+    if (prevLevel !== null && lvl.level > prevLevel) showToast('🎉 Level up! You\'re now Level ' + lvl.level + '.');
 }
 function weekendReadFlag() {
     var found = false;
@@ -895,6 +912,15 @@ function favoritesCount() {
 }
 function longFormCompleted() {
     return novels.some(function (n) { return n.ch >= 9 && getRead(n) >= n.ch; }) ? 1 : 0;
+}
+/* Turns real reading activity into an XP total and level: 15 XP per chapter
+   read, 60 XP per novel finished, 5 XP per distinct reading day, 25 XP per
+   achievement unlocked. Every 100 XP is a level, no upper cap. */
+function computeReaderLevel(s, unlockedCount) {
+    var totalXP = s.read * 15 + s.completed * 60 + s.days * 5 + unlockedCount * 25;
+    var level = Math.floor(totalXP / 100) + 1;
+    var into = totalXP % 100;
+    return { level: level, into: into, need: 100, pct: into, totalXP: totalXP };
 }
 function computeReaderStats() {
     return {
@@ -1077,7 +1103,7 @@ function renderHeatmap() {
 var upcomingReleases = [
     { date: '2026-09-23', title: 'Prequel of The Petal That Falls With A Smile chp 3' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { date: '2026-09-20', title: 'Case File: You — Chapter  13' },
+    { date: '2026-09-27', title: 'Case File: You — Chapter  14' },
     { date: '2026-09-21', title: "The Other Day - Chapter 3" },
     { date: '2026-09-30', title: 'The Day She Stayed Prequel-ONESHOT' },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
@@ -1173,11 +1199,9 @@ function savePrivateNote() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: null, type: 'update', title: 'Version 3.4 is live', excerpt: " Catch a golden PETAL in trending section and added a function in setting that clear data." },
-    { daysAgo: null, type: 'note', title: 'Version 3.4 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo: null, type: 'note', title: "The Rain Pact MANGA VERSION", excerpt: "Manga version is cancelled." },
-    { daysAgo: null, type: 'update', title: "Old version is archived.", excerpt: "The Site won't be updated anymore, but it's still available to visit if you want to. " }
-
+    { daysAgo: 1, type: 'update', title: 'Version 3.5 is live', excerpt: " Add a user level section and removed writer level section, added a new theme color." },
+    { daysAgo: 1, type: 'note', title: 'Version 3.5 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo:1,type:'note', title:'Case File:YOU',excerpt:"Case File:YOU will Air weekly for it final last two chapters of volume 1-Thank you"},
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
 var activeNewsType = 'all';
@@ -1431,7 +1455,11 @@ window.addEventListener('scroll', function () {
    INIT
    ============================================================ */
 window.addEventListener('load', function () {
-    if (store.get('lightMode', '') === 'on') { document.body.classList.add('light'); var t = document.getElementById('lightToggle'); t.classList.add('on'); t.setAttribute('aria-checked', 'true'); }
+    var defaultLightMode = document.body.classList.contains('editorial') ? 'on' : 'off';
+    var wantLight = store.get('lightMode', defaultLightMode) === 'on';
+    document.body.classList.toggle('light', wantLight);
+    var t = document.getElementById('lightToggle');
+    if (t) { t.classList.toggle('on', wantLight); t.setAttribute('aria-checked', String(wantLight)); }
     document.getElementById('tiltToggle').classList.toggle('on', tiltEnabled);
     document.getElementById('motionToggle').classList.toggle('on', motionEnabled);
     initTheme();

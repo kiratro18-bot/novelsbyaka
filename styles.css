@@ -82,6 +82,104 @@ body.light {
 }
 
 /* ============================================================
+   EDITORIAL SKIN — used only on theme1.html (body.editorial).
+   Same markup, same script.js, same IDs as the dashboard layout;
+   this block re-tokens the design system to the calmer paper/ink
+   palette from the original theme1 design instead of restyling
+   every component individually. Placed before the color-theme
+   accent overrides below so an explicit swatch pick still wins
+   over the editorial default accent (moss).
+   ============================================================ */
+body.editorial {
+    --void: #17181a;
+    --void-2: #1e1f21;
+    --void-3: #242527;
+    --panel: rgba(237, 234, 226, .06);
+    --panel-2: rgba(237, 234, 226, .09);
+    --panel-solid: #1e1f21;
+    --panel-border: rgba(237, 234, 226, .10);
+    --panel-border-strong: rgba(237, 234, 226, .20);
+    --ink: #edeae2;
+    --ink-soft: #b9b6ac;
+    --muted: #6e6c64;
+    --muted-dim: #55534c;
+    --rose: #8fb79b;
+    --accent-2: #5c7a67;
+    --accent-rgb: 143, 183, 155;
+    --font-body: 'Source Serif 4', serif;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-xl: 14px;
+    --r-pill: 14px;
+    --shadow-glass: 0 4px 16px rgba(0, 0, 0, .25);
+    --shadow-lift: 0 10px 30px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+}
+
+body.editorial.light {
+    --void: #efede6;
+    --void-2: #f7f5f0;
+    --void-3: #fbfaf7;
+    --panel: rgba(27, 27, 30, .045);
+    --panel-2: rgba(27, 27, 30, .07);
+    --panel-solid: #f7f5f0;
+    --panel-border: rgba(27, 27, 30, .10);
+    --panel-border-strong: rgba(27, 27, 30, .18);
+    --ink: #1b1b1e;
+    --ink-soft: #4a4944;
+    --muted: #8b8578;
+    --muted-dim: #a39d8e;
+    --rose: #3f5a46;
+    --accent-2: #2e4434;
+    --accent-rgb: 63, 90, 70;
+    --shadow-glass: 0 4px 14px rgba(60, 40, 20, .10);
+    --shadow-lift: 0 10px 28px rgba(60, 40, 20, .16);
+    color-scheme: light;
+}
+
+/* Flatten the glass-morphism blur look everywhere in favor of the
+   editorial design's flat, bordered paper surfaces. */
+body.editorial * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* .site-nav and .browser-dock hardcode their translucent background
+   (rather than reading a token) so they need explicit overrides. */
+body.editorial .site-nav {
+    background: rgba(23, 24, 26, .82);
+}
+
+body.editorial.light .site-nav {
+    background: rgba(239, 237, 230, .85);
+}
+
+body.editorial .browser-dock {
+    background: var(--panel-solid);
+    border-color: var(--panel-border-strong);
+    box-shadow: var(--shadow-lift);
+}
+
+body.editorial .hero-feature-bg::after {
+    background: linear-gradient(180deg, rgba(23, 24, 26, .15) 0%, rgba(23, 24, 26, .55) 55%, rgba(23, 24, 26, .92) 100%);
+}
+
+body.editorial.light .hero-feature-bg::after {
+    background: linear-gradient(180deg, rgba(239, 237, 230, .1) 0%, rgba(239, 237, 230, .55) 55%, rgba(239, 237, 230, .94) 100%);
+}
+
+/* No glowing aurora blobs or film-grain texture in the editorial look. */
+body.editorial .aurora-layer.on {
+    opacity: 0 !important;
+}
+
+body.editorial #grain {
+    opacity: 0 !important;
+}
+
+
+/* ============================================================
    COLOR THEMES — override the accent trio; everything else
    (buttons, glows, progress bars, dock, badges) reads from these
    ============================================================ */
@@ -113,6 +211,12 @@ body[data-theme="teal"] {
     --rose: #68d8c4;
     --accent-rgb: 104, 216, 196;
     --accent-2: #35b39e;
+}
+
+body[data-theme="emerald"] {
+    --rose: #3ddc97;
+    --accent-rgb: 61, 220, 151;
+    --accent-2: #1fae74;
 }
 
 

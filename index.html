@@ -18,7 +18,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Sora:wght@300;400;500;600;700;800&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
@@ -81,6 +81,9 @@
                         role="radio" aria-checked="false" aria-label="Gold theme" title="Gold"></button>
                     <button class="theme-swatch" data-theme="teal" style="background:#68d8c4" onclick="setTheme('teal')"
                         role="radio" aria-checked="false" aria-label="Teal theme" title="Teal"></button>
+                    <button class="theme-swatch" data-theme="emerald" style="background:#3ddc97"
+                        onclick="setTheme('emerald')" role="radio" aria-checked="false" aria-label="Emerald theme"
+                        title="Emerald"></button>
                 </div>
             </div>
             <div class="sph-row">
@@ -98,7 +101,7 @@
                     data</button>
             </div>
             <div style="margin-top:20px;font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.8">
-                Version 3.4 · September 2026
+                Version 3.5 · September 2026
             </div>
         </div>
     </aside>
@@ -266,22 +269,18 @@
                     </div>
                 </div>
                 <div class="hero-card glass">
-                    <div class="hero-card-label">✦ The Author</div>
+                    <div class="hero-card-label">✦ Your Level</div>
                     <div class="author-row">
-                        <div class="author-avatar">AKA</div>
+                        <div class="author-avatar" id="readerLevelBadge">1</div>
                         <div>
-                            <div class="author-name">AKA</div>
-                            <div class="author-level" id="authorLevelLabel">Level 8 · Prolific Storyteller</div>
+                            <div class="author-name" id="readerRankName">Novice Reader</div>
+                            <div class="author-level" id="readerLevelSub">Level 1</div>
                         </div>
                     </div>
                     <div class="xp-bar">
-                        <div class="xp-fill" id="authorXpFill" style="width:76%"></div>
+                        <div class="xp-fill" id="readerXpFill" style="width:0%"></div>
                     </div>
-                    <div class="xp-label" id="authorXpLabel">2,000/ 20,000 XP to Level 9</div>
-                    <div class="streak-chip">🔥 <span id="authorStreak">7-release streak</span></div>
-                    <div class="author-quote">"Every chapter is a small room. I just leave the light on and hope someone
-                        stays a
-                        while."</div>
+                    <div class="xp-label" id="readerXpLabel">0 / 100 XP to Level 2</div>
                 </div>
             </div>
         </div>
@@ -562,7 +561,7 @@
                         <div class="nav-brand" style="margin-bottom:10px">A <em>Novel</em> Web</div>
                         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.7;max-width:280px">Original
                             romance, drama,
-                            and slice-of-life fiction by AKA. Rebuilt as Version 3.4 — a living reading dashboard
+                            and slice-of-life fiction by AKA. Rebuilt as Version 3.5 — a living reading dashboard
                             instead of a static
                             page.</p>
                         <div class="newsletter-row">
@@ -584,7 +583,7 @@
                             <a href="#" onclick="return false"> The Day She Stayed Prequel-ONESHOT</a><a href="#"
                                 onclick="return false">Petal
                                 Vol. 4 — planned University → Adulthood Arc ( last volume )</a>
-                            <a href="#version30">Version 3.4 is live</a>
+                            <a href="#version30">Version 3.6 is yet to be release</a>
                             <a href="#" onclick="return false">Case File: vol 2</a><a href="#"
                                 onclick="return false">Smooth UI UX
                                 </a>
@@ -606,7 +605,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <span>Filed &amp; maintained by AKA · Version 3.4 · September 2026</span>
+                    <span>Filed &amp; maintained by AKA · Version 3.5 · September 2026</span>
                     <span>Please don't repost or reupload stories without permission. Sharing links is always
                         appreciated.</span>
                 </div>
