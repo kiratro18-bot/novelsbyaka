@@ -152,7 +152,7 @@ var novels = [
         blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "./chapters2/p.html", genres: ["drama", "sad"], status: "ongoing", ch: 2, rating: 4.9, views: 2500, releaseOffsetDays: 0,
+        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "./chapters2/p.html", genres: ["drama", "sad"], status: "ongoing", ch: 3, rating: 4.9, views: 4000, releaseOffsetDays: 0,
         blurb: "Sora and Ren story!", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
 ];
@@ -1101,7 +1101,7 @@ function renderHeatmap() {
    CALENDAR
    ============================================================ */
 var upcomingReleases = [
-    { date: '2026-09-23', title: 'Prequel of The Petal That Falls With A Smile chp 3' },
+    { date: '2026-09-30', title: 'Prequel of The Petal That Falls With A Smile chp 4' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-09-27', title: 'Case File: You — Chapter  14' },
     { date: '2026-09-28', title: "The Other Day - Chapter 5" },

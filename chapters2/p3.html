@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Boy Who Stayed — Chapter 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --snow: #f3f6fa;
+    --snow-deep: #e7edf4;
+    --ink: #2b3b52;
+    --ink-soft: #5c6b81;
+    --plum: #79515e;
+    --petal: #e3a6b4;
+    --petal-soft: #f0d3da;
+    --rule: #c9d3e0;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--snow);
+  }
+
+  body {
+    font-family: "Source Serif 4", Georgia, serif;
+    color: var(--ink);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ambient petal fall — one deliberate motion moment, tied to the chapter's own bloom */
+  .petalfall {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .petal {
+    position: absolute;
+    top: -10%;
+    border-radius: 50% 0 50% 50%;
+    background: linear-gradient(135deg, var(--petal), var(--petal-soft));
+    opacity: 0;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes fall {
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    8%   { opacity: 0.9; }
+    92%  { opacity: 0.55; }
+    100% { transform: translate(var(--drift, 20px), 115vh) rotate(200deg); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .petal { animation: none; opacity: 0.35; }
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 6rem 1.75rem 5rem;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .kicker {
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin: 0 0 1.1rem;
+  }
+
+  h1 {
+    font-family: "Shippori Mincho", serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 3.4rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    color: var(--ink);
+  }
+
+  .meta {
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    margin: 0 0 2.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  .meta::before,
+  .meta::after {
+    content: "·";
+    color: var(--petal);
+    margin: 0 0.6em;
+  }
+
+  .illustration {
+    width: 150px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .illustration svg { width: 100%; height: auto; display: block; }
+
+  main.story {
+    font-size: 1.12rem;
+    line-height: 1.75;
+  }
+
+  main.story p {
+    margin: 0 0 0.85em;
+  }
+
+  main.story p.dialogue {
+    color: var(--plum);
+  }
+
+  main.story p.whisper {
+    font-style: italic;
+    color: var(--plum);
+  }
+
+  main.story p.em-break {
+    margin-bottom: 1.6em;
+  }
+
+  main.story p.confession {
+    text-align: center;
+    font-family: "Shippori Mincho", serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--plum);
+    margin: 1.5em auto 1.6em;
+    padding: 0;
+  }
+
+  main.story p.confession::before {
+    content: "";
+    display: block;
+    width: 14px;
+    height: 14px;
+    margin: 0 auto 0.7em;
+    background: linear-gradient(135deg, var(--petal), var(--petal-soft));
+    border-radius: 50% 0 50% 50%;
+    transform: rotate(-45deg);
+  }
+
+  .chapter-end {
+    text-align: center;
+    margin-top: 4rem;
+    padding-top: 2.2rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .chapter-end .mark {
+    display: block;
+    width: 8px;
+    height: 8px;
+    margin: 0 auto 1rem;
+    background: var(--petal);
+    border-radius: 2px;
+    transform: rotate(45deg);
+  }
+
+  .chapter-end p {
+    font-family: "Shippori Mincho", serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  @media (max-width: 480px) {
+    .page { padding: 4.5rem 1.25rem 4rem; }
+    main.story { font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="petalfall" aria-hidden="true">
+  <span class="petal" style="left:4%;  width:6px; height:5px; --drift:14px;  animation-duration:13s; animation-delay:0s;"></span>
+  <span class="petal" style="left:12%; width:5px; height:4px; --drift:-12px; animation-duration:10s; animation-delay:2s;"></span>
+  <span class="petal" style="left:20%; width:7px; height:6px; --drift:20px;  animation-duration:16s; animation-delay:1s;"></span>
+  <span class="petal" style="left:28%; width:5px; height:5px; --drift:-16px; animation-duration:12s; animation-delay:4s;"></span>
+  <span class="petal" style="left:36%; width:4px; height:4px; --drift:10px;  animation-duration:9s;  animation-delay:6s;"></span>
+  <span class="petal" style="left:44%; width:6px; height:5px; --drift:-18px; animation-duration:14s; animation-delay:0.5s;"></span>
+  <span class="petal" style="left:52%; width:5px; height:4px; --drift:12px;  animation-duration:11s; animation-delay:3s;"></span>
+  <span class="petal" style="left:60%; width:7px; height:6px; --drift:-22px; animation-duration:17s; animation-delay:5s;"></span>
+  <span class="petal" style="left:68%; width:4px; height:4px; --drift:16px;  animation-duration:10s; animation-delay:1.5s;"></span>
+  <span class="petal" style="left:76%; width:6px; height:5px; --drift:-10px; animation-duration:15s; animation-delay:2.5s;"></span>
+  <span class="petal" style="left:84%; width:5px; height:4px; --drift:18px;  animation-duration:12s; animation-delay:4.5s;"></span>
+  <span class="petal" style="left:92%; width:4px; height:4px; --drift:-14px; animation-duration:9s;  animation-delay:0.8s;"></span>
+  <span class="petal" style="left:8%;  width:5px; height:4px; --drift:8px;   animation-duration:18s; animation-delay:7s;"></span>
+  <span class="petal" style="left:56%; width:4px; height:4px; --drift:-8px;  animation-duration:8s;  animation-delay:8s;"></span>
+  <span class="petal" style="left:32%; width:6px; height:5px; --drift:22px;  animation-duration:13s; animation-delay:6.5s;"></span>
+  <span class="petal" style="left:72%; width:5px; height:4px; --drift:-20px; animation-duration:11s; animation-delay:3.5s;"></span>
+</div>
+
+<div class="page">
+
+  <header class="hero">
+    <p class="kicker">Prequel — The Petal That Falls With a Smile</p>
+    <h1>The Confession</h1>
+    <p class="meta">Chapter 3 &nbsp;POV: Sora</p>
+
+    <div class="illustration" aria-hidden="true">
+      <svg viewBox="0 0 200 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 165 L100 95" stroke="#2b3b52" stroke-width="3" stroke-linecap="round"/>
+        <path d="M100 120 C 85 108, 70 104, 58 88" stroke="#2b3b52" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M100 105 C 118 92, 128 86, 145 70" stroke="#2b3b52" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M100 95 C 96 78, 100 62, 90 45" stroke="#2b3b52" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M58 88 C 50 82, 44 80, 36 74" stroke="#2b3b52" stroke-width="2" stroke-linecap="round"/>
+        <path d="M145 70 C 152 62, 156 58, 164 50" stroke="#2b3b52" stroke-width="2" stroke-linecap="round"/>
+        <path d="M90 45 C 86 34, 88 26, 82 16" stroke="#2b3b52" stroke-width="2" stroke-linecap="round"/>
+        <!-- full bloom: the same tree, now covered in blossoms -->
+        <circle cx="46" cy="60" r="4" fill="#e3a6b4"/>
+        <circle cx="38" cy="65" r="3" fill="#f0d3da"/>
+        <circle cx="150" cy="40" r="3.5" fill="#e3a6b4"/>
+        <circle cx="158" cy="46" r="3" fill="#f0d3da"/>
+        <circle cx="118" cy="30" r="4" fill="#e3a6b4"/>
+        <circle cx="126" cy="24" r="3" fill="#f0d3da"/>
+        <circle cx="58" cy="88" r="3.5" fill="#f0d3da"/>
+        <circle cx="145" cy="70" r="3.5" fill="#e3a6b4"/>
+        <circle cx="36" cy="74" r="3" fill="#f0d3da"/>
+        <circle cx="164" cy="50" r="3" fill="#e3a6b4"/>
+        <circle cx="90" cy="45" r="3.5" fill="#f0d3da"/>
+        <circle cx="82" cy="16" r="4.5" fill="#e3a6b4"/>
+        <circle cx="74" cy="22" r="3" fill="#f0d3da"/>
+        <circle cx="100" cy="60" r="3" fill="#f0d3da"/>
+        <!-- a couple of petals adrift beside the tree -->
+        <circle cx="30" cy="110" r="2.5" fill="#e3a6b4" opacity="0.7"/>
+        <circle cx="168" cy="95" r="2" fill="#e3a6b4" opacity="0.6"/>
+      </svg>
+    </div>
+  </header>
+
+  <main class="story">
+    <p>Spring arrived quietly.</p>
+    <p>One morning, I walked through the school gate and realized the snow was gone.</p>
+    <p>The mountains were still white in the distance, but the streets had begun to change.</p>
+    <p>And then I saw it.</p>
+    <p>The old tree.</p>
+    <p>The one Ren and I had visited all winter.</p>
+    <p>Pink.</p>
+    <p>Every branch was covered in sakura blossoms.</p>
+    <p>I stopped walking.</p>
+
+    <p class="dialogue">&ldquo;Wow&hellip;&rdquo;</p>
+    <p class="dialogue">&ldquo;It finally bloomed.&rdquo;</p>
+
+    <p>I turned.</p>
+    <p>Ren was standing behind me, his school bag hanging from one shoulder.</p>
+    <p>&ldquo;You're late,&rdquo; I said.</p>
+    <p class="dialogue">&ldquo;You stopped walking.&rdquo;</p>
+    <p class="dialogue">&ldquo;Because look at it.&rdquo;</p>
+    <p class="dialogue">&ldquo;I know.&rdquo;</p>
+
+    <p>He walked over and stood beside me.</p>
+    <p>For a while, neither of us said anything.</p>
+    <p>The tree was beautiful.</p>
+    <p>But somehow, it felt different from the last time we'd stood there.</p>
+    <p>Maybe because spring meant the school year was changing.</p>
+    <p>Maybe because we were getting older.</p>
+    <p>Or maybe because something about Ren had changed.</p>
+    <p>He had been acting strange lately.</p>
+    <p>Quieter.</p>
+    <p>More nervous.</p>
+    <p>Sometimes I'd catch him looking at me, and the moment I looked back, he'd turn away.</p>
+
+    <p class="dialogue">&ldquo;Ren?&rdquo;</p>
+    <p class="dialogue">&ldquo;Hmm?&rdquo;</p>
+    <p class="dialogue">&ldquo;Is something wrong?&rdquo;</p>
+    <p class="dialogue">&ldquo;No.&rdquo;</p>
+    <p class="dialogue">&ldquo;You're lying.&rdquo;</p>
+    <p class="dialogue">&ldquo;I am not.&rdquo;</p>
+    <p class="dialogue">&ldquo;You are.&rdquo;</p>
+
+    <p>He laughed awkwardly.</p>
+    <p class="dialogue">&ldquo;I'll tell you later.&rdquo;</p>
+    <p class="dialogue">&ldquo;Later?&rdquo;</p>
+    <p class="dialogue">&ldquo;Yeah.&rdquo;</p>
+
+    <p>I frowned.</p>
+    <p class="dialogue">&ldquo;What does that mean?&rdquo;</p>
+    <p class="dialogue">&ldquo;You'll see.&rdquo;</p>
+
+    <p>He walked away before I could ask anything else.</p>
+    <p>I watched him disappear through the school entrance.</p>
+    <p class="whisper">&ldquo;&hellip;What was that?&rdquo;</p>
+
+    <p>After school, I went back to the tree.</p>
+    <p>I didn't know why.</p>
+    <p>Maybe I was waiting for Ren.</p>
+    <p>Maybe I just wanted to see the blossoms again.</p>
+    <p>I sat beneath the tree and opened my notebook.</p>
+    <p>A few minutes passed.</p>
+    <p>Then I heard footsteps.</p>
+
+    <p class="dialogue">&ldquo;Sora.&rdquo;</p>
+
+    <p>I looked up.</p>
+    <p>Ren stood there.</p>
+    <p>His face was red.</p>
+    <p>Not from the cold.</p>
+    <p>There wasn't much cold left.</p>
+    <p>&ldquo;What's wrong?&rdquo; I asked.</p>
+    <p class="dialogue">&ldquo;Nothing.&rdquo;</p>
+    <p class="dialogue">&ldquo;You look nervous.&rdquo;</p>
+    <p class="dialogue">&ldquo;I am.&rdquo;</p>
+
+    <p>That surprised me.</p>
+    <p>Ren sat beside me.</p>
+    <p>For a while, he stared at the ground.</p>
+    <p>Then he took a deep breath.</p>
+
+    <p class="dialogue">&ldquo;Sora.&rdquo;</p>
+    <p class="dialogue">&ldquo;Yeah?&rdquo;</p>
+    <p class="dialogue">&ldquo;I've wanted to tell you something for a long time.&rdquo;</p>
+
+    <p>My heart began beating faster.</p>
+    <p class="dialogue">&ldquo;Okay&hellip;&rdquo;</p>
+
+    <p>He looked at me.</p>
+    <p>His expression was completely different from usual.</p>
+    <p>Serious.</p>
+    <p>Nervous.</p>
+    <p>But determined.</p>
+
+    <p class="confession">&ldquo;I like you.&rdquo;</p>
+
+    <p>Everything stopped.</p>
+    <p>The wind.</p>
+    <p>The birds.</p>
+    <p>Even my thoughts.</p>
+    <p>I stared at him.</p>
+    <p class="whisper">&ldquo;&hellip;What?&rdquo;</p>
+
+    <p class="dialogue">&ldquo;I like you, Sora.&rdquo;</p>
+
+    <p>He looked away almost immediately.</p>
+    <p class="dialogue">&ldquo;I don't know when it happened. Maybe it was slowly. Maybe it was always there and I just didn't realize it.&rdquo;</p>
+
+    <p>His hands tightened around his knees.</p>
+    <p class="dialogue">&ldquo;But whenever something happens, you're the first person I want to tell.&rdquo;</p>
+
+    <p>He laughed nervously.</p>
+    <p class="dialogue">&ldquo;And when you're sad, I want to make you smile.&rdquo;</p>
+
+    <p>I couldn't speak.</p>
+    <p>&ldquo;I know we're still young,&rdquo; he continued. &ldquo;And I don't know what happens when we get older.&rdquo;</p>
+
+    <p>He looked back at me.</p>
+    <p class="dialogue">&ldquo;But I wanted you to know.&rdquo;</p>
+
+    <p>My heart was pounding.</p>
+    <p>I liked Ren.</p>
+    <p>Of course I did.</p>
+    <p>He was my best friend.</p>
+    <p>The person who always stayed beside me.</p>
+    <p>The person who knew when I was pretending to be okay.</p>
+    <p>The person I looked for whenever I entered a room.</p>
+    <p>But hearing him say those words&hellip;</p>
+    <p>made everything feel different.</p>
+
+    <p class="dialogue">&ldquo;Ren&hellip;&rdquo;</p>
+    <p class="dialogue">&ldquo;Yeah?&rdquo;</p>
+
+    <p>I smiled.</p>
+    <p class="confession">&ldquo;I like you too.&rdquo;</p>
+
+    <p>His eyes widened.</p>
+    <p class="dialogue">&ldquo;Really?&rdquo;</p>
+
+    <p>I nodded.</p>
+    <p class="dialogue">&ldquo;Really.&rdquo;</p>
+
+    <p>For a second, he just stared at me.</p>
+    <p>Then he smiled.</p>
+    <p>The biggest smile I'd ever seen from him.</p>
+    <p>I laughed.</p>
+
+    <p class="dialogue">&ldquo;Why are you smiling like that?&rdquo;</p>
+    <p class="dialogue">&ldquo;Because you said yes.&rdquo;</p>
+    <p class="dialogue">&ldquo;I didn't exactly say&mdash;&rdquo;</p>
+    <p class="dialogue">&ldquo;You said you liked me.&rdquo;</p>
+    <p class="dialogue">&ldquo;That doesn't automatically mean&mdash;&rdquo;</p>
+    <p class="dialogue">&ldquo;It does to me.&rdquo;</p>
+
+    <p>I laughed again.</p>
+    <p class="dialogue">&ldquo;Idiot.&rdquo;</p>
+    <p class="dialogue">&ldquo;Maybe.&rdquo;</p>
+
+    <p>The wind passed through the branches.</p>
+    <p>A few petals drifted down between us.</p>
+    <p>One landed on my notebook.</p>
+    <p>I picked it up carefully.</p>
+
+    <p class="dialogue">&ldquo;Ren.&rdquo;</p>
+    <p class="dialogue">&ldquo;Yeah?&rdquo;</p>
+    <p class="dialogue">&ldquo;Let's make a promise.&rdquo;</p>
+
+    <p>He looked at me.</p>
+    <p class="dialogue">&ldquo;No matter what happens&hellip;&rdquo;</p>
+
+    <p>I held the petal between my fingers.</p>
+    <p class="dialogue">&ldquo;&hellip;let's stay together.&rdquo;</p>
+
+    <p>He smiled.</p>
+    <p class="dialogue">&ldquo;Promise.&rdquo;</p>
+
+    <p>Our hands met briefly as we bumped our fists together.</p>
+    <p>Neither of us knew how fragile promises could be.</p>
+    <p>Neither of us knew how quickly life could change.</p>
+
+    <p class="em-break">For that moment, though&mdash;</p>
+    <p>I was happy.</p>
+    <p>Ren was happy.</p>
+    <p>And the sakura tree was blooming above us.</p>
+  </main>
+
+  <footer class="chapter-end">
+    <span class="mark"></span>
+    <p>End of Chapter 3</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
