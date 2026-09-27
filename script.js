@@ -96,7 +96,7 @@ var novels = [
         blurb: "A simple story about him, her, and the quiet spaces between their words.", grad: "135deg,#4a3a2a,#6a5230", collections: ["best-romance", "completed"]
     },
     {
-        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 13, rating: 4.8, views: 18200, releaseOffsetDays: 570,
+        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 14, rating: 4.9, views: 20000, releaseOffsetDays: 570,
         blurb: "A mystery that begins with a single file. Who are you, really, when the world isn't looking?", grad: "135deg,#3a2a4a,#5a2a30", collections: ["editors-choice"]
     },
     {
@@ -136,7 +136,7 @@ var novels = [
         blurb: "A manga adaptation of the beloved novel, illustrated with the same tenderness that made the original a favorite.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
-        order: 16, title: "The Day She Stayed:Prequel-ONESHOT", img: "./bg2/tdssp.jpg", link: "#", genres: ["romance", "drama", "slice"], status: "upcoming", ch: 0, rating: null, views: 0, releaseOffsetDays: -15,
+        order: 16, title: "The Day She Stayed:Prequel-ONESHOT", img: "./bg2/tdssp.jpg", link: "./chapters2/ptdss.html", genres: ["romance", "drama", "slice"], status: "completed", ch: 1, rating: 4.1, views: 9000, releaseOffsetDays: -15,
         blurb: "A PREQUEL ONESHOT OF THE DAY SHE STAYED.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -269,21 +269,68 @@ function initTheme() {
    ============================================================ */
 function attachTilt(el) {
     if (!tiltEnabled || window.matchMedia('(hover: none)').matches) return;
+
     var raf = 0, px = 0, py = 0;
+
     function paintTilt() {
         raf = 0;
         if (!tiltEnabled) return;
-        el.style.transform = 'perspective(700px) rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 8) + 'deg) translateY(-4px)';
+        el.style.transform =
+            'perspective(700px) rotateY(' + (px * 8) + 'deg) rotateX(' + (-py * 8) + 'deg) translateY(-4px)';
     }
+
     el.addEventListener('mousemove', function (e) {
         if (!tiltEnabled) return;
+
         var r = el.getBoundingClientRect();
         px = (e.clientX - r.left) / r.width - 0.5;
         py = (e.clientY - r.top) / r.height - 0.5;
+
         if (!raf) raf = requestAnimationFrame(paintTilt);
     }, { passive: true });
-    el.addEventListener('mouseleave', function () { if (raf) cancelAnimationFrame(raf); raf = 0; el.style.transform = ''; });
+
+    el.addEventListener('mouseleave', function () {
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+        el.style.transform = '';
+    });
 }
+    document.addEventListener("mouseover", function (e) {
+    const card = e.target.closest(".novel-card");
+    if (!card) return;
+
+    const cards = [...document.querySelectorAll("#catalogGrid .novel-card")];
+    const i = cards.indexOf(card);
+
+    cards.forEach(c => c.classList.remove(
+        "active-book",
+        "neighbor-left",
+        "neighbor-right",
+        "far-left",
+        "far-right"
+    ));
+
+    card.classList.add("active-book");
+    cards[i - 1]?.classList.add("neighbor-left");
+    cards[i + 1]?.classList.add("neighbor-right");
+    cards[i - 2]?.classList.add("far-left");
+    cards[i + 2]?.classList.add("far-right");
+});
+
+document.addEventListener("mouseout", function (e) {
+    if (!e.target.closest(".novel-card")) return;
+
+    document.querySelectorAll("#catalogGrid .novel-card").forEach(c => {
+        c.classList.remove(
+            "active-book",
+            "neighbor-left",
+            "neighbor-right",
+            "far-left",
+            "far-right"
+        );
+    });
+});
+
 
 /* ============================================================
    HERO — TRENDING CAROUSEL / CONTINUE READING / AUTHOR CARD
@@ -671,8 +718,11 @@ function renderCatalog() {
             (n.ch ? '<div class="nc-progress"><div class="nc-progress-fill" style="width:' + pct + '%"></div></div><div class="nc-progress-label">' + read + ' / ' + n.ch + ' read</div>' : '<div class="nc-progress-label">Releasing soon</div>') +
             '</div></div></div>';
     }).join('');
-    Array.prototype.forEach.call(grid.querySelectorAll('.novel-card'), attachTilt);
-    populateCommentSelect();
+   Array.prototype.forEach.call(grid.querySelectorAll('.novel-card'), function(card){
+    attachTilt(card);
+    ;
+});
+   
 }
 function toggleLikeNovel(order) {
     bookmarks[order] = !bookmarks[order];
@@ -941,7 +991,8 @@ function computeReaderStats() {
         themed: store.get('themeChanged', false) ? 1 : 0,
         shared: store.get('sharedOnce', false) ? 1 : 0,
         longForm: longFormCompleted(),
-        goldenPetal: store.get('goldenPetalCaught', false) ? 1 : 0
+        goldenPetal: store.get('goldenPetalCaught', false) ? 1 : 0,
+        eclipseWitness: store.get('readerAchUnlocks', {}).eclipseWitness ? 1 : 0
     };
 }
 /* One-time flags for achievements tied to trying a feature, not just reading.
@@ -958,16 +1009,32 @@ var readerAchievementDefs = [
     { icon: '🌈', title: 'Shelf Hopper', hint: 'Read from 3 different genres', rarity: 'common', metric: function (s) { return s.genres; }, target: 3 },
     { icon: '🧭', title: 'Genre Compass', hint: 'Read from 4 different genres', rarity: 'rare', metric: function (s) { return s.genres; }, target: 4 },
     { icon: '🏆', title: 'Full Return', hint: 'Finish a novel start to finish', rarity: 'rare', metric: function (s) { return s.completed; }, target: 1 },
-    { icon: '⚡', title: 'Marathoner', hint: 'Read 10+ chapters in a single week', rarity: 'rare', metric: function (s) { return s.week; }, target: 10 },
+    { icon: '⚡', title: 'Marathoner', hint: 'Read 10+ chapters in a single week', rarity: 'common', metric: function (s) { return s.week; }, target: 10 },
     { icon: '🌅', title: 'Weekend Reader', hint: 'Read on a Saturday or Sunday', rarity: 'rare', metric: function (s) { return s.weekend; }, target: 1 },
     { icon: '💬', title: 'Margin Writer', hint: 'Leave a note in the margins', rarity: 'rare', metric: function (s) { return s.notes; }, target: 1 },
     { icon: '🎬', title: 'One-Shot Wonder', hint: 'Complete all ' + oneShotTotal + ' one-shots on the Shelf', rarity: 'rare', metric: function (s) { return s.oneShots; }, target: oneShotTotal },
-    { icon: '📚', title: 'Chapter Collector', hint: 'Read 25 chapters total', rarity: 'epic', metric: function (s) { return s.read; }, target: 25 },
+    { icon: '📚', title: 'Chapter Collector', hint: 'Read 25 chapters total', rarity: 'rare', metric: function (s) { return s.read; }, target: 25 },
     { icon: '🔥', title: 'Bookworm', hint: 'Read 45+ chapters total', rarity: 'epic', metric: function (s) { return s.read; }, target: 45 },
     { icon: '🌙', title: 'Afterglow Reader', hint: 'Read on 7 different days', rarity: 'epic', metric: function (s) { return s.days; }, target: 7 },
-    { icon: '🧡', title: 'Story Curator', hint: 'Favorite 3 stories', rarity: 'epic', metric: function (s) { return s.favorites; }, target: 3 },
+    { icon: '🧡', title: 'Story Curator', hint: 'Favorite 3 stories', rarity: 'common', metric: function (s) { return s.favorites; }, target: 3 },
     { icon: '🗂️', title: 'Archive Diver', hint: 'Finish 3 stories start to finish', rarity: 'epic', metric: function (s) { return s.completed; }, target: 3 },
-    { icon: '👑', title: 'Genre Omnivore', hint: 'Read from all 6 genres', rarity: 'legendary', metric: function (s) { return s.genres; }, target: 6 }
+    { icon: '👑', title: 'Genre Omnivore', hint: 'Read from all 6 genres', rarity: 'legendary', metric: function (s) { return s.genres; }, target: 6 },
+    { 
+    icon: '💖',
+    title: 'Heart Collector',
+    hint: 'Favorite 10 stories',
+    rarity: 'epic',
+    metric: function (s) { return s.favorites; },
+    target: 10
+},
+{
+    icon: '📆',
+    title: 'Daily Devotion',
+    hint: 'Read on 30 different days',
+    rarity: 'legendary',
+    metric: function (s) { return s.days; },
+    target: 30
+}
 ];
 readerAchievementDefs.push(
     { icon: '🔍', title: 'Master Searcher', hint: 'Use search to find a story', rarity: 'common', metric: function (s) { return s.searched; }, target: 1 },
@@ -975,13 +1042,48 @@ readerAchievementDefs.push(
     { icon: '↗️', title: 'Storyteller', hint: 'Share a story with someone', rarity: 'rare', metric: function (s) { return s.shared; }, target: 1 },
     { icon: '🌌', title: 'Night Owl', hint: 'Read a chapter between 11pm and 5am', rarity: 'rare', metric: function (s) { return s.nightOwl; }, target: 1 },
     { icon: '🚀', title: 'On a Roll', hint: 'Reach a 3-day reading streak', rarity: 'rare', metric: function (s) { return s.bestStreak; }, target: 3 },
-    { icon: '🐋', title: 'Deep Diver', hint: 'Finish one of the longer sagas (9+ chapters) start to finish', rarity: 'epic', metric: function (s) { return s.longForm; }, target: 1 },
+    { icon: '🐋', title: 'Deep Diver', hint: 'Finish one of the longer sagas (9+ chapters) start to finish', rarity: 'rare', metric: function (s) { return s.longForm; }, target: 1 },
     { icon: '📅', title: 'Unstoppable', hint: 'Reach a 7-day reading streak', rarity: 'epic', metric: function (s) { return s.bestStreak; }, target: 7 },
-    { icon: '✨', title: 'Petal Catcher', hint: 'Catch a golden petal', rarity: 'rare', metric: function (s) { return s.goldenPetal; }, target: 1 }
+    { icon: '✨', title: 'Petal Catcher', hint: 'Catch a golden petal', rarity: 'rare', metric: function (s) { return s.goldenPetal; }, target: 1 },
+    { icon: '💖', title: 'Heart Collector', hint: 'Favorite 10 stories', rarity: 'epic', metric: function (s) { return s.favorites; }, target: 10 },
+    { icon: '📆', title: 'Daily Devotion', hint: 'Read on 30 different days', rarity: 'legendary', metric: function (s) { return s.days; }, target: 30 },
+    { icon: '🌘', title: 'Eclipse Witness', hint: 'Find the one book disappears when the Library goes dark [possbile of occuring is 1.5% in a day]', rarity: 'Mythic', metric: function (s) { return s.eclipseWitness; }, target: 1 },
+    {
+  icon: "👁",
+  title: "The Watcher",
+  hint: "Witness the Eye awaken [possbile of occuring is 3.5% in a day]  .",
+  rarity: "Mythic",
+  metric: function () {
+    return store.get("readerAchUnlocks", {}).eyeWatcher ? 1 : 0;
+  },
+  target: 1
+},
+{
+  icon: "🕹️",
+  title: "Neon Archivist",
+  hint: "Enter the cheat code find it in novels or anywhere.",
+  rarity: "Mythic",
+  metric: function () {
+    return store.get("readerAchUnlocks", {}).neonArchivist ? 1 : 0;
+  },
+  target: 1
+},
+{
+  icon: "🐉",
+  title: "The Keeper",
+  hint: "Wake the Eye, witness the Eclipse, and crack the Neon code.",
+  rarity: "Mythical Honor",
+  metric: function () {
+    var u = store.get("readerAchUnlocks", {});
+    return (u.eyeWatcher ? 1 : 0) + (u.eclipseWitness ? 1 : 0) + (u.neonArchivist ? 1 : 0);
+  },
+  target: 3
+}
 );
+
 var readerAchievementCoreCount = readerAchievementDefs.length;
 readerAchievementDefs.push({
-    icon: '🌟', title: 'Living Legend', hint: 'Unlock every other reader achievement', rarity: 'legendary',
+    icon: '🌟', title: 'Living Legend', hint: 'Unlock every other reader achievement', rarity: 'Immortal',
     metric: function (s) {
         var count = 0;
         for (var i = 0; i < readerAchievementCoreCount; i++) {
@@ -991,9 +1093,12 @@ readerAchievementDefs.push({
     },
     target: readerAchievementCoreCount
 });
-var readerAchUnlocks = store.get('readerAchUnlocks', {});
 function renderReaderAchievements() {
     var s = computeReaderStats();
+    // Fetched fresh on every render (not cached at page load) so that flags set
+    // by unlockEyeAchievement()/unlockEclipseReward()/unlockNeonAchievement()
+    // in between renders aren't clobbered when this function writes back below.
+    var readerAchUnlocks = store.get('readerAchUnlocks', {});
     var grid = document.getElementById('achievementGrid');
     if (!grid) return;
     var newlyUnlocked = [];
@@ -1103,9 +1208,9 @@ function renderHeatmap() {
 var upcomingReleases = [
     { date: '2026-09-30', title: 'Prequel of The Petal That Falls With A Smile chp 4' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { date: '2026-09-27', title: 'Case File: You — Chapter  14' },
+    { date: '2026-10-04', title: 'Case File: You — Chapter  15' },
     { date: '2026-09-28', title: "The Other Day - Chapter 5" },
-    { date: '2026-09-30', title: 'The Day She Stayed Prequel-ONESHOT' },
+    { date: '2026-10-01', title: 'The Days Between Us' },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
@@ -1199,9 +1304,9 @@ function savePrivateNote() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: 1, type: 'update', title: 'Version 3.5 is live', excerpt: " Add a user level section and removed writer level section, added a new theme color." },
-    { daysAgo: 1, type: 'note', title: 'Version 3.5 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo:1,type:'note', title:'Case File:YOU',excerpt:"Case File:YOU will Air weekly for it final last two chapters of volume 1-Thank you"},
+    { daysAgo: 1, type: 'update', title: 'Version 3.6 is live', excerpt: " Changed the PICK ME A STORY button to THE STORY CHOOSE YOU and fixed some bug along with new achievement." },
+    { daysAgo: 1, type: 'note', title: 'Version 3.6 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo:1,type:'note', title:'Case File:YOU',excerpt:"Case File:YOU will Air weekly for it final last one chapters of volume 1-Thank you"},
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
 var activeNewsType = 'all';
@@ -1483,7 +1588,7 @@ window.addEventListener('load', function () {
    NAVIGATION DOCK
    ============================================================ */
 
-const dockItems = document.querySelectorAll(".dock-item");
+const dockItems = document.querySelectorAll(".browser-tab:not(.browser-settings)");
 
 dockItems.forEach(item => {
     item.addEventListener("click", () => {
@@ -1556,10 +1661,229 @@ document.addEventListener('keydown', function (event) {
         clearShelfSearch();
     }
 });
+/* ============================================================
+   THE EYE AWAKENS
+============================================================ */
 
+const EYE_KEY = "eyeLastSeen";
+
+function shouldWakeEye(){
+
+    const last = store.get(EYE_KEY,0);
+
+    if(Date.now()-last < 7*24*60*60*1000) return false;
+
+    const hour = new Date().getHours();
+
+    const chance = (hour>=0 && hour<3) ? 0.15 : 0.01;
+
+    return Math.random() < chance;
+}
+
+function wakeEye(){
+
+    const eye=document.getElementById("eyeEvent");
+    const pupil=document.getElementById("eyePupil");
+
+    if(!eye||!pupil) return;
+
+    document.body.classList.add("eye-awakened");
+    eye.classList.add("active");
+
+    store.set(EYE_KEY,Date.now());
+
+    showToast("UNKNOWN SIGNAL DETECTED");
+
+    function follow(e){
+
+        const x=(e.clientX-window.innerWidth/2)*0.02;
+        const y=(e.clientY-window.innerHeight/2)*0.02;
+
+        pupil.style.transform=`translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+    }
+
+    window.addEventListener("mousemove",follow);
+
+    const glitch=setInterval(()=>{
+
+        document.body.style.filter="brightness(.88)";
+
+        setTimeout(()=>document.body.style.filter="",90);
+
+    },7000);
+
+    setTimeout(()=>{
+
+        eye.classList.remove("active");
+        document.body.classList.remove("eye-awakened");
+        window.removeEventListener("mousemove",follow);
+        clearInterval(glitch);
+
+        unlockEyeAchievement();
+
+    },45000);
+}
+
+/* Mythic unlocks once all three of these hidden achievements are earned.
+   showToast() has no queue — it just overwrites whatever's showing — so
+   firing the Mythic toast right away would get stomped by the specific
+   achievement's own toast below it. Each unlock function only reaches
+   this point the one time its own flag flips from false to true, so
+   this fires exactly once, whichever of the three completes last, and
+   its toast is delayed to land just after the other one finishes. */
+function announceMythicIfComplete() {
+    const u = store.get("readerAchUnlocks", {});
+    if (u.eyeWatcher && u.eclipseWitness && u.neonArchivist) {
+        setTimeout(() => {
+            showToast("🐉 Hidden Achievement: Mythic — every secret of the Library, found.");
+        }, 3000);
+    }
+}
+
+function unlockEyeAchievement(){
+
+    const unlocks=store.get("readerAchUnlocks",{});
+
+    if(unlocks.eyeWatcher) return;
+
+    unlocks.eyeWatcher=true;
+
+    store.set("readerAchUnlocks",unlocks);
+
+    renderReaderAchievements();
+    renderProgressJourney();
+
+    showToast("👁 Hidden Achievement: The Watcher");
+
+    announceMythicIfComplete();
+}
 document.addEventListener('DOMContentLoaded', function () {
     updateShelfSearchUI();
+    setTimeout(() => {
+
+    if(shouldWakeEye()){
+
+        wakeEye();
+
+    }
+
+}, 3000);
+
+setTimeout(() => {
+
+    if(shouldTriggerEclipse()){
+
+        triggerEclipse();
+
+    }
+
+}, 5000);
 });
+
+/* ============================================================
+   ECLIPSE EVENT
+   (Declared at top level — not inside DOMContentLoaded — so that
+   triggerEclipse()/unlockEclipseReward() are reachable from the
+   Ctrl/Cmd+Shift+E shortcut and window.debugEclipse() below, which
+   live outside that handler's scope. Previously these were declared
+   inside the DOMContentLoaded callback, which made them local to that
+   function and undefined everywhere else — this was the bug that made
+   the eclipse event impossible to trigger manually.)
+============================================================ */
+
+const ECLIPSE_KEY = "lastEclipseEvent";
+
+function shouldTriggerEclipse()
+{
+setTimeout(() => {
+    const cmdk = document.getElementById("cmdkInput");
+    if (cmdk) cmdk.placeholder = "The library remembers who stayed...";
+}, 25000);
+
+setTimeout(() => {
+    const cmdk = document.getElementById("cmdkInput");
+    if (cmdk) cmdk.placeholder = "Search novels, genres, moods…";
+}, 120000);
+
+
+    const last = store.get(ECLIPSE_KEY,0);
+
+    if(Date.now()-last < 7*24*60*60*1000) return false;
+
+    const h = new Date().getHours();
+
+    const chance = (h>=0 && h<3) ? 0.15 : 0.005;
+
+    return Math.random() < chance;
+}
+
+function triggerEclipse(){
+
+    const event=document.getElementById("eclipseEvent");
+
+    if(!event) return;
+
+    document.body.classList.add("eclipse-active");
+    event.classList.add("active");
+
+    store.set(ECLIPSE_KEY,Date.now());
+
+    showToast("🌒 The Library has gone silent...");
+
+    // Pick one random shelf card
+
+   if (!document.querySelector("#catalogGrid .novel-card")) {
+    renderCatalog();
+}
+
+const cards = [...document.querySelectorAll("#catalogGrid .novel-card")];
+
+    let blessed=null;
+
+    if(cards.length){
+
+        blessed=cards[Math.floor(Math.random()*cards.length)];
+
+        blessed.classList.add("eclipse-blessed");
+    }
+
+    if(blessed){
+
+        blessed.style.pointerEvents="auto";
+
+        blessed.addEventListener("click",unlockEclipseReward,{once:true});
+    }
+
+    setTimeout(()=>{
+
+        event.classList.remove("active");
+        document.body.classList.remove("eclipse-active");
+
+        if(blessed)
+            blessed.classList.remove("eclipse-blessed");
+
+        showToast("The eclipse has passed.");
+
+    },120000); // 2 minutes
+}
+
+function unlockEclipseReward(){
+
+    const unlocks=store.get("readerAchUnlocks",{});
+
+    if(unlocks.eclipseWitness) return;
+
+    unlocks.eclipseWitness=true;
+
+    store.set("readerAchUnlocks",unlocks);
+
+    renderReaderAchievements();
+    renderProgressJourney();
+
+    showToast("🌘 Hidden Achievement: Eclipse Witness — the Library remembers you were here.");
+
+    announceMythicIfComplete();
+}
 const cursor = document.querySelector(".cursor");
 
 if (cursor) {
@@ -1588,4 +1912,106 @@ if (cursor) {
             cursor.classList.remove("hover");
         }
     });
+}
+
+function playStoryIntro() {
+    const intro = document.getElementById("storyIntro");
+    const img = document.getElementById("introBookImg");
+    const title = document.getElementById("introBookTitle");
+
+    if (!intro || !img || !title) return;
+
+    const released = novels.filter(n => n.status !== "upcoming");
+    const chosen = released[Math.floor(Math.random() * released.length)];
+
+    img.src = chosen.img;
+    title.textContent = chosen.title;
+
+    intro.classList.add("show");
+
+    setTimeout(() => {
+        intro.classList.remove("show");
+        openSpotlight(chosen.order);
+    }, 8000);
+}
+// Developer shortcut - Ctrl/Cmd + Shift + E
+// Previously Alt+Shift+E: dropped because bare Alt+Shift is a reserved
+// OS-level "switch keyboard language" hotkey on many Windows setups, and
+// Option+E is a dead-key accent combo on Mac — both can swallow the
+// keydown before the page ever sees it. Ctrl/Cmd+Shift avoids both.
+document.addEventListener("keydown", (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.code === "KeyE") {
+        e.preventDefault();
+        triggerEclipse();
+        showToast("🌒 Developer: Eclipse triggered.");
+    }
+});
+// Guaranteed fallback if any browser/OS/extension still eats the shortcut:
+// open devtools console and run  debugEclipse()
+window.debugEclipse = function () {
+  if (typeof triggerEclipse === "function") {
+    triggerEclipse();
+  } else {
+    console.error("triggerEclipse() is missing.");
+  }
+};
+/* =========================
+   KONAMI NEON MODE
+========================= */
+
+const konami = [
+  "ArrowUp","ArrowUp",
+  "ArrowDown","ArrowDown",
+  "ArrowLeft","ArrowRight",
+  "ArrowLeft","ArrowRight",
+  "b","a"
+];
+
+let konamiIndex = 0;
+let neonUnlocked = false;
+
+document.addEventListener("keydown", (e) => {
+  const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+
+  if (key === konami[konamiIndex]) {
+    konamiIndex++;
+
+    if (konamiIndex === konami.length) {
+      activateNeonMode();
+      konamiIndex = 0;
+    }
+  } else {
+    konamiIndex = 0;
+  }
+});
+
+function activateNeonMode() {
+  document.body.classList.add("neon-mode");
+
+  if (!neonUnlocked) {
+    unlockNeonAchievement();
+    neonUnlocked = true;
+  }
+
+  setTimeout(() => {
+    document.body.classList.remove("neon-mode");
+  }, 10000);
+}
+
+function unlockNeonAchievement(){
+
+    const unlocks=store.get("readerAchUnlocks",{});
+
+    if(unlocks.neonArchivist) return;
+
+    unlocks.neonArchivist=true;
+
+    store.set("readerAchUnlocks",unlocks);
+
+    renderReaderAchievements();
+    renderProgressJourney();
+
+    showToast("🕹️ Hidden Achievement: Neon Archivist — you found the old cheat code.");
+
+    announceMythicIfComplete();
 }

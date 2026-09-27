@@ -5647,3 +5647,558 @@ textarea {
     .cursor { display: none; }
     * { cursor: auto; }
 }
+.story-intro{
+position:fixed;
+inset:0;
+z-index:9999;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:#07040c;
+opacity:0;
+pointer-events:none;
+transition:opacity .8s;
+overflow:hidden;
+}
+
+.story-intro.show{
+opacity:1;
+pointer-events:auto;
+}
+
+.intro-vignette{
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle,#0000 20%,rgba(0,0,0,.7) 80%);
+}
+
+.intro-book{
+position:relative;
+width:220px;
+transform:perspective(900px) rotateX(22deg);
+animation:bookFloat 6s ease-in-out infinite;
+}
+
+.intro-book img{
+border-radius:18px;
+box-shadow:
+0 0 80px rgba(255,125,156,.45),
+0 0 160px rgba(167,139,250,.28);
+animation:bookOpen 2s ease forwards;
+}
+
+.intro-book-glow{
+position:absolute;
+inset:-40px;
+background:radial-gradient(circle,
+rgba(255,125,156,.5),
+transparent 70%);
+filter:blur(40px);
+animation:pulseGlow 2s infinite;
+}
+
+.intro-text{
+margin-top:40px;
+text-align:center;
+font-family:Fraunces,serif;
+}
+
+.intro-text span{
+font-size:clamp(32px,4vw,52px);
+letter-spacing:.04em;
+display:block;
+animation:fadeWords 2s ease .8s both;
+}
+
+.intro-text small{
+display:block;
+margin-top:12px;
+font-size:18px;
+color:#d3c6e6;
+animation:fadeWords 2s ease 1.5s both;
+}
+
+@keyframes bookOpen{
+0%{transform:rotateY(-18deg) scale(.9);}
+100%{transform:rotateY(0) scale(1);}
+}
+
+@keyframes pulseGlow{
+50%{transform:scale(1.2);}
+}
+
+@keyframes bookFloat{
+50%{transform:translateY(-10px);}
+}
+
+@keyframes fadeWords{
+from{opacity:0;transform:translateY(20px);}
+to{opacity:1;transform:none;}
+}
+.cta-magic{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,var(--rose),var(--violet));
+    color:#fff;
+    border:none;
+    box-shadow:0 0 25px rgba(var(--accent-rgb),.35);
+}
+
+.cta-magic::before{
+    content:"";
+    position:absolute;
+    top:-150%;
+    left:-30%;
+    width:40%;
+    height:400%;
+    background:rgba(255,255,255,.35);
+    transform:rotate(25deg);
+    transition:.8s;
+}
+
+.cta-magic:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 0 40px rgba(var(--accent-rgb),.55);
+}
+
+.cta-magic:hover::before{
+    left:120%;
+}
+/* ===== Dynamic Shelf Physics ===== */
+
+.bookshelf{
+    perspective:1400px;
+}
+
+.novel-card{
+    transform-style:preserve-3d;
+    transition:
+        transform .45s cubic-bezier(.2,.9,.2,1),
+        filter .45s,
+        box-shadow .45s;
+    will-change:transform;
+}
+
+.bookshelf:hover .novel-card{
+    filter:brightness(.72);
+}
+
+.novel-card.active-book{
+    transform:
+        translateY(-16px)
+        translateZ(60px)
+        rotateY(0deg)
+        scale(1.06);
+    filter:brightness(1.08);
+    z-index:20;
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.55),
+        0 0 35px rgba(var(--accent-rgb),.35);
+}
+
+/* immediate neighbors */
+
+.novel-card.neighbor-left{
+    transform:
+        translateY(-6px)
+        rotateY(14deg)
+        translateX(-10px);
+}
+
+.novel-card.neighbor-right{
+    transform:
+        translateY(-6px)
+        rotateY(-14deg)
+        translateX(10px);
+}
+
+/* second neighbors */
+
+.novel-card.far-left{
+    transform:
+        rotateY(8deg)
+        translateX(-6px);
+}
+
+.novel-card.far-right{
+    transform:
+        rotateY(-8deg)
+        translateX(6px);
+}
+
+/* spring return */
+
+.novel-card.returning{
+    animation:shelfSpring .55s cubic-bezier(.22,1.4,.36,1);
+}
+
+@keyframes shelfSpring{
+    0%{transform:translateY(-10px) scale(1.02);}
+    55%{transform:translateY(3px);}
+    100%{transform:none;}
+}
+/* ===============================
+   THE EYE AWAKENS EVENT
+================================ */
+
+.eye-event{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:0;
+    z-index:500;
+    transition:opacity 3s ease;
+}
+
+.eye-event.active{
+    opacity:1;
+}
+
+.eye-event::before{
+    content:"";
+    position:absolute;
+    width:700px;
+    height:360px;
+    left:50%;
+    top:28%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:
+      radial-gradient(circle at center,
+        rgba(255,40,40,.95) 0%,
+        rgba(120,0,0,.55) 35%,
+        rgba(0,0,0,0) 75%);
+    filter:blur(25px);
+}
+
+.eye-pupil{
+    position:absolute;
+    width:110px;
+    height:110px;
+    left:50%;
+    top:28%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:#070707;
+    box-shadow:
+        0 0 40px rgba(255,0,0,.9),
+        0 0 120px rgba(255,0,0,.5);
+    transition:transform .15s linear;
+}
+
+.eye-fog{
+    position:absolute;
+    inset:-20%;
+    background:
+      radial-gradient(circle at 40% 30%, rgba(255,0,0,.05), transparent 45%),
+      radial-gradient(circle at 70% 60%, rgba(255,255,255,.03), transparent 50%);
+    animation:eyeFog 18s linear infinite;
+}
+
+@keyframes eyeFog{
+    from{transform:translateX(-2%)}
+    to{transform:translateX(2%)}
+}
+
+body.eye-awakened{
+    animation:eyeFlicker 8s ease-in-out infinite;
+}
+
+@keyframes eyeFlicker{
+    0%,97%,100%{filter:none}
+    98%{filter:brightness(.85)}
+    99%{filter:brightness(1.1)}
+}
+/* ============================================================
+   ECLIPSE EVENT
+============================================================ */
+
+.eclipse-event{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:450;
+    opacity:0;
+    transition:opacity 6s ease;
+}
+
+.eclipse-event.active{
+    opacity:1;
+}
+
+.eclipse-backdrop{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(40,20,10,.1), rgba(0,0,0,.75) 72%),
+        rgba(0,0,0,.55);
+    backdrop-filter:blur(4px) saturate(.6);
+}
+
+.eclipse-event.active .eclipse-backdrop{
+    animation:eclipseBreathe 9s ease-in-out infinite 3s;
+}
+
+@keyframes eclipseBreathe{
+    0%,100%{ filter:brightness(1); }
+    50%{ filter:brightness(1.1); }
+}
+
+.eclipse-moon{
+    position:absolute;
+    left:50%;
+    top:28%;
+    width:340px;
+    height:340px;
+    transform:translate(-50%,-50%) scale(.8);
+    transition:transform 10s ease;
+}
+
+.eclipse-event.active .eclipse-moon{
+    transform:translate(-50%,-50%) scale(1);
+    animation:eclipseHover 12s ease-in-out infinite 10s;
+}
+
+@keyframes eclipseHover{
+    0%,100%{ margin-top:0; }
+    50%{ margin-top:-14px; }
+}
+
+.eclipse-moon::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:radial-gradient(circle at 40% 38%, #131313 0%, #060606 55%, #000 100%);
+    box-shadow:0 0 120px rgba(0,0,0,.9);
+}
+
+.eclipse-ring{
+    position:absolute;
+    inset:-10px;
+    border-radius:50%;
+    border:3px solid rgba(255,210,120,.95);
+    box-shadow:
+        0 0 25px rgba(255,210,120,.8),
+        0 0 80px rgba(255,180,60,.4);
+}
+
+.eclipse-event.active .eclipse-ring{
+    animation:eclipseFlare 3s ease-out, eclipseCorona 4.5s ease-in-out 3s infinite;
+}
+
+@keyframes eclipseFlare{
+    0%{ box-shadow:0 0 0 rgba(255,225,160,0); opacity:0; transform:scale(.72); }
+    40%{ box-shadow:0 0 70px rgba(255,228,165,1),0 0 170px rgba(255,190,80,.85); opacity:1; transform:scale(1.18); }
+    100%{ box-shadow:0 0 25px rgba(255,210,120,.8),0 0 80px rgba(255,180,60,.4); opacity:1; transform:scale(1); }
+}
+
+@keyframes eclipseCorona{
+    0%,100%{ box-shadow:0 0 25px rgba(255,210,120,.8),0 0 80px rgba(255,180,60,.4); }
+    50%{ box-shadow:0 0 42px rgba(255,218,145,1),0 0 115px rgba(255,190,90,.6); }
+}
+
+.eclipse-ring::before{
+    content:"";
+    position:absolute;
+    inset:-24px;
+    border-radius:50%;
+    border:1px dashed rgba(255,210,120,.3);
+}
+
+.eclipse-event.active .eclipse-ring::before{
+    animation:eclipseRingSpin 70s linear infinite;
+}
+
+@keyframes eclipseRingSpin{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+}
+
+.eclipse-quote{
+    position:absolute;
+    left:50%;
+    bottom:18%;
+    transform:translateX(-50%) translateY(14px);
+    font-family:var(--font-display);
+    font-size:clamp(22px,3vw,34px);
+    color:rgba(255,235,190,.95);
+    text-shadow:0 0 22px rgba(255,200,120,.55);
+    opacity:0;
+    letter-spacing:.02em;
+    transition:opacity 3s ease 20s, transform 3s ease 20s;
+    text-align:center;
+}
+
+.eclipse-event.active .eclipse-quote{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+.eclipse-particles{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+.eclipse-particles::before{
+    content:"";
+    position:absolute;
+    inset:-30%;
+    background:
+        radial-gradient(circle, rgba(255,210,120,.9) 1px, transparent 2px);
+    background-size:70px 70px;
+    opacity:.18;
+}
+
+.eclipse-particles::after{
+    content:"";
+    position:absolute;
+    inset:-30%;
+    background:
+        radial-gradient(circle, rgba(255,238,205,.85) 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,255,255,.55) .8px, transparent 2px);
+    background-size:150px 150px,210px 210px;
+    background-position:0 0,70px 45px;
+    opacity:0;
+}
+
+.eclipse-event.active .eclipse-particles::before{
+    animation:eclipseDrift 50s linear infinite;
+}
+
+.eclipse-event.active .eclipse-particles::after{
+    animation:eclipseDriftSlow 80s linear infinite, eclipseTwinkle 5s ease-in-out infinite 1s;
+}
+
+@keyframes eclipseDrift{
+    from{transform:translateY(0);}
+    to{transform:translateY(-120px);}
+}
+
+@keyframes eclipseDriftSlow{
+    from{transform:translateY(0);}
+    to{transform:translateY(-200px);}
+}
+
+@keyframes eclipseTwinkle{
+    0%,100%{ opacity:.12; }
+    50%{ opacity:.55; }
+}
+
+/* Library silence */
+
+body.eclipse-active .glass,
+body.eclipse-active .cta,
+body.eclipse-active .search-trigger,
+body.eclipse-active .icon-btn{
+    transition-duration:1.5s!important;
+    filter:saturate(.35) brightness(.92);
+}
+
+body.eclipse-active .aurora-layer{
+    animation-play-state:paused;
+    opacity:.12!important;
+}
+
+body.eclipse-active #grain{
+    opacity:.08;
+}
+
+/* Highlight one chosen book */
+
+.novel-card.eclipse-blessed{
+    border-color:#ffd27a!important;
+    box-shadow:
+        0 0 30px rgba(255,210,120,.5),
+        0 0 80px rgba(255,180,60,.25);
+    transform:translateY(-6px);
+    animation:eclipseBlessedGlow 2.6s ease-in-out infinite;
+}
+
+@keyframes eclipseBlessedGlow{
+    0%,100%{ box-shadow:0 0 30px rgba(255,210,120,.5),0 0 80px rgba(255,180,60,.25); }
+    50%{ box-shadow:0 0 48px rgba(255,220,150,.8),0 0 125px rgba(255,190,90,.42); }
+}
+
+.novel-card.eclipse-blessed::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(115deg,transparent 35%,rgba(255,228,165,.4) 50%,transparent 65%);
+    background-size:240% 100%;
+    animation:eclipseShine 2.6s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes eclipseShine{
+    0%{ background-position:140% 0; }
+    100%{ background-position:-140% 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .eclipse-event.active .eclipse-backdrop,
+    .eclipse-event.active .eclipse-moon,
+    .eclipse-event.active .eclipse-ring,
+    .eclipse-event.active .eclipse-ring::before,
+    .eclipse-event.active .eclipse-particles::before,
+    .eclipse-event.active .eclipse-particles::after,
+    .novel-card.eclipse-blessed,
+    .novel-card.eclipse-blessed::after{
+        animation:none!important;
+    }
+}
+.novel-card{
+    opacity:0;
+    transform:translateY(80px) rotateX(20deg);
+}
+
+.novel-card.shelf-arrive{
+    animation:shelfArrive .75s cubic-bezier(.18,.88,.25,1) forwards;
+}
+
+@keyframes shelfArrive{
+    0%{
+        opacity:0;
+        transform:translateY(80px) rotateX(20deg);
+    }
+    70%{
+        opacity:1;
+        transform:translateY(-8px) rotateX(0);
+    }
+    100%{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+/* Neon Archive Mode */
+body.neon-mode{
+  --accent:#00e5ff;
+  --glow:rgba(0,229,255,.55);
+}
+
+body.neon-mode .novel-card{
+  box-shadow:0 0 12px var(--glow);
+  border-color:var(--accent);
+}
+
+body.neon-mode .novel-card:hover{
+  box-shadow:0 0 22px var(--glow);
+}
+
+body.neon-mode .bookshelf{
+  box-shadow:0 0 25px rgba(0,229,255,.18);
+}
+
+body.neon-mode .nav-brand{
+  animation:neonGlitch .18s 6;
+}
+
+@keyframes neonGlitch{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(1px);}
+  50%{transform:translateX(-1px);}
+  100%{transform:translateX(0);}
+}

@@ -26,6 +26,11 @@
 
 <body>
     <div id="grain"></div>
+    <!-- THE EYE AWAKENS -->
+<div id="eyeEvent" class="eye-event" aria-hidden="true">
+  <div class="eye-fog"></div>
+  <div id="eyePupil" class="eye-pupil"></div>
+</div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <!-- ============ COMMAND-K ============ -->
@@ -101,7 +106,7 @@
                     data</button>
             </div>
             <div style="margin-top:20px;font-family:var(--font-mono);font-size:10px;color:var(--muted);line-height:1.8">
-                Version 3.5 · September 2026
+                Version 3.6 · September 2026
             </div>
         </div>
     </aside>
@@ -138,7 +143,7 @@
             <div class="sp-private-notes">
                 <div class="sp-private-notes-head">
                     <div>
-                        <div class="side-label">3.2 · Private reader notes</div>
+                        <div class="side-label"> · Private reader notes</div>
                         <div class="sp-notes-title">Leave yourself a little bookmark.</div>
                     </div>
                     <span class="sp-notes-saved" id="spNotesSaved">Saved locally</span>
@@ -252,8 +257,9 @@
                     <div class="hero-cta-row">
                         <button class="cta cta-primary" id="heroStartBtn">Start Reading →</button>
                         <button class="cta cta-ghost" onclick="scrollToId('catalog')">Browse the Shelf</button>
-                        <button class="cta cta-ghost" onclick="surpriseMe()"><span id="surpriseIcon">🎲</span> Pick Me
-                            a Story</button>
+                            <button class="cta cta-magic" onclick="playStoryIntro()">
+                            ✨ The Story Chooses You
+                       </button>
                     </div>
                     <div class="hero-trend-dots" id="heroTrendDots"></div>
                 </div>
@@ -279,12 +285,27 @@
                     </div>
                     <div class="xp-bar">
                         <div class="xp-fill" id="readerXpFill" style="width:0%"></div>
-                    </div>
+                    </div> 
                     <div class="xp-label" id="readerXpLabel">0 / 100 XP to Level 2</div>
                 </div>
             </div>
         </div>
     </section>
+    <!-- =========================
+     ECLIPSE EVENT
+========================= -->
+
+<div id="eclipseEvent" class="eclipse-event">
+    <div class="eclipse-backdrop"></div>
+    <div class="eclipse-moon">
+        <div class="eclipse-ring"></div>
+    </div>
+    <div class="eclipse-particles"></div>
+
+    <div class="eclipse-quote">
+        <span>Every story casts a shadow.</span>
+    </div>
+</div>
 
     <!-- ============ STATS STRIP ============ -->
     <section class="section">
@@ -353,13 +374,19 @@
                 </div>
             </div>
             <div class="shelf-wrap">
-                <div class="catalog-grid" id="catalogGrid"></div>
+               <div id="catalogGrid" class="catalog-grid bookshelf"></div>
                 <aside class="sidebar-stack">
                     <div class="side-card glass">
                         <span class="side-label">Search &amp; Filter</span>
-                        <div class="search-mini"><span aria-hidden="true">🔍</span><input id="shelfSearch"
-                                placeholder="Search titles or genres…" oninput="scheduleCatalogRender()"
-                                aria-label="Search shelf"></div>
+                        <div class="shelf-search">
+                            <span class="shelf-search-icon" aria-hidden="true">🔍</span>
+                            <input id="shelfSearch" type="search" placeholder="Search titles or genres…"
+                                oninput="handleShelfSearchInput()" aria-label="Search shelf">
+                            <span class="search-shortcut">⌘K</span>
+                            <button class="search-clear" onclick="clearShelfSearch()"
+                                aria-label="Clear search">✕</button>
+                        </div>
+                        <div class="search-result-info" id="searchResultInfo">Search titles, genres, and stories</div>
                         <div class="filter-section-label">Genre</div>
                         <div class="filter-pills" id="genrePills">
                             <button class="pill-btn active" data-genre="all">All</button>
@@ -561,7 +588,7 @@
                         <div class="nav-brand" style="margin-bottom:10px">A <em>Novel</em> Web</div>
                         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.7;max-width:280px">Original
                             romance, drama,
-                            and slice-of-life fiction by AKA. Rebuilt as Version 3.5 — a living reading dashboard
+                            and slice-of-life fiction by AKA. Rebuilt as Version 3.6 — a living reading dashboard
                             instead of a static
                             page.</p>
                         <div class="newsletter-row">
@@ -583,7 +610,7 @@
                             <a href="#" onclick="return false"> The Day She Stayed Prequel-ONESHOT</a><a href="#"
                                 onclick="return false">Petal
                                 Vol. 4 — planned University → Adulthood Arc ( last volume )</a>
-                            <a href="#version30">Version 3.6 is yet to be release</a>
+                            <a href="#version30">Version 3.7 is yet to be release</a>
                             <a href="#" onclick="return false">Case File: vol 2</a><a href="#"
                                 onclick="return false">Smooth UI UX
                                 </a>
@@ -605,7 +632,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <span>Filed &amp; maintained by AKA · Version 3.5 · September 2026</span>
+                    <span>Filed &amp; maintained by AKA · Version 3.6 · September 2026</span>
                     <span>Please don't repost or reupload stories without permission. Sharing links is always
                         appreciated.</span>
                 </div>
@@ -618,7 +645,7 @@
 
         <div class="browser-dock-inner">
 
-            <a href="#hero" class="browser-tab active" data-label="Home">
+            <a href="#hero" class="browser-tab" data-label="Home">
                 <span class="browser-tab-icon">⌂</span>
                 <span class="browser-tab-text">Home</span>
             </a>
@@ -658,6 +685,22 @@
     <button id="scrollBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
 
     <div class="cursor" aria-hidden="true"></div>
+
+    <div id="storyIntro" class="story-intro">
+    <div class="intro-vignette"></div>
+    <div class="intro-particles"></div>
+
+    <div class="intro-book">
+        <div class="intro-book-glow"></div>
+        <img id="introBookImg">
+    </div>
+
+    <div class="intro-text">
+        <span>This story chose you.</span>
+        <small id="introBookTitle"></small>
+    </div>
+</div>
+
 
     <script src="script.js"></script>
 </body>
