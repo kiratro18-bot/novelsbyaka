@@ -98,7 +98,7 @@
             <div class="sph-row" style="flex-direction:column;align-items:flex-start;gap:10px">
                 <span class="sph-row-label">Your data</span>
                 <p style="font-size:11.5px;color:var(--ink-soft);line-height:1.7;margin:0">
-                    Reading progress, bookmarks, private notes, and comments are stored only in this
+                    Your reader profile name, reading progress, bookmarks, private notes, and comments are stored only in this
                     browser's local storage — nothing is sent to or saved on a server. They won't follow you
                     to another device, browser, or private window.
                 </p>
@@ -225,7 +225,7 @@
         </div>
         <div class="nav-actions">
             <button class="search-trigger" onclick="openCmdk()" aria-label="Open search"><span>🔍</span><span
-                    class="nav-search-label">Search</span><span class="kbd">⌘K</span></button>
+                    class="nav-search-label">Search</span><span class="kbd"></span></button>
             <button class="icon-btn nav-settings-btn" onclick="openSettings()" aria-label="Open settings"
                 title="Settings">⚙</button>
         </div>
@@ -245,21 +245,13 @@
                     <div id="heroFeatureText">
                         <span class="trend-badge">🔥 Trending Now · Vol. 3</span>
                         <h1 class="hero-feature-title">The Petal That Falls<br>With a <em>Smile</em></h1>
-                        <p class="hero-feature-desc">Life is a series of small smiles and falling petals — a gentle,
-                            aching
-                            exploration of growing up, holding on, and learning when to let go.</p>
-                        <div class="hero-meta-row">
-                            <span>⭐ 4.9 rating</span><span>👁 21.4k readers</span><span>📖 22 chapters across 3
-                                volumes</span><span style="color: var(--rose)">
-                                Completed</span>
-                        </div>
+                        <p class="hero-feature-desc">Life is a series of small smiles and falling petals — a gentle, aching exploration of growing up, holding on, and learning when to let go.</p>
+                        <div class="hero-meta-row"><span>⭐ 4.9 rating</span><span>👁 21.4k readers</span><span>📖 22 chapters across 3 volumes</span><span style="color:var(--rose)">Completed</span></div>
                     </div>
                     <div class="hero-cta-row">
                         <button class="cta cta-primary" id="heroStartBtn">Start Reading →</button>
                         <button class="cta cta-ghost" onclick="scrollToId('catalog')">Browse the Shelf</button>
-                            <button class="cta cta-magic" onclick="playStoryIntro()">
-                            ✨ The Story Chooses You
-                       </button>
+                        <button class="cta cta-magic" onclick="playStoryIntro()">✨ The Story Chooses You</button>
                     </div>
                     <div class="hero-trend-dots" id="heroTrendDots"></div>
                 </div>
@@ -268,24 +260,21 @@
                 <div class="hero-card glass" id="crCard">
                     <div class="hero-card-label"><span class="pulse-dot"></span>Continue Reading</div>
                     <div class="streak-chip" id="readerStreakChip">🔥 0-day streak</div>
-                    <div id="crBody">
-                        <div class="cr-empty">You haven't started a story yet. Pick one from The Shelf and it'll show up
-                            here, like
-                            a bookmark that remembers you.</div>
-                    </div>
+                    <div id="crBody"><div class="cr-empty">You haven't started a story yet. Pick one from The Shelf and it'll show up here, like a bookmark that remembers you.</div></div>
                 </div>
-                <div class="hero-card glass">
-                    <div class="hero-card-label">✦ Your Level</div>
-                    <div class="author-row">
-                        <div class="author-avatar" id="readerLevelBadge">1</div>
-                        <div>
-                            <div class="author-name" id="readerRankName">Novice Reader</div>
-                            <div class="author-level" id="readerLevelSub">Level 1</div>
+                <div class="hero-card glass reader-profile-card">
+                    <div class="hero-card-label">✦ Your Reader Profile <span class="profile-local-note">Saved on this device</span></div>
+                    <div class="reader-profile-head">
+                        <div class="author-avatar reader-profile-avatar" id="readerProfileAvatar" aria-hidden="true">G</div>
+                        <div class="reader-profile-identity">
+                            <div class="author-name" id="readerProfileName">Guest Reader</div>
+                            <div class="author-level" id="readerRankName">Novice Reader</div>
                         </div>
+                        <button class="profile-edit-btn" type="button" onclick="editReaderProfile()" aria-label="Edit reader profile name" title="Edit profile">✎</button>
                     </div>
-                    <div class="xp-bar">
-                        <div class="xp-fill" id="readerXpFill" style="width:0%"></div>
-                    </div> 
+                    <div class="reader-profile-stats"><span id="readerProfileChapters">0 chapters read</span><span id="readerProfileStories">0 stories finished</span></div>
+                    <div class="reader-level-row"><span id="readerLevelSub">Level 1</span><span id="readerLevelBadge">1</span></div>
+                    <div class="xp-bar"><div class="xp-fill" id="readerXpFill" style="width:0%"></div></div>
                     <div class="xp-label" id="readerXpLabel">0 / 100 XP to Level 2</div>
                 </div>
             </div>
@@ -359,35 +348,56 @@
         </div>
     </section>
 
+    <!-- ============ TRENDING READS ============ -->
+    <section class="section trending-section" id="trending">
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">Reader favorites</span>
+                    <h2 class="section-title">Stories in the <em>spotlight</em></h2>
+                    <p class="section-sub">The most-read stories in AKA’s library, ready for your next read.</p>
+                </div>
+                <button class="pill-btn" onclick="scrollToId('catalog')">Browse all stories ↓</button>
+            </div>
+            <div class="trending-grid" id="trendingGrid"></div>
+        </div>
+    </section>
+
     <!-- ============ THE SHELF ============ -->
     <section class="section" id="catalog">
         <div class="wrap">
             <div class="section-head shelf-section-head">
                 <div>
-                    <span class="eyebrow">The archive</span>
-                    <h2 class="section-title">The <em>Shelf</em></h2>
-                    <p class="section-sub" id="shelfCount">18 stories, filed and ready to open.</p>
+                    <span class="eyebrow">The reading room · 3.7</span>
+                    <h2 class="section-title">Find your next <em>world</em></h2>
+                    <p class="section-sub" id="shelfCount">Stories, filed and ready to open.</p>
                 </div>
                 <div class="shelf-heading-actions">
                     <span class="catalog-filter-summary" id="catalogFilterSummary">Showing everything</span>
                     <button class="pill-btn" id="clearShelfBtn" onclick="clearShelfFilters()">Clear filters</button>
                 </div>
             </div>
-            <div class="shelf-wrap">
-               <div id="catalogGrid" class="catalog-grid bookshelf"></div>
-                <aside class="sidebar-stack">
-                    <div class="side-card glass">
-                        <span class="side-label">Search &amp; Filter</span>
-                        <div class="shelf-search">
-                            <span class="shelf-search-icon" aria-hidden="true">🔍</span>
-                            <input id="shelfSearch" type="search" placeholder="Search titles or genres…"
-                                oninput="handleShelfSearchInput()" aria-label="Search shelf">
-                            <span class="search-shortcut">⌘K</span>
-                            <button class="search-clear" onclick="clearShelfSearch()"
-                                aria-label="Clear search">✕</button>
-                        </div>
-                        <div class="search-result-info" id="searchResultInfo">Search titles, genres, and stories</div>
-                        <div class="filter-section-label">Genre</div>
+            <div class="shelf-console glass">
+                <div class="shelf-console-top">
+                    <div class="shelf-search">
+                        <span class="shelf-search-icon" aria-hidden="true">⌕</span>
+                        <input id="shelfSearch" type="search" placeholder="Search stories, genres, or moods…"
+                            oninput="handleShelfSearchInput()" aria-label="Search shelf">
+                        <span class="search-shortcut">⌘K</span>
+                        <button class="search-clear" onclick="clearShelfSearch()" aria-label="Clear search">✕</button>
+                    </div>
+                    <label class="shelf-sort-label" for="shelfSort">Sort by</label>
+                    <select id="shelfSort" class="shelf-sort" aria-label="Sort stories">
+                        <option value="newest">Newest</option>
+                        <option value="popular">Most read</option>
+                        <option value="rating">Top rated</option>
+                        <option value="title">Title A–Z</option>
+                        <option value="progress">Your progress</option>
+                    </select>
+                </div>
+                <div class="shelf-filter-row">
+                    <div class="shelf-filter-group">
+                        <span class="shelf-filter-label">Genre</span>
                         <div class="filter-pills" id="genrePills">
                             <button class="pill-btn active" data-genre="all">All</button>
                             <button class="pill-btn" data-genre="romance">Romance</button>
@@ -397,27 +407,45 @@
                             <button class="pill-btn" data-genre="mystery">Mystery</button>
                             <button class="pill-btn" data-genre="action">Action</button>
                         </div>
-                        <div class="filter-section-label filter-section-label-status">Status</div>
+                    </div>
+                    <div class="shelf-filter-group shelf-status-group">
+                        <span class="shelf-filter-label">Status</span>
                         <div class="filter-pills" id="statusPills">
-                            <button class="pill-btn active" data-status="all">All status</button>
+                            <button class="pill-btn active" data-status="all">Any</button>
                             <button class="pill-btn" data-status="ongoing">Ongoing</button>
                             <button class="pill-btn" data-status="completed">Completed</button>
+                            <button class="pill-btn" data-status="upcoming">Coming soon</button>
                         </div>
                     </div>
-                    <div class="side-card glass">
-                        <span class="side-label">Reading Challenges</span>
-                        <div id="challengesList"></div>
-                    </div>
-                    <div class="side-card glass">
-                        <span class="side-label">Your Reading Journey</span>
-                        <div class="sb-title" style="font-family:var(--font-display);font-style:italic;font-size:15px"
-                            id="journeyRank">Novice Reader</div>
-                        <div class="cr-sub" id="journeyStats">0 badges earned</div>
-                        <button class="pill-btn" style="margin-top:10px" onclick="scrollToId('achievements')">View all
-                            achievements
-                            ↓</button>
-                    </div>
-                </aside>
+                </div>
+                <div class="search-result-info" id="searchResultInfo">Search titles, genres, and stories</div>
+            </div>
+            <div class="shelf-feature" id="shelfFeature"></div>
+            <div class="shelf-results-head">
+                <span class="side-label">The collection</span>
+                <span class="shelf-results-note">Choose a cover to step inside <span>✦</span></span>
+            </div>
+            <div class="shelf-wrap">
+                <div id="catalogGrid" class="catalog-grid bookshelf"></div>
+            </div>
+            <section class="reading-challenges" id="reading-challenges">
+                <div class="challenge-section-head">
+                    <div><span class="eyebrow">Your reading quests</span><h3>Small goals. <em>Big worlds.</em></h3>
+                    <p>Every chapter moves your journey forward.</p></div>
+                    <div class="challenge-summary" id="challengeSummary">0 quests complete</div>
+                </div>
+                <div class="challenge-grid" id="challengesList"></div>
+            </section>
+            <div class="shelf-extras">
+                <div class="shelf-extra-card glass journey-card" id="journeyCard">
+                    <span class="side-label">Your Reading Journey</span>
+                    <div class="sb-title" id="journeyRank">Novice Reader</div>
+                    <div class="cr-sub" id="journeyStats">0 badges earned</div>
+                    <details class="journey-achievements">
+                        <summary><span>Achievement collection</span><span class="journey-achievements-cta">View all ↓</span></summary>
+                        <div class="milestone-grid" id="achievementGrid"></div>
+                    </details>
+                </div>
             </div>
         </div>
     </section>
@@ -431,27 +459,13 @@
                     <h2 class="section-title">Your <em>Shelf</em></h2>
                     <p class="section-sub">A quick home for what you are reading, loving, and ready to finish next.</p>
                 </div>
-                <button class="pill-btn" onclick="scrollToId('achievements')">View milestones ↓</button>
+                <button class="pill-btn" onclick="scrollToId('journeyCard')">View milestones ↓</button>
             </div>
             <div class="personal-shelf-grid">
                 <article class="glass personal-shelf-card personal-current-card" id="personalCurrentCard"></article>
                 <article class="glass personal-shelf-card" id="personalFavoritesCard"></article>
                 <article class="glass personal-shelf-card" id="personalFinishedCard"></article>
             </div>
-        </div>
-    </section>
-
-    <!-- ============ READER ACHIEVEMENTS ============ -->
-    <section class="section" id="achievements">
-        <div class="wrap">
-            <div class="section-head">
-                <div>
-                    <h2 class="section-title">Reader <em>Achievements</em></h2>
-                    <p class="section-sub">Badges you earn by reading and exploring the shelf — track your own journey.
-                    </p>
-                </div>
-            </div>
-            <div class="milestone-grid" id="achievementGrid"></div>
         </div>
     </section>
 
@@ -600,7 +614,7 @@
                     <div>
                         <div class="footer-col-title">Explore</div>
                         <div class="footer-links">
-                            <a href="#catalog">The Shelf</a><a href="#achievements">Achievements</a><a
+                            <a href="#catalog">The Shelf</a><a href="#journeyCard">Achievements</a><a
                                 href="#leaderboard">Leaderboard</a><a href="#news">News</a>
                         </div>
                     </div>
@@ -655,7 +669,7 @@
                 <span class="browser-tab-text">Shelf</span>
             </a>
 
-            <a href="#achievements" class="browser-tab" data-label="Achievements">
+            <a href="#journeyCard" class="browser-tab" data-label="Achievements">
                 <span class="browser-tab-icon">✦</span>
                 <span class="browser-tab-text">Achievements</span>
             </a>
