@@ -27,7 +27,7 @@ var APP_STORAGE_KEYS = [
     'privateReaderNotes', 'novelComments', 'recentSearches', 'lightMode', 'theme',
     'tiltEnabled', 'motionEnabled', 'readerFontScale', 'readerAchUnlocks',
     'goldenPetalCaught', 'nightOwlRead', 'oneDayRead', 'searchedOnce', 'sharedOnce',
-    'themeChanged', 'lastCommentAt', 'readerLevel', 'readerProfileName'
+    'themeChanged', 'lastCommentAt', 'readerLevel'
 ];
 function confirmClearLocalData() {
     var ok = window.confirm('This permanently erases your reading progress, bookmarks, private notes, achievements, and comments saved in this browser. This can\'t be undone. Continue?');
@@ -144,7 +144,7 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 4, rating: 4.2, views: 9000, releaseOffsetDays: 0,
+        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 5, rating: 4.3, views: 11000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -178,7 +178,6 @@ var currentlyReadingOrder = store.get('currentlyReading', null);
 var readingLog = store.get('readingLog', {});
 var claimedChallenges = store.get('claimedChallenges', {});
 var privateReaderNotes = store.get('privateReaderNotes', {});
-var readerProfileName = sanitize(String(store.get('readerProfileName', 'Guest Reader'))).slice(0, 24) || 'Guest Reader';
 
 function getRead(n) { var v = readProgress[n.order]; return typeof v === 'number' ? Math.max(0, Math.min(v, n.ch)) : 0; }
 function logReadingActivity(delta) {
@@ -394,19 +393,6 @@ function buildHeroDots() {
     if (!wrap) return;
     wrap.innerHTML = heroFeaturedList.map(function (n, i) {
         return '<button class="hero-trend-dot' + (i === 0 ? ' active' : '') + '" aria-label="Show ' + esc(n.title.trim()) + '" onclick="jumpHeroFeature(' + i + ')"></button>';
-    }).join('');
-}
-function renderTrendingShelf() {
-    var grid = document.getElementById('trendingGrid');
-    if (!grid) return;
-    var top = novels.filter(function (n) { return n.status !== 'upcoming' && n.ch > 0; })
-        .slice().sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).slice(0, 3);
-    grid.innerHTML = top.map(function (n, i) {
-        var status = n.status === 'ongoing' ? 'Currently releasing' : 'Complete story';
-        return '<article class="trending-card" tabindex="0" role="button" aria-label="Open ' + esc(n.title.trim()) + ' details" onclick="openSpotlight(' + n.order + ')" onkeydown="if(event.target===this&&(event.key===\'Enter\'||event.key===\' \')){event.preventDefault();openSpotlight(' + n.order + ')}">' +
-            '<div class="trending-cover">' + coverHtml(n, '') + '<span class="trending-rank">0' + (i + 1) + '</span><span class="trending-status">' + status + '</span></div>' +
-            '<div class="trending-copy"><div class="trending-eyebrow">🔥 ' + (i === 0 ? 'Most read' : 'Reader favorite') + ' · ' + fmtNum(n.views) + ' reads</div>' +
-            '<h3>' + esc(n.title.trim()) + '</h3><p>' + esc(n.blurb) + '</p><div class="trending-meta"><span>★ ' + (n.rating || '—') + '</span><span>' + n.ch + ' chapters</span><span>Open story ↗</span></div></div></article>';
     }).join('');
 }
 function jumpHeroFeature(i) {
@@ -662,8 +648,6 @@ document.addEventListener('DOMContentLoaded', function () {
         this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active'); activeStatus = btn.dataset.status || 'all'; renderCatalog();
     });
-    var shelfSort = document.getElementById('shelfSort');
-    if (shelfSort) shelfSort.addEventListener('change', renderCatalog);
     document.getElementById('lbTabs').addEventListener('click', function (e) {
         var btn = e.target.closest('.pill-btn'); if (!btn) return;
         this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -702,16 +686,7 @@ function renderCatalog() {
         var matchesGenre = activeGenre === 'all' || n.genres.indexOf(activeGenre) > -1;
         var matchesStatus = activeStatus === 'all' || n.status === activeStatus;
         return matchesMood && matchesQ && matchesGenre && matchesStatus;
-    });
-    var sortMode = document.getElementById('shelfSort') ? document.getElementById('shelfSort').value : 'newest';
-    filtered.sort(function (a, b) {
-        if (sortMode === 'popular') return (b.views || 0) - (a.views || 0);
-        if (sortMode === 'rating') return (b.rating || 0) - (a.rating || 0);
-        if (sortMode === 'title') return a.title.trim().localeCompare(b.title.trim());
-        if (sortMode === 'progress') return (getRead(b) / Math.max(b.ch, 1)) - (getRead(a) / Math.max(a.ch, 1));
-        return b.order - a.order;
-    });
-    renderShelfFeature();
+    }).sort(function (a, b) { return b.order - a.order; });
     document.getElementById('shelfCount').textContent = filtered.length + ' stor' + (filtered.length === 1 ? 'y' : 'ies') + ', filed and ready to open.';
     updateShelfSearchUI(filtered.length);
     var summaryEl = document.getElementById('catalogFilterSummary');
@@ -729,7 +704,7 @@ function renderCatalog() {
         var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
         var statusCls = n.status === 'ongoing' ? 'status-ongoing' : n.status === 'upcoming' ? 'status-upcoming' : 'status-completed';
         var isLiked = !!bookmarks[n.order];
-        return '<article class="novel-card" tabindex="0" role="group" aria-label="' + esc(n.title.trim()) + ' story card" onkeydown="if(event.target===this&&(event.key===\'Enter\'||event.key===\' \')){event.preventDefault();openSpotlight(' + n.order + ')}" style="animation-delay:' + (i * 0.03) + 's" onclick="openSpotlight(' + n.order + ')">' +
+        return '<div class="novel-card" style="animation-delay:' + (i * 0.03) + 's" onclick="openSpotlight(' + n.order + ')">' +
             '<div class="nc-cover">' + coverHtml(n, '').replace('<div class=""', '<div style="width:100%;height:100%"') +
             '<div class="nc-grad"></div>' +
             '<span class="nc-status ' + statusCls + '">' + n.status + '</span>' +
@@ -741,9 +716,8 @@ function renderCatalog() {
             '<div class="nc-title">' + esc(n.title) + '</div>' +
             '<div class="nc-meta"><span>' + (n.rating ? ('⭐ ' + n.rating) : '—') + '</span><span>👁 ' + fmtNum(n.views) + '</span><span>📖 ' + (n.ch || '0') + ' ch</span></div>' +
             (n.ch ? '<div class="nc-progress"><div class="nc-progress-fill" style="width:' + pct + '%"></div></div><div class="nc-progress-label">' + read + ' / ' + n.ch + ' read</div>' : '<div class="nc-progress-label">Releasing soon</div>') +
-            '</div></div></article>';
+            '</div></div></div>';
     }).join('');
-    if (!filtered.length) grid.innerHTML = '<div class="shelf-empty"><span>✧</span><strong>No stories found</strong><p>Try another search or clear a filter to reopen the archive.</p><button class="pill-btn" onclick="clearShelfFilters()">Reset the shelf</button></div>';
    Array.prototype.forEach.call(grid.querySelectorAll('.novel-card'), function(card){
     attachTilt(card);
     ;
@@ -922,23 +896,18 @@ function renderChallenges() {
     var weekCh = chaptersInLastDays(7);
     var monthDone = completedCount();
     var challenges = [
-        { icon: '⚡', title: 'Chapter sprint', sub: 'Read 15 chapters this week', target: 15, cur: Math.min(weekCh, 15), xp: 150 },
-        { icon: '📚', title: 'Long haul', sub: 'Read 35 chapters this week', target: 35, cur: Math.min(weekCh, 35), xp: 350 },
-        { icon: '🏁', title: 'Finish a story', sub: 'Complete 2 stories', target: 2, cur: Math.min(monthDone, 2), xp: 200 },
-        { icon: '🌱', title: 'One-shot garden', sub: 'Complete 4 one-shots', target: 4, cur: Math.min(novels.filter(function (n) { return isOneShot(n) && getRead(n) >= n.ch; }).length, 4), xp: 250 },
-        { icon: '🧭', title: 'Genre explorer', sub: 'Read across 3 genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 },
+        { id: 'weekly', title: 'Turn 15 Pages', sub: 'Read 15 chapters this week', target: 15, cur: Math.min(weekCh, 15), xp: 150 },
+        { id: 'weekly',  title: 'turn 35 pages',  sub: 'Read 35 chapters this week',target:35,cur:Math.min(weekCh,35), xp:700},
+        { id: 'monthly', title: 'Finish 2 Full Story', sub: 'Complete two novel', target: 2, cur: Math.min(monthDone, 2), xp: 400 },
+        { id: 'monthly', title: 'Finish 4 ONESHOT', sub: 'Complete four oneshot novel', target: 4, cur: Math.min(monthDone, 4), xp: 600},                                                                                                                 
+        { id: 'variety', title: 'Genre Explorer', sub: 'Read from 3 different genres', target: 3, cur: Math.min(genresTouched(), 3), xp: 200 },
     ];
-    var doneCount = challenges.filter(function (c) { return c.cur >= c.target; }).length;
-    var summary = document.getElementById('challengeSummary');
-    if (summary) summary.textContent = doneCount + ' / ' + challenges.length + ' quests complete';
     document.getElementById('challengesList').innerHTML = challenges.map(function (c) {
         var pct = Math.round(c.cur / c.target * 100);
         var done = c.cur >= c.target;
-        return '<article class="challenge-item' + (done ? ' is-complete' : '') + '"><div class="challenge-item-top"><span class="challenge-icon">' + c.icon + '</span><span class="challenge-xp">+' + c.xp + ' XP</span></div>' +
-            '<h4>' + c.title + '</h4><p class="challenge-sub">' + c.sub + '</p>' +
-            '<div class="challenge-progress-meta"><span>' + (done ? 'Quest complete' : 'Progress') + '</span><strong>' + Math.min(c.cur, c.target) + ' / ' + c.target + '</strong></div>' +
+        return '<div class="challenge-item"><div class="challenge-title"><span>' + c.title + '</span><span class="challenge-xp">+' + c.xp + ' XP</span></div>' +
             '<div class="challenge-bar"><div class="challenge-fill" style="width:' + pct + '%' + (done ? ';background:var(--gold)' : '') + '"></div></div>' +
-            '<div class="challenge-foot">' + (done ? '✓ Nicely done' : (c.target - c.cur) + ' to go') + '</div></article>';
+            '<div class="challenge-sub">' + c.sub + ' · ' + c.cur + '/' + c.target + (done ? ' · Complete ✓' : '') + '</div></div>';
     }).join('');
 }
 function genresTouched() {
@@ -953,9 +922,8 @@ function genresTouched() {
 function renderProgressJourney() {
     var tr = totalRead();
     var rank = 'Novice Reader';
-    if (tr >= 75) rank = 'Legendary Librarian'; else if (tr >= 35) rank = 'Dedicated Scholar'; else if (tr >= 15) rank = 'Avid Reader';
+    if (tr >= 50) rank = 'Legendary Librarian'; else if (tr >= 20) rank = 'Dedicated Scholar'; else if (tr >= 5) rank = 'Avid Reader';
     document.getElementById('journeyRank').textContent = rank;
-    renderReaderProfile();
     var s = computeReaderStats();
     var unlockedCount = readerAchievementDefs.filter(function (a) { return a.metric(s) >= a.target; }).length;
     document.getElementById('journeyStats').textContent = unlockedCount + ' / ' + readerAchievementDefs.length + ' badges earned';
@@ -974,24 +942,6 @@ function renderProgressJourney() {
     var prevLevel = store.get('readerLevel', null);
     store.set('readerLevel', lvl.level);
     if (prevLevel !== null && lvl.level > prevLevel) showToast('🎉 Level up! You\'re now Level ' + lvl.level + '.');
-}
-function renderReaderProfile() {
-    var nameEl = document.getElementById('readerProfileName');
-    var avatarEl = document.getElementById('readerProfileAvatar');
-    var chaptersEl = document.getElementById('readerProfileChapters');
-    var storiesEl = document.getElementById('readerProfileStories');
-    if (nameEl) nameEl.textContent = readerProfileName;
-    if (avatarEl) avatarEl.textContent = readerProfileName.split(/\s+/).map(function (part) { return part.charAt(0); }).join('').slice(0, 2).toUpperCase() || 'G';
-    if (chaptersEl) chaptersEl.textContent = totalRead() + ' chapters read';
-    if (storiesEl) storiesEl.textContent = completedCount() + ' stories finished';
-}
-function editReaderProfile() {
-    var entered = window.prompt('Choose a reader name (up to 24 characters). It stays on this device:', readerProfileName);
-    if (entered === null) return;
-    readerProfileName = sanitize(entered).slice(0, 24) || 'Guest Reader';
-    store.set('readerProfileName', readerProfileName);
-    renderReaderProfile();
-    showToast('Reader profile saved on this device ✦');
 }
 function weekendReadFlag() {
     var found = false;
@@ -1259,9 +1209,9 @@ var upcomingReleases = [
     { date: '2026-09-30', title: 'Prequel of The Petal That Falls With A Smile chp 4' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-10-04', title: 'Case File: You — Chapter  15' },
-    { date: '2026-09-28', title: "The Other Day - Chapter 5" },
+    { date: '2026-10-05', title: "The Other Day - Chapter 6" },
     { date: '2026-10-01', title: 'The Days Between Us' },
-    { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
+    { date: '2026-10-03', title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
 
@@ -1621,7 +1571,6 @@ window.addEventListener('load', function () {
 
     paintAurora(moodColors.all);
     renderHero();
-    renderTrendingShelf();
     startPetalField();
     renderStats();
     renderLeaderboard('views');
@@ -2065,19 +2014,4 @@ function unlockNeonAchievement(){
     showToast("🕹️ Hidden Achievement: Neon Archivist — you found the old cheat code.");
 
     announceMythicIfComplete();
-}
-function renderShelfFeature() {
-    var feature = document.getElementById('shelfFeature');
-    if (!feature) return;
-    var n = novels.find(function (x) { return x.order === currentlyReadingOrder; });
-    var eyebrow = n ? 'PICK UP WHERE YOU LEFT OFF' : 'THE READING ROOM PICK';
-    if (!n) n = novels.filter(function (x) { return x.status !== 'upcoming'; }).slice().sort(function (a, b) {
-        return ((b.rating || 0) * 1000 + (b.views || 0) / 100) - ((a.rating || 0) * 1000 + (a.views || 0) / 100);
-    })[0];
-    if (!n) { feature.innerHTML = ''; return; }
-    var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
-    feature.innerHTML = '<div class="shelf-feature-art" style="background-image:linear-gradient(90deg,rgba(13,9,19,.97) 0%,rgba(13,9,19,.84) 48%,rgba(13,9,19,.18) 100%),url(&quot;' + esc(n.img) + '&quot;)"></div>' +
-        '<div class="shelf-feature-copy"><span class="shelf-feature-kicker">✦ ' + eyebrow + '</span><h3>' + esc(n.title.trim()) + '</h3><p>' + esc(n.blurb) + '</p>' +
-        '<div class="shelf-feature-meta"><span>' + (n.rating ? '★ ' + n.rating + ' reader rating' : 'Coming soon') + '</span><span>' + n.ch + ' chapters</span>' + (read ? '<span>' + pct + '% explored</span>' : '') + '</div>' +
-        '<button class="cta cta-primary" onclick="openSpotlight(' + n.order + ')">' + (read ? 'Continue this story →' : 'Explore this story →') + '</button></div><div class="shelf-feature-index">01 <i>／</i> 20</div>';
 }
