@@ -128,7 +128,7 @@ var novels = [
         blurb: "If time was a currency, how much would you pay for a single hour of the past?", grad: "135deg,#3a2a2a,#5a3a30", collections: ["hidden-gems", "completed"]
     },
     {
-        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "#", genres: ["romance", "drama", "slice", "sad"], status: "upcoming", ch: 0, rating: null, views: null, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
+        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "./chapters2/hahv3.html", genres: ["romance", "drama", "slice", "sad"], status: "ongoing", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
         blurb: "Continuing the journey of Him and Her into a new chapter of their lives.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
     },
     {
@@ -1210,7 +1210,6 @@ var upcomingReleases = [
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-10-04', title: 'Case File: You — Chapter  15' },
     { date: '2026-10-05', title: "The Other Day - Chapter 5" },
-    { date: '2026-10-01', title: 'The Days Between Us' },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
@@ -1304,9 +1303,10 @@ function savePrivateNote() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: 1, type: 'update', title: 'Version 3.6 is live', excerpt: " Changed the PICK ME A STORY button to THE STORY CHOOSE YOU and fixed some bug along with new achievement." },
-    { daysAgo: 1, type: 'note', title: 'Version 3.6 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
+    { daysAgo: 1, type: 'update', title: 'Version 3.7 is live', excerpt: " Smooth UI update on phone." },
+    { daysAgo: 1, type: 'note', title: 'Version 3.7 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
     { daysAgo:1,type:'note', title:'Case File:YOU',excerpt:"Case File:YOU will Air weekly for it final last one chapters of volume 1-Thank you"},
+    { daysAgo:1,type:'note', title:'HIM AND HER VOL 3',excerpt:"Him and Her volume 3 chapters 0.5 is out "},                                                    
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
 var activeNewsType = 'all';
