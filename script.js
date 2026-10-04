@@ -23,14 +23,14 @@ var store = {
    wipe their own locally-stored data on request (see confirmClearLocalData
    below) — nothing here is ever transmitted anywhere. */
 var APP_STORAGE_KEYS = [
-    'readProgress', 'bookmarks', 'currentlyReading', 'readingLog', 'claimedChallenges',
+    'readProgress', 'bookmarks', 'currentlyReading', 'readingLog', 'readingQueue', 'claimedChallenges',
     'privateReaderNotes', 'novelComments', 'recentSearches', 'lightMode', 'theme',
     'tiltEnabled', 'motionEnabled', 'readerFontScale', 'readerAchUnlocks',
     'goldenPetalCaught', 'nightOwlRead', 'oneDayRead', 'searchedOnce', 'sharedOnce',
     'themeChanged', 'lastCommentAt', 'readerLevel'
 ];
 function confirmClearLocalData() {
-    var ok = window.confirm('This permanently erases your reading progress, bookmarks, private notes, achievements, and comments saved in this browser. This can\'t be undone. Continue?');
+    var ok = window.confirm('This permanently erases your reading progress, bookmarks, reading queue, private notes, achievements, and comments saved in this browser. This can\'t be undone. Continue?');
     if (!ok) return;
     APP_STORAGE_KEYS.forEach(function (k) { try { localStorage.removeItem(k); } catch (e) { } });
     showToast('Local data cleared ✦ Reloading…');
@@ -96,7 +96,7 @@ var novels = [
         blurb: "A simple story about him, her, and the quiet spaces between their words.", grad: "135deg,#4a3a2a,#6a5230", collections: ["best-romance", "completed"]
     },
     {
-        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "ongoing", ch: 14, rating: 4.9, views: 20000, releaseOffsetDays: 570,
+        order: 6, title: "Case File: You", img: "./bg/cfy.jpg", link: "./chapters/cfy.html", genres: ["mystery", "drama", "action"], status: "completed", ch: 15, rating: 4.9, views: 26000, releaseOffsetDays: 570,
         blurb: "A mystery that begins with a single file. Who are you, really, when the world isn't looking?", grad: "135deg,#3a2a4a,#5a2a30", collections: ["editors-choice"]
     },
     {
@@ -176,6 +176,8 @@ var readProgress = store.get('readProgress', {});
 var bookmarks = store.get('bookmarks', {});
 var currentlyReadingOrder = store.get('currentlyReading', null);
 var readingLog = store.get('readingLog', {});
+var readingQueue = store.get('readingQueue', {});
+if (!readingQueue || typeof readingQueue !== 'object' || Array.isArray(readingQueue)) readingQueue = {};
 var claimedChallenges = store.get('claimedChallenges', {});
 var privateReaderNotes = store.get('privateReaderNotes', {});
 
@@ -234,7 +236,9 @@ var themeAccents = {
     gold: ['#ffc46b', '#ff7d9c'],
     teal: ['#68d8c4', '#a78bfa'],
     emerald: ['#3ddc97', '#a78bfa'],
+    cyan: ['#22d3ee', '#818cf8'],
 };
+var caseClosedMoodPalette = ['#f2bd64', '#8aa3c8'];
 function setTheme(theme) {
     if (!themeAccents[theme]) theme = 'rose';
     if (theme === 'rose') document.body.removeAttribute('data-theme');
@@ -245,7 +249,7 @@ function setTheme(theme) {
         s.classList.toggle('active', active);
         s.setAttribute('aria-checked', String(active));
     });
-    moodColors.all = themeAccents[theme];
+    moodColors.all = document.body.classList.contains('case-closed-event') ? caseClosedMoodPalette : themeAccents[theme];
     var activeMoodCard = document.querySelector('.mood-card.active');
     var moodKey = activeMoodCard ? activeMoodCard.dataset.mood : 'all';
     if (moodKey === 'all') paintAurora(themeAccents[theme]);
@@ -262,6 +266,33 @@ function initTheme() {
         s.setAttribute('aria-checked', String(active));
     });
     moodColors.all = themeAccents[saved];
+}
+
+function isCaseClosedOccasionActive(now) {
+    now = now || new Date();
+    var starts = new Date(2026, 9, 3, 0, 0, 0);
+    var ends = new Date(2026, 9, 17, 0, 0, 0);
+    return now >= starts && now < ends;
+}
+function syncCaseClosedOccasion() {
+    var banner = document.getElementById('caseClosedBanner');
+    if (!banner) return;
+    var now = new Date();
+    var ends = new Date(2026, 9, 17, 0, 0, 0);
+    var active = isCaseClosedOccasionActive(now);
+    var wasActive = document.body.classList.contains('case-closed-event');
+    document.body.classList.toggle('case-closed-event', active);
+    banner.hidden = !active;
+    if (active) {
+        var remaining = Math.max(1, Math.ceil((ends.getTime() - now.getTime()) / 86400000));
+        var remainingLabel = document.getElementById('caseClosedRemaining');
+        if (remainingLabel) remainingLabel.textContent = remaining === 1 ? 'last day' : remaining + ' days left';
+        moodColors.all = caseClosedMoodPalette;
+        window.setTimeout(syncCaseClosedOccasion, ends.getTime() - now.getTime() + 100);
+    } else if (wasActive) {
+        renderReaderAchievements();
+        renderProgressJourney();
+    }
 }
 
 /* ============================================================
@@ -518,12 +549,53 @@ function renderReaderStreak() {
 function refreshReadingUI() {
     renderContinueReading();
     renderPersonalShelf();
+    renderReadingQueue();
     renderProgressJourney();
     renderChallenges();
     renderCatalog();
     renderReaderAchievements();
     renderHeatmap();
     renderReaderStreak();
+}
+function updateQueueButton(order) {
+    var button = document.getElementById('spQueueBtn');
+    if (!button) return;
+    var saved = !!readingQueue[order];
+    button.textContent = saved ? '✓ Saved in reading queue' : '＋ Add to reading queue';
+    button.classList.toggle('active', saved);
+    button.setAttribute('aria-pressed', String(saved));
+}
+function toggleReadingQueue(order) {
+    order = order || spotlightOrder;
+    var novel = novels.find(function (n) { return n.order === Number(order); });
+    if (!novel) return;
+    if (readingQueue[novel.order]) {
+        delete readingQueue[novel.order];
+        showToast(novel.title + ' removed from your queue.');
+    } else {
+        readingQueue[novel.order] = Date.now();
+        showToast(novel.title + ' saved to your reading queue ✦');
+    }
+    store.set('readingQueue', readingQueue);
+    updateQueueButton(novel.order);
+    renderReadingQueue();
+}
+function renderReadingQueue() {
+    var list = document.getElementById('readingQueueList');
+    if (!list) return;
+    var queued = novels.filter(function (n) { return !!readingQueue[n.order]; })
+        .sort(function (a, b) { return Number(readingQueue[a.order]) - Number(readingQueue[b.order]); });
+    var count = document.getElementById('readingQueueCount');
+    if (count) count.textContent = queued.length + ' saved';
+    if (!queued.length) {
+        list.innerHTML = '<div class="queue-empty glass"><span aria-hidden="true">↗</span><strong>Your next read, saved</strong><p>Open any story and add it to your queue for later.</p><button type="button" class="pill-btn" onclick="scrollToId(\'catalog\')">Browse the shelf →</button></div>';
+        return;
+    }
+    list.innerHTML = queued.map(function (n) {
+        var read = getRead(n), pct = n.ch ? Math.round(read / n.ch * 100) : 0;
+        var meta = n.status === 'upcoming' ? 'Coming soon' : (n.ch - read) + ' chapters left';
+        return '<article class="queue-card glass"><button class="queue-story" type="button" onclick="openSpotlight(' + n.order + ')"><span class="queue-cover" style="background:linear-gradient(' + n.grad + ')"><img src="' + esc(n.img) + '" alt="" loading="lazy" onerror="imgFail(this)"></span><span class="queue-story-copy"><strong>' + esc(n.title) + '</strong><span>' + meta + '</span>' + (n.ch ? '<span class="queue-progress"><i style="width:' + pct + '%"></i></span>' : '') + '</span><span class="queue-open-mark" aria-hidden="true">→</span></button><button type="button" class="queue-remove" onclick="toggleReadingQueue(' + n.order + ')" aria-label="Remove ' + esc(n.title) + ' from reading queue">×</button></article>';
+    }).join('');
 }
 function personalMiniCard(n, label, actionText) {
     if (!n) return '<div class="personal-empty"><span class="personal-empty-icon">✦</span><strong>Nothing here yet</strong><span>Choose a story from the Shelf to start building this space.</span></div>';
@@ -624,6 +696,43 @@ function pickMood(el, genreStr) {
     scheduleCatalogRender();
     scrollToId('catalog');
     showToast('Showing ' + el.querySelector('.mood-label').textContent + ' reads ✦');
+}
+
+/* ============================================================
+   STORY MATCH — 3.8 DISCOVERY FEATURE
+   ============================================================ */
+var lastStoryMatchOrder = null;
+function runStoryMatch() {
+    var moodEl = document.getElementById('storyMatchMood');
+    var timeEl = document.getElementById('storyMatchTime');
+    var result = document.getElementById('storyMatchResult');
+    if (!moodEl || !timeEl || !result) return;
+    var mood = moodEl.value;
+    var maxMinutes = Number(timeEl.value);
+    var genres = { romance: ['romance'], sad: ['sad', 'drama'], mystery: ['mystery', 'action'], slice: ['slice'] };
+    var candidates = novels.filter(function (n) {
+        return n.status !== 'upcoming' && n.ch > 0 && (!genres[mood] || genres[mood].some(function (g) { return n.genres.indexOf(g) > -1; }));
+    }).map(function (n) {
+        var remaining = Math.max(1, n.ch - getRead(n));
+        return { novel: n, minutes: Math.max(6, Math.round(remaining * 7)) };
+    });
+    if (!candidates.length) {
+        result.textContent = 'No stories match those choices yet. Try another mood.';
+        return;
+    }
+    var fits = maxMinutes ? candidates.filter(function (x) { return x.minutes <= maxMinutes; }) : candidates.slice();
+    var pool = fits.length ? fits : candidates.slice().sort(function (a, b) { return a.minutes - b.minutes; }).slice(0, 1);
+    if (pool.length > 1 && lastStoryMatchOrder !== null) {
+        var fresh = pool.filter(function (x) { return x.novel.order !== lastStoryMatchOrder; });
+        if (fresh.length) pool = fresh;
+    }
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    lastStoryMatchOrder = pick.novel.order;
+    var n = pick.novel;
+    var fitLabel = fits.length ? 'A good fit for your time' : 'Closest match to your time';
+    result.innerHTML = '<div class="story-match-cover" style="background:linear-gradient(' + n.grad + ')"><img src="' + esc(n.img) + '" alt="" onerror="imgFail(this)"></div>' +
+        '<div class="story-match-copy"><span class="story-match-fit">' + fitLabel + ' · about ' + pick.minutes + ' min</span><strong>' + esc(n.title) + '</strong><span>' + esc(n.blurb) + '</span></div>' +
+        '<button class="pill-btn" type="button" onclick="openSpotlight(' + n.order + ')">View story →</button>';
 }
 
 /* ============================================================
@@ -748,6 +857,7 @@ var readerFontScale = store.get('readerFontScale', 1);
 function openSpotlight(order) {
     var n = novels.find(function (x) { return x.order === order; });
     if (!n) return;
+    if (order === 6 && isCaseClosedOccasionActive()) unlockCaseClosedAchievement();
     spotlightOrder = order;
     var bg = document.getElementById('spCoverBg');
     bg.style.background = 'linear-gradient(' + n.grad + ')';
@@ -779,6 +889,7 @@ function openSpotlight(order) {
     var bbtn = document.getElementById('spBookmarkBtn');
     if (currentlyReadingOrder === order) { bbtn.textContent = '✓ Currently Reading'; bbtn.classList.add('active'); }
     else { bbtn.textContent = '🔖 Set as Currently Reading'; bbtn.classList.remove('active'); }
+    updateQueueButton(order);
     document.getElementById('spReadBtn').textContent = (read > 0 && read < n.ch) ? 'Continue Reading →' : 'Start Reading →';
     document.getElementById('spotlightOverlay').classList.add('open');
     document.getElementById('spotlightPanel').classList.add('open');
@@ -925,8 +1036,9 @@ function renderProgressJourney() {
     if (tr >= 50) rank = 'Legendary Librarian'; else if (tr >= 20) rank = 'Dedicated Scholar'; else if (tr >= 5) rank = 'Avid Reader';
     document.getElementById('journeyRank').textContent = rank;
     var s = computeReaderStats();
-    var unlockedCount = readerAchievementDefs.filter(function (a) { return a.metric(s) >= a.target; }).length;
-    document.getElementById('journeyStats').textContent = unlockedCount + ' / ' + readerAchievementDefs.length + ' badges earned';
+    var visibleAchievements = getVisibleReaderAchievementEntries();
+    var unlockedCount = visibleAchievements.filter(function (entry) { return entry.achievement.metric(s) >= entry.achievement.target; }).length;
+    document.getElementById('journeyStats').textContent = unlockedCount + ' / ' + visibleAchievements.length + ' badges earned';
 
     var lvl = computeReaderLevel(s, unlockedCount);
     var badge = document.getElementById('readerLevelBadge');
@@ -1059,25 +1171,15 @@ readerAchievementDefs.push(
   target: 1
 },
 {
-  icon: "🕹️",
-  title: "Neon Archivist",
-  hint: "Enter the cheat code find it in novels or anywhere.",
-  rarity: "Mythic",
-  metric: function () {
-    return store.get("readerAchUnlocks", {}).neonArchivist ? 1 : 0;
-  },
-  target: 1
-},
-{
   icon: "🐉",
   title: "The Keeper",
-  hint: "Wake the Eye, witness the Eclipse, and crack the Neon code.",
+  hint: "Wake the Eye, witness the Eclipse.",
   rarity: "Mythical Honor",
   metric: function () {
     var u = store.get("readerAchUnlocks", {});
     return (u.eyeWatcher ? 1 : 0) + (u.eclipseWitness ? 1 : 0) + (u.neonArchivist ? 1 : 0);
   },
-  target: 3
+  target: 2
 }
 );
 
@@ -1093,6 +1195,30 @@ readerAchievementDefs.push({
     },
     target: readerAchievementCoreCount
 });
+readerAchievementDefs.push({
+    icon: '🗃️', title: 'Case Closed',
+    hint: 'Visit Case File: You Vol. 1 during the limited celebration. Once earned, it stays in your collection.',
+    rarity: 'limited', unlockKey: 'caseClosed', limitedEvent: true,
+    metric: function () { return store.get('readerAchUnlocks', {}).caseClosed ? 1 : 0; },
+    target: 1
+});
+function getVisibleReaderAchievementEntries() {
+    var unlocks = store.get('readerAchUnlocks', {});
+    return readerAchievementDefs.map(function (achievement, index) { return { achievement: achievement, index: index }; })
+        .filter(function (entry) {
+            return !entry.achievement.limitedEvent || isCaseClosedOccasionActive() || !!unlocks[entry.achievement.unlockKey];
+        });
+}
+function unlockCaseClosedAchievement() {
+    if (!isCaseClosedOccasionActive()) return;
+    var unlocks = store.get('readerAchUnlocks', {});
+    if (unlocks.caseClosed) return;
+    unlocks.caseClosed = new Date().toISOString();
+    store.set('readerAchUnlocks', unlocks);
+    renderReaderAchievements();
+    renderProgressJourney();
+    showToast('🏆 Limited achievement unlocked: Case Closed!');
+}
 function renderReaderAchievements() {
     var s = computeReaderStats();
     // Fetched fresh on every render (not cached at page load) so that flags set
@@ -1102,12 +1228,14 @@ function renderReaderAchievements() {
     var grid = document.getElementById('achievementGrid');
     if (!grid) return;
     var newlyUnlocked = [];
-    grid.innerHTML = readerAchievementDefs.map(function (a, idx) {
+    grid.innerHTML = getVisibleReaderAchievementEntries().map(function (entry) {
+        var a = entry.achievement, idx = entry.index;
+        var unlockKey = a.unlockKey || idx;
         var cur = a.metric(s);
         var pct = Math.min(100, Math.round(cur / a.target * 100));
         var unlocked = cur >= a.target;
-        if (unlocked && !readerAchUnlocks[idx]) { readerAchUnlocks[idx] = new Date().toISOString(); store.set('readerAchUnlocks', readerAchUnlocks); newlyUnlocked.push(a.title); }
-        var dateLabel = unlocked && readerAchUnlocks[idx] ? new Date(readerAchUnlocks[idx]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : null;
+        if (unlocked && !readerAchUnlocks[unlockKey]) { readerAchUnlocks[unlockKey] = new Date().toISOString(); store.set('readerAchUnlocks', readerAchUnlocks); newlyUnlocked.push(a.title); }
+        var dateLabel = unlocked && readerAchUnlocks[unlockKey] ? new Date(readerAchUnlocks[unlockKey]).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : null;
         return '<div class="glass milestone-tile' + (unlocked ? ' unlocked' : '') + '">' +
             '<div class="m-icon-row"><div class="m-icon">' + a.icon + '</div><span class="rarity-tag rarity-' + a.rarity + '">' + a.rarity + '</span></div>' +
             '<div class="m-title">' + a.title + '</div><div class="m-hint">' + a.hint + '</div>' +
@@ -1208,7 +1336,6 @@ function renderHeatmap() {
 var upcomingReleases = [
     { date: '2026-10-07', title: 'Prequel of The Petal That Falls With A Smile chp 5' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { date: '2026-10-04', title: 'Case File: You — Chapter  15' },
     { date: '2026-10-05', title: "The Other Day - Chapter 5" },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
@@ -1303,9 +1430,8 @@ function savePrivateNote() {
    NEWS
    ============================================================ */
 var newsItems = [
-    { daysAgo: 1, type: 'update', title: 'Version 3.7 is live', excerpt: " Smooth UI update on phone." },
-    { daysAgo: 1, type: 'note', title: 'Version 3.7 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo:1,type:'note', title:'Case File:YOU',excerpt:"Case File:YOU will Air weekly for it final last one chapters of volume 1-Thank you"},
+    { daysAgo: 1, type: 'update', title: 'Version 3.7.1 is live', excerpt: " Add a new time limited feature and title." },
+    { daysAgo: 1, type: 'note', title: 'Version 3.7.1 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
     { daysAgo:1,type:'note', title:'HIM AND HER VOL 3',excerpt:"Him and Her volume 3 chapters 0.5 is out "},                                                    
 ];
 var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
@@ -1330,37 +1456,6 @@ function renderNews() {
 function openNewsToast(el) {
     var titleEl = el.querySelector('.news-title');
     showToast((titleEl ? titleEl.textContent : 'This note') + ' — full post coming soon ✦');
-}
-
-/* ============================================================
-   ACTIVITY FEED (sample / illustrative — wire to real analytics as needed)
-   ============================================================ */
-var activityTemplates = [
-    { icon: '📖', text: 'Someone just started reading <b>The Rain Pact</b>' },
-    { icon: '✨', text: 'A new chapter of <b>Petal Vol. 3</b> was released' },
-    { icon: '🏆', text: 'A reader unlocked the <b>Bookworm</b> achievement' },
-    { icon: '💬', text: 'New comment on <b>The Day She Stayed</b>' },
-    { icon: '🔥', text: '<b>Before I Forget Your Name</b> is trending today' },
-    { icon: '🔖', text: 'Someone bookmarked <b>Case File: You</b>' },
-    { icon: '❤️', text: '<b>Ten Percent of Forever</b> just passed 7.6k views' },
-    { icon: '📚', text: 'A reader finished <b>Him and Her</b> start to finish' }
-];
-var activityFeedItems = [], activityTimer = null;
-function pushActivity() {
-    var t = activityTemplates[Math.floor(Math.random() * activityTemplates.length)];
-    activityFeedItems.unshift({ icon: t.icon, text: t.text, ts: Date.now() });
-    activityFeedItems = activityFeedItems.slice(0, 10);
-    renderActivity();
-}
-function startActivityFeed() {
-    clearInterval(activityTimer);
-    activityTimer = motionEnabled && !document.hidden ? setInterval(pushActivity, 12000) : null;
-}
-function renderActivity() {
-    document.getElementById('activityList').innerHTML = activityFeedItems.map(function (a, i) {
-        return '<div class="activity-item" style="animation-delay:' + (i * 0.02) + 's"><div class="act-icon">' + a.icon + '</div>' +
-            '<div class="act-text">' + a.text + '</div><div class="act-time">' + timeAgo(a.ts) + '</div></div>';
-    }).join('');
 }
 
 /* ============================================================
@@ -1452,7 +1547,6 @@ function toggleMotionPref() {
     btn.setAttribute('aria-checked', String(motionEnabled));
     startHeroRotate();
     startPetalField();
-    if (typeof startActivityFeed === 'function') startActivityFeed();
 }
 function toggleTilt() {
     var btn = document.getElementById('tiltToggle'); btn.classList.toggle('on');
@@ -1568,21 +1662,21 @@ window.addEventListener('load', function () {
     document.getElementById('tiltToggle').classList.toggle('on', tiltEnabled);
     document.getElementById('motionToggle').classList.toggle('on', motionEnabled);
     initTheme();
+    syncCaseClosedOccasion();
 
     paintAurora(moodColors.all);
     renderHero();
     startPetalField();
     renderStats();
     renderLeaderboard('views');
+    renderReadingQueue();
     renderHeatmap();
     renderCalendar();
     renderNews();
     renderComments();
     populateCommentSelect();
 
-    for (var k = 0; k < 2; k++) pushActivity();
-    startActivityFeed();
-    document.addEventListener('visibilitychange', function () { startHeroRotate(); startActivityFeed(); startPetalField(); });
+    document.addEventListener('visibilitychange', function () { startHeroRotate(); startPetalField(); });
 });
 /* ============================================================
    NAVIGATION DOCK

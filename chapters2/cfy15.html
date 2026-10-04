@@ -1,0 +1,1375 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Case File: You - Chapter 15: Final Verdict — Part 3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        :root {
+            --bg: #f5f3ef;
+            --surface: #ffffff;
+            --ink: #1a1a1a;
+            --ink-soft: #444;
+            --ink-muted: #888;
+            --accent: #3a3a5c;
+            --accent-light: rgba(58, 58, 92, 0.07);
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.14);
+            --red: #c62828;
+            --red-light: rgba(198, 40, 40, 0.07);
+            --gold: #b8860b;
+            --gold-light: rgba(184, 134, 11, 0.08);
+        }
+
+        body.dark {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --ink: #e6edf3;
+            --ink-soft: #b0bec5;
+            --ink-muted: #6a7f99;
+            --accent: #8b8bcc;
+            --accent-light: rgba(139, 139, 204, 0.08);
+            --border: rgba(255, 255, 255, 0.07);
+            --border-strong: rgba(255, 255, 255, 0.12);
+            --red: #ef5350;
+            --red-light: rgba(239, 83, 80, 0.08);
+            --gold: #d4a84c;
+            --gold-light: rgba(212, 168, 76, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background-color: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            transition:
+                background-color 0.3s ease,
+                color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        *:focus {
+            outline: none;
+        }
+
+        *:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(58, 58, 92, 0.3);
+        }
+
+        ::selection {
+            background: rgba(58, 58, 92, 0.18);
+            color: var(--ink);
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 999;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--ink-muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-strong);
+            background: var(--bg);
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            color: var(--ink);
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .novel-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border-strong);
+            background: var(--bg);
+            color: var(--ink);
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .font-pill {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: var(--bg);
+            border: 1px solid var(--border-strong);
+            border-radius: 20px;
+            padding: 4px 8px;
+        }
+
+        .font-pill span {
+            font-size: 11px;
+            color: var(--ink-muted);
+            padding: 0 6px;
+            letter-spacing: 1px;
+        }
+
+        .font-pill button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--ink);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: "DM Sans", sans-serif;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .font-pill button:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .reading-progress {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 998;
+        }
+
+        .reading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--red));
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .flashback-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 32px;
+            margin-top: 48px;
+        }
+
+        .flashback-label::before,
+        .flashback-label::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.3;
+        }
+
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 96px 24px 120px;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .series-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 5px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(58, 58, 92, 0.18);
+            margin-bottom: 20px;
+        }
+
+        body.dark .series-badge {
+            border-color: rgba(139, 139, 204, 0.2);
+        }
+
+        .chapter-icon {
+            font-size: 16px;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.9);
+            }
+        }
+
+        .chapter-title {
+            font-family: "Crimson Pro", serif;
+            font-size: clamp(34px, 7vw, 54px);
+            font-weight: 600;
+            line-height: 1.05;
+            color: var(--ink);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .chapter-subtitle {
+            font-family: "Crimson Pro", serif;
+            font-size: 20px;
+            font-style: italic;
+            color: var(--ink-muted);
+            margin-bottom: 20px;
+        }
+
+        .chapter-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            font-size: 11px;
+            color: var(--ink-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .meta-dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--ink-muted);
+        }
+
+        .prose {
+            font-family: "Crimson Pro", serif;
+            font-size: 19px;
+            line-height: 1.9;
+            color: var(--ink-soft);
+        }
+
+        .prose p {
+            margin-bottom: 1.6em;
+        }
+
+        .prose .scene-break {
+            text-align: center;
+            color: var(--ink-muted);
+            font-size: 14px;
+            letter-spacing: 8px;
+            margin: 2.5em 0;
+        }
+
+        .prose .dialogue {
+            font-style: italic;
+            color: var(--ink);
+        }
+
+        .prose .thought {
+            color: var(--ink-muted);
+            font-style: italic;
+        }
+
+        .prose .emphasis {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .prose .danger {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .prose .clue {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .prose .name {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .news-block {
+            margin: 40px auto;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--red);
+            border-radius: 0 16px 16px 0;
+            position: relative;
+        }
+
+        .news-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .news-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--red);
+            animation: blink 1.2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        .news-text {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.8;
+        }
+
+        .casefile-block {
+            margin: 40px auto;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .casefile-icon {
+            flex-shrink: 0;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: var(--accent-light);
+            border: 1px solid rgba(58, 58, 92, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+        }
+
+        body.dark .casefile-icon {
+            border-color: rgba(139, 139, 204, 0.2);
+        }
+
+        .casefile-meta {
+            flex: 1;
+        }
+
+        .casefile-title {
+            font-family: "Crimson Pro", serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--ink);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .casefile-sub {
+            font-size: 11px;
+            color: var(--ink-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .evidence-block {
+            margin: 40px auto;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--red);
+            border-radius: 0 16px 16px 0;
+            position: relative;
+        }
+
+        .evidence-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .evidence-item {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .evidence-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .ev-num {
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            color: var(--red);
+            flex-shrink: 0;
+            min-width: 20px;
+        }
+
+        .ev-text {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.5;
+        }
+
+        .observation-block {
+            margin: 40px auto;
+            padding: 28px 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 16px 16px 0;
+        }
+
+        .observation-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .observation-text {
+            font-family: "Crimson Pro", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink-soft);
+            line-height: 1.8;
+        }
+
+        .suspect-block {
+            margin: 40px auto;
+            padding: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .suspect-block::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top,
+                    var(--red-light) 0%,
+                    transparent 70%);
+            pointer-events: none;
+        }
+
+        .suspect-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .suspect-name {
+            font-family: "Crimson Pro", serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .suspect-status {
+            display: inline-block;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 20px;
+            background: var(--red-light);
+            border: 1px solid rgba(198, 40, 40, 0.2);
+            color: var(--red);
+            margin-bottom: 20px;
+        }
+
+        body.dark .suspect-status {
+            border-color: rgba(239, 83, 80, 0.25);
+        }
+
+        .suspect-details {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+
+        .suspect-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .sd-label {
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        .sd-val {
+            font-family: "Crimson Pro", serif;
+            font-size: 17px;
+            font-style: italic;
+            color: var(--ink-soft);
+        }
+
+        .desires-block {
+            margin: 40px auto;
+            padding: 32px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .desires-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 22px;
+            display: block;
+        }
+
+        .desires-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .desire-item {
+            padding: 14px 10px;
+            border-radius: 10px;
+            background: var(--accent-light);
+            border: 1px solid rgba(58, 58, 92, 0.15);
+            font-family: "Crimson Pro", serif;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--accent);
+        }
+
+        body.dark .desire-item {
+            border-color: rgba(139, 139, 204, 0.2);
+        }
+
+        .chapter-end {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .end-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .end-line {
+            font-family: "Crimson Pro", serif;
+            font-size: 22px;
+            font-style: italic;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .end-sub {
+            font-family: "Crimson Pro", serif;
+            font-size: 15px;
+            font-style: italic;
+            color: var(--ink-muted);
+            margin-bottom: 32px;
+        }
+
+        .volume-end {
+            max-width: 460px;
+            margin: 44px auto 0;
+            padding: 34px 30px;
+            text-align: center;
+            background: var(--surface);
+            border: 1px solid rgba(184, 134, 11, 0.35);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .volume-end::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, var(--gold-light) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .volume-end-label {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 14px;
+            display: block;
+            position: relative;
+        }
+
+        .volume-end-title {
+            font-family: "Crimson Pro", serif;
+            font-size: 26px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--ink);
+            position: relative;
+        }
+
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: "DM Sans", sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid var(--border-strong);
+            cursor: pointer;
+            background: none;
+            color: var(--ink);
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-btn.nav-disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            cursor: default;
+        }
+
+        #scrollBtn {
+            position: fixed;
+            bottom: 28px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--bg);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: all 0.2s;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #scrollBtn:hover {
+            transform: translateY(-2px);
+        }
+
+        #scrollBtn.visible {
+            display: flex;
+        }
+
+        @media (max-width: 480px) {
+            .topbar {
+                padding: 0 12px;
+            }
+
+            .novel-label {
+                display: none;
+            }
+
+            main {
+                padding: 80px 16px 100px;
+            }
+
+            .prose {
+                font-size: 17px;
+            }
+
+            .evidence-block,
+            .observation-block,
+            .news-block {
+                padding: 20px;
+            }
+
+            .casefile-block,
+            .suspect-block,
+            .desires-block,
+            .volume-end {
+                padding: 20px;
+            }
+
+            .casefile-block {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .suspect-details {
+                gap: 18px;
+            }
+
+            .desires-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .desire-item {
+                font-size: 14px;
+                padding: 12px 8px;
+            }
+
+            .chapter-nav {
+                justify-content: center;
+            }
+
+            .nav-btn {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
+
+            .flashback-label {
+                margin-top: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="cfy.html" class="back-btn">← Chapters</a>
+            <span class="novel-label">Case File: You</span>
+        </div>
+        <div class="topbar-right">
+            <div class="font-pill">
+                <button onclick="changeFont(-1)" title="Smaller">A−</button>
+                <span>Font</span>
+                <button onclick="changeFont(0)" title="Reset">A</button>
+                <span>·</span>
+                <button onclick="changeFont(1)" title="Larger">A+</button>
+            </div>
+            <button class="icon-btn" id="darkModeBtn" onclick="toggleDark()">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <div class="reading-progress">
+        <div class="reading-progress-bar" id="progressBar"></div>
+    </div>
+
+    <button id="scrollBtn" onclick="scrollToTop()">↑</button>
+
+    <main>
+        <!-- CHAPTER HEADER -->
+        <div class="chapter-header">
+            <div class="series-badge">
+                <span class="chapter-icon">🔍</span>
+                Case File: You · Chapter 15
+            </div>
+            <h1 class="chapter-title">Final Verdict — Part 3</h1>
+            <p class="chapter-subtitle">Rain on Oak Street, a chair in an empty room, and a name that finally
+                answers. Sato gets his confession — but not the one he was looking for.</p>
+            <div class="chapter-meta">
+                <span class="meta-item">Mystery</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Investigation</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">Dark</span>
+                <span class="meta-dot"></span>
+                <span class="meta-item">By AKA</span>
+            </div>
+        </div>
+
+        <!-- PROSE 1 -->
+        <div class="prose">
+            <p>Rain.</p>
+            <p>Again.</p>
+            <p><span class="name">Sato</span> stood beneath the streetlight, staring at the building in front of
+                him.</p>
+            <p>Apartment 307.</p>
+            <p>The same address that had appeared in <span class="name">Envy</span>'s message.</p>
+            <p>The same place where <span class="name">Lust</span> had disappeared.</p>
+            <p>Behind him, police vehicles stopped one after another.</p>
+            <p><span class="name">Akane</span> stepped out first.</p>
+            <p>Then <span class="name">Aizwa</span>.</p>
+            <p><span class="dialogue">"Everyone's in position,"</span> <span class="name">Akane</span> said.</p>
+            <p><span class="name">Sato</span> nodded.</p>
+            <p>His eyes remained on the building.</p>
+            <p><span class="dialogue">"You're sure he's inside?"</span></p>
+            <p><span class="name">Sato</span> looked at the photograph in his hand.</p>
+            <p><span class="name">Envy</span> had sent it.</p>
+            <p>A picture of <span class="name">Rei</span>.</p>
+            <p>Or rather—</p>
+            <p>the man everyone knew as <span class="name">Rei</span>.</p>
+            <p><span class="dialogue">"I'm sure."</span></p>
+            <p><span class="name">Aizwa</span> looked at him.</p>
+            <p><span class="dialogue">"You still think he's connected to the murders?"</span></p>
+            <p><span class="name">Sato</span> folded the photograph.</p>
+            <p><span class="dialogue">"I don't think."</span></p>
+            <p>He looked toward the dark windows.</p>
+            <p><span class="dialogue">"I know."</span></p>
+        </div>
+
+        <p class="prose"><span class="scene-break">• • •</span></p>
+
+        <!-- PROSE 2 -->
+        <div class="prose">
+            <p>The door to Apartment 307 was open.</p>
+            <p><span class="name">Sato</span> entered first.</p>
+            <p>The room was empty.</p>
+            <p>No furniture.</p>
+            <p>No decorations.</p>
+            <p>Nothing.</p>
+            <p>Except for a chair in the center.</p>
+            <p>And a man sitting on it.</p>
+            <p>His hands were behind his back.</p>
+            <p>His head was lowered.</p>
+            <p><span class="name">Sato</span> stopped.</p>
+            <p><span class="dialogue">"Rei."</span></p>
+            <p>The man slowly lifted his head.</p>
+            <p>He smiled.</p>
+            <p><span class="dialogue">"You finally found me."</span></p>
+            <p><span class="name">Akane</span> raised her weapon.</p>
+            <p><span class="dialogue">"Don't move."</span></p>
+            <p><span class="name">Rei</span> looked at her.</p>
+            <p>Then at <span class="name">Aizwa</span>.</p>
+            <p>Then back at <span class="name">Sato</span>.</p>
+            <p><span class="dialogue">"You brought everyone."</span></p>
+            <p><span class="name">Sato</span> stepped forward.</p>
+            <p><span class="dialogue">"It's over."</span></p>
+            <p><span class="name">Rei</span> laughed.</p>
+            <p><span class="dialogue">"No."</span></p>
+            <p>His smile widened.</p>
+            <p><span class="dialogue">"You've only found me."</span></p>
+            <p><span class="name">Sato</span>'s eyes narrowed.</p>
+            <p><span class="dialogue">"You're Lust."</span></p>
+            <p>The smile disappeared.</p>
+            <p>For the first time, <span class="name">Rei</span> said nothing.</p>
+            <p><span class="name">Sato</span> continued.</p>
+            <p><span class="dialogue">"Ruby Zeni."</span></p>
+            <p>No response.</p>
+            <p><span class="dialogue">"Casper Voss."</span></p>
+            <p>Silence.</p>
+            <p><span class="dialogue">"Mia."</span></p>
+            <p>Nothing.</p>
+            <p><span class="dialogue">"Charlotte."</span></p>
+            <p><span class="name">Rei</span> finally looked down.</p>
+            <p><span class="name">Sato</span> watched him carefully.</p>
+            <p><span class="dialogue">"Those weren't random victims."</span></p>
+            <p><span class="name">Rei</span> slowly raised his head.</p>
+            <p><span class="dialogue">"You really want to know?"</span></p>
+            <p><span class="dialogue">"Yes."</span></p>
+            <p><span class="dialogue">"Why?"</span></p>
+            <p><span class="name">Sato</span> didn't hesitate.</p>
+            <p><span class="dialogue">"Because I'm a detective."</span></p>
+            <p><span class="name">Rei</span> laughed again.</p>
+            <p><span class="dialogue">"No."</span></p>
+            <p>He leaned back in the chair.</p>
+            <p><span class="dialogue">"That's not why."</span></p>
+            <p><span class="name">Sato</span> stared at him.</p>
+            <p><span class="name">Rei</span>'s eyes sharpened.</p>
+            <p><span class="dialogue">"You're not chasing the truth because you're a detective."</span></p>
+            <p><span class="dialogue">"You're chasing it because you need it."</span></p>
+            <p>Silence.</p>
+            <p><span class="name">Akane</span> looked at <span class="name">Sato</span>.</p>
+            <p><span class="name">Sato</span> didn't react.</p>
+            <p><span class="name">Rei</span> smiled.</p>
+            <p><span class="dialogue">"That's your desire, isn't it?"</span></p>
+            <p><span class="name">Sato</span> stepped closer.</p>
+            <p><span class="dialogue">"What's your real name?"</span></p>
+            <p>The smile vanished.</p>
+            <p>A long silence followed.</p>
+            <p>Then—</p>
+            <p><span class="dialogue">"Vaneiro."</span></p>
+            <p><span class="name">Akane</span>'s eyes widened.</p>
+            <p><span class="dialogue">"Vaneiro?"</span></p>
+            <p><span class="name">Rei</span> nodded.</p>
+            <p><span class="dialogue">"Rei was never my name."</span></p>
+            <p><span class="name">Sato</span> stared at him.</p>
+            <p><span class="dialogue">"Then why use it?"</span></p>
+            <p><span class="dialogue">"Because names are useful."</span></p>
+        </div>
+
+        <!-- SUSPECT BLOCK — identity reveal -->
+        <div class="suspect-block">
+            <span class="suspect-label">Identity Confirmed</span>
+            <div class="suspect-name">Vaneiro</div>
+            <div class="suspect-status">Formerly Known As Rei</div>
+            <div class="suspect-details">
+                <div class="suspect-detail">
+                    <span class="sd-label">Codename</span>
+                    <span class="sd-val">Lust</span>
+                </div>
+                <div class="suspect-detail">
+                    <span class="sd-label">Affiliation</span>
+                    <span class="sd-val">The 8</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROSE 3 -->
+        <div class="prose">
+            <p><span class="name">Vaneiro</span> looked toward the window.</p>
+            <p><span class="dialogue">"People believe what they're given."</span></p>
+            <p><span class="name">Sato</span> thought about the case.</p>
+            <p>The DNA.</p>
+            <p>The alibis.</p>
+            <p>The symbols.</p>
+            <p>The victims.</p>
+            <p>Everything.</p>
+            <p><span class="dialogue">"You were working for Sengoku."</span></p>
+            <p><span class="name">Vaneiro</span> smiled faintly.</p>
+            <p><span class="dialogue">"Sengoku-sama."</span></p>
+            <p><span class="name">Sato</span>'s expression hardened.</p>
+            <p><span class="dialogue">"Where is he?"</span></p>
+            <p><span class="name">Vaneiro</span> looked at him.</p>
+            <p>Then laughed.</p>
+            <p><span class="dialogue">"You still believe that's the question?"</span></p>
+            <p><span class="name">Sato</span> grabbed the back of the chair.</p>
+            <p><span class="dialogue">"Where is Sengoku?"</span></p>
+            <p><span class="name">Vaneiro</span>'s eyes met his.</p>
+            <p><span class="dialogue"><span class="danger">"Dead."</span></span></p>
+            <p>Everyone went silent.</p>
+            <p><span class="name">Sato</span>'s grip tightened.</p>
+            <p><span class="dialogue">"You expect me to believe that?"</span></p>
+            <p><span class="dialogue">"I didn't say you should."</span></p>
+            <p><span class="name">Vaneiro</span> leaned forward.</p>
+            <p><span class="dialogue">"Sengoku-sama died."</span></p>
+            <p><span class="dialogue">"Then who has been giving you orders?"</span></p>
+            <p><span class="name">Vaneiro</span> smiled.</p>
+            <p><span class="dialogue">"That…"</span></p>
+            <p>He paused.</p>
+            <p><span class="dialogue">"Is something you haven't earned the answer to."</span></p>
+        </div>
+
+        <p class="prose"><span class="scene-break">• • •</span></p>
+
+        <!-- PROSE 4 -->
+        <div class="prose">
+            <p>A sudden noise came from outside.</p>
+            <p><span class="name">Akane</span> turned.</p>
+            <p><span class="dialogue">"Movement!"</span></p>
+            <p><span class="name">Sato</span> looked toward the window.</p>
+            <p>A black figure stood across the street.</p>
+            <p>The same figure.</p>
+            <p>The one he'd seen months ago.</p>
+            <p><span class="name">Sato</span> ran.</p>
+            <p>By the time he reached the street—</p>
+            <p>nothing.</p>
+            <p>Only rain.</p>
+            <p>He looked around.</p>
+            <p>Empty.</p>
+            <p>Then he heard something behind him.</p>
+            <p><span class="name">Vaneiro</span>.</p>
+            <p><span class="dialogue">"Detective."</span></p>
+            <p><span class="name">Sato</span> turned.</p>
+            <p><span class="name">Vaneiro</span> was standing at the apartment entrance, surrounded by officers.</p>
+            <p>His eyes met <span class="name">Sato</span>'s.</p>
+            <p><span class="dialogue">"You should've asked about Envy."</span></p>
+            <p><span class="name">Sato</span> froze.</p>
+            <p><span class="dialogue">"Where is Envy?"</span></p>
+            <p><span class="name">Vaneiro</span> smiled.</p>
+            <p><span class="dialogue">"Gone."</span></p>
+            <p>The officers took him away.</p>
+            <p><span class="name">Sato</span> watched.</p>
+            <p>For the first time since the case began—</p>
+            <p>he felt like he had actually caught someone.</p>
+            <p class="thought">But it didn't feel like victory.</p>
+        </div>
+
+        <!-- SCENE BREAK -->
+        <div class="flashback-label">Three Days Later</div>
+
+        <!-- PROSE 5 -->
+        <div class="prose">
+            <p>The courtroom was silent.</p>
+            <p><span class="name">Vaneiro</span> stood before the judge.</p>
+            <p>His crimes had been linked to multiple murders.</p>
+            <p>The evidence was overwhelming.</p>
+            <p>The symbol.</p>
+            <p>The DNA.</p>
+            <p>The witness statements.</p>
+            <p>The connection to <span class="name">The 8</span>.</p>
+            <p>And the confession he had given during interrogation.</p>
+            <p><span class="name">Sato</span> sat in the back.</p>
+            <p><span class="name">Akane</span> beside him.</p>
+            <p><span class="name">Aizwa</span> stood near the entrance.</p>
+            <p>The verdict was delivered.</p>
+            <p><span class="danger">Guilty.</span></p>
+            <p><span class="name">Vaneiro</span> showed no emotion.</p>
+            <p>The judge announced the sentence.</p>
+            <p><span class="danger">Death.</span></p>
+            <p><span class="name">Akane</span> looked at <span class="name">Sato</span>.</p>
+            <p><span class="dialogue">"You okay?"</span></p>
+            <p><span class="name">Sato</span> didn't answer immediately.</p>
+            <p>He looked at <span class="name">Vaneiro</span>.</p>
+            <p><span class="name">Vaneiro</span> was staring directly at him.</p>
+            <p>Then he smiled.</p>
+            <p>Not proudly.</p>
+            <p>Not happily.</p>
+            <p>Almost sadly.</p>
+            <p>As if he already knew something <span class="name">Sato</span> didn't.</p>
+        </div>
+
+        <!-- SCENE BREAK -->
+        <div class="flashback-label">The Final Conversation</div>
+
+        <!-- PROSE 6 -->
+        <div class="prose">
+            <p>Later that evening, <span class="name">Sato</span> was allowed one final conversation with
+                <span class="name">Vaneiro</span>.</p>
+            <p>A glass wall separated them.</p>
+            <p><span class="name">Vaneiro</span> sat on one side.</p>
+            <p><span class="name">Sato</span> on the other.</p>
+            <p>For several seconds, neither spoke.</p>
+            <p>Then <span class="name">Sato</span> asked:</p>
+            <p><span class="dialogue">"Why did you kill them?"</span></p>
+            <p><span class="name">Vaneiro</span> looked down.</p>
+            <p><span class="dialogue">"Because I was Lust."</span></p>
+            <p><span class="name">Sato</span> frowned.</p>
+            <p><span class="dialogue">"That isn't an answer."</span></p>
+            <p><span class="dialogue">"It is."</span></p>
+            <p><span class="name">Vaneiro</span> raised his eyes.</p>
+            <p><span class="dialogue">"I wanted something."</span></p>
+            <p><span class="dialogue">"What?"</span></p>
+            <p><span class="dialogue">"More."</span></p>
+            <p><span class="name">Sato</span> remained silent.</p>
+            <p><span class="name">Vaneiro</span> continued.</p>
+            <p><span class="dialogue">"More attention. More pleasure. More control. More everything."</span></p>
+            <p>He smiled bitterly.</p>
+            <p><span class="dialogue">"And eventually, wanting wasn't enough."</span></p>
+            <p><span class="name">Sato</span> watched him.</p>
+            <p><span class="dialogue">"Did Sengoku make you like this?"</span></p>
+            <p><span class="name">Vaneiro</span> shook his head.</p>
+            <p><span class="dialogue">"No."</span></p>
+            <p><span class="dialogue">"Then why follow him?"</span></p>
+            <p><span class="name">Vaneiro</span>'s expression became strangely calm.</p>
+            <p><span class="dialogue">"Because he understood something."</span></p>
+            <p><span class="dialogue">"What?"</span></p>
+            <p><span class="dialogue">"That everyone has a desire."</span></p>
+            <p><span class="name">Sato</span>'s eyes narrowed.</p>
+            <p><span class="name">Vaneiro</span> leaned toward the glass.</p>
+            <p><span class="dialogue">"Even you."</span></p>
+            <p><span class="name">Sato</span> said nothing.</p>
+            <p><span class="name">Vaneiro</span> smiled.</p>
+            <p><span class="dialogue">"Especially you."</span></p>
+            <p>The guard entered.</p>
+            <p><span class="dialogue">"Time."</span></p>
+            <p><span class="name">Sato</span> stood.</p>
+            <p>Before leaving, he asked one final question.</p>
+            <p><span class="dialogue">"Did Envy betray you?"</span></p>
+            <p><span class="name">Vaneiro</span> looked toward the floor.</p>
+            <p>Then laughed quietly.</p>
+            <p><span class="dialogue">"Yes."</span></p>
+            <p><span class="dialogue">"Why?"</span></p>
+            <p><span class="name">Vaneiro</span> looked back at him.</p>
+            <p><span class="dialogue">"Ask Envy."</span></p>
+            <p>The door opened.</p>
+            <p><span class="name">Sato</span> stopped.</p>
+            <p><span class="name">Vaneiro</span> called after him.</p>
+            <p><span class="dialogue">"Sato."</span></p>
+            <p>He turned.</p>
+            <p><span class="name">Vaneiro</span>'s smile was gone.</p>
+            <p><span class="dialogue">"Don't find Sengoku."</span></p>
+            <p><span class="name">Sato</span> stared at him.</p>
+            <p><span class="dialogue">"Why?"</span></p>
+            <p><span class="name">Vaneiro</span> answered quietly.</p>
+            <p><span class="dialogue">"Because if you do…"</span></p>
+            <p>A pause.</p>
+            <p><span class="dialogue"><span class="danger">"…he'll find you first."</span></span></p>
+        </div>
+
+        <!-- SCENE BREAK -->
+        <div class="flashback-label">6:03 AM</div>
+
+        <!-- PROSE 7 -->
+        <div class="prose">
+            <p>The execution was carried out.</p>
+            <p>No cameras.</p>
+            <p>No crowd.</p>
+            <p>No final speech.</p>
+            <p>Only silence.</p>
+            <p><span class="name">Vaneiro</span> closed his eyes.</p>
+            <p>For a moment, he remembered the first time <span class="name">Sengoku</span> had spoken to him.</p>
+            <p>The first time he heard the word—</p>
+            <p><span class="clue">desire.</span></p>
+            <p>Then everything went quiet.</p>
+        </div>
+
+        <!-- SCENE BREAK -->
+        <div class="flashback-label">6:30 AM</div>
+
+        <!-- PROSE 8 -->
+        <div class="prose">
+            <p><span class="name">Sato</span> stood outside.</p>
+            <p>Rain tapped against the window.</p>
+            <p><span class="name">Akane</span> approached.</p>
+            <p><span class="dialogue">"It's done."</span></p>
+            <p><span class="name">Sato</span> nodded.</p>
+            <p><span class="dialogue">"Vaneiro?"</span></p>
+            <p><span class="dialogue"><span class="danger">"Dead."</span></span></p>
+            <p><span class="name">Sato</span> looked down at the case file in his hands.</p>
+        </div>
+
+        <!-- CASEFILE BLOCK -->
+        <div class="casefile-block">
+            <div class="casefile-icon">📁</div>
+            <div class="casefile-meta">
+                <span class="casefile-title">Case File: You</span>
+                <span class="casefile-sub">Victims · Symbols · The 8 · Sengoku · Vaneiro · Envy</span>
+            </div>
+        </div>
+
+        <!-- PROSE 9 -->
+        <div class="prose">
+            <p>He opened it.</p>
+            <p>Inside were photographs.</p>
+            <p>Then something slipped from between the pages.</p>
+            <p>A small piece of paper.</p>
+            <p><span class="name">Sato</span> picked it up.</p>
+            <p>There was only one sentence.</p>
+            <p>His face went completely still.</p>
+        </div>
+
+        <!-- OBSERVATION BLOCK — the note -->
+        <div class="observation-block">
+            <span class="observation-label">📝 Note</span>
+            <p class="observation-text">
+                <strong>"One desire has fallen."</strong><br />
+                Underneath it — eight words.<br />
+                <strong>"Seven remain. We will see you soon."</strong>
+            </p>
+        </div>
+
+        <!-- PROSE 10 -->
+        <div class="prose">
+            <p><span class="name">Akane</span> looked over his shoulder.</p>
+            <p><span class="dialogue">"What is it?"</span></p>
+            <p><span class="name">Sato</span> didn't answer.</p>
+            <p>He folded the paper.</p>
+            <p>Far away, in an unknown room—</p>
+            <p>someone placed a photograph on a table.</p>
+            <p><span class="name">Vaneiro</span>.</p>
+            <p><span class="danger">A red line was drawn across his face.</span></p>
+            <p>Then another photograph was placed beside it.</p>
+            <p><span class="name">Sato</span>.</p>
+            <p>Someone picked up a pen.</p>
+            <p>And wrote:</p>
+        </div>
+
+        <!-- OBSERVATION BLOCK — the pen -->
+        <div class="observation-block">
+            <span class="observation-label">✎ Written</span>
+            <p class="observation-text">
+                <strong>DESIRE: TRUTH</strong>
+            </p>
+        </div>
+
+        <!-- PROSE 11 -->
+        <div class="prose">
+            <p>The pen stopped.</p>
+            <p>A voice whispered:</p>
+            <p>The light went out.</p>
+        </div>
+
+        <!-- CHAPTER END -->
+        <div class="chapter-end">
+            <span class="end-label">End of Chapter 15</span>
+            <div class="end-line">"Begin the next case."</div>
+            <div class="end-sub">— Case File: You</div>
+        </div>
+
+        <!-- VOLUME END -->
+        <div class="volume-end">
+            <span class="volume-end-label">End of Volume 1</span>
+            <div class="volume-end-title">Case File: You</div>
+        </div>
+
+        <div class="chapter-nav">
+            <a href="cfy14.html" class="nav-btn">← Chapter 14</a>
+            <a href="../index.html" class="nav-btn">🏠 Home</a>
+            <span class="nav-btn nav-disabled">Volume 2 ⏳</span>
+        </div>
+    </main>
+
+    <script>
+        var fontSize = 19;
+
+        function changeFont(action) {
+            if (action === 1 && fontSize < 26) fontSize += 2;
+            else if (action === -1 && fontSize > 14) fontSize -= 2;
+            else if (action === 0) fontSize = 19;
+            document.querySelectorAll(".prose").forEach(function (el) {
+                el.style.fontSize = fontSize + "px";
+            });
+        }
+
+        function toggleDark() {
+            document.body.classList.toggle("dark");
+            var on = document.body.classList.contains("dark");
+            document.getElementById("darkModeBtn").textContent = on ? "☀️" : "🌙";
+            localStorage.setItem("darkMode", on ? "on" : "off");
+        }
+
+        window.onscroll = function () {
+            var scrollTop =
+                document.documentElement.scrollTop || document.body.scrollTop;
+            var total =
+                document.documentElement.scrollHeight -
+                document.documentElement.clientHeight;
+            document.getElementById("progressBar").style.width =
+                (total > 0 ? (scrollTop / total) * 100 : 0) + "%";
+            var btn = document.getElementById("scrollBtn");
+            if (scrollTop > 300) btn.classList.add("visible");
+            else btn.classList.remove("visible");
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        window.onload = function () {
+            if (localStorage.getItem("darkMode") === "on") {
+                document.body.classList.add("dark");
+                document.getElementById("darkModeBtn").textContent = "☀️";
+            }
+        };
+    </script>
+</body>
+
+</html>

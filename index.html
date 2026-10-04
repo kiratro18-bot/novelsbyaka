@@ -89,6 +89,9 @@
                     <button class="theme-swatch" data-theme="emerald" style="background:#3ddc97"
                         onclick="setTheme('emerald')" role="radio" aria-checked="false" aria-label="Emerald theme"
                         title="Emerald"></button>
+                    <button class="theme-swatch" data-theme="cyan" style="background:#22d3ee"
+                        onclick="setTheme('cyan')" role="radio" aria-checked="false" aria-label="Cyan theme"
+                        title="Cyan"></button>
                 </div>
             </div>
             <div class="sph-row">
@@ -225,7 +228,7 @@
         </div>
         <div class="nav-actions">
             <button class="search-trigger" onclick="openCmdk()" aria-label="Open search"><span>🔍</span><span
-                    class="nav-search-label">Search</span><span class="kbd">⌘K</span></button>
+                    class="nav-search-label">Search</span><span class="kbd"></span></button>
             <button class="icon-btn nav-settings-btn" onclick="openSettings()" aria-label="Open settings"
                 title="Settings">⚙</button>
         </div>
@@ -249,7 +252,7 @@
                             aching
                             exploration of growing up, holding on, and learning when to let go.</p>
                         <div class="hero-meta-row">
-                            <span>⭐ 4.9 rating</span><span>👁 21.4k readers</span><span>📖 22 chapters across 3
+                            <span>⭐ 4.9 rating</span><span>👁 39.4k readers</span><span>📖 22 chapters across 3
                                 volumes</span><span style="color: var(--rose)">
                                 Completed</span>
                         </div>
@@ -290,6 +293,11 @@
                 </div>
             </div>
         </div>
+        <aside class="case-closed-banner" id="caseClosedBanner" hidden aria-label="Limited-time Case File: You Vol. 1 completion celebration">
+            <div class="case-closed-mark" aria-hidden="true">🔎</div>
+            <div class="case-closed-copy"><span class="case-closed-kicker">LIMITED OCCASION <i>·</i> <span id="caseClosedRemaining">14 days left</span></span><strong>The case is closed.</strong><p><em>Case File: You</em> Vol. 1 is complete. Revisit all 15 chapters during the celebration.</p></div>
+            <button class="case-closed-action" type="button" onclick="openSpotlight(6)">Revisit the case <span aria-hidden="true">→</span></button>
+        </aside>
     </section>
     <!-- =========================
      ECLIPSE EVENT
@@ -315,15 +323,13 @@
                     <h2 class="section-title">The Library at a <em>Glance</em></h2>
                     <p class="section-sub">Everything AKA has written, in numbers.</p>
                 </div>
-                <span class="pill-btn" style="cursor:default">Updated sept 2026</span>
+                <span class="pill-btn" style="cursor:default">Updated Oct 2026</span>
             </div>
             <div class="stats-grid" id="statsGrid"></div>
         </div>
     </section>
 
-    <!-- ============ VERSION 3.0 PREVIEW ============ -->
 
-    <!-- ============ VERSION 3.0 ROADMAP ============ -->
 
     <!-- ============ MOOD PICKER ============ -->
     <section class="section" style="padding-top:0">
@@ -356,6 +362,15 @@
                         class="mood-sub">Slow, quiet
                         moments</span></div>
             </div>
+            <div class="story-match glass" id="storyMatch">
+                <div class="story-match-intro"><span class="story-match-kicker">3.8 · PERSONAL PICKER</span><h3>Find your next <em>read</em></h3><p>Tell us your mood and reading window. We’ll find a story that fits.</p></div>
+                <div class="story-match-controls">
+                    <label>Mood<select id="storyMatchMood"><option value="any">Surprise me</option><option value="romance">Heartwarming</option><option value="sad">Emotional</option><option value="mystery">Mystery &amp; suspense</option><option value="slice">Quiet &amp; cozy</option></select></label>
+                    <label>Time<select id="storyMatchTime"><option value="15">About 15 minutes</option><option value="30">About 30 minutes</option><option value="60">About an hour</option><option value="0">Any amount</option></select></label>
+                    <button type="button" class="cta cta-primary" onclick="runStoryMatch()">Find my story ✦</button>
+                </div>
+                <div class="story-match-result" id="storyMatchResult" aria-live="polite">Your pick will appear here. Reading time is estimated at about 7 minutes per chapter.</div>
+            </div>
         </div>
     </section>
 
@@ -382,7 +397,7 @@
                             <span class="shelf-search-icon" aria-hidden="true">🔍</span>
                             <input id="shelfSearch" type="search" placeholder="Search titles or genres…"
                                 oninput="handleShelfSearchInput()" aria-label="Search shelf">
-                            <span class="search-shortcut">⌘K</span>
+                            <span class="search-shortcut"></span>
                             <button class="search-clear" onclick="clearShelfSearch()"
                                 aria-label="Clear search">✕</button>
                         </div>
