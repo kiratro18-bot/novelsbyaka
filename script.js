@@ -144,7 +144,7 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 4, rating: 4.2, views: 9000, releaseOffsetDays: 0,
+        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 5, rating: 4.2, views: 9000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -1336,7 +1336,7 @@ function renderHeatmap() {
 var upcomingReleases = [
     { date: '2026-10-07', title: 'Prequel of The Petal That Falls With A Smile chp 5' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { date: '2026-10-05', title: "The Other Day - Chapter 5" },
+    { date: '2026-10-05', title: "The Other Day - Chapter 6" },
     { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
 ];
 var calSorted = [];
