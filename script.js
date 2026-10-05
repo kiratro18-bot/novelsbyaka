@@ -2,7 +2,7 @@
 /* ============================================================
    UTILITIES
 
-   SECURITY NOTE — user-generated content (comment name/text, search
+   SECURITY NOTE — user-generated content (private notes, search
    queries, private notes) is protected in two independent layers:
      1. sanitize() strips HTML tags on the way IN (before it's stored).
      2. esc() HTML-entity-escapes content on the way OUT (right before
@@ -14,7 +14,6 @@
 function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;"); }
 function imgFail(el) { el.style.display = 'none'; }
 function sanitize(s) { return String(s).replace(/<[^>]*>/g, "").replace(/[\u0000-\u001F\u007F]/g, "").trim(); }
-function isValidName(s) { return s.length >= 1 && s.length <= 30 && /^[^<>&"']+$/.test(s); }
 var store = {
     get: function (k, fb) { try { var v = localStorage.getItem(k); return v !== null ? JSON.parse(v) : fb; } catch (e) { return fb; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }
@@ -27,17 +26,17 @@ var APP_STORAGE_KEYS = [
     'privateReaderNotes', 'novelComments', 'recentSearches', 'lightMode', 'theme',
     'tiltEnabled', 'motionEnabled', 'readerFontScale', 'readerAchUnlocks',
     'goldenPetalCaught', 'nightOwlRead', 'oneDayRead', 'searchedOnce', 'sharedOnce',
-    'themeChanged', 'lastCommentAt', 'readerLevel'
+    'themeChanged', 'lastCommentAt', 'readerLevel', 'achievementsCollapsed'
 ];
 function confirmClearLocalData() {
-    var ok = window.confirm('This permanently erases your reading progress, bookmarks, reading queue, private notes, achievements, and comments saved in this browser. This can\'t be undone. Continue?');
+    var ok = window.confirm('This permanently erases reading progress, bookmarks, your reading queue, private notes, achievements, and saved preferences in this browser. This can\'t be undone. Continue?');
     if (!ok) return;
     APP_STORAGE_KEYS.forEach(function (k) { try { localStorage.removeItem(k); } catch (e) { } });
     showToast('Local data cleared ✦ Reloading…');
     setTimeout(function () { window.location.reload(); }, 700);
 }
 var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-var tiltEnabled = store.get('tiltEnabled', !prefersReducedMotion);
+var tiltEnabled = document.body.classList.contains('editorial') ? store.get('tiltEnabled', false) : false;
 var motionEnabled = store.get('motionEnabled', !prefersReducedMotion);
 
 var toastTimer;
@@ -128,7 +127,7 @@ var novels = [
         blurb: "If time was a currency, how much would you pay for a single hour of the past?", grad: "135deg,#3a2a2a,#5a3a30", collections: ["hidden-gems", "completed"]
     },
     {
-        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "./chapters2/hahv3.html", genres: ["romance", "drama", "slice", "sad"], status: "ongoing", ch: 1, rating: 4.0, views: 4000, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
+        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "./chapters2/hahv3.html", genres: ["romance", "drama", "slice", "sad"], status: "ongoing", ch: 2, rating: 4.2, views: 7000, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
         blurb: "Continuing the journey of Him and Her into a new chapter of their lives.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
     },
     {
@@ -144,7 +143,7 @@ var novels = [
         blurb: "ONE SHOT.", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 5, rating: 4.2, views: 9000, releaseOffsetDays: 0,
+        order: 18, title: "The Other Day", img: "./bg2/tod.jpg", link: "./chapters2/tod.html", genres: ["drama", "slice"], status: "ongoing", ch: 6, rating: 4.4, views: 11000, releaseOffsetDays: 0,
         blurb: "normal days?", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
     {
@@ -163,7 +162,6 @@ function nowMs() { return Date.now(); }
 function releaseDate(n) { return new Date(nowMs() - n.releaseOffsetDays * 86400000); }
 function lastUpdate(n) { return new Date(nowMs() - (n.updatedDaysAgo != null ? n.updatedDaysAgo : n.releaseOffsetDays) * 86400000); }
 function likes(n) { return Math.round(n.views * 0.11); }
-function commentsCount(n) { return Math.round(n.views * 0.01) + 2; }
 function words(n) { return n.ch * 1850; }
 function coverHtml(n, cls) {
     return '<div class="' + cls + '" style="background:linear-gradient(' + n.grad + ')"><img src="' + esc(n.img) + '" alt="" loading="lazy" onerror="imgFail(this)"></div>';
@@ -443,74 +441,6 @@ function startHeroRotate() {
     }
 }
 /* ============================================================
-   TRENDING PETALS — ambient falling effect + rare golden petal
-   ============================================================ */
-var petalSpawnTimer = null;
-var goldenPetalOnScreen = false;
-function startPetalField() {
-    clearTimeout(petalSpawnTimer);
-    petalSpawnTimer = null;
-    var field = document.getElementById('petalField');
-    if (!field || !motionEnabled || document.hidden) return;
-    schedulePetal(field);
-}
-function schedulePetal(field) {
-    clearTimeout(petalSpawnTimer);
-    petalSpawnTimer = setTimeout(function () {
-        spawnPetal(field);
-        schedulePetal(field);
-    }, 1100 + Math.random() * 1200);
-}
-function spawnPetal(field) {
-    if (!motionEnabled || document.hidden || field.children.length > 16) return;
-    var makeGold = !goldenPetalOnScreen && Math.random() < 0.02;
-    var el = document.createElement('div');
-    var variant = ['a', 'b', 'c'][Math.floor(Math.random() * 3)];
-    var duration = makeGold ? (10 + Math.random() * 3) : (7 + Math.random() * 5);
-    var fall = field.clientHeight ? field.clientHeight + 40 : 560;
-
-    el.className = 'petal ' + (makeGold ? 'petal-gold' : 'petal-' + variant);
-    el.style.left = (Math.random() * 92) + '%';
-    if (!makeGold) {
-        var size = 8 + Math.random() * 8;
-        el.style.width = size + 'px';
-        el.style.height = size + 'px';
-    }
-    el.style.setProperty('--fall', fall + 'px');
-    el.style.setProperty('--sway1', (Math.random() * 60 - 30).toFixed(1) + 'px');
-    el.style.setProperty('--sway2', (Math.random() * 70 - 35).toFixed(1) + 'px');
-    el.style.setProperty('--spin', ((Math.random() < 0.5 ? -1 : 1) * (200 + Math.random() * 260)) + 'deg');
-    el.style.animationDuration = duration + 's';
-
-    if (makeGold) {
-        goldenPetalOnScreen = true;
-        el.setAttribute('role', 'button');
-        el.setAttribute('tabindex', '0');
-        el.setAttribute('aria-label', 'Catch the golden petal');
-        el.title = 'Catch me ✦';
-        el.addEventListener('click', function () { catchGoldenPetal(el); });
-        el.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); catchGoldenPetal(el); }
-        });
-    }
-    el.addEventListener('animationend', function () {
-        if (makeGold && !el.dataset.caught) goldenPetalOnScreen = false;
-        el.remove();
-    });
-    field.appendChild(el);
-}
-function catchGoldenPetal(el) {
-    if (!el || el.dataset.caught) return;
-    el.dataset.caught = '1';
-    goldenPetalOnScreen = false;
-    el.style.pointerEvents = 'none';
-    el.style.animation = 'petalCatch .55s ease forwards';
-    showToast('✨ You caught a golden petal!');
-    if (markFlag('goldenPetalCaught')) {
-        setTimeout(function () { renderReaderAchievements(); renderProgressJourney(); }, 3000);
-    }
-}
-/* ============================================================
    READING STREAK
    ============================================================ */
 function dateKey(d) { return d.toISOString().slice(0, 10); }
@@ -664,8 +594,7 @@ function renderStats() {
     var grid = document.getElementById('statsGrid');
     grid.innerHTML = tiles.map(function (t, i) {
         return '<div class="glass stat-tile" data-target="' + t.val + '" data-suffix="' + t.suffix + '" data-float="' + (!!t.isFloat) + '">' +
-            '<div class="stat-num" id="statNum' + i + '">0</div><div class="stat-label">' + esc(t.label) + '</div>' +
-            (i < 3 ? '<div class="stat-growth">▲ growing weekly</div>' : '') + '</div>';
+            '<div class="stat-num" id="statNum' + i + '">0</div><div class="stat-label">' + esc(t.label) + '</div></div>';
     }).join('');
     var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
@@ -761,16 +690,6 @@ document.addEventListener('DOMContentLoaded', function () {
         var btn = e.target.closest('.pill-btn'); if (!btn) return;
         this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
         btn.classList.add('active'); renderLeaderboard(btn.dataset.lb);
-    });
-    document.getElementById('newsTabs').addEventListener('click', function (e) {
-        var btn = e.target.closest('.pill-btn'); if (!btn) return;
-        this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active'); activeNewsType = btn.dataset.newstype || 'all'; renderNews();
-    });
-    document.getElementById('commentToolbar').addEventListener('click', function (e) {
-        var btn = e.target.closest('.pill-btn'); if (!btn) return;
-        this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active'); activeNoteFilter = btn.dataset.notefilter || 'all'; renderComments();
     });
 });
 function clearShelfFilters() {
@@ -1067,7 +986,7 @@ function distinctReadingDays() {
     return Object.keys(readingLog).filter(function (k) { return readingLog[k] > 0; }).length;
 }
 function notesWritten() {
-    return typeof comments !== 'undefined' && Array.isArray(comments) ? comments.length : 0;
+    return Object.keys(privateReaderNotes).filter(function (key) { return String(privateReaderNotes[key] || '').trim().length > 0; }).length;
 }
 function favoritesCount() {
     return Object.keys(bookmarks).filter(function (k) { return bookmarks[k]; }).length;
@@ -1103,7 +1022,6 @@ function computeReaderStats() {
         themed: store.get('themeChanged', false) ? 1 : 0,
         shared: store.get('sharedOnce', false) ? 1 : 0,
         longForm: longFormCompleted(),
-        goldenPetal: store.get('goldenPetalCaught', false) ? 1 : 0,
         eclipseWitness: store.get('readerAchUnlocks', {}).eclipseWitness ? 1 : 0
     };
 }
@@ -1123,7 +1041,7 @@ var readerAchievementDefs = [
     { icon: '🏆', title: 'Full Return', hint: 'Finish a novel start to finish', rarity: 'rare', metric: function (s) { return s.completed; }, target: 1 },
     { icon: '⚡', title: 'Marathoner', hint: 'Read 10+ chapters in a single week', rarity: 'common', metric: function (s) { return s.week; }, target: 10 },
     { icon: '🌅', title: 'Weekend Reader', hint: 'Read on a Saturday or Sunday', rarity: 'rare', metric: function (s) { return s.weekend; }, target: 1 },
-    { icon: '💬', title: 'Margin Writer', hint: 'Leave a note in the margins', rarity: 'rare', metric: function (s) { return s.notes; }, target: 1 },
+    { icon: '📝', title: 'Margin Writer', hint: 'Save a private reader note', rarity: 'rare', metric: function (s) { return s.notes; }, target: 1 },
     { icon: '🎬', title: 'One-Shot Wonder', hint: 'Complete all ' + oneShotTotal + ' one-shots on the Shelf', rarity: 'rare', metric: function (s) { return s.oneShots; }, target: oneShotTotal },
     { icon: '📚', title: 'Chapter Collector', hint: 'Read 25 chapters total', rarity: 'rare', metric: function (s) { return s.read; }, target: 25 },
     { icon: '🔥', title: 'Bookworm', hint: 'Read 45+ chapters total', rarity: 'epic', metric: function (s) { return s.read; }, target: 45 },
@@ -1156,7 +1074,6 @@ readerAchievementDefs.push(
     { icon: '🚀', title: 'On a Roll', hint: 'Reach a 3-day reading streak', rarity: 'rare', metric: function (s) { return s.bestStreak; }, target: 3 },
     { icon: '🐋', title: 'Deep Diver', hint: 'Finish one of the longer sagas (9+ chapters) start to finish', rarity: 'rare', metric: function (s) { return s.longForm; }, target: 1 },
     { icon: '📅', title: 'Unstoppable', hint: 'Reach a 7-day reading streak', rarity: 'epic', metric: function (s) { return s.bestStreak; }, target: 7 },
-    { icon: '✨', title: 'Petal Catcher', hint: 'Catch a golden petal', rarity: 'rare', metric: function (s) { return s.goldenPetal; }, target: 1 },
     { icon: '💖', title: 'Heart Collector', hint: 'Favorite 10 stories', rarity: 'epic', metric: function (s) { return s.favorites; }, target: 10 },
     { icon: '📆', title: 'Daily Devotion', hint: 'Read on 30 different days', rarity: 'legendary', metric: function (s) { return s.days; }, target: 30 },
     { icon: '🌘', title: 'Eclipse Witness', hint: 'Find the one book disappears when the Library goes dark [possbile of occuring is 1.5% in a day]', rarity: 'Mythic', metric: function (s) { return s.eclipseWitness; }, target: 1 },
@@ -1250,6 +1167,18 @@ function renderReaderAchievements() {
         showToast('🏆 ' + newlyUnlocked.length + ' achievements unlocked!');
     }
 }
+function toggleAchievements() {
+    var grid = document.getElementById('achievementGrid');
+    var button = document.getElementById('achievementsToggle');
+    if (!grid || !button) return;
+    var collapsed = !grid.hidden;
+    grid.hidden = collapsed;
+    button.setAttribute('aria-expanded', String(!collapsed));
+    button.innerHTML = collapsed
+        ? 'Show achievements <span aria-hidden="true">⌄</span>'
+        : 'Minimize achievements <span aria-hidden="true">⌃</span>';
+    store.set('achievementsCollapsed', collapsed);
+}
 function shareReaderAch(idx) {
     var a = readerAchievementDefs[idx];
     if (!a) return;
@@ -1302,15 +1231,11 @@ function renderLeaderboard(mode) {
     else if (mode === 'chapters') sorted.sort(function (a, b) { return b.ch - a.ch; });
     else if (mode === 'newest') sorted.sort(function (a, b) { return a.releaseOffsetDays - b.releaseOffsetDays; });
     sorted = sorted.slice(0, 10);
-    var trends = ['up', 'up', 'flat', 'down', 'up', 'flat', 'down'];
     document.getElementById('lbList').innerHTML = sorted.map(function (n, i) {
-        var trend = trends[i % trends.length];
-        var arrow = trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—';
         var val = mode === 'views' ? fmtNum(n.views) : mode === 'rating' ? ('⭐' + n.rating) : mode === 'chapters' ? (n.ch + ' ch') : releaseDate(n).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
         return '<div class="lb-row" onclick="openSpotlight(' + n.order + ')"><span class="lb-rank' + (i < 3 ? ' top' : '') + '">' + (i + 1) + '</span>' +
             '<div class="lb-cover">' + coverHtml(n, '').replace('<div class=""', '<div style="width:100%;height:100%"') + '</div>' +
-            '<div class="lb-info"><div class="lb-title">' + esc(n.title) + '</div><div class="lb-sub">' + val + '</div></div>' +
-            '<span class="lb-trend ' + trend + '">' + arrow + '</span></div>';
+            '<div class="lb-info"><div class="lb-title">' + esc(n.title) + '</div><div class="lb-sub">' + val + '</div></div></div>';
     }).join('');
 }
 
@@ -1336,8 +1261,8 @@ function renderHeatmap() {
 var upcomingReleases = [
     { date: '2026-10-07', title: 'Prequel of The Petal That Falls With A Smile chp 5' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
-    { date: '2026-10-05', title: "The Other Day - Chapter 6" },
-    { date: '2026-10-05', title: 'Him and Her vol 3 - chapter 1' },
+    { date: '2026-10-12', title: "The Other Day - Chapter 7" },
+    { date: '2026-10-11', title: 'Him and Her vol 3 - chapter 2' },
 ];
 var calSorted = [];
 
@@ -1424,38 +1349,6 @@ function savePrivateNote() {
     }
 
     showToast(value ? 'Private note saved ✦' : 'Private note cleared ✦');
-}
-
-/* ============================================================
-   NEWS
-   ============================================================ */
-var newsItems = [
-    { daysAgo: 1, type: 'update', title: 'Version 3.7.1 is live', excerpt: " Add a new time limited feature and title." },
-    { daysAgo: 1, type: 'note', title: 'Version 3.7.1 is drafted', excerpt: "A new roadmap section is now open for the next chapter of the reading lounge: archive polish, deeper milestones, and a calmer way to read." },
-    { daysAgo:1,type:'note', title:'HIM AND HER VOL 3',excerpt:"Him and Her volume 3 chapters 0.5 is out "},                                                    
-];
-var newsTagLabel = { release: 'Release', update: 'Site Update', note: 'Author Note' };
-var activeNewsType = 'all';
-function renderNews() {
-    var list = document.getElementById('newsList');
-    if (!list) return;
-    var filtered = activeNewsType === 'all' ? newsItems : newsItems.filter(function (a) { return a.type === activeNewsType; });
-    filtered = filtered.slice().sort(function (a, b) { return a.daysAgo - b.daysAgo; });
-    var countEl = document.getElementById('newsCount');
-    if (countEl) countEl.textContent = filtered.length + ' note' + (filtered.length !== 1 ? 's' : '') + ' from the author.';
-    if (!filtered.length) { list.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:12.5px">Nothing here yet.</div>'; return; }
-    list.innerHTML = filtered.map(function (a) {
-        var d = new Date(Date.now() - a.daysAgo * 86400000);
-        return '<div class="news-item" onclick="openNewsToast(this)">' +
-            '<div class="news-date-block"><div class="news-day">' + d.getDate() + '</div><div class="news-mon">' + d.toLocaleDateString('en-US', { month: 'short' }) + '</div></div>' +
-            '<div class="news-body"><div class="news-tag-row"><span class="news-tag ' + a.type + '">' + newsTagLabel[a.type] + '</span><span class="news-time">' + timeAgo(d.getTime()) + '</span></div>' +
-            '<div class="news-title">' + esc(a.title) + '</div>' +
-            '<div class="news-excerpt">' + esc(a.excerpt) + '</div></div></div>';
-    }).join('');
-}
-function openNewsToast(el) {
-    var titleEl = el.querySelector('.news-title');
-    showToast((titleEl ? titleEl.textContent : 'This note') + ' — full post coming soon ✦');
 }
 
 /* ============================================================
@@ -1546,103 +1439,12 @@ function toggleMotionPref() {
     motionEnabled = btn.classList.contains('on'); store.set('motionEnabled', motionEnabled);
     btn.setAttribute('aria-checked', String(motionEnabled));
     startHeroRotate();
-    startPetalField();
 }
 function toggleTilt() {
     var btn = document.getElementById('tiltToggle'); btn.classList.toggle('on');
     tiltEnabled = btn.classList.contains('on'); store.set('tiltEnabled', tiltEnabled);
     btn.setAttribute('aria-checked', String(tiltEnabled));
 }
-function subscribeNewsletter() {
-    var v = document.getElementById('newsletterEmail').value.trim();
-    if (!v || v.indexOf('@') < 0) { showToast('Enter a valid email first'); return; }
-    document.getElementById('newsletterEmail').value = '';
-    showToast('Thanks for subscribing ✦ (demo only)');
-}
-
-/* ============================================================
-   COMMENTS
-   ============================================================ */
-var selectedStar = 0;
-function setStar(n) {
-    selectedStar = n;
-    document.querySelectorAll('.star-btn').forEach(function (b, i) { b.classList.toggle('lit', i < n); });
-}
-function updateCharCount() {
-    var l = document.getElementById('commentText').value.length;
-    document.getElementById('charCount').textContent = l + ' / 500';
-}
-function populateCommentSelect() {
-    var sel = document.getElementById('commentNovel');
-    if (sel.dataset.filled) return;
-    sel.innerHTML = '<option value="">About which novel?</option>' + novels.map(function (n) { return '<option>' + esc(n.title) + '</option>'; }).join('') + '<option>General / All novels</option>';
-    sel.dataset.filled = '1';
-}
-var comments = store.get('novelComments', []).map(function (c) {
-    return {
-        name: sanitize(String(c.name || '')).slice(0, 30), novel: sanitize(String(c.novel || '')).slice(0, 60),
-        text: sanitize(String(c.text || '')).slice(0, 500), ts: Number(c.ts) || Date.now(), likes: Math.max(0, parseInt(c.likes) || 0),
-        liked: !!c.liked, stars: Math.min(5, Math.max(0, parseInt(c.stars) || 0))
-    };
-});
-var avatarColors = ['#ff7d9c', '#a78bfa', '#68d8c4', '#ffc46b', '#7fa8d6', '#ff7272'];
-function getInitials(n) { return n.trim().split(/\s+/).map(function (w) { return w[0]; }).join('').toUpperCase().slice(0, 2); }
-function getAvColor(n) { var i = 0; for (var c = 0; c < n.length; c++) i += n.charCodeAt(c); return avatarColors[i % avatarColors.length]; }
-function starsHtml(n) { var s = ''; for (var i = 1; i <= 5; i++) s += '<span style="color:' + (i <= n ? 'var(--gold)' : 'var(--panel-border-strong)') + '">★</span>'; return s; }
-var activeNoteFilter = 'all';
-function renderComments() {
-    var list = document.getElementById('commentsList');
-    var entries = comments.map(function (c, i) { return { comment: c, index: i }; });
-    if (activeNoteFilter === 'rated') entries = entries.filter(function (e) { return e.comment.stars > 0; });
-    if (activeNoteFilter === 'newest') entries = entries.slice().sort(function (a, b) { return b.comment.ts - a.comment.ts; });
-    else entries = entries.slice().sort(function (a, b) { return b.comment.ts - a.comment.ts; });
-    document.getElementById('commentCount').textContent = (activeNoteFilter === 'all' ? comments.length : entries.length) + ' note' + ((activeNoteFilter === 'all' ? comments.length : entries.length) !== 1 ? 's' : '') + ' in the margins';
-    if (!entries.length) { list.innerHTML = '<div class="glass" style="padding:40px;text-align:center;font-family:var(--font-display);font-style:italic;color:var(--muted)">No notes match this view yet…</div>'; return; }
-    list.innerHTML = entries.map(function (entry) {
-        var c = entry.comment, ri = entry.index;
-        return '<div class="comment-card glass" id="cc-' + ri + '">' +
-            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
-            '<div class="c-avatar" style="background:' + getAvColor(c.name) + '">' + esc(getInitials(c.name)) + '</div>' +
-            '<div style="flex:1"><div style="font-size:13px;font-weight:600">' + esc(c.name) + '</div>' +
-            '<div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);display:flex;gap:8px">' + timeAgo(c.ts) + (c.stars ? ('<span>' + starsHtml(c.stars) + '</span>') : '') + '</div></div>' +
-            (c.novel ? '<span class="nc-tag" style="color:var(--ink);border-color:var(--panel-border-strong)">' + esc(c.novel.length > 18 ? c.novel.slice(0, 18) + '…' : c.novel) + '</span>' : '') +
-            '</div><div style="font-size:13.5px;line-height:1.7;color:var(--ink-soft)">' + esc(c.text) + '</div>' +
-            '<div style="display:flex;gap:8px;margin-top:10px">' +
-            '<button class="pill-btn" onclick="toggleLikeComment(' + ri + ')">' + (c.liked ? '♥' : '♡') + ' ' + (c.likes || 0) + '</button>' +
-            '<button class="pill-btn" style="margin-left:auto" onclick="deleteComment(' + ri + ')">🗑 Delete</button></div></div>';
-    }).join('');
-}
-function toggleLikeComment(i) {
-    if (!comments[i]) return;
-    comments[i].liked = !comments[i].liked; comments[i].likes = Math.max(0, (comments[i].likes || 0) + (comments[i].liked ? 1 : -1));
-    store.set('novelComments', comments); renderComments();
-}
-function deleteComment(i) { comments.splice(i, 1); store.set('novelComments', comments); renderComments(); showToast('Comment deleted.'); }
-var lastCommentTime = Number(store.get('lastCommentAt', 0)) || 0, COOLDOWN = 15000;
-function submitComment() {
-    var now = Date.now();
-    var name = sanitize(document.getElementById('commentName').value);
-    var novel = sanitize(document.getElementById('commentNovel').value);
-    var text = sanitize(document.getElementById('commentText').value);
-    if (!name || !isValidName(name)) { shakeEl('commentName'); showToast('Please enter a valid name.'); return; }
-    if (text.length < 3) { shakeEl('commentText'); showToast('Comment is too short.'); return; }
-    if (now - lastCommentTime < COOLDOWN) { showToast('Wait ' + Math.ceil((COOLDOWN - (now - lastCommentTime)) / 1000) + 's before posting again.'); return; }
-    if ((text.match(/https?:\/\//g) || []).length > 1) { showToast('No links in comments, please.'); return; }
-    lastCommentTime = now;
-    store.set('lastCommentAt', now);
-    comments.push({ name: name, novel: novel, text: text, ts: now, likes: 0, liked: false, stars: selectedStar });
-    if (comments.length > 200) comments = comments.slice(-200);
-    store.set('novelComments', comments);
-    document.getElementById('commentText').value = '';
-    document.getElementById('commentNovel').value = '';
-    document.getElementById('commentName').value = '';
-    document.getElementById('charCount').textContent = '0 / 500';
-    selectedStar = 0;
-    document.querySelectorAll('.star-btn').forEach(function (b) { b.classList.remove('lit'); });
-    renderComments();
-    showToast('Note posted! ✦');
-}
-
 /* ============================================================
    SCROLL / MISC
    ============================================================ */
@@ -1654,46 +1456,59 @@ window.addEventListener('scroll', function () {
    INIT
    ============================================================ */
 window.addEventListener('load', function () {
+    var achievementsCollapsed = store.get('achievementsCollapsed', false);
+    var achievementGrid = document.getElementById('achievementGrid');
+    var achievementToggle = document.getElementById('achievementsToggle');
+    if (achievementGrid && achievementToggle) {
+        achievementGrid.hidden = achievementsCollapsed;
+        achievementToggle.setAttribute('aria-expanded', String(!achievementsCollapsed));
+        achievementToggle.innerHTML = achievementsCollapsed
+            ? 'Show achievements <span aria-hidden="true">⌄</span>'
+            : 'Minimize achievements <span aria-hidden="true">⌃</span>';
+    }
     var defaultLightMode = document.body.classList.contains('editorial') ? 'on' : 'off';
     var wantLight = store.get('lightMode', defaultLightMode) === 'on';
     document.body.classList.toggle('light', wantLight);
     var t = document.getElementById('lightToggle');
     if (t) { t.classList.toggle('on', wantLight); t.setAttribute('aria-checked', String(wantLight)); }
-    document.getElementById('tiltToggle').classList.toggle('on', tiltEnabled);
     document.getElementById('motionToggle').classList.toggle('on', motionEnabled);
+    document.getElementById('motionToggle').setAttribute('aria-checked', String(motionEnabled));
     initTheme();
     syncCaseClosedOccasion();
 
     paintAurora(moodColors.all);
     renderHero();
-    startPetalField();
     renderStats();
     renderLeaderboard('views');
     renderReadingQueue();
     renderHeatmap();
     renderCalendar();
-    renderNews();
-    renderComments();
-    populateCommentSelect();
 
-    document.addEventListener('visibilitychange', function () { startHeroRotate(); startPetalField(); });
+    document.addEventListener('visibilitychange', startHeroRotate);
 });
 /* ============================================================
    NAVIGATION DOCK
    ============================================================ */
 
 const dockItems = document.querySelectorAll(".browser-tab:not(.browser-settings)");
+dockItems.forEach(item => item.addEventListener("click", () => {
+    dockItems.forEach(i => i.classList.toggle("active", i === item));
+}));
 
-dockItems.forEach(item => {
-    item.addEventListener("click", () => {
-
-        // Remove active state
-        dockItems.forEach(i => i.classList.remove("active"));
-
-        // Activate clicked item
-        item.classList.add("active");
-    });
-});
+if ('IntersectionObserver' in window) {
+    var dockSections = Array.from(dockItems).map(function (item) {
+        return { item: item, section: document.querySelector(item.getAttribute('href')) };
+    }).filter(function (entry) { return !!entry.section; });
+    var dockObserver = new IntersectionObserver(function (entries) {
+        var visible = entries.filter(function (entry) { return entry.isIntersecting; })
+            .sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+        if (!visible) return;
+        var active = dockSections.find(function (entry) { return entry.section === visible.target; });
+        if (active) dockItems.forEach(function (item) { item.classList.toggle("active", item === active.item); });
+    }, { rootMargin: "-20% 0px -55% 0px", threshold: [0, .15, .35, .6] });
+    
+    dockSections.forEach(function (entry) { dockObserver.observe(entry.section); });
+}
 
 
 /* ============================================================
@@ -1977,56 +1792,6 @@ function unlockEclipseReward(){
     showToast("🌘 Hidden Achievement: Eclipse Witness — the Library remembers you were here.");
 
     announceMythicIfComplete();
-}
-const cursor = document.querySelector(".cursor");
-
-if (cursor) {
-    document.addEventListener("mousemove", (e) => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-        cursor.style.opacity = "1";
-    });
-
-    document.addEventListener("mouseleave", () => {
-        cursor.style.opacity = "0";
-    });
-
-    document.addEventListener("mouseenter", () => {
-        cursor.style.opacity = "1";
-    });
-
-    document.addEventListener("mouseover", (e) => {
-        if (e.target.closest("button, a, input, textarea, select, [role=button]")) {
-            cursor.classList.add("hover");
-        }
-    });
-
-    document.addEventListener("mouseout", (e) => {
-        if (e.target.closest("button, a, input, textarea, select, [role=button]")) {
-            cursor.classList.remove("hover");
-        }
-    });
-}
-
-function playStoryIntro() {
-    const intro = document.getElementById("storyIntro");
-    const img = document.getElementById("introBookImg");
-    const title = document.getElementById("introBookTitle");
-
-    if (!intro || !img || !title) return;
-
-    const released = novels.filter(n => n.status !== "upcoming");
-    const chosen = released[Math.floor(Math.random() * released.length)];
-
-    img.src = chosen.img;
-    title.textContent = chosen.title;
-
-    intro.classList.add("show");
-
-    setTimeout(() => {
-        intro.classList.remove("show");
-        openSpotlight(chosen.order);
-    }, 8000);
 }
 // Developer shortcut - Ctrl/Cmd + Shift + E
 // Previously Alt+Shift+E: dropped because bare Alt+Shift is a reserved
