@@ -151,7 +151,7 @@ var novels = [
         blurb: "ONE SHOT", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["hidden-gems"]
     },
     {
-        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "./chapters2/p.html", genres: ["drama", "sad"], status: "ongoing", ch: 4, rating: 4.8, views: 7000, releaseOffsetDays: 0,
+        order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "./chapters2/p.html", genres: ["drama", "sad"], status: "Completed", ch: 5, rating: 4.9, views: 16000, releaseOffsetDays: 0,
         blurb: "Sora and Ren story!", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
 ];
@@ -324,41 +324,37 @@ function attachTilt(el) {
         el.style.transform = '';
     });
 }
-    document.addEventListener("mouseover", function (e) {
-    const card = e.target.closest(".novel-card");
-    if (!card) return;
+var catalogHoverGrid = document.getElementById("catalogGrid");
+var supportsCardHover = window.matchMedia("(hover: hover)").matches;
+if (catalogHoverGrid && supportsCardHover) {
+    catalogHoverGrid.addEventListener("mouseover", function (e) {
+        var card = e.target.closest(".novel-card");
+        var previousCard = e.relatedTarget && e.relatedTarget.closest
+            ? e.relatedTarget.closest(".novel-card") : null;
+        if (!card || card === previousCard) return;
 
-    const cards = [...document.querySelectorAll("#catalogGrid .novel-card")];
-    const i = cards.indexOf(card);
-
-    cards.forEach(c => c.classList.remove(
-        "active-book",
-        "neighbor-left",
-        "neighbor-right",
-        "far-left",
-        "far-right"
-    ));
-
-    card.classList.add("active-book");
-    cards[i - 1]?.classList.add("neighbor-left");
-    cards[i + 1]?.classList.add("neighbor-right");
-    cards[i - 2]?.classList.add("far-left");
-    cards[i + 2]?.classList.add("far-right");
-});
-
-document.addEventListener("mouseout", function (e) {
-    if (!e.target.closest(".novel-card")) return;
-
-    document.querySelectorAll("#catalogGrid .novel-card").forEach(c => {
-        c.classList.remove(
-            "active-book",
-            "neighbor-left",
-            "neighbor-right",
-            "far-left",
-            "far-right"
-        );
+        var cards = Array.from(catalogHoverGrid.querySelectorAll(".novel-card"));
+        var i = cards.indexOf(card);
+        cards.forEach(function (item) {
+            item.classList.remove("active-book", "neighbor-left", "neighbor-right", "far-left", "far-right");
+        });
+        card.classList.add("active-book");
+        if (cards[i - 1]) cards[i - 1].classList.add("neighbor-left");
+        if (cards[i + 1]) cards[i + 1].classList.add("neighbor-right");
+        if (cards[i - 2]) cards[i - 2].classList.add("far-left");
+        if (cards[i + 2]) cards[i + 2].classList.add("far-right");
     });
-});
+
+    catalogHoverGrid.addEventListener("mouseout", function (e) {
+        var card = e.target.closest(".novel-card");
+        var nextCard = e.relatedTarget && e.relatedTarget.closest
+            ? e.relatedTarget.closest(".novel-card") : null;
+        if (!card || card === nextCard) return;
+        catalogHoverGrid.querySelectorAll(".novel-card").forEach(function (item) {
+            item.classList.remove("active-book", "neighbor-left", "neighbor-right", "far-left", "far-right");
+        });
+    });
+}
 
 
 /* ============================================================
@@ -746,10 +742,11 @@ function renderCatalog() {
             (n.ch ? '<div class="nc-progress"><div class="nc-progress-fill" style="width:' + pct + '%"></div></div><div class="nc-progress-label">' + read + ' / ' + n.ch + ' read</div>' : '<div class="nc-progress-label">Releasing soon</div>') +
             '</div></div></div>';
     }).join('');
-   Array.prototype.forEach.call(grid.querySelectorAll('.novel-card'), function(card){
-    attachTilt(card);
-    ;
-});
+    if (tiltEnabled) {
+        Array.prototype.forEach.call(grid.querySelectorAll('.novel-card'), function (card) {
+            attachTilt(card);
+        });
+    }
    
 }
 function toggleLikeNovel(order) {
@@ -1259,10 +1256,9 @@ function renderHeatmap() {
    CALENDAR
    ============================================================ */
 var upcomingReleases = [
-    { date: '2026-10-07', title: 'Prequel of The Petal That Falls With A Smile chp 5' },
-    { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ( last volume )' },
     { date: '2026-10-12', title: "The Other Day - Chapter 7" },
     { date: '2026-10-11', title: 'Him and Her vol 3 - chapter 2' },
+    { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ' },
 ];
 var calSorted = [];
 

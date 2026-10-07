@@ -5790,7 +5790,6 @@ to{opacity:1;transform:none;}
         transform .45s cubic-bezier(.2,.9,.2,1),
         filter .45s,
         box-shadow .45s;
-    will-change:transform;
 }
 
 .bookshelf:hover .novel-card{
@@ -6641,61 +6640,24 @@ body.light .cal-item {
     .sp-btn:hover { transform: none; }
 }
 
-/* Final compact dock overrides (kept last so the old dock skin cannot win). */
+/* Navigation rail on wide screens; thumb-friendly dock on compact screens. */
 .browser-dock {
-    left: 50%;
-    right: auto;
-    bottom: calc(14px + env(safe-area-inset-bottom));
-    width: max-content;
-    max-width: calc(100vw - 24px);
-    padding: 6px;
-    border-radius: 18px;
     border: 1px solid var(--panel-border-strong);
     background: rgba(15, 24, 40, .96);
     box-shadow: 0 8px 24px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.09);
     animation: none !important;
 }
-
 body.light .browser-dock { background: rgba(242, 247, 255, .97); }
-.browser-dock-inner { gap: 4px; }
-.browser-tab {
-    min-width: 48px;
-    height: 46px;
-    padding: 0 12px;
-    gap: 7px;
-    border-radius: 13px;
-    color: var(--ink-soft);
-    transition: background-color .14s ease, color .14s ease;
-}
-.browser-tab-text { max-width: 110px; opacity: 1; font-size: 11px; transition: none; }
+.browser-tab { color: var(--ink-soft); transition: background-color .14s ease, color .14s ease; }
+.browser-tab-text { opacity: 1; transition: none; }
 .browser-tab:hover,
 .browser-tab:hover .browser-tab-icon { transform: none; }
 .browser-tab.active {
-    padding: 0 12px;
     background: rgba(var(--accent-rgb), .16);
     box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), .22);
 }
-.browser-tab.active .browser-tab-text { max-width: 110px; }
 .browser-tab.active::after { box-shadow: none; }
 
-@media (max-width: 640px) {
-    .browser-dock {
-        left: 12px;
-        right: 12px;
-        bottom: calc(10px + env(safe-area-inset-bottom));
-        width: auto;
-        max-width: none;
-        transform: none;
-    }
-    .browser-dock-inner { justify-content: space-around; }
-    .browser-tab { min-width: 0; flex: 1 1 0; padding: 0 6px; gap: 4px; flex-direction: column; }
-    .browser-tab-icon { width: auto; height: 18px; font-size: 16px; }
-    .browser-tab-text { max-width: 100%; font-size: 9px; }
-    .browser-tab.active { padding: 0 6px; }
-    .browser-tab.active .browser-tab-text { max-width: 100%; }
-}
-
-/* Navigation rail on wide screens; thumb-friendly dock on compact screens. */
 @media (min-width: 821px) {
     .browser-dock {
         top: 50%; left: 18px; right: auto; bottom: auto;
@@ -6729,7 +6691,7 @@ body.light .browser-dock { background: rgba(242, 247, 255, .97); }
         padding: 4px 3px; gap: 3px; flex-direction: column;
     }
     .browser-tab-icon { width: auto; height: 19px; font-size: 17px; }
-    .browser-tab-text { max-width: 100%; font-size: 9px; }
+    .browser-tab-text { max-width: 100%; opacity: 1; font-size: 9px; }
     .browser-tab.active { padding: 4px 3px; }
     .browser-tab.active::after {
         top: auto; bottom: 2px; left: 50%; width: 16px; height: 2px;
