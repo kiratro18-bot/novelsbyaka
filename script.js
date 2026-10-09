@@ -26,7 +26,7 @@ var APP_STORAGE_KEYS = [
     'privateReaderNotes', 'novelComments', 'recentSearches', 'lightMode', 'theme',
     'tiltEnabled', 'motionEnabled', 'readerFontScale', 'readerAchUnlocks',
     'goldenPetalCaught', 'nightOwlRead', 'oneDayRead', 'searchedOnce', 'sharedOnce',
-    'themeChanged', 'lastCommentAt', 'readerLevel', 'achievementsCollapsed'
+    'themeChanged', 'lastCommentAt', 'readerLevel', 'achievementsCollapsed', 'readerProfile'
 ];
 function confirmClearLocalData() {
     var ok = window.confirm('This permanently erases reading progress, bookmarks, your reading queue, private notes, achievements, and saved preferences in this browser. This can\'t be undone. Continue?');
@@ -127,7 +127,7 @@ var novels = [
         blurb: "If time was a currency, how much would you pay for a single hour of the past?", grad: "135deg,#3a2a2a,#5a3a30", collections: ["hidden-gems", "completed"]
     },
     {
-        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "./chapters2/hahv3.html", genres: ["romance", "drama", "slice", "sad"], status: "ongoing", ch: 2, rating: 4.2, views: 7000, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
+        order: 14, title: "Him and Her vol.3", img: "./bg2/hahv3.jpg", link: "./chapters2/hahv3.html", genres: ["romance", "drama", "slice", "sad"], status: "ongoing", ch: 3, rating: 4.1, views: 9000, releaseOffsetDays: 46, updatedDaysAgo: 0.08,
         blurb: "Continuing the journey of Him and Her into a new chapter of their lives.", grad: "135deg,#4a2a3a,#6a3a4e", collections: ["newest"]
     },
     {
@@ -154,6 +154,10 @@ var novels = [
         order: 20, title: "Prequel of The Petal That Falls With A Smile", img: "./bg2/p1.jpg", link: "./chapters2/p.html", genres: ["drama", "sad"], status: "Completed", ch: 5, rating: 4.9, views: 16000, releaseOffsetDays: 0,
         blurb: "Sora and Ren story!", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["newest"]
     },
+    {
+        order: 21, title: "The Petal That Falls With A Smile vol 4", img: "#", link: "#", genres: ["drama", "slice of life"], status: "upcoming", ch: 0, rating: null, views: null, releaseOffsetDays: 0,
+        blurb: "Volume 4 — University → Adulthood Arc", grad: "135deg,#3a2a4a,#4a2a3a", collections: ["upcoming"]
+    }
 ];
 var badgeLabel = { romance: "Romance", drama: "Drama", slice: "Slice", sad: "Sad", mystery: "Mystery", action: "Action" };
 function isOneShot(n) { return n.ch === 1 && n.status === 'completed'; }
@@ -178,6 +182,8 @@ var readingQueue = store.get('readingQueue', {});
 if (!readingQueue || typeof readingQueue !== 'object' || Array.isArray(readingQueue)) readingQueue = {};
 var claimedChallenges = store.get('claimedChallenges', {});
 var privateReaderNotes = store.get('privateReaderNotes', {});
+var readerProfile = store.get('readerProfile', {});
+if (!readerProfile || typeof readerProfile !== 'object' || Array.isArray(readerProfile)) readerProfile = {};
 
 function getRead(n) { var v = readProgress[n.order]; return typeof v === 'number' ? Math.max(0, Math.min(v, n.ch)) : 0; }
 function logReadingActivity(delta) {
@@ -679,7 +685,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.getElementById('statusPills').addEventListener('click', function (e) {
         var btn = e.target.closest('.pill-btn'); if (!btn) return;
-        this.querySelectorAll('.pill-btn').forEach(function (b) { b.classList.remove('active'); });
+        this.querySelectorAll('.pill-btn').forEach(function (b) {
+            b.classList.toggle('active', b === btn);
+            b.setAttribute('aria-pressed', String(b === btn));
+        });
         btn.classList.add('active'); activeStatus = btn.dataset.status || 'all'; renderCatalog();
     });
     document.getElementById('lbTabs').addEventListener('click', function (e) {
@@ -695,7 +704,11 @@ function clearShelfFilters() {
     var search = document.getElementById('shelfSearch');
     if (search) search.value = '';
     document.querySelectorAll('#genrePills .pill-btn').forEach(function (p) { p.classList.toggle('active', p.dataset.genre === 'all'); });
-    document.querySelectorAll('#statusPills .pill-btn').forEach(function (p) { p.classList.toggle('active', p.dataset.status === 'all'); });
+    document.querySelectorAll('#statusPills .pill-btn').forEach(function (p) {
+        var active = p.dataset.status === 'all';
+        p.classList.toggle('active', active);
+        p.setAttribute('aria-pressed', String(active));
+    });
     document.querySelectorAll('.mood-card').forEach(function (c) { c.classList.toggle('active', c.dataset.mood === 'all'); });
     scheduleCatalogRender();
     showToast('Shelf filters cleared ✦');
@@ -708,7 +721,9 @@ function renderCatalog() {
         var matchesMood = !activeMoodGenres || activeMoodGenres.some(function (g) { return n.genres.indexOf(g) > -1; });
         var matchesQ = !q || n.title.toLowerCase().indexOf(q) > -1 || n.genres.join(' ').indexOf(q) > -1;
         var matchesGenre = activeGenre === 'all' || n.genres.indexOf(activeGenre) > -1;
-        var matchesStatus = activeStatus === 'all' || n.status === activeStatus;
+        var matchesStatus = activeStatus === 'all' || (activeStatus === 'unread'
+            ? n.status !== 'upcoming' && getRead(n) === 0
+            : n.status === activeStatus);
         return matchesMood && matchesQ && matchesGenre && matchesStatus;
     }).sort(function (a, b) { return b.order - a.order; });
     document.getElementById('shelfCount').textContent = filtered.length + ' stor' + (filtered.length === 1 ? 'y' : 'ies') + ', filed and ready to open.';
@@ -718,7 +733,7 @@ function renderCatalog() {
         var summary = [];
         if (q) summary.push('Search: ' + q);
         if (activeGenre !== 'all') summary.push(badgeLabel[activeGenre] || activeGenre);
-        if (activeStatus !== 'all') summary.push(activeStatus);
+        if (activeStatus !== 'all') summary.push(activeStatus === 'unread' ? 'Unread' : activeStatus);
         if (activeMoodGenres) summary.push('mood');
         summaryEl.textContent = summary.length ? summary.join(' · ') : 'Showing everything';
     }
@@ -993,12 +1008,20 @@ function longFormCompleted() {
 }
 /* Turns real reading activity into an XP total and level: 15 XP per chapter
    read, 60 XP per novel finished, 5 XP per distinct reading day, 25 XP per
-   achievement unlocked. Every 100 XP is a level, no upper cap. */
+   achievement unlocked. Level 2 starts at 100 XP; each next level costs 50 XP
+   more than the previous one. */
 function computeReaderLevel(s, unlockedCount) {
     var totalXP = s.read * 15 + s.completed * 60 + s.days * 5 + unlockedCount * 25;
-    var level = Math.floor(totalXP / 100) + 1;
-    var into = totalXP % 100;
-    return { level: level, into: into, need: 100, pct: into, totalXP: totalXP };
+    var level = 1;
+    var remainingXP = totalXP;
+    var need = 100;
+    while (remainingXP >= need) {
+        remainingXP -= need;
+        level++;
+        need = 100 + (level - 1) * 50;
+    }
+    var pct = Math.min(100, Math.floor(remainingXP / need * 100));
+    return { level: level, into: remainingXP, need: need, pct: pct, totalXP: totalXP };
 }
 function computeReaderStats() {
     return {
@@ -1257,7 +1280,7 @@ function renderHeatmap() {
    ============================================================ */
 var upcomingReleases = [
     { date: '2026-10-12', title: "The Other Day - Chapter 7" },
-    { date: '2026-10-11', title: 'Him and Her vol 3 - chapter 2' },
+    { date: '2026-10-13', title: 'Him and Her vol 3 - chapter 3' },
     { date: '2026-10-25', title: 'Petal Vol. 4 —  University → Adulthood Arc ' },
 ];
 var calSorted = [];
@@ -1416,8 +1439,44 @@ document.addEventListener('keydown', function (e) {
 /* ============================================================
    SETTINGS
    ============================================================ */
-function openSettings() { document.getElementById('settingsOverlay').classList.add('open'); document.getElementById('settingsPanel').classList.add('open'); }
+function openSettings(section) {
+    document.getElementById('settingsOverlay').classList.add('open');
+    document.getElementById('settingsPanel').classList.add('open');
+    if (section === 'profile') setTimeout(function () {
+        var input = document.getElementById('readerProfileNameInput');
+        if (input) input.focus();
+    }, 180);
+}
 function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); document.getElementById('settingsPanel').classList.remove('open'); }
+function renderReaderProfile() {
+    var name = sanitize(readerProfile.name || 'Reader').slice(0, 32) || 'Reader';
+    var bio = sanitize(readerProfile.bio || '').slice(0, 140);
+    var initials = name.trim().split(/\s+/).slice(0, 2).map(function (part) { return part.charAt(0); }).join('').toUpperCase() || 'R';
+    var nameDisplay = document.getElementById('readerProfileNameDisplay');
+    var bioDisplay = document.getElementById('readerProfileBioDisplay');
+    var avatar = document.getElementById('readerProfileAvatar');
+    var nameInput = document.getElementById('readerProfileNameInput');
+    var bioInput = document.getElementById('readerProfileBioInput');
+    if (nameDisplay) nameDisplay.textContent = name;
+    if (bioDisplay) bioDisplay.textContent = bio || 'Make this reading space yours.';
+    if (avatar) avatar.textContent = initials;
+    if (nameInput) nameInput.value = name;
+    if (bioInput) bioInput.value = bio;
+}
+function saveReaderProfile() {
+    var nameInput = document.getElementById('readerProfileNameInput');
+    var bioInput = document.getElementById('readerProfileBioInput');
+    var name = sanitize(nameInput ? nameInput.value : '').slice(0, 32);
+    if (!name) {
+        showToast('Add a display name to save your profile.');
+        if (nameInput) nameInput.focus();
+        return;
+    }
+    readerProfile = { name: name, bio: sanitize(bioInput ? bioInput.value : '').slice(0, 140) };
+    store.set('readerProfile', readerProfile);
+    renderReaderProfile();
+    showToast('Reader profile saved ✦');
+}
 function toggleLight() {
     document.body.classList.toggle('light');
     var on = document.body.classList.contains('light');
@@ -1452,6 +1511,7 @@ window.addEventListener('scroll', function () {
    INIT
    ============================================================ */
 window.addEventListener('load', function () {
+    renderReaderProfile();
     var achievementsCollapsed = store.get('achievementsCollapsed', false);
     var achievementGrid = document.getElementById('achievementGrid');
     var achievementToggle = document.getElementById('achievementsToggle');

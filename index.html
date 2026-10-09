@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AKA · Original Fiction — The Reading Lounge</title>
+    <title>Novels by AKA — Original Fiction Reading Lounge</title>
     <meta name="description"
         content="Original fiction by AKA. Romance, drama, and slice-of-life novels, reimagined as a living reading dashboard." />
     <!-- Security: restricts where scripts/styles/images/fonts/network calls can come from.
@@ -52,6 +52,19 @@
             <button class="icon-btn" onclick="closeSettings()" aria-label="Close settings">✕</button>
         </div>
         <div class="sph-body">
+            <section class="sph-section" id="readerProfileSettings" aria-labelledby="readerProfileHeading">
+                <h2 class="sph-section-title" id="readerProfileHeading">Reader profile</h2>
+                <label class="profile-field">Display name
+                    <input id="readerProfileNameInput" type="text" maxlength="32" autocomplete="nickname" placeholder="Your name">
+                </label>
+                <label class="profile-field">About you
+                    <textarea id="readerProfileBioInput" rows="3" maxlength="140" placeholder="What do you like to read?"></textarea>
+                </label>
+                <div class="profile-form-footer">
+                    <span class="sph-help">Saved only in this browser.</span>
+                    <button class="pill-btn" type="button" onclick="saveReaderProfile()">Save profile</button>
+                </div>
+            </section>
             <section class="sph-section" aria-labelledby="settingsAppearanceTitle">
                 <h2 class="sph-section-title" id="settingsAppearanceTitle">Appearance</h2>
                 <div class="sph-row">
@@ -187,7 +200,7 @@
     <!-- ============ NAV ============ -->
     <nav class="site-nav">
         <div class="nav-brand">
-            <div class="nav-brand-mark">✦</div>A <em>Novel</em> Web
+            <div class="nav-brand-mark">✦</div><span>Novels by <em>AKA</em></span>
         </div>
         <div class="nav-links">
             <a class="nav-link" href="#readingHeatmap">Reading activity</a>
@@ -208,7 +221,7 @@
         </div>
         <div class="hero-bento">
             <div class="hero-feature" id="heroFeature">
-                <div class="hero-feature-bg"><img id="heroFeatureImg" src="" alt=""></div>
+                <div class="hero-feature-bg"><img id="heroFeatureImg" src="" alt="" decoding="async" fetchpriority="high"></div>
                 <div class="hero-feature-content">
                     <div id="heroFeatureText">
                         <span class="trend-badge">🔥 Trending Now · Vol. 3</span>
@@ -252,6 +265,14 @@
                         <div class="xp-fill" id="readerXpFill" style="width:0%"></div>
                     </div> 
                     <div class="xp-label" id="readerXpLabel">0 / 100 XP to Level 2</div>
+                    <div class="reader-profile-summary">
+                        <div class="reader-profile-avatar" id="readerProfileAvatar" aria-hidden="true">R</div>
+                        <div class="reader-profile-copy">
+                            <strong id="readerProfileNameDisplay">Reader</strong>
+                            <span id="readerProfileBioDisplay">Make this reading space yours.</span>
+                        </div>
+                        <button class="profile-edit-btn" type="button" onclick="openSettings('profile')">Edit</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -354,9 +375,10 @@
                         </div>
                         <div class="filter-section-label filter-section-label-status">Status</div>
                         <div class="filter-pills" id="statusPills">
-                            <button class="pill-btn active" data-status="all">All status</button>
-                            <button class="pill-btn" data-status="ongoing">Ongoing</button>
-                            <button class="pill-btn" data-status="completed">Completed</button>
+                            <button class="pill-btn active" data-status="all" aria-pressed="true">All status</button>
+                            <button class="pill-btn" data-status="ongoing" aria-pressed="false">Ongoing</button>
+                            <button class="pill-btn" data-status="completed" aria-pressed="false">Completed</button>
+                            <button class="pill-btn" data-status="unread" aria-pressed="false">Unread</button>
                         </div>
                     </div>
                     <div class="side-card glass">
@@ -478,7 +500,7 @@
             <div class="glass footer-panel">
                 <div class="footer-grid">
                     <div>
-                        <div class="nav-brand" style="margin-bottom:10px">A <em>Novel</em> Web</div>
+                        <div class="nav-brand" style="margin-bottom:10px">Novels by <em>AKA</em></div>
                         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.7;max-width:340px">Original fiction by AKA, in a calmer glass reading room. Your reading progress and queue stay saved in this browser.</p>
                         <button class="pill-btn" style="margin-top:14px" onclick="toggleLight()">🌗 Switch appearance</button>
                     </div>

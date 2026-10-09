@@ -822,132 +822,6 @@ body.light .hero-feature-bg::after {
     border-color: var(--rose);
 }
 
-/* ============================================================
-   TRENDING PETALS — ambient fall + rare golden petal
-   ============================================================ */
-.petal-field {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    overflow: hidden;
-    pointer-events: none;
-}
-
-.petal {
-    position: absolute;
-    top: -22px;
-    border-radius: 0% 60% 0% 60%;
-    opacity: 0;
-    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .22));
-    animation-name: petalFall;
-    animation-timing-function: ease-in;
-    animation-fill-mode: forwards;
-    will-change: transform, opacity;
-}
-
-.petal-a {
-    background: linear-gradient(135deg, var(--rose), rgba(255, 255, 255, .55));
-}
-
-.petal-b {
-    background: linear-gradient(135deg, var(--accent-2, var(--rose)), var(--rose));
-}
-
-.petal-c {
-    background: linear-gradient(135deg, #fff, var(--rose));
-    opacity: .7;
-}
-
-@keyframes petalFall {
-    0% {
-        transform: translate3d(0, -22px, 0) rotate(0deg);
-        opacity: 0;
-    }
-
-    8% {
-        opacity: .85;
-    }
-
-    30% {
-        transform: translate3d(var(--sway1, 20px), calc(var(--fall, 540px) * .32), 0) rotate(calc(var(--spin, 220deg) * .3));
-    }
-
-    62% {
-        transform: translate3d(var(--sway2, -20px), calc(var(--fall, 540px) * .66), 0) rotate(calc(var(--spin, 220deg) * .66));
-    }
-
-    90% {
-        opacity: .8;
-    }
-
-    100% {
-        transform: translate3d(0, calc(var(--fall, 540px) + 24px), 0) rotate(var(--spin, 220deg));
-        opacity: 0;
-    }
-}
-
-.petal-gold {
-    top: -34px;
-    width: 30px;
-    height: 30px;
-    background: none;
-    border-radius: 0;
-    pointer-events: auto;
-    cursor: pointer;
-    z-index: 3;
-}
-
-.petal-gold::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: 16px;
-    height: 16px;
-    background: linear-gradient(135deg, #fff6df, var(--gold) 55%, #b9822e);
-    border-radius: 0% 60% 0% 60%;
-    box-shadow: 0 0 10px 2px rgba(255, 196, 107, .6), 0 0 26px 8px rgba(255, 196, 107, .3);
-    animation: petalGoldPulse 1.5s ease-in-out infinite;
-}
-
-.petal-gold:hover::before,
-.petal-gold:focus-visible::before {
-    box-shadow: 0 0 14px 4px rgba(255, 196, 107, .85), 0 0 34px 12px rgba(255, 196, 107, .5);
-}
-
-@keyframes petalGoldPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        filter: brightness(1);
-    }
-
-    50% {
-        transform: scale(1.18);
-        filter: brightness(1.3);
-    }
-}
-
-@keyframes petalCatch {
-    0% {
-        transform: scale(1) rotate(0deg);
-        opacity: 1;
-    }
-
-    45% {
-        transform: scale(1.7) rotate(30deg);
-        opacity: 1;
-        filter: brightness(1.7);
-    }
-
-    100% {
-        transform: scale(.15) rotate(90deg);
-        opacity: 0;
-        filter: brightness(2.2);
-    }
-}
-
 .hero-side {
     display: flex;
     flex-direction: column;
@@ -1406,7 +1280,6 @@ body.light .hero-feature-bg::after {
     position: relative;
     cursor: pointer;
     transform-style: preserve-3d;
-    will-change: transform;
     transition: transform .12s ease-out, box-shadow var(--tr);
     opacity: 0;
     animation: cardIn .5s cubic-bezier(.4, 0, .2, 1) forwards
@@ -3683,6 +3556,72 @@ body.light .nav-dock {
     }
 }
 
+/* Reader profile editor and compact profile summary. */
+.reader-profile-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: min(100%, 430px);
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px solid var(--panel-border);
+    border-radius: var(--r-md);
+    background: var(--panel);
+    text-align: left;
+}
+.reader-profile-avatar {
+    display: grid;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid rgba(var(--accent-rgb), .28);
+    border-radius: 50%;
+    background: var(--rose-dim);
+    color: var(--ink);
+    font: 700 13px/1 var(--font-mono);
+}
+.reader-profile-copy { display: grid; min-width: 0; flex: 1; gap: 3px; }
+.reader-profile-copy strong,
+.reader-profile-copy span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reader-profile-copy strong { color: var(--ink); font-size: 12px; }
+.reader-profile-copy span { color: var(--muted); font-size: 10px; }
+.profile-edit-btn {
+    min-height: 38px;
+    padding: 0 13px;
+    border: 1px solid var(--panel-border-strong);
+    border-radius: var(--r-pill);
+    background: var(--panel-2);
+    color: var(--ink);
+    font: 600 11px var(--font-body);
+}
+.profile-edit-btn:hover { border-color: rgba(var(--accent-rgb), .45); background: var(--rose-dim); }
+.profile-field { display: grid; gap: 7px; margin-top: 14px; color: var(--ink-soft); font-size: 12px; }
+.profile-field input,
+.profile-field textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 12px;
+    border: 1px solid var(--panel-border-strong);
+    border-radius: var(--r-sm);
+    outline: none;
+    background: var(--panel);
+    color: var(--ink);
+    font: 12px/1.5 var(--font-body);
+}
+.profile-field textarea { min-height: 82px; resize: vertical; }
+.profile-field input::placeholder,
+.profile-field textarea::placeholder { color: var(--muted); }
+.profile-field input:focus,
+.profile-field textarea:focus { border-color: rgba(var(--accent-rgb), .7); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .12); }
+.profile-form-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; }
+@media (max-width: 560px) {
+    .reader-profile-summary { gap: 9px; padding: 10px; }
+    .reader-profile-avatar { flex-basis: 38px; width: 38px; height: 38px; }
+    .profile-form-footer { align-items: flex-start; flex-direction: column; }
+    .profile-form-footer .pill-btn { width: 100%; min-height: 44px; }
+}
+
 
 /* ============================================================
    FOUNDATION POLISH — NAVIGATION / SHELF / CATALOGUE
@@ -4419,8 +4358,6 @@ body.reader-mode-active {
 }
 
 .aurora-layer,
-.petal-field,
-.petal,
 .browser-dock-glow,
 .cursor { display: none !important; }
 
@@ -6370,9 +6307,9 @@ body.light {
     --panel-border: rgba(63, 87, 124, .15);
     --panel-border-strong: rgba(63, 87, 124, .24);
     --ink: #172338;
-    --ink-soft: #42536e;
-    --muted: #61718c;
-    --muted-dim: #7d8ba2;
+    --ink-soft: #34465e;
+    --muted: #485a73;
+    --muted-dim: #52627a;
     --shadow-glass: 0 18px 48px rgba(39, 65, 105, .12), inset 0 1px 0 rgba(255, 255, 255, .8);
     --shadow-lift: 0 26px 64px rgba(39, 65, 105, .2), inset 0 1px 0 rgba(255, 255, 255, .9);
     background:
@@ -6697,4 +6634,6 @@ body.light .browser-dock { background: rgba(242, 247, 255, .97); }
         top: auto; bottom: 2px; left: 50%; width: 16px; height: 2px;
         transform: translateX(-50%);
     }
+    #genrePills .pill-btn,
+    #statusPills .pill-btn { min-height: 44px; }
 }
